@@ -3,30 +3,59 @@ var restify = require('restify');
 
 /*
   users
-
   events
-
   event_fields
-
   event_groups
 
+  GET  /users
+  POST /user
+  GET  /user/:id
+  PUT  /user/:id
+  DEL  /user/:id
 
+  GET  /user/:id/events
+  GET  /user/:id/event_groups
 
+  GET  /events
+  POST /event
+  GET  /event/:id (with event_group and created_by_user and fields)
+  PUT  /event/:id
+  DEL  /event/:id
+
+  (GET  /event/:id/fields)
+  GET  /event/:id/field/:key
+  POST /event/:id/field
+  PUT  /event/:id/field/:key
+  DEL  /event/:id/field/:key
+
+  GET  /event_groups
+  GET  /event_group/:id
+  POST /event_group
+  PUT  /event_group/:id
+  DEL  /event_group/:id
+
+  
 */
 
 
+var server = restify.createServer({
+  name: 'piecemaker'
+});
+server.use(restify.acceptParser(['application/json']));
+server.use(restify.authorizationParser());
 
-function respond(req, res, next) {
-  res.send('hello ' + req.params.name);
-}
 
-var server = restify.createServer();
-server.get('/hello/:name', respond);
-server.head('/hello/:name', respond);
+server.get('/hello/:name', function(req, res, next){
+  res.send({ola: 'hello ' + req.params.name});
+});
+
+
 
 server.listen(8080, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
+
+
 
 
 
