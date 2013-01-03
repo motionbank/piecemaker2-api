@@ -1,6 +1,33 @@
-var mysql      = require('mysql');
-var express = require('express');
-var app = express();
+var mysql = require('mysql');
+var restify = require('restify');
+
+/*
+  users
+
+  events
+
+  event_fields
+
+  event_groups
+
+
+
+*/
+
+
+
+function respond(req, res, next) {
+  res.send('hello ' + req.params.name);
+}
+
+var server = restify.createServer();
+server.get('/hello/:name', respond);
+server.head('/hello/:name', respond);
+
+server.listen(8080, function() {
+  console.log('%s listening at %s', server.name, server.url);
+});
+
 
 
 var connection = mysql.createConnection({
@@ -20,5 +47,3 @@ connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
 connection.end();
 
 
-app.listen(8081);
-console.log('Listening on port 8081');
