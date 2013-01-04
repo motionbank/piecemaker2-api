@@ -1,12 +1,9 @@
 piecemaker API
 ==============
 
-Execute 
-    node index.js 
-(see also [nodemon](https://github.com/remy/nodemon)).
+Execute ```node index.js``` (see also [nodemon](https://github.com/remy/nodemon)).
 
-Delete all data in all tables and insert dummy data, execute
-    node test/db_dummy_data.js
+Delete all data in all tables and insert dummy data, execute ```node test/db_dummy_data.js```
 
 
 Example DB
