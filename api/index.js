@@ -1,5 +1,14 @@
-var mysql = require('mysql');
-var restify = require('restify');
+var connect = require('connect');
+var http = require('http');
+var Sequelize = require("sequelize")
+
+
+var sequelize = new Sequelize('d015dedf', 'd015dedf', 'QUtNzpy3QF25gv3E', {
+  host: 'kb-server.de',
+  dialect: 'mysql',
+  charset: 'utf8',
+  collate: 'utf8_general_ci'
+});
 
 /*
   users
@@ -38,41 +47,13 @@ var restify = require('restify');
 */
 
 
-var server = restify.createServer({
-  name: 'piecemaker'
+var app = connect()
+  .use(connect.cookieParser())
+  .use(connect.session({ secret: 'my secret here' }))
+  .use(function(req, res){
+    res.end('Hello from Connect!\n');
+  });
+
+http.createServer(app).listen(8080, function() {
+  console.log('api listening at port 8080');
 });
-server.use(restify.acceptParser(['application/json']));
-server.use(restify.authorizationParser());
-
-
-server.get('/hello/:name', function(req, res, next){
-  res.send({ola: 'hello ' + req.params.name});
-});
-
-
-
-server.listen(8080, function() {
-  console.log('%s listening at %s', server.name, server.url);
-});
-
-
-
-
-
-var connection = mysql.createConnection({
-  host     : 'kb-server.de',
-  user     : 'd015dedf',
-  password : 'QUtNzpy3QF25gv3E',
-});
-
-connection.connect();
-
-connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-  if (err) throw err;
-
-  console.log('The solution is: ', rows[0].solution);
-});
-
-connection.end();
-
-
