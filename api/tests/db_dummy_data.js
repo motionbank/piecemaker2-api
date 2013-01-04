@@ -17,8 +17,6 @@ var rl = readline.createInterface({
 rl.question("Delete ALL records in ALL tables and create NEW records? [yes|no] ", function(answer) {
   if(answer == 'yes') {
     console.log('Alright, deleting ...');
-
-
     // -------------------------------------------
 
 
@@ -30,7 +28,10 @@ rl.question("Delete ALL records in ALL tables and create NEW records? [yes|no] "
     function create() {
 
       Model.User.create({name: 'Martin', email: 'martin@h-da.de', password: 'martin', api_access_key: 'martin', is_admin: true});
+      Model.User.create({name: 'Matthias', email: 'matthias@h-da.de', password: 'matthias', api_access_key: 'matthias', is_admin: true});
+      Model.User.create({name: 'Peter', email: 'peter@h-da.de', password: 'peter', api_access_key: 'peter', is_admin: true});
 
+      // Model.Event.create({});
 
     }
 
@@ -40,7 +41,6 @@ rl.question("Delete ALL records in ALL tables and create NEW records? [yes|no] "
 
 
     // -------------------------------------------
-
   } else {
     console.log('Nothing was changed.');
   }
