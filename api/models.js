@@ -37,10 +37,9 @@ module.exports = function(sequelize, Sequelize) {
       text: {type: Sequelize.TEXT}
     }),
 
-    // @todo is this definition required?
     UserEventGroup: sequelize.define('user_has_event_group', {
-      user_id: {type: Sequelize.INTEGER},
-      event_group_id: {type: Sequelize.INTEGER},
+      user_id: {type: Sequelize.INTEGER, primaryKey: true},
+      event_group_id: {type: Sequelize.INTEGER, primaryKey: true},
       allow_create: {type: Sequelize.BOOLEAN},
       allow_read: {type: Sequelize.BOOLEAN},
       allow_update: {type: Sequelize.BOOLEAN},
@@ -52,11 +51,13 @@ module.exports = function(sequelize, Sequelize) {
   // define associations
   // see http://www.sequelizejs.com/#associations
   Model.User.hasMany(Model.Event, {foreignKey: 'created_by_user_id'});
+  
   Model.User.hasMany(Model.EventGroup, {joinTableName: 'user_has_event_groups'});
   Model.EventGroup.hasMany(Model.User, {joinTableName: 'user_has_event_groups'});
+  
   Model.EventGroup.hasMany(Model.Event);
   Model.Event.belongsTo(Model.EventGroup);
-  Model.Event.belongsTo(Model.User);
+  Model.Event.belongsTo(Model.User, {foreignKey: 'created_by_user_id'});
   Model.Event.hasMany(Model.EventField);
   Model.EventField.belongsTo(Model.Event);
 
