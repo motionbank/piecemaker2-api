@@ -6,9 +6,42 @@ var Sequelize = require("sequelize")
 var sequelize = new Sequelize('d015dedf', 'd015dedf', 'QUtNzpy3QF25gv3E', {
   host: 'kb-server.de',
   dialect: 'mysql',
-  charset: 'utf8',
-  collate: 'utf8_general_ci'
+  define: {
+    charset: 'utf8',
+    collate: 'utf8_general_ci',
+    timestamps: false
+  }
 });
+
+
+var User = sequelize.define('user', {
+  user_id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  name: {type: Sequelize.STRING},
+  email: {type: Sequelize.STRING}
+});
+
+User.findAll().success(function(users) {
+  console.log(users);
+});
+
+
+
+
+var app = connect()
+  // .use(connect.cookieParser())
+  // .use(connect.session({ secret: 'my secret here' }))
+  .use(function(req, res){
+    res.end('Hello from Connect!\n');
+  });
+
+http.createServer(app).listen(8080, function() {
+  console.log('api listening at port 8080');
+});
+
+
+
+
+
 
 /*
   users
@@ -45,15 +78,3 @@ var sequelize = new Sequelize('d015dedf', 'd015dedf', 'QUtNzpy3QF25gv3E', {
 
   
 */
-
-
-var app = connect()
-  .use(connect.cookieParser())
-  .use(connect.session({ secret: 'my secret here' }))
-  .use(function(req, res){
-    res.end('Hello from Connect!\n');
-  });
-
-http.createServer(app).listen(8080, function() {
-  console.log('api listening at port 8080');
-});
