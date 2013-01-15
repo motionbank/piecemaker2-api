@@ -2,8 +2,6 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-CREATE SCHEMA IF NOT EXISTS `d015dedf` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `d015dedf` ;
 
 -- -----------------------------------------------------
 -- Table `d015dedf`.`users`
@@ -63,26 +61,24 @@ COLLATE = utf8_general_ci;
 
 
 -- -----------------------------------------------------
--- Table `d015dedf`.`acl`
+-- Table `d015dedf`.`user_has_event_groups`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `d015dedf`.`acl` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+CREATE  TABLE IF NOT EXISTS `d015dedf`.`user_has_event_groups` (
   `user_id` INT UNSIGNED NOT NULL ,
   `event_group_id` INT UNSIGNED NOT NULL ,
   `allow_create` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
   `allow_read` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
   `allow_update` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
   `allow_delete` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
-  INDEX `fk_acl_has_event_group` (`event_group_id` ASC) ,
-  INDEX `fk_acl_has_user` (`user_id` ASC) ,
-  UNIQUE INDEX `user_id_event_group_id` (`user_id` ASC, `event_group_id` ASC) ,
-  PRIMARY KEY (`id`) ,
-  CONSTRAINT `fk_acl_has_user`
+  INDEX `fk_user_has_event_groups` (`event_group_id` ASC) ,
+  INDEX `fk_event_group_has_users` (`user_id` ASC) ,
+  PRIMARY KEY (`user_id`, `event_group_id`) ,
+  CONSTRAINT `fk_event_group_has_users`
     FOREIGN KEY (`user_id` )
     REFERENCES `d015dedf`.`users` (`id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_acl_has_event_group`
+  CONSTRAINT `fk_user_has_event_groups`
     FOREIGN KEY (`event_group_id` )
     REFERENCES `d015dedf`.`event_groups` (`id` )
     ON DELETE CASCADE
