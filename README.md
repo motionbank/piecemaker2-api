@@ -8,9 +8,17 @@ Delete all data in all tables and insert dummy data, execute ```node test/db_dum
 
 Example DB
 ----------
+__Use this DB for example datasets.__
 * https://dd15102.kasserver.com/mysqladmin
 * User: d015dedf
 * Pass: QUtNzpy3QF25gv3E
+
+Temporary DB
+------------
+__This DB is deleted from time to time.__
+* https://dd15102.kasserver.com/mysqladmin
+* User: d0161511
+* Pass: nmsN8dCS5yB3mFUk
 
 API methods
 -----------
