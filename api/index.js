@@ -2,15 +2,11 @@ var config = require('./config.js');
 var mysql = require('mysql');
 var connection = mysql.createConnection(config.mysql);
 
-var express = require('express');
-var app = express();
+var connect = require('connect')
+var http = require('http');
 
 
-app.get('/', function(req, res){
-  res.send('Hello World');
-});
 
-app.listen(3000);
 
 connection.destroy();
 
@@ -29,16 +25,17 @@ connection.destroy();
 // 
 // 
 // 
-// var app = connect()
-//   // .use(connect.cookieParser())
-//   // .use(connect.session({ secret: 'my secret here' }))
-//   .use(function(req, res){
-//     res.end('Hello from Connect!\n');
-//   });
-// 
-// http.createServer(app).listen(8080, function() {
-//   console.log('api listening at port 8080');
-// });
+
+var app = connect()
+  // .use(connect.cookieParser())
+  // .use(connect.session({ secret: 'my secret here' }))
+  .use(function(req, res){
+    res.end('Hello from Connect!\n');
+  });
+
+http.createServer(app).listen(8080, function() {
+  console.log('api listening at port 8080');
+});
 
 
 
