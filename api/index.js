@@ -1,29 +1,44 @@
 var config = require('./config.js');
-var connect = require('connect');
-var http = require('http');
-var Sequelize = require("sequelize");
-var sequelize = new Sequelize(config.sequelize.database, config.sequelize.username, config.sequelize.password, config.sequelize.options);
-var Model = require('./models.js')(sequelize, Sequelize); // model definitions
+var mysql = require('mysql');
+var connection = mysql.createConnection(config.mysql);
+
+var express = require('express');
+var app = express();
 
 
-
-Model.User.findAll().success(function(users) {
-  console.log(users);
-  console.log(users[0].getEvents());
+app.get('/', function(req, res){
+  res.send('Hello World');
 });
 
+app.listen(3000);
 
+connection.destroy();
 
-var app = connect()
-  // .use(connect.cookieParser())
-  // .use(connect.session({ secret: 'my secret here' }))
-  .use(function(req, res){
-    res.end('Hello from Connect!\n');
-  });
-
-http.createServer(app).listen(8080, function() {
-  console.log('api listening at port 8080');
-});
+// var connect = require('connect');
+// var http = require('http');
+// var Sequelize = require("sequelize");
+// var sequelize = new Sequelize(config.sequelize.database, config.sequelize.username, config.sequelize.password, config.sequelize.options);
+// var Model = require('./models.js')(sequelize, Sequelize); // model definitions
+// 
+// 
+// 
+// Model.User.findAll().success(function(users) {
+//   console.log(users);
+//   console.log(users[0].getEvents());
+// });
+// 
+// 
+// 
+// var app = connect()
+//   // .use(connect.cookieParser())
+//   // .use(connect.session({ secret: 'my secret here' }))
+//   .use(function(req, res){
+//     res.end('Hello from Connect!\n');
+//   });
+// 
+// http.createServer(app).listen(8080, function() {
+//   console.log('api listening at port 8080');
+// });
 
 
 
