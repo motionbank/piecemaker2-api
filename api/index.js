@@ -31,6 +31,9 @@ var app = connect()
     helper.throwNewEnvError(e);
   }
   
+  // build params for controller 
+  
+
   // load controller and delegate execution
   // controllerName should be safe here, only contains a-z and _
   try {
