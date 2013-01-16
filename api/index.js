@@ -4,14 +4,6 @@ var connect = require('connect')
 var http = require('http');
 
 
-if(config.env == 'development' && config.mysql.debug) config.mysql.debug = false;
-var connection = mysql.createConnection(config.mysql);
-
-
-connection.destroy();
-
-
-
 var app = connect()
 // .use(connect.cookieParser())
 // .use(connect.session({ secret: 'my secret here' }))
@@ -26,16 +18,33 @@ var app = connect()
   try {
     var controllerName = req.url.match(/^\/([a-z][a-z0-9_]*)/)[1];
   } catch(e) {
-    throw new Error('invalid controller name');
+    throwNewErrorDependingOnEnv('invalid controller name. controller name must start with character followed by alphanumerics and/or underscores. ', 'invalid controller name');
+  }
+
+  // connect to database
+  try {
+    if(config.env == 'development' && config.mysql.debug) config.mysql.debug = false;
+    var connection = mysql.createConnection(config.mysql);
+  } catch(e) {
+    throwNewErrorDependingOnEnv(e);
   }
   
   // load controller and delegate execution
   // controllerName should be safe here, only contains a-z and _
   try {
-    require('./controllers/' + controllerName + '.js').call(null, req, res, next);
-  } catch(e) {
-    throw new Error('controller not found');
+    var content = require('./controllers/' + controllerName + '.js').call(null, req, res, connection);
+  } catch(e) { 
+    throwNewErrorDependingOnEnv(e, 'controller not found');
   }
+
+  // verify if controller has return statement
+  if(typeof content == 'undefined') throwNewErrorDependingOnEnv('missing return statement in controller ' + controllerName);
+
+  // return content
+  res.end(content);
+
+  // close connection
+  connection.destroy();
   
 })
 
@@ -68,4 +77,17 @@ http.createServer(app).listen(8080, function() {
 });
 
 
+
+
+// HELPER METHODS
+
+// throw new Error with error message for config.env (development or production)
+// errorForProduction is optional
+function throwNewErrorDependingOnEnv(errorForDevelopment, errorForProduction) {
+  if(config.env == 'development') {
+    throw new Error(errorForDevelopment);
+  } else {
+    throw new Error(errorForProduction || 'internal api error');
+  }
+}
 
