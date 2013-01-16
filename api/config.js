@@ -12,7 +12,7 @@ module.exports = {
     database: 'd0161511',
     user: 'd0161511',
     password: 'nmsN8dCS5yB3mFUk',
-    debug: false // set to false, if config.env = production
+    debug: false // is set to false, if config.env = production
   }
 
 };

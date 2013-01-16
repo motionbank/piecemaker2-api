@@ -1,8 +1,10 @@
-module.exports = function(req, res, next) {
+module.exports = function(req, res, db) {
 
-  console.log('called');
+  
 
 
-  res.end('Hello from Connesct!\n');
+
+
+  return 'hallo2';
 
 };
