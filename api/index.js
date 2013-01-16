@@ -21,11 +21,10 @@ var app = connect()
 // =====================
 .use(function(req, res, next){
   
-
-  // find first a-z and _ in url.
-  // example /controller/:id = controller
+  // parse controller name from url
+  // controller name must start with character followed by alphanumerics and/or underscores
   try {
-    var controllerName = req.url.match(/^\/([a-z_]+)/)[1];
+    var controllerName = req.url.match(/^\/([a-z][a-z0-9_]*)/)[1];
   } catch(e) {
     throw new Error('invalid controller name');
   }
@@ -38,7 +37,6 @@ var app = connect()
     throw new Error('controller not found');
   }
   
-  res.end('Hello from Connect!\n');
 })
 
 
