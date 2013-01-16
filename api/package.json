@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "connect": "2.7.x",
-    "mysql": "2.0.x"
+    "mysql": "2.0.x",
+    // "connect-xcors": "0.5.x"
   }
 }

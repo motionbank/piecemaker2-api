@@ -10,32 +10,43 @@ var http = require('http');
 
 connection.destroy();
 
-// var connect = require('connect');
-// var http = require('http');
-// var Sequelize = require("sequelize");
-// var sequelize = new Sequelize(config.sequelize.database, config.sequelize.username, config.sequelize.password, config.sequelize.options);
-// var Model = require('./models.js')(sequelize, Sequelize); // model definitions
-// 
-// 
-// 
-// Model.User.findAll().success(function(users) {
-//   console.log(users);
-//   console.log(users[0].getEvents());
-// });
-// 
-// 
-// 
+
 
 var app = connect()
   // .use(connect.cookieParser())
   // .use(connect.session({ secret: 'my secret here' }))
-  .use(function(req, res){
-    res.end('Hello from Connect!\n');
+
+
+  // API ROUTER MIDDLEWARE
+  // =====================
+  .use(function(req, res, next){
+    
+
+    // find first a-z and _ in url.
+    // example /controller/:id = controller
+    try {
+      var controllerName = req.url.match(/^\/([a-z_]+)/)[1];
+    } catch(e) {
+      console.log(e);
+    }
+    
+    // load controller and delegate execution
+    // controllerName should be safe here, only contains a-z and _
+    try {
+      require('./controllers/' + controllerName + '.js').call(null, req, res, next);
+    } catch(e) {
+      console.log(e);
+    }
+
+    // res.end('Hello from Connect!\n');
   });
+
+
 
 http.createServer(app).listen(8080, function() {
   console.log('api listening at port 8080');
 });
+
 
 
 
