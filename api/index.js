@@ -39,7 +39,6 @@ var app = connect()
   
 })
 
-
 // ERROR HANDLER MIDDLEWARE
 // ========================
 .use(function(err, req, res, next){
@@ -63,49 +62,10 @@ var app = connect()
   }
 });
 
-
+// start server and listen ...
 http.createServer(app).listen(8080, function() {
   console.log('api listening at port 8080');
 });
 
 
 
-
-
-
-
-/*
-  users
-  events
-  event_fields
-  event_groups
-
-  GET  /users
-  POST /user
-  GET  /user/:id
-  PUT  /user/:id
-  DEL  /user/:id
-
-  GET  /user/:id/events
-  GET  /user/:id/event_groups
-
-  GET  /events
-  POST /event
-  GET  /event/:id (with event_group and created_by_user and fields)
-  PUT  /event/:id
-  DEL  /event/:id
-
-  (GET  /event/:id/fields)
-  GET  /event/:id/field/:key
-  POST /event/:id/field
-  PUT  /event/:id/field/:key
-  DEL  /event/:id/field/:key
-
-  GET  /event_groups
-  GET  /event_group/:id
-  POST /event_group
-  PUT  /event_group/:id
-  DEL  /event_group/:id
-
-  
-*/
