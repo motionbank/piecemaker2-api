@@ -38,6 +38,7 @@ var app = connect()
   if(Object.keys(router).length == 0) helper.throwNewEnvError('no routes defined in controllers/' + controllerName + '.js', 'route not found');
 
   // parse request elements
+  // @todo make sure that req.url starts with /
   var requestElements = helper.rtrim(req.url, '/').split('/').slice(1);
   var requestElementsLength = requestElements.length;
 
@@ -48,7 +49,9 @@ var app = connect()
     var route = routerKeys[j];
     if(helper.isDevEnv()) util.debug('checking route: ' + route);
     
-    // parse  elements for this route
+    // @todo make sure that route starts with /
+
+    // parse elements for this route
     var routeElements = helper.rtrim(route, '/').split('/');
     var requestParams = []; // holds :params from request
 
