@@ -1,9 +1,7 @@
 piecemaker API
 ==============
 
-Execute ```node index.js``` (see also [nodemon](https://github.com/remy/nodemon)).
-
-Delete all data in all tables and insert dummy data, execute ```node test/db_dummy_data.js```
+For further API information see README.md in /api.
 
 
 Example DB
@@ -22,6 +20,9 @@ __This DB is deleted from time to time.__
 
 API methods
 -----------
+
+__This list is just a reminder__
+
 https://github.com/fjenett/piecemaker/blob/master/app/controllers/api_controller.rb#L15
 
 
