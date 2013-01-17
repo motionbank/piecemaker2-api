@@ -88,7 +88,7 @@ var app = connect()
           }
 
           // pass some instances to the function
-          var that = {db: connection, req: req, res: res};
+          var that = {db: connection, req: req, res: res, h: helper, config: config};
 
           // finally ... execute method from controller and fetch returned content
           var content = router[route].apply(that, requestParams);
@@ -108,6 +108,13 @@ var app = connect()
 
   // was there a match?!
   if(!match) helper.throwNewEnvError('unable to find matching route in controllers/' + controllerName + '.js', 'route not found');
+
+  // parse content to JSON
+  try {
+    content = JSON.stringify(content);
+  } catch(e) {
+    helper.throwNewEnvError('could parse content to JSON: ' + e);
+  }
 
   // return content to client
   res.end(content); 
