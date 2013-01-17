@@ -24,6 +24,7 @@ Controllers
 A short tutorial on how to create a controller file, i.e. for users.
 
  * Create file __users__.js in /controllers (the filename equals the first part of the REST-URL, i.e. GET <notextile>/</notextile>__users__/1)
+ * Controller names must start with a character followed by alphanumerics and/or underscores
  * Put your routes and according functions in the file:
  
 ```javascript
@@ -38,6 +39,7 @@ module.exports = {
   // you can use params in your route, :int and :string
   // some examples: /users/:int, /users/:int/events/:int, /users_by_name/:string
   // params are then passed to the function
+  // routes must start with /
 
   'GET /users': 
   function() {
@@ -79,7 +81,15 @@ module.exports = {
 Routing Algo
 ------------
 
-1. df
-1. df
+Example: GET /users/:int
+
+1. Get first element of request URL (users)
+1. Load /controller/users.js
+1. Loop over all routes found in controller:
+ 1. Check if HTTP method from request URL (GET) is allowed for this route (see config.allowHttpMethods)
+ 1. Check if HTTP method matches for this route
+ 1. Check if numbers of URL route elements (users, :int => 2) from request URL and this route from your controller are equal
+ 1. Check if route elements match (in this order: plain string, :int, :string)
+ 1. Break if any of these checks fail, otherwise you found your route with its function
 
 
