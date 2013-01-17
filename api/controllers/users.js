@@ -20,7 +20,7 @@ module.exports = {
     return 'get all users with name ' + name;
   },       
 
-  'GET /users/:int/events/:int': 
+  'GET users/:int/events/:int': 
   function(user_id, event_id) {
 
     // console.log(this.db);
