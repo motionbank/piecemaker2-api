@@ -26,6 +26,8 @@ var app = connect()
 
   util.log('[api] request ' + req.method + ' ' + req.url); // do some logging
   
+  // @todo send hello if empty url
+
   // load controller and the routes
   // controllerName should be safe here, only contains a-z and _
   try {
