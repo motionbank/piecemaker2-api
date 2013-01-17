@@ -1,15 +1,5 @@
 module.exports = {
 
-  /* Put all your controller routes and functions in this file.
-   * Example:
-   *  'GET /users/:int':
-   *  function(user_id) {
-   *    // access mysql db with this.db
-   *    return 'get user with id ' + user_id;
-   *  }
-   */
-  
-
   'GET /users': 
   function() {
     return 'get all users';
@@ -35,7 +25,7 @@ module.exports = {
 
     // console.log(this.db);
 
-    return 'get all events with id ' + event_id + ' for user with id ' + user_id;
+    return {foobar: 'get all events with id ' + event_id + ' for user with id ' + user_id};
   },
 
   'DEL /users/:int/event_groups': 
