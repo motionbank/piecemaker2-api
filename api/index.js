@@ -24,14 +24,21 @@ var app = connect()
     helper.throwNewEnvError('invalid controller name. controller name must start with character followed by alphanumerics and/or underscores. ', 'invalid controller name');
   }
 
-  util.log('[api] request ' + req.url); // do some logging
+  util.log('[api] request ' + req.method + ' ' + req.url); // do some logging
   
   // load controller and the routes
   // controllerName should be safe here, only contains a-z and _
   try {
+    // load controller in pluralized form
     var router = require('./controllers/' + controllerName + '.js');
   } catch(e) { 
-    helper.throwNewEnvError(e, 'controller not found');
+    try {
+      // load controller if in singularized form
+      var router = require('./controllers/' + controllerName + 's.js');
+    } catch(e) {
+      // if no controller was found ...
+      helper.throwNewEnvError(e, 'controller not found');  
+    }
   }
 
   // route request ...
@@ -68,8 +75,8 @@ var app = connect()
           } else if(routeElements[i] == ':int' && !isNaN(requestElements[i]-0)) {
             // found an integer
             requestParams.push(requestElements[i]);
-          } else if(routeElements[i] == ':string') {
-            // well, taking this as string
+          } else if(routeElements[i] == ':string' && isNaN(requestElements[i]-0)) {
+            // found a string which is not an integer
             requestParams.push(requestElements[i]);
           } else {
             // no match, stop loop

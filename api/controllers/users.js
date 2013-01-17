@@ -5,14 +5,14 @@ module.exports = {
     return 'get all users';
   },
 
-  'GET /users/:int': 
+  'GET /user/:int': 
   function(user_id) {
     return 'get user with id ' + user_id;
   },
-
-  'GET /users/peter': 
+   
+  'GET /user/peter': 
   function() {
-    return 'get all users with name peter';
+    return 'get user with name peter';
   },    
 
   'GET /users/:string': 
@@ -20,7 +20,7 @@ module.exports = {
     return 'get all users with name ' + name;
   },       
 
-  'GET /users/:int/events/:int': 
+  'GET /user/:int/events/:int': 
   function(user_id, event_id) {
 
     // console.log(this.db);
@@ -28,7 +28,7 @@ module.exports = {
     return {foobar: 'get all events with id ' + event_id + ' for user with id ' + user_id};
   },
 
-  'DEL /users/:int/event_groups': 
+  'DEL /user/:int/event_groups': 
   function(user_id) {
     return 'delete all event groups for user with id ' + user_id;
   }
