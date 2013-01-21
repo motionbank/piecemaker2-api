@@ -6,11 +6,12 @@ var http = require('http');
 var util = require('util');
 
 
-var app = connect()
-// .use(connect.cookieParser())
-// .use(connect.session({ secret: 'my secret here' }))
 
+var app = connect()
+
+.use(connect.bodyParser())
 // @todo cors middleware
+
 
 // API ROUTER MIDDLEWARE
 // =====================
@@ -24,7 +25,7 @@ var app = connect()
     helper.throwNewEnvError('invalid controller name. controller name must start with character followed by alphanumerics and/or underscores. ', 'invalid controller name');
   }
 
-  util.log('[api] request ' + req.method + ' ' + req.url); // do some logging
+  util.log('[api] request ' + req.method + ' ' + req.url + ' ('+ JSON.stringify(req.body) +')'); // do some logging
 
   // @todo send hello if empty url
 
@@ -52,6 +53,7 @@ var app = connect()
   var requestElementsLength = requestElements.length;
 
   // loop over all found routes from controller
+  var match = false;
   var routerKeys = Object.keys(router);
   var routerKeysLength = routerKeys.length;
   for (var j = 0; j < routerKeysLength; j++) {
@@ -70,7 +72,7 @@ var app = connect()
       // verify elements length from route and request
       if (routeElements.length == requestElementsLength) {
         // see if elements from route and request match
-        var match = true;
+        match = true;
         for (var i = 0; i < requestElementsLength; i++) {
           if (routeElements[i] == requestElements[i]) {
             // elements match perfectly
@@ -91,25 +93,54 @@ var app = connect()
         if (match) {
           if (helper.isDevEnv()) util.debug('using route ' + route + ' with params [' + requestParams + ']');
 
-          // connect to database
-          try {
-            if (helper.isDevEnv() && config.mysql.debug) config.mysql.debug = false;
-            var connection = mysql.createConnection(config.mysql);
-          } catch (e) {
-            helper.throwNewEnvError(e);
+          if (helper.isDevEnv() && config.mysql.debug) config.mysql.debug = false;
+          var connection = mysql.createConnection(config.mysql);
+          
+
+          var errorCallback = function(error) {
+            next(error); // pass error to next layer
+
+            // close connection
+            connection.end(function(error) {
+              if(error) util.error(error);
+             });
+
+            return;
+          };
+
+          var renderCallback = function(content) {
+            // parse content to JSON
+            try {
+              content = JSON.stringify(content);
+            } catch (e) {
+              helper.throwNewEnvError('could not parse content to JSON: ' + e);
+            }
+
+            // send content back to client
+            res.end(content);
+
+            // close connection
+            connection.end(function(error) {
+              if(error) util.error(error);
+             });
+
+            if (helper.isDevEnv()) util.debug('return ' + content);  
           }
 
-          // pass some instances to the function
-          var that = {db: connection, req: req, res: res, h: helper, config: config};
+          // pass some vars to the function
+          var api = { error: errorCallback, 
+                      render: renderCallback,
+                      db: connection, 
+                      params: req.body,
+                      req: req, 
+                      res: res, 
+                      h: helper, 
+                      config: config};
 
-          // finally ... execute method from controller and fetch returned content
-          var content = router[route].apply(that, requestParams);
+          requestParams.unshift(api);
 
-          // close connection
-          connection.destroy();
-
-          // verify if controller has return statement
-          if (typeof content == 'undefined') helper.throwNewEnvError('missing return statement in controller ' + controllerName);
+          // finally ... execute method from controller
+          router[route].apply(null, requestParams);
 
           // since we found a route, do not check further routes
           break;
@@ -118,24 +149,12 @@ var app = connect()
     }
   }
 
-  // was there a match?!
-  if (!match) helper.throwNewEnvError('unable to find matching route in controllers/' + controllerName + '.js', 'route not found');
-
-  // parse content to JSON
-  try {
-    content = JSON.stringify(content);
-  } catch (e) {
-    helper.throwNewEnvError('could parse content to JSON: ' + e);
-  }
-
-  // return content to client
-  res.end(content);
-
-  if (helper.isDevEnv()) util.debug('return ' + content);
-
-  // @todo auto jsonp return!?
+  // there was no match!
+  if(!match) helper.throwNewEnvError('unable to find matching route in controllers/' + controllerName + '.js', 'route not found');
 
 })
+
+// @todo auto jsonp return!? middleware
 
 // ERROR HANDLER MIDDLEWARE
 // ========================
