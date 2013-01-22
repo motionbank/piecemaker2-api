@@ -24,6 +24,7 @@ API methods
 __This list is just a reminder__
 
 https://github.com/fjenett/piecemaker/blob/master/app/controllers/api_controller.rb#L15
+https://github.com/fjenett/piecemaker/blob/master/config/routes.rb#L43-L63
 
 
 ```
