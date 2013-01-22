@@ -71,6 +71,12 @@ module.exports = {
       }
     }
 
+    // anything to update?
+    if(updateKeys.length == 0) {
+      api.render('false');
+      return; 
+    }
+
     updateValues.push(user_id);
     api.db.query('UPDATE users SET ' +
       updateKeys.join(',') + ' WHERE id=? LIMIT 1',
