@@ -22,6 +22,22 @@ var connection = mysql.createConnection(config.mysql);
 
 var app = connect()
 
+// etablish mysql connection
+.use(function(req, res, next) {
+  if(!connection._connectCalled) {
+    connection.connect(function(error) {
+      if(error) {
+        util.error(error);
+        next(500, 'mysql unavailable');
+      } else {
+        next();
+      }
+    });
+  } else {
+    next();
+  }
+})
+
 .use(connect.bodyParser())
 // @todo cors middleware
 
@@ -164,6 +180,8 @@ var app = connect()
 // ERROR HANDLER MIDDLEWARE
 // ========================
 .use(function(err, req, res, next) {
+
+  if(!err.status) err.status = 500;
 
   // send error to client
   res.statusCode = err.status < 400 ? 500 : err.status;
