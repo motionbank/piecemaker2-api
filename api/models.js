@@ -27,7 +27,7 @@ module.exports = {
       });    
   },
 
-  get_one: function($, id, sql) {
+  get_one: function($, id, sql, include) {
     if(!id) {
       return $.error(400, 'invalid parameters');
     }
@@ -40,7 +40,29 @@ module.exports = {
           if(!results[0]) {
             return $.error(400, 'unable to fetch result for this id');
           }
-          return $.render(results[0]); 
+
+          if(include) {
+            var includeResults = {};
+            var includeKeys = Object.keys(include);
+            var includeKeysLength = includeKeys.length;
+            var i = 0;
+            includeKeys.forEach(function(key, i){
+              var sql = include[ key ];
+              $.db.query(sql, [ results[0][key + '_id'] ], function(error, subResults){
+                i++;
+                if(error) {
+                  return $.error(500, 'unable to fetch result');
+                } else {
+                  results[0][key] = subResults[0];
+                  if(i == includeKeysLength) {
+                    return $.render(results[0]); 
+                  }
+                }
+              });
+            });
+          } else {
+            return $.render(results[0]);   
+          }
         }
     });
   },
