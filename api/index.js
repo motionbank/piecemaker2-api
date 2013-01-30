@@ -5,6 +5,19 @@ var connect = require('connect');
 var http = require('http');
 var util = require('util');
 
+var consoleEscapeCodes = {};
+consoleEscapeCodes.red = '\u001b[31m';
+consoleEscapeCodes.green = '\u001b[32m';
+consoleEscapeCodes.yellow = '\u001b[33m';
+consoleEscapeCodes.blue = '\u001b[34m';
+consoleEscapeCodes.magenta = '\u001b[35m';
+consoleEscapeCodes.cyan = '\u001b[36m';
+consoleEscapeCodes.white = '\u001b[37m';
+consoleEscapeCodes.bold = '\u001b[1m';
+consoleEscapeCodes.reset = '\u001b[0m';
+
+if (helper.isDevEnv()) config.mysql.debug = false;
+var connection = mysql.createConnection(config.mysql);
 
 
 var app = connect()
@@ -22,10 +35,10 @@ var app = connect()
   try {
     var controllerName = req.url.match(/^\/([a-z][a-z0-9_]*)/)[1];
   } catch (e) {
-    helper.throwNewEnvError('invalid controller name. controller name must start with character followed by alphanumerics and/or underscores. ', 'invalid controller name');
+    return next(404, 'invalid controller name');
   }
 
-  util.log('[api] request ' + req.method + ' ' + req.url + ' ('+ JSON.stringify(req.body) +')'); // do some logging
+  util.log(consoleEscapeCodes.cyan + consoleEscapeCodes.bold + '[api] request ' + req.method + ' ' + req.url + ' ('+ JSON.stringify(req.body) +')' + consoleEscapeCodes.reset); // do some logging
 
   // @todo send hello if empty url
 
@@ -40,12 +53,12 @@ var app = connect()
       var router = require('./controllers/' + controllerName + 's.js');
     } catch (e) {
       // if no controller was found ...
-      helper.throwNewEnvError(e, 'controller not found');
+      return next(404, 'controller not found');
     }
   }
 
   // route request ...
-  if (Object.keys(router).length == 0) helper.throwNewEnvError('no routes defined in controllers/' + controllerName + '.js', 'route not found');
+  if (Object.keys(router).length == 0) return next(404, 'route not found');
 
   // parse request elements
   // @todo make sure that req.url starts with /
@@ -93,38 +106,30 @@ var app = connect()
         if (match) {
           if (helper.isDevEnv()) util.debug('using route ' + route + ' with params [' + requestParams + ']');
 
-          if (helper.isDevEnv() && config.mysql.debug) config.mysql.debug = false;
-          var connection = mysql.createConnection(config.mysql);
-          
 
-          var errorCallback = function(error) {
-            next(error); // pass error to next layer
-
-            // close connection
-            connection.end(function(error) {
-              if(error) util.error(error);
-             });
-
-            return;
+          var errorCallback = function(http, message) { 
+            return next(http, message);
           };
+
 
           var renderCallback = function(content) {
             // parse content to JSON
             try {
               content = JSON.stringify(content);
             } catch (e) {
-              helper.throwNewEnvError('could not parse content to JSON: ' + e);
+              return next(500, 'could not parse content to JSON');
             }
 
             // send content back to client
+            res.setHeader('Content-Type', 'application/json');
             res.end(content);
 
             // close connection
-            connection.end(function(error) {
-              if(error) util.error(error);
-             });
+            //connection.end(function(error) {
+            //  if(error) util.error(error);
+            // });
 
-            if (helper.isDevEnv()) util.debug('return ' + content);  
+            if (helper.isDevEnv()) util.debug(consoleEscapeCodes.cyan + 'return ' + content + consoleEscapeCodes.reset);  
           }
 
           // pass some vars to the function
@@ -150,7 +155,7 @@ var app = connect()
   }
 
   // there was no match!
-  if(!match) helper.throwNewEnvError('unable to find matching route in controllers/' + controllerName + '.js', 'route not found');
+  if(!match) return next(404, 'route not found');
 
 })
 
@@ -159,25 +164,40 @@ var app = connect()
 // ERROR HANDLER MIDDLEWARE
 // ========================
 .use(function(err, req, res, next) {
-  // copy & paste with some modifications from http://www.senchalabs.org/connect/errorHandler.html
-  if (err.status) res.statusCode = err.status;
-  if (res.statusCode < 400) res.statusCode = 500;
-  var accept = req.headers.accept || '';
 
-  // handle json
-  if (~accept.indexOf('json')) {
-    var error = {message: err.message, statusCode: res.statusCode};
-    if (config.env == 'development') error.stack = err.stack;
-    for (var prop in err) error[prop] = err[prop];
-    var json = JSON.stringify({ error: error });
-    res.setHeader('Content-Type', 'application/json');
-    res.end(json);
-  // plain text
+  // send error to client
+  res.statusCode = err.status < 400 ? 500 : err.status;
+  res.writeHead(res.statusCode, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify( {http: res.statusCode, error: err.message} ));
+
+  if(config.env == 'development') {
+    util.error(consoleEscapeCodes.red + '[api] ' + res.statusCode + ' ' + err.message + consoleEscapeCodes.reset);
+    util.error(consoleEscapeCodes.white + '[api] ' + err.stack + consoleEscapeCodes.reset);
   } else {
-    res.writeHead(res.statusCode, { 'Content-Type': 'text/plain' });
-    res.end('(HTTP ' + res.statusCode + ') ' + (config.env == 'development' ? err.stack : err.message));
+    // util.error('[api] ' + res.statusCode + ' ' + err.stack); // log to file
   }
+
+
+  // // copy & paste with some modifications from http://www.senchalabs.org/connect/errorHandler.html
+  // if (err.status) res.statusCode = err.status;
+  // if (res.statusCode < 400) res.statusCode = 500;
+  // var accept = req.headers.accept || '';
+// 
+  // // handle json
+  // if (~accept.indexOf('json')) {
+  //   var error = {message: err.message, statusCode: res.statusCode};
+  //   if (config.env == 'development') error.stack = err.stack;
+  //   for (var prop in err) error[prop] = err[prop];
+  //   var json = JSON.stringify({ error: error });
+  //   res.setHeader('Content-Type', 'application/json');
+  //   res.end(json);
+  // // plain text
+  // } else {
+  //   res.writeHead(res.statusCode, { 'Content-Type': 'text/plain' });
+  //   res.end('(HTTP ' + res.statusCode + ') ' + (config.env == 'development' ? err.stack : err.message));
+  // }
 });
+
 
 // start server and listen ...
 http.createServer(app).listen(config.port, function() {
