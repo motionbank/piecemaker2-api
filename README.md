@@ -21,6 +21,7 @@ __This DB is deleted from time to time.__
 Create API Doc
 -------------
 Run 
+    
     chmod +x apidoc.rb
     ./apidoc.rb -d api/controllers > docs/api.html
 
