@@ -11,10 +11,9 @@ module.exports = {
     $.db.query('SELECT * FROM users WHERE is_disabled=0', 
       function(error, results) {
         if(error) {
-          $.error(error);
-          return;
+          return $.error(500, error);
         } else {
-          $.render(results);
+          return $.render(results);
         }
     });
   },
@@ -36,10 +35,9 @@ module.exports = {
       [$.params.name, $.params.email, $.params.password, $AccessKey],
       function(error, results) {
         if(error) {
-          $.error(error);
-          return;
+          return $.error(400, error);
         } else {
-          $.render(results.insertId);
+          return $.render(results.insertId);
         }
       });
   },
@@ -54,17 +52,15 @@ module.exports = {
   'GET /user/:int':
   function($, user_id) {
     if(!user_id) {
-      $.error('invalid user_id');
-      return;
+      return $.error('invalid user_id');
     }
 
-    $.db.query('SELECT * FROM users WHERE id=? LIMIT 1', [user_id], 
+    $.db.query('SELECT * FROM users WHERE isd=? LIMIT 1', [user_id], 
       function(error, results) {
         if(error) {
-          $.error(error);
-          return;
+          return $.error(400, 'invalid parameters');
         } else {
-          $.render(results[0] || 'false'); 
+          return $.render(results[0] || 'false'); 
         }
     });
   },
@@ -81,8 +77,7 @@ module.exports = {
   'PUT /user/:int':
   function($, user_id) {
     if(!user_id) {
-      $.error('invalid user_id');
-      return;
+      return $.error(400, 'invalid user_id');
     }
 
     // filter $.params
@@ -100,8 +95,7 @@ module.exports = {
 
     // anything to update?
     if(updateKeys.length == 0) {
-      $.render('false');
-      return; 
+      return $.render('false');
     }
 
     updateValues.push(user_id);
@@ -110,16 +104,14 @@ module.exports = {
       updateValues,
       function(error, results) {
         if(error) {
-          $.error(error);
-          return;
+          return$.error(error);
         } else {
           $.db.query('SELECT * FROM users WHERE id=? LIMIT 1', [user_id], 
             function(error, results) {
               if(error) {
-                $.error(error);
-                return;
+                return $.error(error);
               } else {
-                $.render(results[0] || 'false'); 
+                return $.render(results[0] || 'false'); 
               }
           });
         }
@@ -136,17 +128,15 @@ module.exports = {
   'DELETE /user/:int':
   function($, user_id) {
     if(!user_id) {
-      $.error('invalid user_id');
-      return;
+      return $.error('invalid user_id');
     }
 
     $.db.query('DELETE FROM users WHERE id=? LIMIT 1', [user_id], 
       function(error, results) {
         if(error) {
-          $.error(error);
-          return;
+          return $.error(error);
         } else {
-          $.render(user_id); 
+          return $.render(user_id); 
         }
     });
   }
