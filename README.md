@@ -18,6 +18,12 @@ __This DB is deleted from time to time.__
 * User: d0161511
 * Pass: nmsN8dCS5yB3mFUk
 
+Create API Doc
+-------------
+Run 
+    chmod +x apidoc.rb
+    ./apidoc.rb -d api/controllers > docs/api.html
+
 API methods
 -----------
 
