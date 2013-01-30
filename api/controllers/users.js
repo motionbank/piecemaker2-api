@@ -37,7 +37,7 @@ module.exports = {
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   'GET /user/:int':
   function($, user_id) {
-    $.m.get_one($, user_id, 'SELECT id, name, email FROM users WHERE id=? LIMIT 1');
+    $.m.get_one($, [user_id], 'SELECT id, name, email FROM users WHERE id=? LIMIT 1');
   },
 
   // > PUT /user/:int > json
@@ -51,7 +51,7 @@ module.exports = {
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   'PUT /user/:int':
   function($, user_id) {
-    $.m.put_one($, user_id, ['name', 'email'], 'users');
+    $.m.put_one($, [user_id], ['name', 'email'], 'users', 'id=?');
   },
 
   // > DELETE /user/:int > json
@@ -64,7 +64,7 @@ module.exports = {
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   'DELETE /user/:int':
   function($, user_id) {
-    $.m.delete_one($, user_id, 'users');
+    $.m.delete_one($, user_id, 'users', 'id=?');
   },
 
 
