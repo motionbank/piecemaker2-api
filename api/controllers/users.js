@@ -6,7 +6,7 @@ module.exports = {
   //
   // < 200 < json < [{"id": 1, "name": "Peter", "email": "peter@example.com", "is_admin": 0}]
   // < 401 < json < {"http": 401, "error": "unauthorized"}
-  // < 500 < json < {"http": 401, "error": "unauthorized"}
+  // < 500 < json < {"http": 500, "error": "unable to fetch results"}
   'GET /users':
   function($) {
     $.m.get_all($, 'SELECT * FROM users WHERE is_disabled=0');
@@ -65,6 +65,17 @@ module.exports = {
   'DELETE /user/:int':
   function($, user_id) {
     $.m.delete_one($, user_id, 'users');
+  },
+
+
+
+  'GET /user/:int/events':
+  function($, user_id) {
+
+  }
+
+  'GET /user/:int/event_groups':
+  function($, user_id) {
 
   }
 
