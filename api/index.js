@@ -1,5 +1,6 @@
 var config = require('./config.js');
 var helper = require('./helper.js');
+var models = require('./models.js');
 var mysql = require('mysql');
 var connect = require('connect');
 var http = require('http');
@@ -156,6 +157,7 @@ var app = connect()
                       req: req, 
                       res: res, 
                       h: helper, 
+                      m: models,
                       config: config};
 
           requestParams.unshift(api);
