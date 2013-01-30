@@ -5,13 +5,44 @@ var config = require('./config.js');
 
 module.exports = {
 
-  get_all: function($, sql) {
-    $.db.query(sql, 
+  get_all: function($, sql, fields, include) {
+    $.db.query(sql, fields, 
       function(error, results) {
         if(error) {
           return $.error(500, 'unable to fetch results');
         } else {
-          return $.render(results);
+          if(results.length == 0) {
+            return $.error(400, 'unable to fetch result');
+          }
+
+          if(include && results.length > 0) {
+            var includeKeys = Object.keys(include);
+            var includeKeysLength = includeKeys.length;
+            var resultsLength = results.length;
+
+            var j = 0;
+            results.forEach(function(result, j){
+              j++;
+              var i = 0;
+              includeKeys.forEach(function(key, i){
+                i++;
+                var sql = include[key];
+                $.db.query(sql, [ result[key + '_id'] ], function(error, subResults){
+                  if(error) {
+                    return $.error(500, 'unable to fetch result');
+                  } else {
+                    result[key] = subResults[0];
+                    if(j == resultsLength && i == includeKeysLength) {
+                      return $.render(results);
+                    }
+                  }
+                });
+              });
+
+            });            
+          } else {
+            return $.render(results);
+          }
         }
     });
   },
@@ -28,11 +59,15 @@ module.exports = {
   },
 
   get_one: function($, id, sql, include) {
-    if(!id) {
-      return $.error(400, 'invalid parameters');
+
+    for(var i=0; i < id.length; i++) {
+      if(!id[i]) {
+        return $.error(400, 'invalid parameters');
+      }      
     }
 
-    $.db.query(sql, [id], 
+
+    $.db.query(sql, id, 
       function(error, results) {
         if(error) {
           return $.error(500, 'unable to fetch result');
@@ -41,8 +76,7 @@ module.exports = {
             return $.error(400, 'unable to fetch result for this id');
           }
 
-          if(include) {
-            var includeResults = {};
+          if(include && results[0]) {
             var includeKeys = Object.keys(include);
             var includeKeysLength = includeKeys.length;
             var i = 0;
@@ -67,9 +101,11 @@ module.exports = {
     });
   },
 
-  put_one: function($, id, allowFields, table) {
-    if(!id) {
-      return $.error(400, 'invalid parameters');
+  put_one: function($, id, allowFields, table, where) {
+    for(var i=0; i < id.length; i++) {
+      if(!id[i]) {
+        return $.error(400, 'invalid parameters');
+      }      
     }
 
     // filter $.params
@@ -89,9 +125,14 @@ module.exports = {
       return $.render('false');
     }
 
-    updateValues.push(id);
+    for(var i=0; i < id.length; i++) {
+      if(!id[i]) {
+        updateValues.push(id[i]);
+      }      
+    }
+    
     $.db.query('UPDATE ' + table + ' SET ' +
-      updateKeys.join(',') + ' WHERE id=? LIMIT 1',
+      updateKeys.join(',') + ' WHERE ' + where + ' LIMIT 1',
       updateValues,
       function(error, results) {
         if(error) {
@@ -102,12 +143,12 @@ module.exports = {
       });    
   },
 
-  delete_one: function($, id, table) {
+  delete_one: function($, id, table, where) {
     if(!id) {
       return $.error(400, 'invalid parameters');
     }
 
-    $.db.query('DELETE FROM ' + table + ' WHERE id=? LIMIT 1', [id], 
+    $.db.query('DELETE FROM ' + table + ' WHERE ' + where + ' LIMIT 1', [id], 
       function(error, results) {
         if(error) {
           return $.error(500, 'unable to delete item');
