@@ -111,6 +111,18 @@ new Sequential([
 			} else {
 				var fns = [];
 				if ( emptyBeforeInsert ) {
+					// need to erase events first as they are referenced by users
+					fns.push(
+						function (cb) {
+							pm2Conn.query('TRUNCATE events',[],function(e,r){
+								if (e) {
+									die(e);
+								} else {
+									cb();
+								}
+							});
+						}
+					);
 					fns.push(
 						function (cb) {
 							pm2Conn.query('TRUNCATE users',[],function(e,r){
@@ -228,6 +240,7 @@ new Sequential([
 					);
 				}
 				var eventFields = [
+					'type',
 					'title',
 					'description',
 					'event_type',
@@ -237,10 +250,14 @@ new Sequential([
 					'rating',
 					// TODO: there are more ...
 				];
+				var eventFieldsReplacement = {
+					description: 'body',
+					event_type: 'type'
+				};
 				for ( var e = 0, k = results.length; e < k; e++ ) {
 					var event = results[e];
 					var happenedAt = new Date(event.happened_at * 1000); // assumes Florians PM1 version with milliseconds
-					var duration = event.dur * 1000;
+					var duration = event.dur;
 					var group = newEventGroups[event.piece_id].id;
 					if ( !event.created_by ) {
 						event.created_by = 'Administrator'
@@ -258,6 +275,7 @@ new Sequential([
 										} else {
 											newEvents[o] = {
 												id: r.insertId,
+												srcModel: 'event',
 												oldId: o
 											};
 											cb()
@@ -266,24 +284,138 @@ new Sequential([
 							}
 						})(happenedAt.getTime(), duration, group, createdBy, event.id)
 					);
+					// add fields
 					for ( var f = 0, m = eventFields.length; f < m; f++ ) {
 						var field = eventFields[f];
-						fns.push(
-							(function(o,i,v){
-								return function (cb) {
-									pm2Conn.query(
-										'INSERT INTO event_fields (`event_id`, id, value) VALUES (?,?,?)',
-										[newEvents[o].id,i,v],
-										function(e,r){
-											if(e) {
-												die(e)
-											} else {
-												cb()
-											}
-									})
-								}
-							})(event.id, field, event[field])
-						);
+						var fieldName = eventFieldsReplacement[field] || field;
+
+						if ( event.event_type == 'data' && field == 'description' ) continue; // skip data part of data events
+						
+						if (event[field]) {
+							fns.push(
+								(function(o,i,v){
+									return function (cb) {
+										pm2Conn.query(
+											'INSERT INTO event_fields (`event_id`, id, value) VALUES (?,?,?)',
+											[newEvents[o].id,i,v],
+											function(e,r){
+												if(e) {
+													die(e)
+												} else {
+													cb()
+												}
+										})
+									}
+								})(event.id, fieldName, event[field])
+							);
+						}
+					}
+					if ( event.event_type == 'data' ) {
+						var data = (new Function('return ('+event.description+')'))();
+						for ( var p in data ) {
+							var value = data[p];
+							fns.push(
+								(function(o,i,v){
+									return function (cb) {
+										pm2Conn.query(
+											'INSERT INTO event_fields (`event_id`, id, value) VALUES (?,?,?)',
+											[newEvents[o].id,i,v],
+											function(e,r){
+												if(e) {
+													die(e)
+												} else {
+													cb()
+												}
+										})
+									}
+								})(event.id, p, value)
+							);
+						}
+					}
+				}
+				new Sequential(fns,function(){
+					cb()
+				});
+			}
+		});
+	},
+	// VIDEOS are events too
+	function (cb) {
+		pm1Conn.query('SELECT * FROM videos AS v LEFT JOIN video_recordings AS r ON v.id = r.video_id',[],function(error, results){
+			if (error) {
+				die(error);
+			} else {
+				var fns = [];
+				if (emptyBeforeInsert) {
+					// not needed as it should already have been done at EVENTS above
+				}
+				var videoFields = [
+					'event_type',
+					'title',
+					'meta_data',
+					'rating',
+					'group_id',
+					'fn_local',
+					'fn_s3',
+					'fn_arch',
+					'vid_type',
+					// TODO: there are more ...
+				];
+				var eventFieldsReplacement = {
+					description: 'body',
+					event_type: 'type'
+				};
+				for ( var v = 0, k = results.length; v < k; v++ ) {
+					var video = results[v];
+					video.event_type = 'video';
+					var happenedAt = new Date(video.recorded_at * 1000); // assumes Florians PM1 version with milliseconds
+					var duration = video.duration;
+					var group = newEventGroups[video.piece_id].id;
+					if ( !video.created_by ) {
+						video.created_by = 'Administrator'
+					}
+					var createdBy = newUsers[video.created_by].id;
+					fns.push((function(t,d,g,u,o){
+						return function (cb) {
+							pm2Conn.query(
+								'INSERT INTO events (`utc_timestamp`, duration, `event_group_id`, `created_by_user_id`) VALUES (?,?,?,?)',
+								[t,d,g,u],
+								function (e,r) {
+									if (e) {
+										die(e)
+									} else {
+										newEvents['video-'+o] = {
+											id: r.insertId,
+											srcModel: 'video',
+											oldId: o
+										};
+										cb()
+									}
+								});
+						}
+					})(happenedAt.getTime(), duration, group, createdBy, video.id));
+					// add fields
+					for ( var f = 0, m = videoFields.length; f < m; f++ ) {
+						var field = videoFields[f];
+						var fieldName = eventFieldsReplacement[field] || field;
+						if ( video[field] ) {
+							fns.push(
+								(function(o,i,v){
+									return function (cb) {
+										pm2Conn.query(
+											'INSERT INTO event_fields (`event_id`, id, value) VALUES (?,?,?)',
+											[newEvents['video-'+o].id,i,v],
+											function(e,r){
+												if(e) {
+													die(e)
+												} else {
+													cb()
+												}
+										})
+									}
+								})(video.id, fieldName, video[field])
+							);
+						}
 					}
 				}
 				new Sequential(fns,function(){
