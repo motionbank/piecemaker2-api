@@ -69,7 +69,7 @@ module.exports = {
   // < 500 < json < {"http": 500, "error": "unable to fetch results"}
   'GET /event_group/:int/events':
   function($, event_group_id) {
-    $.m.get_all($, 'SELECT * FROM events WHERE event_group_id=? LIMIT 100', [event_group_id], 
+    $.m.get_all($, 'SELECT * FROM events WHERE event_group_id=? ', [event_group_id], 
       {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
        "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'});
   },
@@ -82,7 +82,7 @@ module.exports = {
   // < 500 < json < {"http": 500, "error": "unable to fetch results"}
   'GET /event_group/:int/users':
   function($, event_group_id) {
-    $.m.get_all($, 'SELECT users.id, users.name, users.email FROM users INNER JOIN user_has_event_groups ON user_has_event_groups.user_id = users.id WHERE user_has_event_groups.event_group_id=? LIMIT 100', [event_group_id]);
+    $.m.get_all($, 'SELECT users.id, users.name, users.email FROM users INNER JOIN user_has_event_groups ON user_has_event_groups.user_id = users.id WHERE user_has_event_groups.event_group_id=? ', [event_group_id]);
   }
 
 };
