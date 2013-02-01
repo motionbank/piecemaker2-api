@@ -141,7 +141,7 @@ module.exports = {
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   'GET /events/type/:string':
   function($, type) {
-    $.m.get_all($, 'SELECT events.* FROM events INNER JOIN event_fields ON event_fields.event_id=events.id WHERE event_fields.id=? LIMIT 100', [type], 
+    $.m.get_all($, 'SELECT events.* FROM events INNER JOIN event_fields ON event_fields.event_id=events.id WHERE event_fields.id=? ', [type], 
       {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
        "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'});
   },
