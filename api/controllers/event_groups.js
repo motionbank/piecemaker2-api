@@ -2,6 +2,7 @@ module.exports = {
 
   // > GET /event_groups > json
   // > get all event_groups
+  // > curl -X GET http://localhost:8080/event_groups
   //
   // < 200 < json < [{"id": 1, "title": "Event Group", "text": "additional info about event group"}]
   // < 401 < json < {"http": 401, "error": "unauthorized"}
@@ -14,6 +15,7 @@ module.exports = {
   // > POST /event_group > json
   // > create new event_group
   // > {title": "Event Group", "text": "additional info about event group"}
+  // > curl -X POST --data "title=Test group&text=This is just an example test group" http://localhost:8080/event_group
   // 
   // < 200 < json < {"id": 1}
   // < 500 < json < {"http": 500, "error": "unable to create new item"}
@@ -26,6 +28,7 @@ module.exports = {
 
   // > GET /event_group/:int > json
   // > get user details about one event_group
+  // > curl -X GET http://localhost:8080/event_group/1
   // 
   // < 200 < json < {"id": 1, title": "Event Group", "text": "additional info about event group"}
   // < 400 < json < {"http": 400, "error": "invalid parameters"}
@@ -39,6 +42,7 @@ module.exports = {
   // > PUT /event_group/:int > json
   // > updates a event_group
   // > {title": "Event Group", "text": "additional info about event group"}
+  // > curl -X PUT --data "title=Testgroup updated&text=This test group has been updated!" http://localhost:8080/event_group/2
   // 
   // < 200 < json < {"id": 1}
   // < 400 < json < {"http": 400, "error": "invalid parameters"}
@@ -51,6 +55,7 @@ module.exports = {
 
   // > DELETE /event_group/:int > json
   // > delete one event_group
+  // > curl -X DELETE http://localhost:8080/event_group/1
   // 
   // < 200 < json < {"id": 1}
   // < 400 < json < {"http": 400, "error": "invalid parameters"}
@@ -63,6 +68,7 @@ module.exports = {
 
   // > GET /event_group/:int/events > json
   // > get all events for event_groups
+  // > curl -X GET http://localhost:8080/event_group/1/events
   //
   // < 200 < json < [{"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}]
   // < 401 < json < {"http": 401, "error": "unauthorized"}
@@ -76,6 +82,7 @@ module.exports = {
 
   // > GET /event_group/:int/users > json
   // > get all users for event_groups
+  // > curl -X GET http://localhost:8080/event_group/1/users
   //
   // < 200 < json < [{"id": 1, "name": "Peter", "email": "peter@example.com"}]
   // < 401 < json < {"http": 401, "error": "unauthorized"}

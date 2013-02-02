@@ -3,6 +3,7 @@ module.exports = {
 
   // > GET /events > json
   // > get all events
+  // > curl -X GET http://localhost:8080/events
   //
   // < 200 < json < [{"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}]
   // < 401 < json < {"http": 401, "error": "unauthorized"}
@@ -17,18 +18,20 @@ module.exports = {
   // > POST /event > json
   // > create new event
   // > {"event_group_id": 1, "created_by_user_id": 1, "utc_timestamp": 0, "duration": 0}
+  // > curl -X POST --data "event_group_id=3&utc_timestamp=1359834314121&duration=2&type=marker&test_custom_attr=foo" http://localhost:8080/event
   // 
   // < 200 < json < {"id": 1}
   // < 500 < json < {"http": 500, "error": "unable to create new item"}
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   'POST /event':
   function($) {
-    $.m.post_one($, 'INSERT INTO events SET event_group_id=?, created_by_user_id=?, utc_timestamp=?, duration=?', 
+    $.m.post_one($, 'INSERT INTO events SET event_group_id=?, created_by_user_id=?, `utc_timestamp`=?, duration=?', 
       [$.params.event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration]);
   },
 
   // > GET /event/:int > json
   // > get details about one event
+  // > curl -X GET http://localhost:8080/event/3333
   // 
   // < 200 < json < {"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}
   // < 400 < json < {"http": 400, "error": "invalid parameters"}
@@ -44,6 +47,7 @@ module.exports = {
   // > PUT /event/:int > json
   // > updates a event
   // > {"event_group_id": 1, "created_by_user_id": 1, "utc_timestamp": 0, "duration": 0}
+  // > curl -X PUT --data "event_group_id=3&utc_timestamp=1359834314121&duration=2&type=marker&test_custom_attr=foo" http://localhost:8080/event/8315
   // 
   // < 200 < json < {"id": 1}
   // < 400 < json < {"http": 400, "error": "invalid parameters"}
@@ -51,11 +55,12 @@ module.exports = {
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   'PUT /event/:int':
   function($, event_id) {
-    $.m.put_one($, [event_id], ['event_group_id', 'created_by_user_id', 'utc_timestamp', 'duration'], 'events', 'id=?');
+    $.m.put_one($, [event_id], ['event_group_id', 'created_by_user_id', '`utc_timestamp`', 'duration'], 'events', 'id=?');
   },
 
   // > DELETE /event/:int > json
   // > delete one event
+  // > curl -X DELETE http://localhost:8080/event/3333
   // 
   // < 200 < json < {"id": 1}
   // < 400 < json < {"http": 400, "error": "invalid parameters"} < user_id invalid or not found
@@ -69,6 +74,7 @@ module.exports = {
 
   // > GET /event/:int/fields > json
   // > get fields for event
+  // > curl -X GET http://localhost:8080/event/3333/fields
   // 
   // < 200 < json < {"id": "key", "value": "value for key"}
   // < 400 < json < {"http": 400, "error": "invalid parameters"}
@@ -76,13 +82,14 @@ module.exports = {
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   'GET /event/:int/fields':
   function($, event_id) {
-    $.m.get_one($, [event_id], 'SELECT id, value FROM event_fields WHERE id=? LIMIT 1');
+    $.m.get_all($, 'SELECT id, value FROM event_fields WHERE event_id=?', [event_id]);
   },
 
 
   // > POST /event/:int/field > json
   // > create new field for event
   // > {"id": "key", "value": "value for key"}
+  // > curl -X POST --data "id=custom&value=komischer Wert ohne Sinn hier" http://localhost:8080/event/3333/field
   // 
   // < 200 < json < {"id": "key"}
   // < 500 < json < {"http": 500, "error": "unable to create new item"}
@@ -95,6 +102,7 @@ module.exports = {
 
   // > GET /event/:int/field/:string > json
   // > get field for event 
+  // > curl -X GET http://localhost:8080/event/8314/field/custom
   // 
   // < 200 < json < {"id": "key", "value": "value for key"}
   // < 400 < json < {"http": 400, "error": "invalid parameters"}
@@ -108,6 +116,7 @@ module.exports = {
   // > PUT /event/:int/field/:string > json
   // > updates a field for an event
   // > {"id": "key", "value": "value for key"}
+  // > curl -X PUT --data "value=ein anderer Wert hier" http://localhost:8080/event/8314/field/custom
   // 
   // < 200 < json < {"id": "key"}
   // < 400 < json < {"http": 400, "error": "invalid parameters"}
@@ -121,6 +130,7 @@ module.exports = {
 
   // > DELETE /event/:int/field/:string > json
   // > delete one field for an event
+  // > curl -X DELETE http://localhost:8080/event/8314/field/custom
   // 
   // < 200 < json < {"id": "key"}
   // < 400 < json < {"http": 400, "error": "invalid parameters"} < user_id invalid or not found
@@ -134,6 +144,7 @@ module.exports = {
 
   // > GET /events/type/:string > json
   // > get events with type 
+  // > curl -X GET http://localhost:8080/events/type/marker
   // 
   // < 200 < json < {"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}
   // < 400 < json < {"http": 400, "error": "invalid parameters"}
@@ -148,6 +159,7 @@ module.exports = {
 
   // > GET /events/between/:string/and/:string > json
   // > get events between A and B 
+  // > curl -X GET http://localhost:8080/events/between/1298937600000/and/1304208000000
   // 
   // < 200 < json < {"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}
   // < 400 < json < {"http": 400, "error": "invalid parameters"}
@@ -157,9 +169,5 @@ module.exports = {
   function($, time1, time2) {
     return $.error(500, 'not yet implemented');
   }  
-
-
-
-
 
 };

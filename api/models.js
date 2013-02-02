@@ -55,7 +55,7 @@ module.exports = {
         } else {
           return $.render({"id": results.insertId});
         }
-      });    
+      });
   },
 
   get_one: function($, id, sql, include) {
@@ -63,9 +63,8 @@ module.exports = {
     for(var i=0; i < id.length; i++) {
       if(!id[i]) {
         return $.error(400, 'invalid parameters');
-      }      
+      }
     }
-
 
     $.db.query(sql, id, 
       function(error, results) {
@@ -126,13 +125,15 @@ module.exports = {
     }
 
     for(var i=0; i < id.length; i++) {
-      if(!id[i]) {
+      if(id[i]) {
         updateValues.push(id[i]);
       }      
     }
+
+    var query = 'UPDATE ' + table + ' SET ' + updateKeys.join(',') + ' WHERE ' + where + ' LIMIT 1';
     
-    $.db.query('UPDATE ' + table + ' SET ' +
-      updateKeys.join(',') + ' WHERE ' + where + ' LIMIT 1',
+    $.db.query(
+      query,
       updateValues,
       function(error, results) {
         if(error) {
