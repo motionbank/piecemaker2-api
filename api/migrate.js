@@ -104,17 +104,27 @@ new Sequential([
 	},
 	// USERS go first
 	function (cb) {
-		// TODO: reflect user roles from PM1, how?
 		pm1Conn.query( 'SELECT * FROM users', [], function ( error, results ) {
 			if (error) {
 				die(error);
 			} else {
 				var fns = [];
 				if ( emptyBeforeInsert ) {
-					// need to erase events first as they are referenced by users
+					// need to erase events first as they are referenced by users table
 					fns.push(
 						function (cb) {
 							pm2Conn.query('TRUNCATE events',[],function(e,r){
+								if (e) {
+									die(e);
+								} else {
+									cb();
+								}
+							});
+						}
+					);
+					fns.push(
+						function (cb) {
+							pm2Conn.query('TRUNCATE user_has_event_groups',[],function(e,r){
 								if (e) {
 									die(e);
 								} else {
@@ -211,6 +221,47 @@ new Sequential([
 			}
 		});
 	},
+	// USER rights
+	function (cb) {
+		pm1Conn.query('SELECT DISTINCT piece_id, created_by FROM events WHERE created_by IS NOT NULL',[],function(error, results){
+			if (error) {
+				die(error);
+			} else {
+				var fns = [];
+				if (emptyBeforeInsert) {
+					// connection should have been deleted at USER step above
+				}
+				for ( var r = 0, k = results.length; r < k; r++ ) {
+					var userGroup = results[r];
+					if ( !newUsers[userGroup.created_by] ) continue; // no need to bind non-existant user
+					var userId = newUsers[userGroup.created_by].id;
+					if ( !newEventGroups[userGroup.piece_id] ) die( "Piece/group does not exit: "+userGroup.piece_id );
+					var groupId = newEventGroups[userGroup.piece_id].id;
+					fns.push(
+						(function(u,g){
+							return function (cb) {
+								pm2Conn.query(
+									'INSERT INTO user_has_event_groups (user_id, event_group_id) VALUES (?, ?)',
+									[u,g],
+									function (e,r) {
+										if (e) {
+											die(e)
+										} else {
+											// assume OK then
+											cb()
+										}
+									}
+								);
+							}
+						})(userId, groupId)
+					);
+				}
+				new Sequential(fns,function(){
+					cb()
+				});
+			}
+		});
+	},
 	// EVENTS, finally
 	function (cb) {
 		// TODO: events_tags, events_users 
@@ -221,7 +272,7 @@ new Sequential([
 				var fns = [];
 				if ( emptyBeforeInsert ) {
 					fns.push(
-						function (cb) {pm2Conn.query('TRUNCATE events',[],function(e,r){
+						function (cb) { pm2Conn.query('TRUNCATE events',[],function(e,r){
 							if (e) {
 								die(e)
 							} else {
