@@ -84,6 +84,7 @@ var newUsers = [],
  */
 
 new Sequential([
+	// connect source database
 	function (cb) {
 		pm1Conn.connect(function(error) {
 			if(error) {
@@ -93,6 +94,7 @@ new Sequential([
 			}
 		});
 	},
+	// connect destination database
 	function (cb) {
 		pm2Conn.connect(function(error) {
 			if(error) {
@@ -240,8 +242,11 @@ new Sequential([
 					fns.push(
 						(function(u,g){
 							return function (cb) {
+								// TODO: use PM1 roles_matrix to decide on CRUD rights
 								pm2Conn.query(
-									'INSERT INTO user_has_event_groups (user_id, event_group_id) VALUES (?, ?)',
+									'INSERT INTO user_has_event_groups '+
+									'(user_id, event_group_id, allow_read, allow_create, allow_update, allow_delete) '+
+									'VALUES (?, ?, 1, 1, 1, 1)',
 									[u,g],
 									function (e,r) {
 										if (e) {
