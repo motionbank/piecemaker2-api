@@ -24,7 +24,7 @@ var connection = mysql.createConnection(config.mysql);
 
 var app = connect()
 
-// etablish mysql connection
+// establish mysql connection
 .use(function(req, res, next) {
   if(!connection._connectCalled) {
     connection.connect(function(error) {
