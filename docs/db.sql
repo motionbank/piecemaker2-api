@@ -96,7 +96,7 @@ CREATE  TABLE IF NOT EXISTS `d015dedf`.`event_fields` (
   `id` CHAR(10) NOT NULL ,
   `value` TEXT NULL ,
   INDEX `fk_event_has_event_fields` (`event_id` ASC) ,
-  PRIMARY KEY (`id`) ,
+  PRIMARY KEY (`id`, `event_id`) ,
   CONSTRAINT `fk_event_has_event_fields`
     FOREIGN KEY (`event_id` )
     REFERENCES `d015dedf`.`events` (`id` )
