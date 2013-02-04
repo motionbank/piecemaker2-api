@@ -3,6 +3,7 @@
  */
 var config = require('./config.js');
 
+
 module.exports = {
 
   get_all: function($, sql, fields, include) {
@@ -47,13 +48,17 @@ module.exports = {
     });
   },
 
-  post_one: function($, sql, values) {
+  post_one: function($, sql, values, dontRenderReturnCallback) {
     $.db.query(sql, values,
       function(error, results) {
         if(error) {
           return $.error(500, 'unable to create new item');
         } else {
-          return $.render({"id": results.insertId});
+          if(dontRenderReturnCallback) {
+            return dontRenderReturnCallback.call(null, {"id": results.insertId});
+          } else {
+            return $.render({"id": results.insertId});
+          }
         }
       });
   },

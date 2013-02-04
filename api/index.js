@@ -5,6 +5,7 @@ var mysql = require('mysql');
 var connect = require('connect');
 var http = require('http');
 var util = require('util');
+var async = require('async');
 
 var consoleEscapeCodes = {};
 consoleEscapeCodes.red = '\u001b[31m';
@@ -186,6 +187,7 @@ var app = connect()
                       res: res, 
                       h: helper, 
                       m: models,
+                      async: async,
                       config: config};
 
           requestParams.unshift(api);
