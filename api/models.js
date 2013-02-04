@@ -159,7 +159,11 @@ module.exports = {
         if(error) {
           return $.error(500, 'unable to delete item');
         } else {
-          return $.render({"id": id}); 
+          if(results.affectedRows == 1) {
+            return $.render({"id": id});   
+          } else {
+            return $.error(500, 'unable to delete item');
+          }
         }
     });    
   }
