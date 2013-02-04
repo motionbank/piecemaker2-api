@@ -46,6 +46,10 @@ var app = connect()
 // https://gist.github.com/3983284
 .use( function(req, res, next) {
   var oneof = false;
+
+  // @todo currently: "freifahrtschein" for all requests...
+  // https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS#Access-Control-Allow-Origin
+
   if(req.headers.origin) {
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
     oneof = true;
