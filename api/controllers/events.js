@@ -16,17 +16,50 @@ module.exports = {
   },
 
   // > POST /event > json
-  // > create new event
+  // > create new event, create new event_fields for all non-events table fields
   // > {"event_group_id": 1, "created_by_user_id": 1, "utc_timestamp": 0, "duration": 0}
   // > curl -X POST --data "event_group_id=3&utc_timestamp=1359834314121&duration=2&type=marker&test_custom_attr=foo" http://localhost:8080/event
   // 
   // < 200 < json < {"id": 1}
+  // < 200 < json < {"id": 1, "event_fields": ["id1", "id2"]}
   // < 500 < json < {"http": 500, "error": "unable to create new item"}
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   'POST /event':
   function($) {
     $.m.post_one($, 'INSERT INTO events SET event_group_id=?, created_by_user_id=?, `utc_timestamp`=?, duration=?', 
-      [$.params.event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration]);
+      [$.params.event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration], function(result) {
+
+        // create event_fields for additonal $.params
+        var ignorefields = ["id", "event_group_id", "created_by_user_id", "utc_timestamp", "duration"];
+        var keys = Object.keys($.params);
+        var successKeys = [];
+        $.async.forEach(keys, function(key, callback) {
+          // apply this to each item
+          if(~ignorefields.indexOf(key)) return callback.call(null);
+
+          $.db.query("INSERT INTO event_fields SET event_id=?, id=?, value=?", [result.id, key, $.params[key]],
+            function(error, results) {
+              if(!error) { 
+                successKeys.push(key);
+              }
+              callback.call(null);
+            });
+        }, 
+        function(err) {
+          // finishing callback
+          if(err) {
+            return $.render(result); // event was created, no event_fields though
+          } else {
+            result["event_fields"] = successKeys;
+            return $.render(result); // event was created, event_fields as well
+          }
+        });
+
+
+      });
+
+
+
   },
 
   // > GET /event/:int > json
