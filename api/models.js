@@ -6,7 +6,7 @@ var config = require('./config.js');
 
 module.exports = {
 
-  get_all: function($, sql, fields, include) {
+  get_all: function($, sql, fields, include, resultsCallback) {
     $.db.query(sql, fields, 
       function(error, results) {
         if(error) {
@@ -34,7 +34,11 @@ module.exports = {
                   } else {
                     result[key] = subResults[0];
                     if(j == resultsLength && i == includeKeysLength) {
-                      return $.render(results);
+                      if(resultsCallback) {
+                        resultsCallback.call(null, results);
+                      } else {
+                        return $.render(results);
+                      }
                     }
                   }
                 });
@@ -42,7 +46,11 @@ module.exports = {
 
             });            
           } else {
-            return $.render(results);
+            if(resultsCallback) {
+              resultsCallback.call(null, results);
+            } else {
+              return $.render(results);
+            }
           }
         }
     });
