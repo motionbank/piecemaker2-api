@@ -162,7 +162,9 @@ module.exports = {
       return $.error(400, 'invalid parameters');
     }
 
-    $.db.query('DELETE FROM ' + table + ' WHERE ' + where + ' LIMIT 1', [id], 
+    if(typeof id != "object") id = [id];
+
+    $.db.query('DELETE FROM ' + table + ' WHERE ' + where + ' LIMIT 1', id, 
       function(error, results) {
         if(error) {
           return $.error(500, 'unable to delete item');
