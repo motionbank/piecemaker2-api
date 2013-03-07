@@ -3,13 +3,16 @@ module.exports = {
   // > GET /users > json
   // > get all users
   // > curl -X GET http://localhost:8080/users
+  // > curl -X GET --data "api_access_key=adklasdkd" http://localhost:8080/users // @todo  
   //
   // < 200 < json < [{"id": 1, "name": "Peter", "email": "peter@example.com", "is_admin": 0}]
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   // < 500 < json < {"http": 500, "error": "unable to fetch results"}
   'GET /users':
   function($) {
-    $.m.get_all($, 'SELECT * FROM users WHERE is_disabled=0');
+    $.auth(function(user) {
+      $.m.get_all($, 'SELECT * FROM users WHERE is_disabled=0');
+    });
   },
 
   // > POST /user > json

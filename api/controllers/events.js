@@ -187,7 +187,26 @@ module.exports = {
   function($, type) {
     $.m.get_all($, 'SELECT events.* FROM events INNER JOIN event_fields ON event_fields.event_id=events.id WHERE event_fields.id=? AND event_fields.value=? ', ['type',type], 
       {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
-       "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'});
+       "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'},
+       function(results){
+        // get event fields and add them
+        $.async.forEach(results, 
+          function(result, callback){
+
+            $.db.query('SELECT id, value FROM event_fields WHERE event_id=?', [result.id], 
+              function(error, results) {
+                if(!error) {
+                  result['event_fields'] = results;
+                }
+                callback.call(null);
+              });
+          },
+          function(error){
+            return $.render(results);
+          }
+        );
+
+       });
   },
 
   // > GET /events/between/:string/and/:string > json
