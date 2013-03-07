@@ -156,6 +156,34 @@ var app = connect()
         if (match) {
           if (helper.isDevEnv()) util.debug('using route ' + route + ' with params [' + requestParams + ']');
 
+          // auth handler
+          var auth = function(successCallback, failedCallback) {
+            var key = false;
+            if(req.body.hasOwnProperty('api_access_key')) {
+              key = req.body.api_access_key;
+            }
+            console.log("key", key);
+            if(key !== false && key != '') {
+              connection.query("SELECT * FROM users WHERE api_access_key=? LIMIT 1", key, function(error, results) {
+                if(!error && results.length === 1) {
+                  console.log("results", results);
+                  successCallback.call(null, results[0]);
+                } else {
+                  if(failedCallback) {
+                    failedCallback.call(null);  
+                  } else {
+                    return next(403, "invalid api access key");
+                  }
+                }
+              });
+            } else {
+              if(failedCallback) {
+                failedCallback.call(null);  
+              } else {
+                return next(403, "invalid api access key");
+              }
+            }
+          };
 
           var errorCallback = function(http, message) { 
             return next(http, message);
@@ -185,6 +213,7 @@ var app = connect()
           // pass some vars to the function
           var api = { error: errorCallback, 
                       render: renderCallback,
+                      auth: auth,
                       db: connection, 
                       params: req.body,
                       req: req, 

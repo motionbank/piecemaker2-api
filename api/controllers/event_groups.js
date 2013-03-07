@@ -66,6 +66,11 @@ module.exports = {
     $.m.delete_one($, event_group_id, 'event_groups', 'id=?');
   },
 
+
+
+
+
+
   // > GET /event_group/:int/events > json
   // > get all events for event_groups
   // > curl -X GET http://localhost:8080/event_group/1/events
@@ -79,6 +84,133 @@ module.exports = {
       {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
        "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'});
   },
+
+
+  // > GET /event_group/:int/event/:int > json
+  // > get details about one event
+  // > curl -X GET http://localhost:8080/event/3333
+  // 
+  // < 200 < json < {"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}
+  // < 400 < json < {"http": 400, "error": "invalid parameters"}
+  // < 500 < json < {"http": 500, "error": "unable to fetch result"}
+  // < 401 < json < {"http": 401, "error": "unauthorized"}
+  'GET /event_group/:int/event/:int':
+  function($, event_group_id, event_id) {
+    $.m.get_one($, [event_group_id, event_id], 'SELECT * FROM events WHERE id=? AND event_group_id=? LIMIT 1', 
+      {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
+       "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'});
+  },
+
+
+  // > POST /event_group/:int/event > json
+  // > create new event, create new event_fields for all non-events table fields
+  // > {"event_group_id": 1, "created_by_user_id": 1, "utc_timestamp": 0, "duration": 0}
+  // > curl -X POST --data "event_group_id=3&utc_timestamp=1359834314121&duration=2&type=marker&test_custom_attr=foo" http://localhost:8080/event
+  // 
+  // < 200 < json < {"id": 1}
+  // < 200 < json < {"id": 1, "event_fields": ["id1", "id2"]}
+  // < 500 < json < {"http": 500, "error": "unable to create new item"}
+  // < 401 < json < {"http": 401, "error": "unauthorized"}
+  'POST /event_group/:int/event':
+  function($, event_group_id) {
+    $.m.post_one($, 'INSERT INTO events SET event_group_id=?, created_by_user_id=?, `utc_timestamp`=?, duration=?', 
+      [event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration], function(result) {
+
+        // create event_fields for additonal $.params
+        var ignorefields = ["id", "event_group_id", "created_by_user_id", "utc_timestamp", "duration"];
+        var keys = Object.keys($.params);
+        var successKeys = [];
+        $.async.forEach(keys, function(key, callback) {
+          // apply this to each item
+          if(~ignorefields.indexOf(key)) return callback.call(null);
+
+          $.db.query("INSERT INTO event_fields SET event_id=?, id=?, value=?", [result.id, key, $.params[key]],
+            function(error, results) {
+              if(!error) { 
+                successKeys.push(key);
+              }
+              callback.call(null);
+            });
+        }, 
+        function(err) {
+          // finishing callback
+          if(err) {
+            return $.render(result); // event was created, no event_fields though
+          } else {
+            result["event_fields"] = successKeys;
+            return $.render(result); // event was created, event_fields as well
+          }
+        });
+
+
+      });
+
+
+
+  },
+
+  // > PUT /event_group/:int/event/:int > json
+  // > updates a event
+  // > {"event_group_id": 1, "created_by_user_id": 1, "utc_timestamp": 0, "duration": 0}
+  // > curl -X PUT --data "event_group_id=3&utc_timestamp=1359834314121&duration=2&type=marker&test_custom_attr=foo" http://localhost:8080/event/8315
+  // 
+  // < 200 < json < {"id": 1}
+  // < 400 < json < {"http": 400, "error": "invalid parameters"}
+  // < 500 < json < {"http": 500, "error": "unable to update item"}
+  // < 401 < json < {"http": 401, "error": "unauthorized"}
+  'PUT /event_group/:int/event/:int':
+  function($, event_group_id, event_id) {
+    $.m.put_one($, [event_id, event_group_id], ['created_by_user_id', '`utc_timestamp`', 'duration'], 'events', 'id=? AND event_group_id=?');
+  },
+
+  // > DELETE /event_group/:int/event/:int > json
+  // > delete one event
+  // > curl -X DELETE http://localhost:8080/event/3333
+  // 
+  // < 200 < json < {"id": 1}
+  // < 400 < json < {"http": 400, "error": "invalid parameters"} < user_id invalid or not found
+  // < 500 < json < {"http": 500, "error": "unable to delete item"}  
+  // < 401 < json < {"http": 401, "error": "unauthorized"}
+  'DELETE /event_group/:int/event/:int':
+  function($, event_group_id, event_id) {
+    $.m.delete_one($, [event_id, event_group_id], 'events', 'id=? AND event_group_id=?');
+  },
+
+
+  // > GET /event_group/:int/events/type/:string > json
+  // > get events with type 
+  // > curl -X GET http://localhost:8080/events/type/marker
+  // 
+  // < 200 < json < {"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}
+  // < 400 < json < {"http": 400, "error": "invalid parameters"}
+  // < 500 < json < {"http": 500, "error": "unable to fetch result"}
+  // < 401 < json < {"http": 401, "error": "unauthorized"}
+  'GET /event_group/:int/events/type/:string':
+  function($, event_group_id, type) {
+    $.m.get_all($, 'SELECT events.* FROM events INNER JOIN event_fields ON event_fields.event_id=events.id WHERE events.event_group_id=? AND event_fields.id=? AND event_fields.value=? ', [event_group_id,'type',type], 
+      {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
+       "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'},
+       function(results){
+        // get event fields and add them
+        $.async.forEach(results, 
+          function(result, callback){
+
+            $.db.query('SELECT id, value FROM event_fields WHERE event_id=?', [result.id], 
+              function(error, results) {
+                if(!error) {
+                  result['event_fields'] = results;
+                }
+                callback.call(null);
+              });
+          },
+          function(error){
+            return $.render(results);
+          }
+        );
+
+       });
+  },
+
 
   // > GET /event_group/:int/users > json
   // > get all users for event_groups
