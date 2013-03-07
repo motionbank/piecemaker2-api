@@ -78,8 +78,13 @@ module.exports = {
   // < 200 < json < [{"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}]
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   // < 500 < json < {"http": 500, "error": "unable to fetch results"}
-  'GET /event_group/:int/events':
+  'AUTH GET /event_group/:int/events':
   function($, event_group_id) {
+
+
+    // @TODO 
+    // GET /event_group/:int/events?field1=value1&field2=value2
+
     $.m.get_all($, 'SELECT * FROM events WHERE event_group_id=? ', [event_group_id], 
       {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
        "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'});
@@ -223,5 +228,20 @@ module.exports = {
   function($, event_group_id) {
     $.m.get_all($, 'SELECT users.id, users.name, users.email FROM users INNER JOIN user_has_event_groups ON user_has_event_groups.user_id = users.id WHERE user_has_event_groups.event_group_id=? ', [event_group_id]);
   }
+
+  // @todo
+  // > GET /events/between/:string/and/:string > json
+  // > get events between A and B 
+  // > curl -X GET http://localhost:8080/events/between/1298937600000/and/1304208000000
+  // 
+  // < 200 < json < {"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}
+  // < 400 < json < {"http": 400, "error": "invalid parameters"}
+  // < 500 < json < {"http": 500, "error": "unable to fetch result"}
+  // < 401 < json < {"http": 401, "error": "unauthorized"}
+  //'GET /events/between/:string/and/:string':
+  //function($, time1, time2) {
+  //  return $.error(500, 'not yet implemented');
+  //}  
+
 
 };

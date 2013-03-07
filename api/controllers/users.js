@@ -30,6 +30,11 @@ module.exports = {
       [$.params.name, $.params.email, $.params.password, accessKey]);
   },
 
+  'GET /user/me':
+  function($) {
+    // @todo gibt user zu api key zurück
+  }
+
   // > GET /user/:int > json
   // > get user details about one user
   // > curl -X GET http://localhost:8080/user/1
@@ -38,7 +43,7 @@ module.exports = {
   // < 400 < json < {"http": 400, "error": "invalid parameters"} < means user_id from url is missing or was not found
   // < 500 < json < {"http": 500, "error": "unable to fetch result"}
   // < 401 < json < {"http": 401, "error": "unauthorized"}
-  'GET /user/:int':
+  'AUTH GET /user/:int':
   function($, user_id) {
     $.m.get_one($, [user_id], 'SELECT id, name, email FROM users WHERE id=? LIMIT 1');
   },
@@ -77,12 +82,12 @@ module.exports = {
   // < 200 < json < [{"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}]
   // < 401 < json < {"http": 401, "error": "unauthorized"}
   // < 500 < json < {"http": 500, "error": "unable to fetch results"}
-  'GET /user/:int/events':
-  function($, user_id) {
-    $.m.get_all($, 'SELECT * FROM events WHERE created_by_user_id=? ', [user_id], 
-      {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
-       "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'});
-  },
+  // 'GET /user/:int/events':
+  // function($, user_id) {
+  //   $.m.get_all($, 'SELECT * FROM events WHERE created_by_user_id=? ', [user_id], 
+  //     {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
+  //      "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'});
+  // },
 
   // > GET /user/:int/event_groups > json
   // > get all event_groups for user
