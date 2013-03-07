@@ -3,9 +3,17 @@
   "description": "piecemaker api",
   "version": "0.0.2",
   "private": true,
+
   "dependencies": {
     "connect": "2.7.x",
-    "mysql": "2.0.x",
-    // "connect-xcors": "0.5.x"
+    "mysql": "2.0.x"
+  },
+
+  "devDependencies": {
+  	"mocha": "*"
+  },
+
+  "scripts": {
+  	"test": "make test"
   }
 }
