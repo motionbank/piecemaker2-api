@@ -22,6 +22,13 @@ var pool = mysql.createPool(config.mysql);
 api.beforeFunctionCall(function(api, req, res, next){
   pool.getConnection(function(err, db){
     if(err) throw new Error('no database connection');
+
+    db.on('error', function(err) {
+      if (!err.fatal) return;
+      // we can ignore this error, because of pooling
+      if (err.code !== 'PROTOCOL_CONNECTION_LOST') throw err;
+    });
+
     api.setHandle('db', db);
     next();
   });
@@ -37,7 +44,6 @@ api.beforeResponse(function(api, req, res, next){
 // auth hook
 // if AUTH flag is set, validate user and quit if validation fails
 api.beforeFunctionCall('AUTH', function(api, req, res, next){
-  console.log('AUTH1');
   try {
     if(req.api.params.token == '123') {
       // get user from db with token
@@ -54,7 +60,6 @@ api.beforeFunctionCall('AUTH', function(api, req, res, next){
 // prepare auth hook
 // use $.req.user for further validations
 api.beforeFunctionCall('PREPARE_AUTH', function(api, req, res, next){
-  console.log('PREPARE_AUTH');
   try {
     if(req.api.params.token == '123') {
       // get user from db with token
