@@ -1,3 +1,5 @@
+var async = require('async');
+
 module.exports = {
 
   // > GET /users > json
@@ -32,9 +34,28 @@ module.exports = {
 
   'GET AUTH PENG /user/me':
   function($) {
-    // @todo gibt user zu api key zurück
+
+    // console.log("$.params", $.params);
+
     
-    $.render({hallo: 'selber!'});
+    // $.error(404, 'das ging daneben');
+    // $.internalError('o12');
+
+
+    // $.db
+    // $.anyOtherHandle
+
+
+
+    $.db.query("SELECT 1", function(err, results) {
+      if(err) throw err;
+      return $.render(results);
+    });
+
+    // throw new Error('ohje');
+
+    // return $.render({hallo: 'selber!'});
+    
   },
 
   // > GET /user/:int > json

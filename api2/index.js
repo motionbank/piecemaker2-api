@@ -1,25 +1,8 @@
 var API = require('../../node-rest-api/lib/api.js');
 var util = require('util');
 
-// mysql config
-connection = 1;
-
-
-
-
-// auth handler
-var auth = function(request) {
-  try {
-    if(request.params.query.token == '123') {
-      // get user from db with token
-
-      return {id: 2, name: 'harald'};
-    }
-  } catch(e) {
-    return false;
-  }
-}
-
+var config = require('./config.js');
+var mysql = require('mysql');
 
 
 var api = new API({
@@ -28,40 +11,71 @@ var api = new API({
   accessLog: './logs/access_log',
   errorLog: './logs/error_log',
   controllers: './controllers',
-  dbHandle: connection,
-  authHandle: auth,
   cors: true,
-  jsonp: true
+  jsonp: false
 });
 
+// mysql config
+var pool = mysql.createPool(config.mysql);
 
-api.beforeFunctionCall('AUTH', function(req, res, next) {
-  console.log(':: beforeFunctionCall :: auth');
+// get mysql connection from pool before function is actually called
+api.beforeFunctionCall(function(api, req, res, next){
+  pool.getConnection(function(err, db){
+    if(err) throw new Error('no database connection');
+    api.setHandle('db', db);
+    next();
+  });
+});
+
+// release mysql connection
+api.beforeResponse(function(api, req, res, next){
+  api.handles.db.end();
   next();
 });
 
 
-api.beforeRender('PENG', function(req, res, next) {
-  console.log(':: beforeRender :: peng2');
-  
+// auth hook
+// if AUTH flag is set, validate user and quit if validation fails
+api.beforeFunctionCall('AUTH', function(api, req, res, next){
+  console.log('AUTH1');
+  try {
+    if(req.api.params.token == '123') {
+      // get user from db with token
+      req.api.user = {id: 2, name: 'harald'};
+      next();
+    } else {
+      throw new ClientError({status: 403, message: 'invalid login'});
+    }
+  } catch(e) {
+    throw new ClientError({status: 401, message: 'login invalid'});
+  }
+});
+
+// prepare auth hook
+// use $.req.user for further validations
+api.beforeFunctionCall('PREPARE_AUTH', function(api, req, res, next){
+  console.log('PREPARE_AUTH');
+  try {
+    if(req.api.params.token == '123') {
+      // get user from db with token
+      req.api.user = {id: 2, name: 'harald'};
+    }
+  } catch(e) {
+    req.api.user = false;
+  }
   next();
 });
 
-api.beforeRender('PENG', function(req, res, next) {
-  console.log(':: beforeRender :: peng1');
-  next();
-});
 
-api.beforeRender(function(req, res, next) {
-  console.log(':: beforeRender :: i am always called at first (*)');
-  next();
-});
 
 // show me what you got
 // console.log("List of all routes:\n", util.inspect(api.listRoutes(), false, 5, true));
 
+
+
 api.start(function() {
   // api is ready
+
 });
 
 // api.reload();
