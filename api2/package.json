@@ -6,7 +6,8 @@
 
   "dependencies": {
     "mysql": "2.0.x",
-    "async":"0.2.6"
+    "sequence":"2.2.1",
+    "underscore":"1.4.x"
   },
 
   "devDependencies": {

@@ -1,12 +1,50 @@
-module.exports = {
+var sequence = require('sequence');
+var _ = require('underscore');
 
+// include user helper (used with .then())
+var includeUser = function($, idField) {
+  return function(next, err, model) {
+    $.db.query('SELECT id, name, email, is_admin ' +
+      'FROM users WHERE id=? LIMIT 1',
+      model[idField],
+      function(err, result){
+        if(err) return next(err);
+        model[(idField.replace('_id', '') || 'user')] = result[0];
+        next(null, model);
+      }
+    );
+  }     
+}
+
+// include event group helper (used with .then())
+var includeEventGroup = function($, idField) {
+  return function(next, err, model) {
+    $.db.query('SELECT id, title, text ' +
+      'FROM event_groups WHERE id=? LIMIT 1',
+      model[idField],
+      function(err, result){
+        if(err) return next(err);
+        model[(idField.replace('_id', '') || 'event_group')] = result[0];
+        next(null, model);
+      }
+    );
+  }     
+}
+
+module.exports = {
 
   'GET AUTH /event_groups':
   // get all event_groups
   //  likes token*
   //  returns [{id, title, text}]
   function($) {
-    // $.m.get_all($, 'SELECT * FROM event_groups WHERE 1');
+    $.db.query('SELECT id, title, text ' +
+      'FROM event_groups WHERE 1',
+      function(err, results){
+        if(err) return $.internalError(err);
+        return $.render(results);
+      }
+    );
   },
 
   'POST AUTH /event_group':
@@ -14,8 +52,14 @@ module.exports = {
   //  likes token*, title*, text
   //  returns {id}
   function($) {
-    // $.m.post_one($, 'INSERT INTO event_groups SET title=?, text=?', 
-    //   [$.params.title, $.params.text]);
+    $.db.query('INSERT INTO event_groups SET ' +
+      'title=?, text=?',
+      [$.params.title, $.params.text],
+      function(err, result){
+        if(err) return $.internalError(err);
+        return $.render({id: result.insertId});
+      }
+    );
   },
 
   'GET AUTH /event_group/:id':
@@ -23,8 +67,14 @@ module.exports = {
   //  likes token*
   //  returns {id, title, text}
   function($, event_group_id) {
-
-    // $.m.get_one($, [event_group_id], 'SELECT id, title, text FROM event_groups WHERE id=? LIMIT 1');
+    $.db.query('SELECT id, title, text ' +
+      'FROM event_groups WHERE id=? LIMIT 1',
+      [event_group_id],
+      function(err, result){
+        if(err) return $.internalError(err);
+        return $.render(result[0]);
+      }
+    );
   },
 
   'PUT AUTH /event_group/:id':
@@ -32,7 +82,15 @@ module.exports = {
   //  likes token*, title*, text
   //  returns boolean
   function($, event_group_id) {
-    // $.m.put_one($, [event_group_id], ['title', 'text'], 'event_groups', 'id=?');
+    $.db.query('UPDATE event_groups SET ' +
+      'title=?, text=? ' +
+      'WHERE id=? LIMIT 1',
+      [$.params.title, $.params.text, event_group_id],
+      function(err, result){
+        if(err) return $.internalError(err);
+        return $.render(result.affectedRows);
+      }
+    );
   },
 
   'DELETE AUTH /event_group/:id':
@@ -40,10 +98,16 @@ module.exports = {
   //  likes token*
   //  returns boolean
   function($, event_group_id) {
-    // $.m.delete_one($, event_group_id, 'event_groups', 'id=?');
+    $.db.query('DELETE FROM event_groups WHERE id=? LIMIT 1',
+      [event_group_id],
+      function(err, result){
+        if(err) return $.internalError(err);
+        return $.render(result.affectedRows);
+      }
+    );
   },
 
-  'GET AUTH AUTH /event_group/:id/events':
+  'GET AUTH /event_group/:id/events':
   // get all events for event_groups
   //  likes token*
   //  returns [{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]
@@ -77,9 +141,24 @@ module.exports = {
   //  likes token*
   //  returns {id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}
   function($, event_group_id, event_id) {
-    //$.m.get_one($, [event_group_id, event_id], 'SELECT * FROM events WHERE id=? AND event_group_id=? LIMIT 1', 
-    //  {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
-    //   "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'});
+    sequence.create()
+      .then(function(next){
+        // get event
+        $.db.query('SELECT id, event_group_id, created_by_user_id, utc_timestamp, duration ' +
+          'FROM events WHERE event_group_id=? AND id=? LIMIT 1',
+          [event_group_id, event_id],
+          function(err, result){
+            if(err) return next(err);
+            next(null, result[0]);
+          }
+        );
+      })
+      .then(includeUser($, 'created_by_user_id'))
+      .then(includeEventGroup($, 'event_group_id'))
+      .then(function(next, err, event){
+        if(err) return $.internalError(err);
+        $.render(event);
+      });
   },
 
   'POST AUTH /event_group/:event_group_id/event':
