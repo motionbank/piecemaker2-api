@@ -1,6 +1,6 @@
 module.exports = {
 
-  'GET /system/time':
+  'GET /system/utc_timestamp':
   // get unix timestamp with milliseconds
   //  returns time
   function($) {

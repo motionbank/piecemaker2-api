@@ -63,7 +63,7 @@ module.exports = {
   'PUT AUTH /user/:id':
   // updates a user
   //  likes token*, name*, email*
-  //  returns {id}
+  //  returns boolean
   function($, user_id) {
     $.db.query('UPDATE users SET ' +
       'name=?, email=? ' +
@@ -71,7 +71,7 @@ module.exports = {
       [$.params.name, $.params.email],
       function(err, result){
         if(err) return $.internalError(err);
-        return $.render({id: user_id});
+        return $.render(result.affectedRows);
       }
     );
   },
@@ -79,7 +79,7 @@ module.exports = {
   'DELETE AUTH /user/:id':
   // delete one user
   //  likes token*
-  //  returns {id}
+  //  returns boolean
   function($, user_id) {
     $.db.query('DELETE FROM users WHERE id=? LIMIT 1',
       [user_id],
