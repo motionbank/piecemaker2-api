@@ -1,4 +1,5 @@
 var sequence = require('sequence');
+var async = require('async');
 var _ = require('underscore');
 
 
@@ -167,7 +168,7 @@ module.exports = {
     );
   },
 
-  'GET /event_group/:id/events':
+  'GET AUTH /event_group/:id/events':
   // get all events for event_groups
   //  likes token*
   //  returns [{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]
@@ -219,41 +220,43 @@ module.exports = {
   },
 
   'POST AUTH /event_group/:event_group_id/event':
-  // create new event, create new event_fields for all non-events table fields
-  //  likes token*, event_group_id, created_by_user_id, utc_timestamp, duration
-  //  returns {event_id}
+  // create new event and create new event_fields for all non-events table fields
+  //  likes token*, event_group_id, created_by_user_id, utc_timestamp, duration, ...
+  //  returns {id}
   function($, event_group_id) {
-    //.m.post_one($, 'INSERT INTO events SET event_group_id=?, created_by_user_id=?, `utc_timestamp`=?, duration=?', 
-    // [event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration], function(result) {
-
-    //   // create event_fields for additonal $.params
-    //   var ignorefields = ["id", "event_group_id", "created_by_user_id", "utc_timestamp", "duration"];
-    //   var keys = Object.keys($.params);
-    //   var successKeys = [];
-    //   $.async.forEach(keys, function(key, callback) {
-    //     // apply this to each item
-    //     if(~ignorefields.indexOf(key)) return callback.call(null);
-
-    //     $.db.query("INSERT INTO event_fields SET event_id=?, id=?, value=?", [result.id, key, $.params[key]],
-    //       function(error, results) {
-    //         if(!error) { 
-    //           successKeys.push(key);
-    //         }
-    //         callback.call(null);
-    //       });
-    //   }, 
-    //   function(err) {
-    //     // finishing callback
-    //     if(err) {
-    //       return $.render(result); // event was created, no event_fields though
-    //     } else {
-    //       result["event_fields"] = successKeys;
-    //       return $.render(result); // event was created, event_fields as well
-    //     }
-    //   });
-
-
-    // });
+    sequence.create()
+    .then(function(next){
+      // insert new event
+      $.db.query('INSERT INTO events SET ' +
+        'event_group_id=?, created_by_user_id=?, `utc_timestamp`=?, duration=?',
+        [event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration],
+        function(err, result){
+          if(err) return next(err);
+          next(null, result.insertId);
+        }
+      );
+    })
+    .then(function(next, err, eventId){
+      // create event_fields for additonal $.params
+      var ignorefields = ['id', 'event_group_id', 'created_by_user_id', 'utc_timestamp', 'duration'];
+      var keys = _.difference(Object.keys($.params), ignorefields);
+      $.async.forEach(keys, function(key, next) {
+        $.db.query('INSERT INTO event_fields SET event_id=?, id=?, value=?',
+          [eventId, key, $.params[key]],
+          function(err, result) {
+            if(err) return next(err);
+            next(null)
+          }
+        );
+      },
+      function(err){
+        if(err) {
+          // rollback
+        } else {
+          // cool ...
+        }
+      });
+    });
   },
 
   'PUT AUTH /event_group/:event_group_id/event/:event_id':
