@@ -1,5 +1,8 @@
 var API = require('../../node-rest-api/lib/api.js');
+
 var util = require('util');
+
+
 
 var config = require('./config.js');
 var mysql = require('mysql');
@@ -34,11 +37,16 @@ api.beforeFunctionCall(function(api, req, res, next){
   });
 });
 
+
+
 // release mysql connection
-api.beforeResponse(function(api, req, res, next){
-  api.handles.db.end();
-  next();
-});
+api.cleanupFunc = function(api){
+  console.log('################onEnd db close');
+  try {
+    api.handles.db.end();  
+  } catch(e) {console.log('cleanupFunc issues');}
+};
+
 
 
 // auth hook

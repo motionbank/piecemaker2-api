@@ -2,20 +2,20 @@ var async = require('async');
 
 module.exports = {
 
-  // > GET /users > json
-  // > get all users
-  // > curl -X GET http://localhost:8080/users
-  // > curl -X GET --data "api_access_key=adklasdkd" http://localhost:8080/users // @todo  
-  //
-  // < 200 < json < [{"id": 1, "name": "Peter", "email": "peter@example.com", "is_admin": 0}]
-  // < 401 < json < {"http": 401, "error": "unauthorized"}
-  // < 500 < json < {"http": 500, "error": "unable to fetch results"}
-  'GET /users':
+  'GET AUTH /users':
+  // get all users
+  //  requires token*
+  //  returns [{id, name, email, is_admin}]
   function($) {
-    // $.auth(function(user) {
-    //   $.m.get_all($, 'SELECT * FROM users WHERE is_disabled=0');
-    // });
+    $.db.query("SELECT id, name, email, is_admin FROM users WHERE is_disabled=0",
+      function(err, results){
+        if(err) return $.internalError(err);
+        return $.internalError('so');
+        $.render(results);
+      }
+    );
   },
+
 
   // > POST /user > json
   // > create new user
