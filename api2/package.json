@@ -1,0 +1,17 @@
+{
+  "name": "piecemaker-api2",
+  "description": "piecemaker api",
+  "version": "0.0.2",
+  "private": true,
+
+  "dependencies": {
+    "mysql": "2.0.x",
+    "async":"0.2.6"
+  },
+
+  "devDependencies": {
+    "mocha": "*"
+  }
+
+
+}
