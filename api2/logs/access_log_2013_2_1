@@ -225,3 +225,5 @@
 [Mon, 11 Mar 2013 19:47:50 GMT] 127.0.0.1 GET /user/1/event_groups.json 200 (281 ms)
 [Mon, 11 Mar 2013 19:47:54 GMT] 127.0.0.1 GET /user/1/event_groups.json 200 (273 ms)
 [Mon, 11 Mar 2013 19:47:55 GMT] 127.0.0.1 GET /user/1/event_groups.json 200 (275 ms)
+[Mon, 11 Mar 2013 19:49:36 GMT] 127.0.0.1 GET /user/1/event_groups.json 401 (213 ms)
+[Mon, 11 Mar 2013 19:49:41 GMT] 127.0.0.1 GET /user/1/event_groups.json?token=123 200 (72 ms)
