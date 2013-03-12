@@ -250,6 +250,7 @@ module.exports = {
         );
       },
       function(err){
+        return $.error(500, 'klappt noch nicht!');
         if(err) {
           // rollback
         } else {
@@ -264,7 +265,16 @@ module.exports = {
   //  likes token*, event_group_id, created_by_user_id, utc_timestamp, duration
   //  returns boolean
   function($, event_group_id, event_id) {
-    // $.m.put_one($, [event_id, event_group_id], ['created_by_user_id', '`utc_timestamp`', 'duration'], 'events', 'id=? AND event_group_id=?');
+    $.db.query('UPDATE events SET ' +
+      'event_group_id=?, created_by_user_id=?, `utc_timestamp`=?, duration=? ' +
+      'WHERE event_group_id=? AND id=? LIMIT 1',
+      [$.params.event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration,
+      event_group_id, event_id],
+      function(err, result){
+        if(err) return $.internalError(err);
+        return $.render(result.affectedRows);
+      }
+    );
   },
 
   'DELETE AUTH /event_group/:event_group_id/event/:event_id':
@@ -272,7 +282,13 @@ module.exports = {
   //  likes token*
   //  returns boolean
   function($, event_group_id, event_id) {
-    // $.m.delete_one($, [event_id, event_group_id], 'events', 'id=? AND event_group_id=?');
+    $.db.query('DELETE FROM events WHERE event_group_id=? AND id=? LIMIT 1',
+      [event_group_id, event_id],
+      function(err, result){
+        if(err) return $.internalError(err);
+        return $.render(result.affectedRows);
+      }
+    );
   },
 
   'GET AUTH /event_group/:event_group_id/events/type/:type':
@@ -280,31 +296,35 @@ module.exports = {
   //  likes token*
   //  returns [{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]
   function($, event_group_id, type) {
-    // $.m.get_all($, 'SELECT events.* FROM events INNER JOIN event_fields ON event_fields.event_id=events.id WHERE events.event_group_id=? AND event_fields.id=? AND event_fields.value=? ', [event_group_id,'type',type], 
-    //   {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
-    //    "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'},
-    //    function(results){
-    //     // get event fields and add them
-    //     $.async.forEach(results, 
-    //       function(result, callback){
-// 
-    //         $.db.query('SELECT id, value FROM event_fields WHERE event_id=?', [result.id], 
-    //           function(error, results) {
-    //             if(!error) {
-    //               result['event_fields'] = results;
-    //             }
-    //             callback.call(null);
-    //           });
-    //       },
-    //       function(error){
-    //         return $.render(results);
-    //       }
-    //     );
-// 
-    //    });
+    sequence.create()
+      .then(function(next){
+        $.db.query('SELECT events.id, events.event_group_id, events.created_by_user_id, events.utc_timestamp, events.duration ' +
+          'FROM events ' +
+          'INNER JOIN event_fields ON event_fields.event_id=events.id ' +
+          'WHERE events.event_group_id=? AND event_fields.id="type" AND event_fields.value=?',
+          [event_group_id,type],
+          function(err, results){
+            if(err) return next(err);
+            next(null, results);
+          }
+        );
+      })
+      .then(includeUser($, 'created_by_user_id'))
+      .then(includeEventGroup($, 'event_group_id'))
+      .then(function(next, err, event){
+        // load event fields
+        // @TODO
+        // SELECT id, value FROM event_fields WHERE event_id=?
+        next(null, event);
+
+      })
+      .then(function(next, err, event){
+        if(err) return $.internalError(err);
+        $.render(event);
+      });
   },
 
-  'GET /event_group/:event_group_id/users':
+  'GET AUTH /event_group/:event_group_id/users':
   // get all users for event_groups
   //  likes token*
   //  returns [{id, name, email}]
