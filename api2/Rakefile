@@ -63,6 +63,7 @@ task :print_routes do
 
   end
 
+  # html file 
   f = File.open('routes.html', 'w')
   f.write '<html><head><style>'
   f.write 'body, td { font-size: 12px; font-family: monospace; }'
@@ -84,7 +85,22 @@ task :print_routes do
   end
   
   f.write '</table></body></html>'
-  
-  puts 'open routes.html in your browser'
   f.close
+  puts 'open routes.html in your browser'
+
+
+  # markdown file 
+  f = File.open('routes.md', 'w')
+
+  routes.each do |route|
+    f.write "### " << route['signature'] << "\n" 
+    f.write " * " << route['comments'] << "\n" 
+    f.write " * Likes: ```" << route['likes']  << "```\n"
+    f.write " * Returns: ``" << route['returns']  << "```\n"
+    f.write "\n"
+  end
+  
+  f.close
+  puts 'open routes.md in your editor'
+
 end
