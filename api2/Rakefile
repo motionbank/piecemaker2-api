@@ -93,11 +93,11 @@ task :print_routes do
   f = File.open('routes.md', 'w')
 
   routes.each do |route|
-    f.write "### " << route['signature'] << "\n" 
+    f.write "__" << route['signature'] << "__\n" 
     f.write " * " << route['comments'] << "\n" 
     f.write " * Likes: ```" << route['likes']  << "```\n"
-    f.write " * Returns: ``" << route['returns']  << "```\n"
-    f.write "\n"
+    f.write " * Returns: ```" << route['returns']  << "```\n"
+    f.write "  \n"
   end
   
   f.close
