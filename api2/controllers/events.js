@@ -1,3 +1,37 @@
+var sequence = require('sequence');
+var async = require('async');
+var _ = require('underscore');
+
+var selectiveUpdateFields = function($, posibleFields, arrayAdditional) {
+  var updateFields = _.intersection(posibleFields, Object.keys($.params));
+  if(updateFields.length > 0) {
+    
+    var string = _.map(updateFields, function(key) {
+      return '`' + key + '`=?'
+    });
+    string = string.join(', ') + ' '; // ' ' is important
+
+    var array = [];
+    for(var i=0; i < updateFields.length; i++) {
+      array.push($.params[ updateFields[i] ]);
+    }
+
+    if(!_.isArray(arrayAdditional)) {
+      arrayAdditional = [arrayAdditional];
+    }
+    if(arrayAdditional.length > 0) {
+      for(var i=0; i < arrayAdditional.length; i++) {
+        array.push(arrayAdditional[i]); 
+      }
+    }
+    return {string: string, array: array};
+  }
+  else {
+    return false;
+  }
+}
+
+
 module.exports = {
 
   'POST AUTH /event/:event_id/field':
@@ -36,15 +70,20 @@ module.exports = {
   //  likes token*, value
   //  returns boolean
   function($, event_id, field_id) {
-    $.db.query('UPDATE event_fields SET ' +
-      'value=? ' +
-      'WHERE event_id=? AND id=? LIMIT 1',
-      [$.params.value, event_id, field_id],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render(result.affectedRows);
-      }
-    );
+    var updateFields = selectiveUpdateFields($, ['value'], [event_id, field_id]);
+    if(updateFields) {
+      $.db.query('UPDATE event_fields SET ' +
+        updateFields.string +
+        'WHERE event_id=? AND id=? LIMIT 1',
+        updateFields.array,
+        function(err, result){
+          if(err) return $.internalError(err);
+          return $.render(result.affectedRows);
+        }
+      );
+    } else {
+      $.error(400, 'verify update fields');
+    }
   },
 
   'DELETE AUTH /event/:event_id/field/:field_id':

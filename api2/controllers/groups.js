@@ -93,6 +93,35 @@ var includeHelperUniqIds = function(model, idField) {
 }
 
 
+var selectiveUpdateFields = function($, posibleFields, arrayAdditional) {
+  var updateFields = _.intersection(posibleFields, Object.keys($.params));
+  if(updateFields.length > 0) {
+    
+    var string = _.map(updateFields, function(key) {
+      return '`' + key + '`=?'
+    });
+    string = string.join(', ') + ' '; // ' ' is important
+
+    var array = [];
+    for(var i=0; i < updateFields.length; i++) {
+      array.push($.params[ updateFields[i] ]);
+    }
+
+    if(!_.isArray(arrayAdditional)) {
+      arrayAdditional = [arrayAdditional];
+    }
+    if(arrayAdditional.length > 0) {
+      for(var i=0; i < arrayAdditional.length; i++) {
+        array.push(arrayAdditional[i]); 
+      }
+    }
+    return {string: string, array: array};
+  }
+  else {
+    return false;
+  }
+}
+
 
 module.exports = {
 
@@ -145,15 +174,20 @@ module.exports = {
   //  likes token*, title*, text
   //  returns boolean
   function($, event_group_id) {
-    $.db.query('UPDATE event_groups SET ' +
-      'title=?, text=? ' +
-      'WHERE id=? LIMIT 1',
-      [$.params.title, $.params.text, event_group_id],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render(result.affectedRows);
-      }
-    );
+    var updateFields = selectiveUpdateFields($, ['title', 'text'], event_group_id);
+    if(updateFields) {
+      $.db.query('UPDATE event_groups SET ' +
+        updateFields.string +
+        'WHERE id=? LIMIT 1',
+        updateFields.array,
+        function(err, result){
+          if(err) return $.internalError(err);
+          return $.render(result.affectedRows);
+        }
+      );
+    } else {
+      return $.error(400, 'verify update fields');
+    }
   },
 
   'DELETE AUTH /group/:id':
@@ -281,16 +315,20 @@ module.exports = {
   //  likes token*, created_by_user_id, utc_timestamp, duration
   //  returns boolean
   function($, event_group_id, event_id) {
-    $.db.query('UPDATE events SET ' +
-      'event_group_id=?, created_by_user_id=?, `utc_timestamp`=?, duration=? ' +
-      'WHERE event_group_id=? AND id=? LIMIT 1',
-      [event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration,
-      event_group_id, event_id],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render(result.affectedRows);
-      }
-    );
+    var updateFields = selectiveUpdateFields($, ['created_by_user_id', 'utc_timestamp', 'duration'], [event_group_id, event_id]);
+    if(updateFields) {
+      $.db.query('UPDATE events SET ' +
+        updateFields.string +
+        'WHERE event_group_id=? AND id=? LIMIT 1',
+        updateFields.array,
+        function(err, result){
+          if(err) return $.internalError(err);
+          return $.render(result.affectedRows);
+        }
+      );
+    } else {
+      return $.error(400, 'verify update fields');
+    }
   },
 
   'DELETE AUTH /group/:event_group_id/event/:event_id':

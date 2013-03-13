@@ -1,3 +1,37 @@
+var sequence = require('sequence');
+var async = require('async');
+var _ = require('underscore');
+
+var selectiveUpdateFields = function($, posibleFields, arrayAdditional) {
+  var updateFields = _.intersection(posibleFields, Object.keys($.params));
+  if(updateFields.length > 0) {
+    
+    var string = _.map(updateFields, function(key) {
+      return '`' + key + '`=?'
+    });
+    string = string.join(', ') + ' '; // ' ' is important
+
+    var array = [];
+    for(var i=0; i < updateFields.length; i++) {
+      array.push($.params[ updateFields[i] ]);
+    }
+
+    if(!_.isArray(arrayAdditional)) {
+      arrayAdditional = [arrayAdditional];
+    }
+    if(arrayAdditional.length > 0) {
+      for(var i=0; i < arrayAdditional.length; i++) {
+        array.push(arrayAdditional[i]); 
+      }
+    }
+    return {string: string, array: array};
+  }
+  else {
+    return false;
+  }
+}
+
+
 module.exports = {
 
   'GET AUTH /users':
@@ -65,15 +99,20 @@ module.exports = {
   //  likes token*, name*, email*
   //  returns boolean
   function($, user_id) {
-    $.db.query('UPDATE users SET ' +
-      'name=?, email=? ' +
-      'WHERE id=? LIMIT 1',
-      [$.params.name, $.params.email, user_id],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render(result.affectedRows);
-      }
-    );
+    var updateFields = selectiveUpdateFields($, ['name', 'email'], [user_id]);
+    if(updateFields) {
+      $.db.query('UPDATE users SET ' +
+        updateFields.string +
+        'WHERE id=? LIMIT 1',
+        updateFields.array,
+        function(err, result){
+          if(err) return $.internalError(err);
+          return $.render(result.affectedRows);
+        }
+      );
+    } else {
+      $.error(400, 'verify update fields');
+    }
   },
 
   'DELETE AUTH /user/:id':
