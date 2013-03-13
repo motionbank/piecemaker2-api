@@ -82,10 +82,11 @@ task :routes do
 
   f.write '</style></head><body>'
   f.write '<table>'
-  f.write '<thead><tr><th>Route</th><th>Params <i>(* required)</i></th><th>Returns</th></tr></thead>'
+  f.write '<thead><tr><th></th><th>Route</th><th>Params <i>(* required)</i></th><th>Returns</th></tr></thead>'
 
   routes.each do |route|
     f.write "<tr>"
+    f.write "<td><input type='checkbox'></td>"
     f.write "<td width='50%'><strong><u>" << route['signature'] << "</u></strong><br>" << route['comments'] << "</td>"
     f.write "<td>" << route['likes']  << "</td>"
     f.write "<td>" << route['returns']  << "</td>"

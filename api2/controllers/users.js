@@ -32,7 +32,7 @@ module.exports = {
 
   'GET AUTH /user/me':
   // get user for api access key
-  //  likes *token
+  //  likes token*
   //  returns {id, name, email, is_admin}
   function($) {
     $.db.query('SELECT id, name, email, is_admin ' +
@@ -68,7 +68,7 @@ module.exports = {
     $.db.query('UPDATE users SET ' +
       'name=?, email=? ' +
       'WHERE id=? LIMIT 1',
-      [$.params.name, $.params.email],
+      [$.params.name, $.params.email, user_id],
       function(err, result){
         if(err) return $.internalError(err);
         return $.render(result.affectedRows);
