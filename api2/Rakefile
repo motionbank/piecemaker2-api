@@ -13,8 +13,8 @@ task :debug_mattes_env do
   system 'nodemon -w . -w ../../node-rest-api/lib/ index.js'
 end
 
-desc "print routes"
-task :print_routes do
+desc "generate routes.html|.md"
+task :routes do
   routes = []
 
   # read files in ./controllers
@@ -66,6 +66,7 @@ task :print_routes do
   # html file 
   f = File.open('routes.html', 'w')
   f.write '<html><head><style>'
+  f.write '@media all { td { border-bottom: 1px solid #666666; } }'
   f.write 'body, td { font-size: 12px; font-family: monospace; }'
   f.write 'tr:nth-child(2n+1) { background-color: #D3E3ED; }'
   f.write 'td, th { padding:3px 5px; text-align: left; }'
@@ -74,7 +75,7 @@ task :print_routes do
 
   f.write '</style></head><body>'
   f.write '<table>'
-  f.write '<thead><tr><th>Route</th><th>Params</th><th>Returns</th></tr></thead>'
+  f.write '<thead><tr><th>Route</th><th>Params <i>(* required)</i></th><th>Returns</th></tr></thead>'
 
   routes.each do |route|
     f.write "<tr>"
@@ -102,5 +103,7 @@ task :print_routes do
   
   f.close
   puts 'open routes.md in your editor'
+
+  # @TODO http://apigee.com/docs/enterprise/content/wadl-reference
 
 end
