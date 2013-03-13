@@ -82,4 +82,15 @@ describe('controllers/users.js', function(){
     });
   });
 
+
+  describe('GET AUTH /user/:id/event_groups', function(){
+    it('gets all event_groups for user', function(done){
+      request
+        .get('/user/500/event_groups.json?token=6a66515fcc6b585a69df6b50805146cf8fb91b9c')
+        .expect('Content-Type', 'application/json')
+        .expect(200, [ { id: 501, title: 'Event Group 1', text: 'some description' } ])
+        .end(done);
+    });
+  });
+
 });

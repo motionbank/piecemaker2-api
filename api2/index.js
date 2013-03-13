@@ -42,7 +42,7 @@ api.beforeFunctionCall(function(api, req, res, next){
 api.cleanupFunc = function(api){
   console.log('################onEnd db close');
   try {
-    api.handles.db.end();  
+    // api.handles.db.end();  
   } catch(e) {console.log('cleanupFunc issues');}
 };
 
