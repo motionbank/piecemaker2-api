@@ -9,6 +9,7 @@ module.exports = {
       'event_id=?, id=?, value=?',
       [event_id, $.params.id, $.params.value],
       function(err, result){
+        console.log(result);
         if(err) return $.internalError(err);
         return $.render({id: result.insertId});
       }
@@ -38,7 +39,7 @@ module.exports = {
     $.db.query('UPDATE event_fields SET ' +
       'value=? ' +
       'WHERE event_id=? AND id=? LIMIT 1',
-      [$.params.value, $.params.event_id, $.params.field_id],
+      [$.params.value, event_id, field_id],
       function(err, result){
         if(err) return $.internalError(err);
         return $.render(result.affectedRows);
