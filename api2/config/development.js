@@ -14,7 +14,7 @@ module.exports = {
     user: 'd0161511',
     password: 'nmsN8dCS5yB3mFUk',
     debug: false, // is set to false, if config.env = production
-    connectionLimit: 50 // The maximum number of connections to create at once. 
+    connectionLimit: 100 // The maximum number of connections to create at once. 
   }
 
 };
