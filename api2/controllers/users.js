@@ -31,6 +31,32 @@ var selectiveUpdateFields = function($, posibleFields, arrayAdditional) {
   }
 }
 
+var emptyParams = function($, objects) {
+  if(!objects) {
+    objects = $;
+    // urlParams
+    if(!_.isArray(objects)) objects = [objects];
+    if(objects.length > 0) {
+      for(var i=0; i < objects.length; i++) {
+        if(_.isEmpty(objects[i])) return true;
+      }
+    }
+  } else {
+    // $.params
+    if(!_.isArray(objects)) objects = [objects];
+    if(objects.length > 0) {
+      for(var i=0; i < objects.length; i++) {
+        if(!_.has($.params, objects[i])) {
+          return true;
+        } else {
+          if(_.isEmpty($.params[objects[i]])) return true;  
+        }
+      }
+    }
+  }
+  return false;
+}
+
 
 module.exports = {
 
@@ -53,6 +79,8 @@ module.exports = {
   //  likes token*, name*, email*
   //  returns {id}
   function($) {
+    if(emptyParams($, ['name', 'email'])) return $.error(400, 'missing params');
+
     var accessKey = 'secret123';
     $.db.query('INSERT INTO users SET ' +
       'name=?, email=?, password=SHA1(?), api_access_key=?',
@@ -84,6 +112,8 @@ module.exports = {
   //  likes token*
   //  returns {id, name, email, is_admin}
   function($, user_id) {
+    if(emptyParams(user_id)) return $.error(400, 'missing params');
+
     $.db.query('SELECT id, name, email, is_admin ' +
       'FROM users WHERE id=? LIMIT 1',
       [user_id],
@@ -99,6 +129,9 @@ module.exports = {
   //  likes token*, name*, email*
   //  returns boolean
   function($, user_id) {
+    if(emptyParams(user_id)) return $.error(400, 'missing params');
+    if(emptyParams($, ['name', 'email'])) return $.error(400, 'missing params');
+
     var updateFields = selectiveUpdateFields($, ['name', 'email'], [user_id]);
     if(updateFields) {
       $.db.query('UPDATE users SET ' +
@@ -120,6 +153,8 @@ module.exports = {
   //  likes token*
   //  returns boolean
   function($, user_id) {
+    if(emptyParams(user_id)) return $.error(400, 'missing params');
+
     $.db.query('DELETE FROM users WHERE id=? LIMIT 1',
       [user_id],
       function(err, result){
@@ -134,6 +169,8 @@ module.exports = {
   //  likes token*
   //  returns [{id, title, text}]
   function($, user_id) {
+    if(emptyParams(user_id)) return $.error(400, 'missing params');
+
     $.db.query('SELECT event_groups.id, event_groups.title, event_groups.text ' +
       'FROM event_groups ' +
       'INNER JOIN user_has_event_groups ON user_has_event_groups.event_group_id = event_groups.id ' +

@@ -123,6 +123,34 @@ var selectiveUpdateFields = function($, posibleFields, arrayAdditional) {
 }
 
 
+var emptyParams = function($, objects) {
+  if(!objects) {
+    objects = $;
+    // urlParams
+    if(!_.isArray(objects)) objects = [objects];
+    if(objects.length > 0) {
+      for(var i=0; i < objects.length; i++) {
+        if(_.isEmpty(objects[i])) return true;
+      }
+    }
+  } else {
+    // $.params
+    if(!_.isArray(objects)) objects = [objects];
+    if(objects.length > 0) {
+      for(var i=0; i < objects.length; i++) {
+        if(!_.has($.params, objects[i])) {
+          return true;
+        } else {
+          if(_.isEmpty($.params[objects[i]])) return true;  
+        }
+      }
+    }
+  }
+  return false;
+}
+
+
+
 module.exports = {
 
   'GET AUTH /groups':
@@ -144,6 +172,8 @@ module.exports = {
   //  likes token*, title*, text
   //  returns {id}
   function($) {
+    if(emptyParams($, ['title'])) return $.error(400, 'missing params');
+
     $.db.query('INSERT INTO event_groups SET ' +
       'title=?, text=?',
       [$.params.title, $.params.text],
@@ -159,6 +189,8 @@ module.exports = {
   //  likes token*
   //  returns {id, title, text}
   function($, event_group_id) {
+    if(emptyParams(event_group_id)) return $.error(400, 'missing params');
+
     $.db.query('SELECT id, title, text ' +
       'FROM event_groups WHERE id=? LIMIT 1',
       [event_group_id],
@@ -174,6 +206,9 @@ module.exports = {
   //  likes token*, title*, text
   //  returns boolean
   function($, event_group_id) {
+    if(emptyParams(event_group_id)) return $.error(400, 'missing params');
+    if(emptyParams($, ['title'])) return $.error(400, 'missing params');
+
     var updateFields = selectiveUpdateFields($, ['title', 'text'], event_group_id);
     if(updateFields) {
       $.db.query('UPDATE event_groups SET ' +
@@ -195,6 +230,8 @@ module.exports = {
   //  likes token*
   //  returns boolean
   function($, event_group_id) {
+    if(emptyParams(event_group_id)) return $.error(400, 'missing params');
+    
     $.db.query('DELETE FROM event_groups WHERE id=? LIMIT 1',
       [event_group_id],
       function(err, result){
@@ -209,6 +246,8 @@ module.exports = {
   //  likes token*
   //  returns [{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]
   function($, event_group_id) {
+    if(emptyParams(event_group_id)) return $.error(400, 'missing params');
+
     // @TODO $.params ?field1=value1&...
     sequence.create()
       .then(function(next){
@@ -236,6 +275,8 @@ module.exports = {
   //  likes token*
   //  returns {id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}
   function($, event_group_id, event_id) {
+    if(emptyParams([event_group_id, event_id])) return $.error(400, 'missing params');
+
     sequence.create()
       .then(function(next){
         // get event
@@ -261,6 +302,8 @@ module.exports = {
   //  likes token*, created_by_user_id, utc_timestamp, duration, ...
   //  returns {id}
   function($, event_group_id) {
+    if(emptyParams(event_group_id)) return $.error(400, 'missing params');
+
     sequence.create()
     .then(function(next){
       $.db.query('START TRANSACTION', function(err){
@@ -315,6 +358,8 @@ module.exports = {
   //  likes token*, created_by_user_id, utc_timestamp, duration
   //  returns boolean
   function($, event_group_id, event_id) {
+    if(emptyParams([event_group_id, event_id])) return $.error(400, 'missing params');
+    
     var updateFields = selectiveUpdateFields($, ['created_by_user_id', 'utc_timestamp', 'duration'], [event_group_id, event_id]);
     if(updateFields) {
       $.db.query('UPDATE events SET ' +
@@ -336,6 +381,8 @@ module.exports = {
   //  likes token*
   //  returns boolean
   function($, event_group_id, event_id) {
+    if(emptyParams([event_group_id, event_id])) return $.error(400, 'missing params');
+
     $.db.query('DELETE FROM events WHERE event_group_id=? AND id=? LIMIT 1',
       [event_group_id, event_id],
       function(err, result){
@@ -350,6 +397,8 @@ module.exports = {
   //  likes token*
   //  returns [{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]
   function($, event_group_id, type) {
+    if(emptyParams([event_group_id, type])) return $.error(400, 'missing params');
+
     sequence.create()
       .then(function(next){
         $.db.query('SELECT events.id, events.event_group_id, events.created_by_user_id, events.`utc_timestamp`, events.duration ' +
@@ -384,6 +433,8 @@ module.exports = {
   //  likes token*
   //  returns [{id, name, email}]
   function($, event_group_id) {
+    if(emptyParams(event_group_id)) return $.error(400, 'missing params');
+
     $.db.query('SELECT users.id, users.name, users.email ' +
       'FROM users ' +
       'INNER JOIN user_has_event_groups ON user_has_event_groups.user_id = users.id ' + 
