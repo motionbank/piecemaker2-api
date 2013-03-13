@@ -90,8 +90,6 @@ var includeHelperUniqIds = function(model, idField) {
 
 
 
-
-
 module.exports = {
 
   'GET AUTH /groups':
@@ -123,7 +121,7 @@ module.exports = {
     );
   },
 
-  'GET AUTH /event_group/:id':
+  'GET AUTH /group/:id':
   // get user details about one event_group
   //  likes token*
   //  returns {id, title, text}
