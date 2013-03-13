@@ -3,7 +3,7 @@ var API = require('../../node-rest-api/lib/api.js');
 var util = require('util');
 
 
-var config = require('./config/development.js');
+var config = require('./config/test.js');
 var mysql = require('mysql');
 
 
@@ -52,13 +52,14 @@ api.cleanupFunc = function(api){
 // if AUTH flag is set, validate user and quit if validation fails
 api.beforeFunctionCall('AUTH', function(api, req, res, next){
   try {
-    if(req.api.params.token == '123') {
-      // get user from db with token
-      req.api.user = {id: 2, name: 'harald'};
-      next();
-    } else {
-      throw new ClientError({status: 403, message: 'invalid login'});
-    }
+    api.handles.db.query('SELECT * FROM users WHERE api_access_key=? LIMIT 1',
+      [req.api.params.token],
+      function(err, result){
+        if(err || result.length !== 1) throw new ClientError({status: 403, message: 'invalid login'});
+        req.api.user = result[0];
+        next();
+      }
+    );
   } catch(e) {
     throw new ClientError({status: 401, message: 'login invalid'});
   }
