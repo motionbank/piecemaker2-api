@@ -32,6 +32,33 @@ var selectiveUpdateFields = function($, posibleFields, arrayAdditional) {
 }
 
 
+var emptyParams = function($, objects) {
+  if(!objects) {
+    objects = $;
+    // urlParams
+    if(!_.isArray(objects)) objects = [objects];
+    if(objects.length > 0) {
+      for(var i=0; i < objects.length; i++) {
+        if(_.isEmpty(objects[i])) return true;
+      }
+    }
+  } else {
+    // $.params
+    if(!_.isArray(objects)) objects = [objects];
+    if(objects.length > 0) {
+      for(var i=0; i < objects.length; i++) {
+        if(!_.has($.params, objects[i])) {
+          return true;
+        } else {
+          if(_.isEmpty($.params[objects[i]])) return true;  
+        }
+      }
+    }
+  }
+  return false;
+}
+
+
 module.exports = {
 
   'POST AUTH /event/:event_id/field':
@@ -39,13 +66,15 @@ module.exports = {
   //  likes token*, id*, value*
   //  returns {id}
   function($, event_id) {
+    if(emptyParams(event_id)) return $.error(400, 'missing params');
+    if(emptyParams($, ['id'])) return $.error(400, 'missing params');
+
     $.db.query('INSERT INTO event_fields SET ' +
       'event_id=?, id=?, value=?',
       [event_id, $.params.id, $.params.value],
       function(err, result){
-        console.log(result);
         if(err) return $.internalError(err);
-        return $.render({id: result.insertId});
+        return $.render({id: result.insertId}); // @FIXME: bug in mysql module?! its not returning insertId
       }
     );
   },
@@ -55,6 +84,8 @@ module.exports = {
   //  likes token*
   //  returns {value}
   function($, event_id, field_id) {
+    if(emptyParams([event_id, field_id])) return $.error(400, 'missing params');
+
     $.db.query('SELECT value ' +
       'FROM event_fields WHERE event_id=? AND id=? LIMIT 1',
       [event_id, field_id],
@@ -70,6 +101,8 @@ module.exports = {
   //  likes token*, value
   //  returns boolean
   function($, event_id, field_id) {
+    if(emptyParams([event_id, field_id])) return $.error(400, 'missing params');
+
     var updateFields = selectiveUpdateFields($, ['value'], [event_id, field_id]);
     if(updateFields) {
       $.db.query('UPDATE event_fields SET ' +
@@ -91,6 +124,8 @@ module.exports = {
   //  likes token*
   //  returns boolean
   function($, event_id, field_id) {
+    if(emptyParams([event_id, field_id])) return $.error(400, 'missing params');
+
     $.db.query('DELETE FROM event_fields WHERE event_id=? AND id=? LIMIT 1',
       [event_id, field_id],
       function(err, result){
