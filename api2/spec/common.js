@@ -14,7 +14,6 @@ var createDb = function(done) {
 }
 
 var deleteDb = function(done) {
-  // return done();
   var mysqlDump = fs.readFileSync('./spec/db/delete-db.sql', 'utf8');
   if(!mysqlDump) return done(new Error('empty delete-db.sql'));
   connection.query(mysqlDump, function(err, result){
