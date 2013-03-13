@@ -1,4 +1,5 @@
-var API = require('../../node-rest-api/lib/api.js');
+// var API = require('../../node-rest-api/lib/api.js');
+var API = require('rest-api');
 
 var util = require('util');
 

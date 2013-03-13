@@ -8,7 +8,8 @@
     "mysql": "2.0.0-alpha7",
     "sequence":"2.2.1",
     "async":"0.2.6",
-    "underscore":"1.4.x"
+    "underscore":"1.4.x",
+    "rest-api":"*"
   },
 
   "devDependencies": {
