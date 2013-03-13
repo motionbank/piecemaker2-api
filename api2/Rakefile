@@ -8,6 +8,13 @@ task :start_api do
   system 'node index.js'
 end
 
+desc "test routes"
+task :test do 
+  system './node_modules/.bin/mocha \
+    --reporter nyan \
+    spec/*.js spec/controllers/*.js'
+end
+
 desc "debug api (mattes env)"
 task :debug_mattes_env do
   system 'nodemon -w . -w ../../node-rest-api/lib/ index.js'

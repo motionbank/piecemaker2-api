@@ -3,7 +3,7 @@ var API = require('../../node-rest-api/lib/api.js');
 var util = require('util');
 
 
-var config = require('./config.js');
+var config = require('./config/development.js');
 var mysql = require('mysql');
 
 
