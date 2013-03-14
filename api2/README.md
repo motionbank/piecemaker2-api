@@ -17,7 +17,7 @@ rake default           # see usage
 rake routes            # generate routes.html|.md
 rake start_api         # start api
 rake test              # test routes
-``
+```
 
 ## Rights 
 
