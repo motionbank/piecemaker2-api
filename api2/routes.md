@@ -19,12 +19,12 @@ __DELETE AUTH /event/:event_id/field/:field_id__
  * Returns: ```boolean```
   
 __GET AUTH /groups__
- * get all event_groups
+ * get all event_groups for current user (with read rights)
  * Likes: ```token*```
  * Returns: ```[{id, title, text}]```
   
 __POST AUTH /group__
- * create new event_group
+ * create new event_group and record for user_has_event_groups (allow everything for owner of event_group)
  * Likes: ```token*, title*, text```
  * Returns: ```{id}```
   
