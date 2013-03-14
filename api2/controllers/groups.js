@@ -149,17 +149,63 @@ var emptyParams = function($, objects) {
   return false;
 }
 
+var getEventGroupIdForEventField = function($, eventId, callback) {
+  $.db.query('SELECT event_group_id FROM events WHERE id=? LIMIT 1', [eventId],
+    function(err, result){
+      if(err) return callback(err);
+      if(result.length == 1 && result[0]['event_group_id']) {
+        return callback(null, result[0]['event_group_id']);
+      } else {
+        return callback(new Error('no event found'));
+      };
+    });
+}
+
+var isAllowed = function($, what, id, userId, callback) {
+  if(!id) return callback(new Error('invalid id'));
+
+  sequence.create()
+    .then(function(next){
+      if(id['eventId']) {
+        getEventGroupIdForEventField($, id['eventId'], function(err, eventId){
+          if(err) return $.error(err);
+          next(null, eventId);
+        })
+      } else {
+        next(null, id['eventGroupId']);
+      }
+    })
+    .then(function(next, err, id){
+      if(_.isFunction(userId)) {
+        callback = userId; 
+        userId = $['api']['user']['id'] || false;
+      }
+      if(!userId) return callback(new Error('invalid userId'));
+      $.db.query('SELECT * FROM user_has_event_groups WHERE user_id=? AND event_group_id=? LIMIT 1',
+        [userId, id],
+        function(err, result){
+          if(err) return callback(err);
+          if(result.length !== 1) return callback(new Error('invalid record'));
+          return callback(null, result[0]['allow_' + what]);
+        }
+      );
+    });
+
+}
+
 
 
 module.exports = {
 
   'GET AUTH /groups':
-  // get all event_groups
+  // get all event_groups for current user (with read rights)
   //  likes token*
   //  returns [{id, title, text}]
   function($) {
     $.db.query('SELECT id, title, text ' +
-      'FROM event_groups WHERE 1',
+      'FROM event_groups ' +
+      'INNER JOIN user_has_event_groups ON user_has_event_groups.event_group_id=event_groups.id ' +
+      'WHERE user_has_event_groups.allow_read=1',
       function(err, results){
         if(err) return $.internalError(err);
         return $.render(results);
@@ -168,7 +214,7 @@ module.exports = {
   },
 
   'POST AUTH /group':
-  // create new event_group
+  // create new event_group and record for user_has_event_groups (allow everything for owner of event_group)
   //  likes token*, title*, text
   //  returns {id}
   function($) {
@@ -179,7 +225,16 @@ module.exports = {
       [$.params.title, $.params.text],
       function(err, result){
         if(err) return $.internalError(err);
-        return $.render({id: result.insertId});
+
+        // create record in user_has_event_groups
+        $.db.query('INSERT INTO user_has_event_groups SET ' +
+          'user_id=?, event_group_id=?, allow_create=1, allow_read=1, allow_update=1, allow_delete=1',
+          [$.api.user.id, result.insertId],
+          function(err, _result){
+            if(err) return $.internalError(err);
+            return $.render({id: result.insertId});
+          }
+        );
       }
     );
   },
@@ -191,14 +246,22 @@ module.exports = {
   function($, event_group_id) {
     if(emptyParams(event_group_id)) return $.error(400, 'missing params');
 
-    $.db.query('SELECT id, title, text ' +
-      'FROM event_groups WHERE id=? LIMIT 1',
-      [event_group_id],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render(result[0]);
-      }
-    );
+    sequence.create()
+      .then(function(next){
+        isAllowed($, 'read', {eventGroupId: event_group_id}, next);        
+      })
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        $.db.query('SELECT id, title, text ' +
+          'FROM event_groups WHERE id=? LIMIT 1',
+          [event_group_id],
+          function(err, result){
+            if(err) return $.internalError(err);
+            return $.render(result[0]);
+          }
+        );
+      });
   },
 
   'PUT AUTH /group/:id':
@@ -209,20 +272,28 @@ module.exports = {
     if(emptyParams(event_group_id)) return $.error(400, 'missing params');
     if(emptyParams($, ['title'])) return $.error(400, 'missing params');
 
-    var updateFields = selectiveUpdateFields($, ['title', 'text'], event_group_id);
-    if(updateFields) {
-      $.db.query('UPDATE event_groups SET ' +
-        updateFields.string +
-        'WHERE id=? LIMIT 1',
-        updateFields.array,
-        function(err, result){
-          if(err) return $.internalError(err);
-          return $.render(result.affectedRows);
+    sequence.create()
+      .then(function(next){
+        isAllowed($, 'update', {eventGroupId: event_group_id}, next);        
+      })
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        var updateFields = selectiveUpdateFields($, ['title', 'text'], event_group_id);
+        if(updateFields) {
+          $.db.query('UPDATE event_groups SET ' +
+            updateFields.string +
+            'WHERE id=? LIMIT 1',
+            updateFields.array,
+            function(err, result){
+              if(err) return $.internalError(err);
+              return $.render(result.affectedRows);
+            }
+          );
+        } else {
+          return $.error(400, 'verify update fields');
         }
-      );
-    } else {
-      return $.error(400, 'verify update fields');
-    }
+      });
   },
 
   'DELETE AUTH /group/:id':
@@ -231,14 +302,22 @@ module.exports = {
   //  returns boolean
   function($, event_group_id) {
     if(emptyParams(event_group_id)) return $.error(400, 'missing params');
-    
-    $.db.query('DELETE FROM event_groups WHERE id=? LIMIT 1',
-      [event_group_id],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render(result.affectedRows);
-      }
-    );
+ 
+    sequence.create()
+      .then(function(next){
+        isAllowed($, 'delete', {eventGroupId: event_group_id}, next);        
+      })
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        $.db.query('DELETE FROM event_groups WHERE id=? LIMIT 1',
+          [event_group_id],
+          function(err, result){
+            if(err) return $.internalError(err);
+            return $.render(result.affectedRows);
+          }
+        );
+      });
   },
 
   'GET AUTH /group/:id/events':
@@ -247,26 +326,33 @@ module.exports = {
   //  returns [{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]
   function($, event_group_id) {
     if(emptyParams(event_group_id)) return $.error(400, 'missing params');
-
-    // @TODO $.params ?field1=value1&...
     sequence.create()
       .then(function(next){
-        // get event
-        $.db.query('SELECT id, event_group_id, created_by_user_id, `utc_timestamp`, duration ' +
-          'FROM events WHERE event_group_id=?',
-          [event_group_id],
-          function(err, results){
-            if(err) return next(err);
-
-            next(null, results);
-          }
-        );
+        isAllowed($, 'read', {eventGroupId: event_group_id}, next);        
       })
-      .then(includeUser($, 'created_by_user_id'))
-      .then(includeEventGroup($, 'event_group_id'))
-      .then(function(next, err, events){
-        if(err) return $.internalError(err);
-        $.render(events);
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        // @TODO $.params ?field1=value1&...
+        sequence.create()
+          .then(function(next){
+            // get event
+            $.db.query('SELECT id, event_group_id, created_by_user_id, `utc_timestamp`, duration ' +
+              'FROM events WHERE event_group_id=?',
+              [event_group_id],
+              function(err, results){
+                if(err) return next(err);
+
+                next(null, results);
+              }
+            );
+          })
+          .then(includeUser($, 'created_by_user_id'))
+          .then(includeEventGroup($, 'event_group_id'))
+          .then(function(next, err, events){
+            if(err) return $.internalError(err);
+            $.render(events);
+          });
       });
   },
 
@@ -279,22 +365,31 @@ module.exports = {
 
     sequence.create()
       .then(function(next){
-        // get event
-        $.db.query('SELECT id, event_group_id, created_by_user_id, `utc_timestamp`, duration ' +
-          'FROM events WHERE event_group_id=? AND id=? LIMIT 1',
-          [event_group_id, event_id],
-          function(err, result){
-            if(err) return next(err);
-            next(null, result[0]);
-          }
-        );
+        isAllowed($, 'read', {eventGroupId: event_group_id}, next);        
       })
-      .then(includeUser($, 'created_by_user_id'))
-      .then(includeEventGroup($, 'event_group_id'))
-      .then(function(next, err, event){
-        if(err) return $.internalError(err);
-        $.render(event);
-      });
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        sequence.create()
+          .then(function(next){
+            // get event
+            $.db.query('SELECT id, event_group_id, created_by_user_id, `utc_timestamp`, duration ' +
+              'FROM events WHERE event_group_id=? AND id=? LIMIT 1',
+              [event_group_id, event_id],
+              function(err, result){
+                if(err) return next(err);
+                next(null, result[0]);
+              }
+            );
+          })
+          .then(includeUser($, 'created_by_user_id'))
+          .then(includeEventGroup($, 'event_group_id'))
+          .then(function(next, err, event){
+            if(err) return $.internalError(err);
+            $.render(event);
+          });
+
+        });
   },
 
   'POST AUTH /group/:event_group_id/event':
@@ -305,52 +400,62 @@ module.exports = {
     if(emptyParams(event_group_id)) return $.error(400, 'missing params');
 
     sequence.create()
-    .then(function(next){
-      $.db.query('START TRANSACTION', function(err){
-        if(err) return next(err);
-        next(null);
+      .then(function(next){
+        isAllowed($, 'create', {eventGroupId: event_group_id}, next);        
       })
-    })
-    .then(function(next){
-      // insert new event
-      $.db.query('INSERT INTO events SET ' +
-        'event_group_id=?, created_by_user_id=?, `utc_timestamp`=?, duration=?',
-        [event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration],
-        function(err, result){
-          if(err) return next(err);
-          next(null, result.insertId);
-        }
-      );
-    })
-    .then(function(next, err, eventId){
-      // create event_fields for additonal $.params
-      var ignorefields = ['token', 'id', 'event_group_id', 'created_by_user_id', 'utc_timestamp', 'duration'];
-      var keys = _.difference(Object.keys($.params), ignorefields);
-      async.forEach(keys, function(key, next) {
-        $.db.query('INSERT INTO event_fields SET event_id=?, id=?, value=?',
-          [eventId, key, $.params[key]],
-          function(err, result) {
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        sequence.create()
+        .then(function(next){
+          $.db.query('START TRANSACTION', function(err){
             if(err) return next(err);
-            next(null)
-          });
-        },
-        function(err){
-          if(err) {
-            // rollback
-            $.db.query('ROLLBACK', function(err){
-              if(err) return $.internalError(err);
-              return $.render({id: eventId});
-            });
-          } else {
-            // cool ...
-            $.db.query('COMMIT', function(err){
-              if(err) return $.internalError(err);
-              return $.render({id: eventId});
-            });
-          }
-        }
-      );
+            next(null);
+          })
+        })
+        .then(function(next){
+          // insert new event
+          $.db.query('INSERT INTO events SET ' +
+            'event_group_id=?, created_by_user_id=?, `utc_timestamp`=?, duration=?',
+            [event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration],
+            function(err, result){
+              if(err) return next(err);
+              next(null, result.insertId);
+            }
+          );
+        })
+        .then(function(next, err, eventId){
+          // create event_fields for additonal $.params
+          var ignorefields = ['token', 'id', 'event_group_id', 'created_by_user_id', 'utc_timestamp', 'duration'];
+          var keys = _.difference(Object.keys($.params), ignorefields);
+          async.forEach(keys, function(key, next) {
+            $.db.query('INSERT INTO event_fields SET event_id=?, id=?, value=?',
+              [eventId, key, $.params[key]],
+              function(err, result) {
+                if(err) return next(err);
+                next(null)
+              });
+            },
+            function(err){
+              if(err) {
+                // rollback
+                $.db.query('ROLLBACK', function(err){
+                  if(err) return $.internalError(err);
+                  return $.render({id: eventId});
+                });
+              } else {
+                // cool ...
+                $.db.query('COMMIT', function(err){
+                  if(err) return $.internalError(err);
+                  return $.render({id: eventId});
+                });
+              }
+            }
+          );
+        });
+  
     });
+
   },
 
   'PUT AUTH /group/:event_group_id/event/:event_id':
@@ -359,21 +464,30 @@ module.exports = {
   //  returns boolean
   function($, event_group_id, event_id) {
     if(emptyParams([event_group_id, event_id])) return $.error(400, 'missing params');
+
+    sequence.create()
+      .then(function(next){
+        isAllowed($, 'update', {eventGroupId: event_group_id}, next);        
+      })
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
     
-    var updateFields = selectiveUpdateFields($, ['created_by_user_id', 'utc_timestamp', 'duration'], [event_group_id, event_id]);
-    if(updateFields) {
-      $.db.query('UPDATE events SET ' +
-        updateFields.string +
-        'WHERE event_group_id=? AND id=? LIMIT 1',
-        updateFields.array,
-        function(err, result){
-          if(err) return $.internalError(err);
-          return $.render(result.affectedRows);
+        var updateFields = selectiveUpdateFields($, ['created_by_user_id', 'utc_timestamp', 'duration'], [event_group_id, event_id]);
+        if(updateFields) {
+          $.db.query('UPDATE events SET ' +
+            updateFields.string +
+            'WHERE event_group_id=? AND id=? LIMIT 1',
+            updateFields.array,
+            function(err, result){
+              if(err) return $.internalError(err);
+              return $.render(result.affectedRows);
+            }
+          );
+        } else {
+          return $.error(400, 'verify update fields');
         }
-      );
-    } else {
-      return $.error(400, 'verify update fields');
-    }
+
+      });
   },
 
   'DELETE AUTH /group/:event_group_id/event/:event_id':
@@ -383,13 +497,21 @@ module.exports = {
   function($, event_group_id, event_id) {
     if(emptyParams([event_group_id, event_id])) return $.error(400, 'missing params');
 
-    $.db.query('DELETE FROM events WHERE event_group_id=? AND id=? LIMIT 1',
-      [event_group_id, event_id],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render(result.affectedRows);
-      }
-    );
+    sequence.create()
+      .then(function(next){
+        isAllowed($, 'delete', {eventGroupId: event_group_id}, next);        
+      })
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        $.db.query('DELETE FROM events WHERE event_group_id=? AND id=? LIMIT 1',
+          [event_group_id, event_id],
+          function(err, result){
+            if(err) return $.internalError(err);
+            return $.render(result.affectedRows);
+          }
+        );
+      });
   },
 
   'GET AUTH /group/:event_group_id/events/by_type/:type':
@@ -401,30 +523,40 @@ module.exports = {
 
     sequence.create()
       .then(function(next){
-        $.db.query('SELECT events.id, events.event_group_id, events.created_by_user_id, events.`utc_timestamp`, events.duration ' +
-          'FROM events ' +
-          'INNER JOIN event_fields ON event_fields.event_id=events.id ' +
-          'WHERE events.event_group_id=? AND event_fields.id="type" AND event_fields.value=?',
-          [event_group_id,type],
-          function(err, results){
-            if(err) return next(err);
-            next(null, results);
-          }
-        );
+        isAllowed($, 'read', {eventGroupId: event_group_id}, next);        
       })
-      .then(includeUser($, 'created_by_user_id'))
-      .then(includeEventGroup($, 'event_group_id'))
-      .then(function(next, err, event){
-        if(err) return $.internalError(err);
-        // load event fields
-        // @TODO
-        // SELECT id, value FROM event_fields WHERE event_id=?
-        next(null, event);
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
 
-      })
-      .then(function(next, err, event){
-        if(err) return $.internalError(err);
-        $.render(event);
+
+        sequence.create()
+          .then(function(next){
+            $.db.query('SELECT events.id, events.event_group_id, events.created_by_user_id, events.`utc_timestamp`, events.duration ' +
+              'FROM events ' +
+              'INNER JOIN event_fields ON event_fields.event_id=events.id ' +
+              'WHERE events.event_group_id=? AND event_fields.id="type" AND event_fields.value=?',
+              [event_group_id,type],
+              function(err, results){
+                if(err) return next(err);
+                next(null, results);
+              }
+            );
+          })
+          .then(includeUser($, 'created_by_user_id'))
+          .then(includeEventGroup($, 'event_group_id'))
+          .then(function(next, err, event){
+            if(err) return $.internalError(err);
+            // load event fields
+            // @TODO
+            // SELECT id, value FROM event_fields WHERE event_id=?
+            next(null, event);
+
+          })
+          .then(function(next, err, event){
+            if(err) return $.internalError(err);
+            $.render(event);
+          });
+
       });
   },
 
@@ -435,16 +567,25 @@ module.exports = {
   function($, event_group_id) {
     if(emptyParams(event_group_id)) return $.error(400, 'missing params');
 
-    $.db.query('SELECT users.id, users.name, users.email ' +
-      'FROM users ' +
-      'INNER JOIN user_has_event_groups ON user_has_event_groups.user_id = users.id ' + 
-      'WHERE user_has_event_groups.event_group_id=?',
-      [event_group_id],
-      function(err, results){
-        if(err) return $.internalError(err);
-        return $.render(results);
-      }
-    );
+    sequence.create()
+      .then(function(next){
+        isAllowed($, 'read', {eventGroupId: event_group_id}, next);        
+      })
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        $.db.query('SELECT users.id, users.name, users.email ' +
+          'FROM users ' +
+          'INNER JOIN user_has_event_groups ON user_has_event_groups.user_id = users.id ' + 
+          'WHERE user_has_event_groups.event_group_id=?',
+          [event_group_id],
+          function(err, results){
+            if(err) return $.internalError(err);
+            return $.render(results);
+          }
+        );
+
+    });
   }
 
 };

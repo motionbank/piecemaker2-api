@@ -58,6 +58,50 @@ var emptyParams = function($, objects) {
   return false;
 }
 
+var getEventGroupIdForEventField = function($, eventId, callback) {
+  $.db.query('SELECT event_group_id FROM events WHERE id=? LIMIT 1', [eventId],
+    function(err, result){
+      if(err) return callback(err);
+      if(result.length == 1 && result[0]['event_group_id']) {
+        return callback(null, result[0]['event_group_id']);
+      } else {
+        return callback(new Error('no event found'));
+      };
+    });
+}
+
+var isAllowed = function($, what, id, userId, callback) {
+  if(!id) return callback(new Error('invalid id'));
+
+  sequence.create()
+    .then(function(next){
+      if(id['eventId']) {
+        getEventGroupIdForEventField($, id['eventId'], function(err, eventId){
+          if(err) return $.error(err);
+          next(null, eventId);
+        })
+      } else {
+        next(null, id['eventGroupId']);
+      }
+    })
+    .then(function(next, err, id){
+      if(_.isFunction(userId)) {
+        callback = userId; 
+        userId = $['api']['user']['id'] || false;
+        
+      }
+      if(!userId) return callback(new Error('invalid userId'));
+      $.db.query('SELECT * FROM user_has_event_groups WHERE user_id=? AND event_group_id=? LIMIT 1',
+        [userId, id],
+        function(err, result){
+          if(err) return callback(err);
+          if(result.length !== 1) return callback(new Error('invalid record'));
+          return callback(null, result[0]['allow_' + what]);
+        }
+      );
+    });
+
+}
 
 module.exports = {
 
@@ -69,14 +113,22 @@ module.exports = {
     if(emptyParams(event_id)) return $.error(400, 'missing params');
     if(emptyParams($, ['id'])) return $.error(400, 'missing params');
 
-    $.db.query('INSERT INTO event_fields SET ' +
-      'event_id=?, id=?, value=?',
-      [event_id, $.params.id, $.params.value],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render({id: result.insertId}); // @FIXME: bug in mysql module?! its not returning insertId
-      }
-    );
+    sequence.create()
+      .then(function(next){
+        isAllowed($, 'create', {eventId: event_id}, next);        
+      })
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        $.db.query('INSERT INTO event_fields SET ' +
+          'event_id=?, id=?, value=?',
+          [event_id, $.params.id, $.params.value],
+          function(err, result){
+            if(err) return $.internalError(err);
+            return $.render({id: result.insertId}); // @FIXME: bug in mysql module?! its not returning insertId
+          }
+        );
+      })
   },
 
   'GET AUTH /event/:event_id/field/:field_id':
@@ -86,14 +138,22 @@ module.exports = {
   function($, event_id, field_id) {
     if(emptyParams([event_id, field_id])) return $.error(400, 'missing params');
 
-    $.db.query('SELECT value ' +
-      'FROM event_fields WHERE event_id=? AND id=? LIMIT 1',
-      [event_id, field_id],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render(result[0]);
-      }
-    );
+    sequence.create()
+      .then(function(next){
+        isAllowed($, 'read', {eventId: event_id}, next);        
+      })
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        $.db.query('SELECT value ' +
+          'FROM event_fields WHERE event_id=? AND id=? LIMIT 1',
+          [event_id, field_id],
+          function(err, result){
+            if(err) return $.internalError(err);
+            return $.render(result[0]);
+          }
+        );
+      });
   },  
 
   'PUT AUTH /event/:event_id/field/:field_id':
@@ -103,20 +163,28 @@ module.exports = {
   function($, event_id, field_id) {
     if(emptyParams([event_id, field_id])) return $.error(400, 'missing params');
 
-    var updateFields = selectiveUpdateFields($, ['value'], [event_id, field_id]);
-    if(updateFields) {
-      $.db.query('UPDATE event_fields SET ' +
-        updateFields.string +
-        'WHERE event_id=? AND id=? LIMIT 1',
-        updateFields.array,
-        function(err, result){
-          if(err) return $.internalError(err);
-          return $.render(result.affectedRows);
+    sequence.create()
+      .then(function(next){
+        isAllowed($, 'update', {eventId: event_id}, next);        
+      })
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        var updateFields = selectiveUpdateFields($, ['value'], [event_id, field_id]);
+        if(updateFields) {
+          $.db.query('UPDATE event_fields SET ' +
+            updateFields.string +
+            'WHERE event_id=? AND id=? LIMIT 1',
+            updateFields.array,
+            function(err, result){
+              if(err) return $.internalError(err);
+              return $.render(result.affectedRows);
+            }
+          );
+        } else {
+          $.error(400, 'verify update fields');
         }
-      );
-    } else {
-      $.error(400, 'verify update fields');
-    }
+      });
   },
 
   'DELETE AUTH /event/:event_id/field/:field_id':
@@ -126,13 +194,21 @@ module.exports = {
   function($, event_id, field_id) {
     if(emptyParams([event_id, field_id])) return $.error(400, 'missing params');
 
-    $.db.query('DELETE FROM event_fields WHERE event_id=? AND id=? LIMIT 1',
-      [event_id, field_id],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render(result.affectedRows);
-      }
-    );
+    sequence.create()
+      .then(function(next){
+        isAllowed($, 'delete', {eventId: event_id}, next);        
+      })
+      .then(function(next, err, allowed){
+        if(!allowed) return $.error(403, 'missing rights');
+
+        $.db.query('DELETE FROM event_fields WHERE event_id=? AND id=? LIMIT 1',
+          [event_id, field_id],
+          function(err, result){
+            if(err) return $.internalError(err);
+            return $.render(result.affectedRows);
+          }
+        );
+      });
   }
 
 }
