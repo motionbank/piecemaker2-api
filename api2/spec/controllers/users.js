@@ -1,7 +1,7 @@
 var request = require('supertest')
 request = request('http://localhost:8081');
 
-describe.only('controllers/users.js', function(){
+describe('controllers/users.js', function(){
 
 
   describe('POST AUTH /user', function(){

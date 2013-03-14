@@ -1,5 +1,5 @@
-// var API = require('../../node-rest-api/lib/api.js');
-var API = require('rest-api');
+var API = require('../../node-rest-api/lib/api.js');
+// var API = require('rest-api');
 
 var util = require('util');
 
@@ -57,7 +57,7 @@ api.beforeFunctionCall('AUTH', function(api, req, res, next){
       [req.api.params.token],
       function(err, result){
         if(err || result.length !== 1) throw new ClientError({status: 403, message: 'invalid login'});
-        req.api.user = result[0];
+        api.user = result[0];
         next();
       }
     );

@@ -1,7 +1,7 @@
 var request = require('supertest')
 request = request('http://localhost:8081');
 
-describe('controllers/groups.js', function(){
+describe.only('controllers/groups.js', function(){
 
   describe('GET AUTH /groups', function(){
     it('gets all event_groups', function(done){
