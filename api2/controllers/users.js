@@ -57,6 +57,7 @@ var emptyParams = function($, objects) {
   return false;
 }
 
+// @TODO is_admin check!
 
 module.exports = {
 

@@ -394,7 +394,7 @@ module.exports = {
 
   'POST AUTH /group/:event_group_id/event':
   // create new event and create new event_fields for all non-events table fields
-  //  likes token*, created_by_user_id, utc_timestamp, duration, ...
+  //  likes token*, utc_timestamp, duration, ...
   //  returns {id}
   function($, event_group_id) {
     if(emptyParams(event_group_id)) return $.error(400, 'missing params');
@@ -417,7 +417,7 @@ module.exports = {
           // insert new event
           $.db.query('INSERT INTO events SET ' +
             'event_group_id=?, created_by_user_id=?, `utc_timestamp`=?, duration=?',
-            [event_group_id, $.params.created_by_user_id, $.params.utc_timestamp, $.params.duration],
+            [event_group_id, $.api.user.id, $.params.utc_timestamp, $.params.duration],
             function(err, result){
               if(err) return next(err);
               next(null, result.insertId);
@@ -460,7 +460,7 @@ module.exports = {
 
   'PUT AUTH /group/:event_group_id/event/:event_id':
   // updates a event
-  //  likes token*, created_by_user_id, utc_timestamp, duration
+  //  likes token*, utc_timestamp, duration
   //  returns boolean
   function($, event_group_id, event_id) {
     if(emptyParams([event_group_id, event_id])) return $.error(400, 'missing params');
@@ -472,7 +472,7 @@ module.exports = {
       .then(function(next, err, allowed){
         if(!allowed) return $.error(403, 'missing rights');
     
-        var updateFields = selectiveUpdateFields($, ['created_by_user_id', 'utc_timestamp', 'duration'], [event_group_id, event_id]);
+        var updateFields = selectiveUpdateFields($, ['utc_timestamp', 'duration'], [event_group_id, event_id]);
         if(updateFields) {
           $.db.query('UPDATE events SET ' +
             updateFields.string +
