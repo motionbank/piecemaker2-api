@@ -55,12 +55,12 @@ __GET AUTH /group/:event_group_id/event/:event_id__
   
 __POST AUTH /group/:event_group_id/event__
  * create new event and create new event_fields for all non-events table fields
- * Likes: ```token*, created_by_user_id, utc_timestamp, duration, ...```
+ * Likes: ```token*, utc_timestamp, duration, ...```
  * Returns: ```{id}```
   
 __PUT AUTH /group/:event_group_id/event/:event_id__
  * updates a event
- * Likes: ```token*, created_by_user_id, utc_timestamp, duration```
+ * Likes: ```token*, utc_timestamp, duration```
  * Returns: ```boolean```
   
 __DELETE AUTH /group/:event_group_id/event/:event_id__
