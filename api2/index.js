@@ -1,5 +1,5 @@
-var API = require('../../node-rest-api/lib/api.js');
-// var API = require('rest-api');
+// var API = require('../../node-rest-api/lib/api.js');
+var API = require('rest-api');
 
 var util = require('util');
 
@@ -41,7 +41,7 @@ api.beforeFunctionCall(function(api, req, res, next){
 
 // release mysql connection
 api.cleanupFunc = function(api){
-  console.log('################onEnd db close');
+  console.log('cleanupFunc called!!!');
   try {
     // api.handles.db.end();  
   } catch(e) {console.log('cleanupFunc issues');}
