@@ -1,5 +1,5 @@
-// var API = require('../../node-rest-api/lib/api.js');
-var API = require('rest-api');
+var API = require('../../node-rest-api/lib/api.js');
+// var API = require('rest-api');
 
 var util = require('util');
 
@@ -22,7 +22,23 @@ var api = new API({
 var pool = mysql.createPool(config.mysql);
 
 // get mysql connection from pool before function is actually called
-api.beforeFunctionCall(function(api, req, res, next){
+// api.beforeFunctionCall(function(api, req, res, next){
+//   pool.getConnection(function(err, db){
+//     if(err) throw new Error('no database connection');
+// 
+//     db.on('error', function(err) {
+//       if (!err.fatal) return;
+//       // we can ignore this error, because of pooling
+//       if (err.code !== 'PROTOCOL_CONNECTION_LOST') throw err;
+//     });
+// 
+//     api.setHandle('db', db);
+//     next();
+//   });
+// });
+
+
+api.hook('beforeFunctionCall', 'AUTH', function(api, req, res, next){
   pool.getConnection(function(err, db){
     if(err) throw new Error('no database connection');
 
@@ -39,19 +55,22 @@ api.beforeFunctionCall(function(api, req, res, next){
 
 
 
+
 // release mysql connection
-api.cleanupFunc = function(api){
+api.hook('cleanup', function(api, req, res, next) {
   console.log('cleanupFunc called!!!');
   try {
     // api.handles.db.end();  
   } catch(e) {console.log('cleanupFunc issues');}
-};
+
+  next();
+});
 
 
 
 // auth hook
 // if AUTH flag is set, validate user and quit if validation fails
-api.beforeFunctionCall('AUTH', function(api, req, res, next){
+api.hook('beforeFunctionCall', 'AUTH', function(api, req, res, next){
   try {
     api.handles.db.query('SELECT * FROM users WHERE api_access_key=? LIMIT 1',
       [req.api.params.token],
@@ -68,18 +87,20 @@ api.beforeFunctionCall('AUTH', function(api, req, res, next){
 
 // prepare auth hook
 // use $.req.user for further validations
-api.beforeFunctionCall('PREPARE_AUTH', function(api, req, res, next){
-  try {
-    if(req.api.params.token == '123') {
-      // get user from db with token
-      req.api.user = {id: 2, name: 'harald'};
-    }
-  } catch(e) {
-    req.api.user = false;
-  }
-  next();
-});
+// api.beforeFunctionCall('PREPARE_AUTH', function(api, req, res, next){
+//   try {
+//     if(req.api.params.token == '123') {
+//       // get user from db with token
+//       req.api.user = {id: 2, name: 'harald'};
+//     }
+//   } catch(e) {
+//     req.api.user = false;
+//   }
+//   next();
+// });
 
+
+console.log(api.hooks);
 
 
 // show me what you got
