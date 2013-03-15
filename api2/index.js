@@ -20,51 +20,34 @@ var api = new API({
 // mysql config
 var pool = mysql.createPool(config.mysql);
 
-// get mysql connection from pool before function is actually called
-// api.beforeFunctionCall(function(api, req, res, next){
-//   pool.getConnection(function(err, db){
-//     if(err) throw new Error('no database connection');
-// 
-//     db.on('error', function(err) {
-//       if (!err.fatal) return;
-//       // we can ignore this error, because of pooling
-//       if (err.code !== 'PROTOCOL_CONNECTION_LOST') throw err;
-//     });
-// 
-//     api.setHandle('db', db);
-//     next();
-//   });
-// });
 
-
-api.beforeFunctionCall(function(_api, req, res, next){
+api.beforeFunctionCall(function(req, res, next){
   pool.getConnection(function(err, db){
-    if(err) throw new Error('no database connection');
-
-    _api.setHandle('db', db);
-    // api.handles['db'] = db;
+    if(err) throw new ClientError({status: 503, 'database timeout'});
+    api.setHandle('db', db);
     next();
   });
 });
 
 
-
-
 // release mysql connection
-api.beforeResponse(function(_api, req, res, next) {
-  console.log('api.handles.db.end()');
+api.beforeResponse(function(req, res, next) {
   try {
-    _api.handles.db.end();  
-  } catch(e) {console.log('cleanupFunc issues');}
+    api.handles.db.end();  
+  } catch(e) {
+    throw new Error('unable to release connection from pool');
+    // continue though ... see what happens
+  }
 
   next();
 });
 
 
 
+
 // auth hook
 // if AUTH flag is set, validate user and quit if validation fails
-api.beforeFunctionCall('AUTH', function(api2, req, res, next){
+api.beforeFunctionCall('AUTH', function(req, res, next){
   try {
     api.handles.db.query('SELECT * FROM users WHERE api_access_key=? LIMIT 1',
       [req.api.params.token],
