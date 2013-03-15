@@ -10,7 +10,6 @@ var mysql = require('mysql');
 
 var api = new API({
   port: 8081,
-  env: 'development',
   accessLog: './logs/access_log',
   errorLog: './logs/error_log',
   controllers: './controllers',
@@ -38,18 +37,20 @@ var pool = mysql.createPool(config.mysql);
 // });
 
 
-api.hook('beforeFunctionCall', 'AUTH', function(api, req, res, next){
+api.hook('beforeFunctionCall', function(_api, req, res, next){
   pool.getConnection(function(err, db){
     if(err) throw new Error('no database connection');
 
     db.on('error', function(err) {
       if (!err.fatal) return;
       // we can ignore this error, because of pooling
+      // @TODO this is wrong!!! we need to care!
       if (err.code !== 'PROTOCOL_CONNECTION_LOST') throw err;
     });
 
-    api.setHandle('db', db);
-    next();
+    // api.setHandle('db', db);
+    api.handles['db'] = db;
+    // next();
   });
 });
 
@@ -57,32 +58,36 @@ api.hook('beforeFunctionCall', 'AUTH', function(api, req, res, next){
 
 
 // release mysql connection
-api.hook('cleanup', function(api, req, res, next) {
+api.hook('cleanup', function(_api, req, res, next) {
   console.log('cleanupFunc called!!!');
   try {
     // api.handles.db.end();  
   } catch(e) {console.log('cleanupFunc issues');}
 
-  next();
+  // next();
 });
 
 
 
 // auth hook
 // if AUTH flag is set, validate user and quit if validation fails
-api.hook('beforeFunctionCall', 'AUTH', function(api, req, res, next){
-  try {
-    api.handles.db.query('SELECT * FROM users WHERE api_access_key=? LIMIT 1',
+api.hook('beforeFunctionCall', 'AUTH', function(api2, req, res, next){
+  // try {
+    
+    api2.handles.db.query('SELECT * FROM users WHERE api_access_key=? LIMIT 1',
       [req.api.params.token],
       function(err, result){
+        console.log("err", err);
+        console.log("result", result);
         if(err || result.length !== 1) throw new ClientError({status: 403, message: 'invalid login'});
         api.user = result[0];
-        next();
+        // next();
       }
     );
-  } catch(e) {
-    throw new ClientError({status: 401, message: 'login invalid'});
-  }
+  //} catch(e) {
+    // throw new ClientError({status: 401, message: 'login invalid'});
+  //  throw e;
+  // }
 });
 
 // prepare auth hook
@@ -99,8 +104,6 @@ api.hook('beforeFunctionCall', 'AUTH', function(api, req, res, next){
 //   next();
 // });
 
-
-console.log(api.hooks);
 
 
 // show me what you got
