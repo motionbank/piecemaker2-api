@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var API = require('../../node-rest-api/lib/api.js');
 // var API = require('rest-api');
 
