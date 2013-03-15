@@ -37,15 +37,13 @@ var pool = mysql.createPool(config.mysql);
 // });
 
 
-api.hook('beforeFunctionCall', function(_api, req, res, next){
+api.beforeFunctionCall(function(_api, req, res, next){
   pool.getConnection(function(err, db){
     if(err) throw new Error('no database connection');
 
-
-
-    // api.setHandle('db', db);
-    api.handles['db'] = db;
-    // next();
+    _api.setHandle('db', db);
+    // api.handles['db'] = db;
+    next();
   });
 });
 
@@ -53,33 +51,32 @@ api.hook('beforeFunctionCall', function(_api, req, res, next){
 
 
 // release mysql connection
-api.hook('beforeResponse', function(_api, req, res, next) {
+api.beforeResponse(function(_api, req, res, next) {
   console.log('api.handles.db.end()');
   try {
-    api.handles.db.end();  
+    _api.handles.db.end();  
   } catch(e) {console.log('cleanupFunc issues');}
 
-  // next();
+  next();
 });
 
 
 
 // auth hook
 // if AUTH flag is set, validate user and quit if validation fails
-api.hook('beforeFunctionCall', 'AUTH', function(api2, req, res){
-  // try {
+api.beforeFunctionCall('AUTH', function(api2, req, res, next){
+  try {
     api.handles.db.query('SELECT * FROM users WHERE api_access_key=? LIMIT 1',
       [req.api.params.token],
       function(err, result){
         if(err || result.length !== 1) throw new ClientError({status: 403, message: 'invalid login'});
         api.user = result[0];
-        // next();
+        next();
       }
     );
-  //} catch(e) {
-    // throw new ClientError({status: 401, message: 'login invalid'});
-  //  throw e;
-  // }
+  } catch(e) {
+    throw new ClientError({status: 401, message: 'login invalid'});
+  }
 });
 
 // prepare auth hook
