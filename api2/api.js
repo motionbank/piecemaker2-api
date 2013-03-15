@@ -4,6 +4,8 @@ var API = require('../../node-rest-api/lib/api.js');
 // var API = require('rest-api');
 
 var util = require('util');
+var program = require('commander');
+
 
 
 var config = require('./config/test.js');

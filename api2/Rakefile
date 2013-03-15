@@ -5,7 +5,7 @@ end
 
 desc "start api"
 task :start_api do
-  system 'node index.js'
+  system 'node api.js'
 end
 
 desc "test routes"
@@ -18,7 +18,7 @@ end
 
 desc "debug api (mattes env)"
 task :debug_mattes_env do
-  system 'nodemon -w . -w ../../node-rest-api/lib/ index.js'
+  system 'nodemon -w . -w ../../node-rest-api/lib/ api.js'
 end
 
 desc "generate routes.html|.md"
