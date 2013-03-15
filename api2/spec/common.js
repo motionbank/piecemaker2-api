@@ -76,5 +76,5 @@ after(function(done){
 
 // delay every spec test 
 beforeEach(function(done) {
-  setTimeout(done, 500);
+  setTimeout(function(){done()}, 500);
 });
