@@ -10,7 +10,8 @@ var includeUser = function($, idField) {
 
   return function(next, err, model) {
     if(err) return next(err);
-
+    if(!model) return next(new Error('invalid model'));
+    
     if(model instanceof Array) {
       // include multiple users ...
       var ids = includeHelperUniqIds(model, idField);
