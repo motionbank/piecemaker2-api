@@ -23,7 +23,7 @@ var pool = mysql.createPool(config.mysql);
 
 api.beforeFunctionCall(function(req, res, next){
   pool.getConnection(function(err, db){
-    if(err) throw new ClientError({status: 503, 'database timeout'});
+    if(err) throw new ClientError({status: 503, message: 'database timeout'});
     api.setHandle('db', db);
     next();
   });
@@ -41,8 +41,6 @@ api.beforeResponse(function(req, res, next) {
 
   next();
 });
-
-
 
 
 // auth hook
