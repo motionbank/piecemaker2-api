@@ -1,5 +1,6 @@
 var request = require('supertest')
-request = request('http://localhost:8081');
+var config = require('../../config/test.js');
+request = request('http://localhost:' + config.api.port);
 
 describe('controllers/system.js', function(){
 

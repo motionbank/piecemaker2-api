@@ -3,8 +3,16 @@
  */
 module.exports = {
 
-  // listen on this port
-  port: '8081',
+  api: {
+    port: 8080,
+    accessLog: false,
+    errorLog: './error_log',
+    controllers: './controllers',
+    cors: true,
+    jsonp: true,
+    headersResponseTime: false    
+  },
+
 
   // mysql settings
   // see https://github.com/felixge/node-mysql#connection-options for options

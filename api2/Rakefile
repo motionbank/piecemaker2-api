@@ -3,9 +3,14 @@ task :default do
   system 'rake -T'
 end
 
-desc "start api"
+desc "start api (production environment)"
 task :start_api do
-  system 'node api.js'
+  system 'node api.js --env production'
+end
+
+desc "start api (development environment)"
+task :start_api_dev do
+  system 'node api.js --env development'
 end
 
 desc "test routes"
