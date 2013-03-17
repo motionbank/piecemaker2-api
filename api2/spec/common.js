@@ -1,7 +1,10 @@
 var mysql = require('mysql');
 var fs = require('fs');
+var spawn = require('child_process').spawn;
 var config = require('../config/test.js');
 connection = null;
+
+var ls;
 
 
 var createDb = function(done) {
@@ -50,9 +53,23 @@ before(function(done){
         insertTestData(function(err){
           if(err) return done(err);
 
-          // @todo start api
+          // start api
+          ls = spawn('node', ['api.js', '--env', 'test']);
 
-          done();
+          ls.stdout.on('data', function (data) {
+            // console.log('stdout: ' + data);
+            done();
+          });
+
+          ls.stderr.on('data', function (data) {
+            // console.log('stderr: ' + data);
+          });
+
+          ls.on('close', function (code) {
+            console.log('child process exited with code ' + code);
+          });
+
+          
         });
       });
     });
@@ -61,12 +78,13 @@ before(function(done){
 
 
 after(function(done){
+  // stop api
+  ls.kill();
+
   deleteDb(function(err){
     if(err) return done(err);
     connection.end(function(err){
       if(err) return done(err);
-
-      // @todo stop api
 
       done();
     })

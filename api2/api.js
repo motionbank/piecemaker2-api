@@ -3,28 +3,25 @@
 var API = require('../../node-rest-api/lib/api.js');
 // var API = require('rest-api');
 
-var util = require('util');
+
+// command line option parser ...
 var program = require('commander');
+program
+  .version('0.0.2')
+  .option('-e, --env [env]', 'Specify environment (production|development|test)')
+  .parse(process.argv);
 
+var ENV = program.env || 'production';
+if(!~['production', 'development', 'test'].indexOf(ENV)) throw new Error('invalid ENV');
 
-
-var config = require('./config/test.js');
+var util = require('util');
+var config = require('./config/' + ENV + '.js');
 var mysql = require('mysql');
 
-
-var api = new API({
-  port: 8081,
-  accessLog: './logs/access_log',
-  errorLog: './logs/error_log',
-  controllers: './controllers',
-  cors: true,
-  jsonp: false
-});
-
-// mysql config
+var api = new API(config.api);
 var pool = mysql.createPool(config.mysql);
 
-
+// ---- add hooks
 api.beforeFunctionCall(function(req, res, next){
   pool.getConnection(function(err, db){
     if(err) throw new ClientError({status: 503, message: 'database timeout'});
@@ -33,19 +30,16 @@ api.beforeFunctionCall(function(req, res, next){
   });
 });
 
-
-// release mysql connection
 api.beforeResponse(function(req, res, next) {
   try {
+    // release mysql connection
     api.handles.db.end();  
   } catch(e) {
     throw new Error('unable to release connection from pool');
     // continue though ... see what happens
   }
-
   next();
 });
-
 
 // auth hook
 // if AUTH flag is set, validate user and quit if validation fails
@@ -79,18 +73,8 @@ api.beforeFunctionCall('AUTH', function(req, res, next){
 // });
 
 
-
-// show me what you got
-// console.log("List of all routes:\n", util.inspect(api.listRoutes(), false, 5, true));
-
-
-
+// ---- start the API ...
 api.start(function() {
   // api is ready
-  
+  util.log('[api] listening at port ' + api.options.port + ' in ' + ENV + ' environment');
 });
-
-// api.reload();
-// api.stop();
-
-// console.log(api.controllers);
