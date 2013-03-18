@@ -1,103 +1,234 @@
+var sequence = require('sequence');
+var async = require('async');
+var _ = require('underscore');
+
+var selectiveUpdateFields = function($, posibleFields, arrayAdditional) {
+  var updateFields = _.intersection(posibleFields, Object.keys($.params));
+  if(updateFields.length > 0) {
+    
+    var string = _.map(updateFields, function(key) {
+      return '`' + key + '`=?'
+    });
+    string = string.join(', ') + ' '; // ' ' is important
+
+    var array = [];
+    for(var i=0; i < updateFields.length; i++) {
+      array.push($.params[ updateFields[i] ]);
+    }
+
+    if(!_.isArray(arrayAdditional)) {
+      arrayAdditional = [arrayAdditional];
+    }
+    if(arrayAdditional.length > 0) {
+      for(var i=0; i < arrayAdditional.length; i++) {
+        array.push(arrayAdditional[i]); 
+      }
+    }
+    return {string: string, array: array};
+  }
+  else {
+    return false;
+  }
+}
+
+var emptyParams = function($, objects) {
+  if(!objects) {
+    objects = $;
+    // urlParams
+    if(!_.isArray(objects)) objects = [objects];
+    if(objects.length > 0) {
+      for(var i=0; i < objects.length; i++) {
+        if(_.isEmpty(objects[i])) return true;
+      }
+    }
+  } else {
+    // $.params
+    if(!_.isArray(objects)) objects = [objects];
+    if(objects.length > 0) {
+      for(var i=0; i < objects.length; i++) {
+        if(!_.has($.params, objects[i])) {
+          return true;
+        } else {
+          if(_.isEmpty($.params[objects[i]])) return true;  
+        }
+      }
+    }
+  }
+  return false;
+}
+
+var isAdmin = function($, userId, callback) {
+
+  if(_.isFunction(userId)) {
+    // use current logged in user
+    callback = userId;
+    try {
+      userId = $.api.user.id;  
+      callback(null, $.api.user.is_admin == true);
+    } catch(e) {
+      return callback(new Error('no user is logged in'));
+    }
+  } else {
+    // use userId from function call
+    if(!userId) {
+      return callback(new Error('no userId given'));
+    }
+
+    // get is_admin for userId
+    $.db.query('SELECT is_admin FROM users WHERE id=? AND is_disabled=0 LIMIT 1',
+      [userId],
+      function(err, result){
+        if(err) return callback(err);
+        if(result.length === 1) {
+          callback(null, result[0].is_admin == true);
+        } else {
+          return callback(null, false);
+        }
+      }
+    );  
+  }
+}
+
 module.exports = {
 
-  // > GET /users > json
-  // > get all users
-  // > curl -X GET http://localhost:8080/users
-  // > curl -X GET --data "api_access_key=adklasdkd" http://localhost:8080/users // @todo  
-  //
-  // < 200 < json < [{"id": 1, "name": "Peter", "email": "peter@example.com", "is_admin": 0}]
-  // < 401 < json < {"http": 401, "error": "unauthorized"}
-  // < 500 < json < {"http": 500, "error": "unable to fetch results"}
-  'GET /users':
+  'GET AUTH /users':
+  // get all users
+  //  likes token*
+  //  returns [{id, name, email, is_admin}]
   function($) {
-    $.auth(function(user) {
-      $.m.get_all($, 'SELECT * FROM users WHERE is_disabled=0');
+    $.db.query('SELECT id, name, email, is_admin ' +
+      'FROM users WHERE is_disabled=0',
+      function(err, results){
+        if(err) return $.internalError(err);
+        return $.render(results);
+      }
+    );
+  },
+
+  'POST AUTH /user':
+  // create new user (requires user with is_admin=1)
+  //  likes token*, name*, email*
+  //  returns {id}
+  function($) {
+    if(emptyParams($, ['name', 'email'])) return $.error(400, 'missing params');
+
+    isAdmin($, function(err, bool){
+      if(!bool) return $.error(403, 'no admin');
+
+      var accessKey = 'secret123';
+      $.db.query('INSERT INTO users SET ' +
+        'name=?, email=?, password=SHA1(?), api_access_key=?',
+        [$.params.name, $.params.email, $.params.email, accessKey],
+        function(err, result){
+          if(err) return $.internalError(err);
+          return $.render({id: result.insertId});
+        }
+      );
     });
   },
 
-  // > POST /user > json
-  // > create new user
-  // > {"name": "Peter", "email": "peter@example.com", "password": "random"}
-  // > curl -X POST --data "name=Matthias&email=matthias@example.com&password=12345" http://localhost:8080/user
-  // 
-  // < 200 < json < {"id": 1}
-  // < 500 < json < {"http": 500, "error": "unable to create new item"}
-  // < 401 < json < {"http": 401, "error": "unauthorized"}
-  'POST /user':
+  'GET AUTH /user/me':
+  // get user for api access key
+  //  likes token*
+  //  returns {id, name, email, is_admin}
   function($) {
-    var accessKey = 'some_random_string'; // @todo
-    $.m.post_one($, 'INSERT INTO users SET name=?, email=?, password=SHA1(?), api_access_key=?', 
-      [$.params.name, $.params.email, $.params.password, accessKey]);
+    $.db.query('SELECT id, name, email, is_admin ' +
+      'FROM users WHERE api_access_key=? LIMIT 1',
+      [$.params.token],
+      function(err, result){
+        if(err) return $.internalError(err);
+        return $.render(result[0]);
+      }
+    );
   },
 
-  'GET /user/me':
-  function($) {
-    // @todo gibt user zu api key zurück
-  }
-
-  // > GET /user/:int > json
-  // > get user details about one user
-  // > curl -X GET http://localhost:8080/user/1
-  // 
-  // < 200 < json < {"id": 1, "name": "Peter", "email": "peter@example.com"}
-  // < 400 < json < {"http": 400, "error": "invalid parameters"} < means user_id from url is missing or was not found
-  // < 500 < json < {"http": 500, "error": "unable to fetch result"}
-  // < 401 < json < {"http": 401, "error": "unauthorized"}
-  'AUTH GET /user/:int':
+  'GET AUTH /user/:id':
+  // get user details about one user
+  //  likes token*
+  //  returns {id, name, email, is_admin}
   function($, user_id) {
-    $.m.get_one($, [user_id], 'SELECT id, name, email FROM users WHERE id=? LIMIT 1');
+    if(emptyParams(user_id)) return $.error(400, 'missing params');
+
+    $.db.query('SELECT id, name, email, is_admin ' +
+      'FROM users WHERE id=? LIMIT 1',
+      [user_id],
+      function(err, result){
+        if(err) return $.internalError(err);
+        return $.render(result[0]);
+      }
+    );
   },
 
-  // > PUT /user/:int > json
-  // > updates a user
-  // > {"name": "Peter", "email": "peter@example.com"}
-  // > curl -X PUT --data "email=newemail@example.com" http://localhost:8080/user/1
-  // 
-  // < 200 < json < {"id": 1}
-  // < 400 < json < {"http": 400, "error": "invalid parameters"}
-  // < 500 < json < {"http": 500, "error": "unable to update item"}
-  // < 401 < json < {"http": 401, "error": "unauthorized"}
-  'PUT /user/:int':
+  'PUT AUTH /user/:id':
+  // updates user details (user with is_admin=1 can update every user)
+  //  likes token*, name*, email*
+  //  returns boolean
   function($, user_id) {
-    $.m.put_one($, [user_id], ['name', 'email'], 'users', 'id=?');
+    if(emptyParams(user_id)) return $.error(400, 'missing params');
+    if(emptyParams($, ['name', 'email'])) return $.error(400, 'missing params');
+
+    isAdmin($, function(err, bool){
+      if(!bool && user_id != $.api.user.id) return $.error(402, 'no admin');
+
+      var updateFields = selectiveUpdateFields($, ['name', 'email'], [user_id]);
+      if(updateFields) {
+        $.db.query('UPDATE users SET ' +
+          updateFields.string +
+          'WHERE id=? LIMIT 1',
+          updateFields.array,
+          function(err, result){
+            if(err) return $.internalError(err);
+            return $.render(result.affectedRows);
+          }
+        );
+      } else {
+        $.error(400, 'verify update fields');
+      }
+
+
+    });
+
+
   },
 
-  // > DELETE /user/:int > json
-  // > delete one user
-  // > curl -X DELETE http://localhost:8080/user/3
-  // 
-  // < 200 < json < {"id": 1}
-  // < 400 < json < {"http": 400, "error": "invalid parameters"} < user_id invalid or not found
-  // < 500 < json < {"http": 500, "error": "unable to delete item"}  
-  // < 401 < json < {"http": 401, "error": "unauthorized"}
-  'DELETE /user/:int':
+  'DELETE AUTH /user/:id':
+  // delete user (user with is_admin=1 can delete every user)
+  //  likes token*
+  //  returns boolean
   function($, user_id) {
-    $.m.delete_one($, user_id, 'users', 'id=?');
+    if(emptyParams(user_id)) return $.error(400, 'missing params');
+
+    isAdmin($, function(err, bool){
+      if(!bool && user_id != $.api.user.id) return $.error(402, 'no admin');
+
+      $.db.query('DELETE FROM users WHERE id=? LIMIT 1',
+        [user_id],
+        function(err, result){
+          if(err) return $.internalError(err);
+          return $.render(result.affectedRows);
+        }
+      );
+
+    });
   },
 
-
-  // > GET /user/:int/events > json
-  // > get all events for user
-  //
-  // < 200 < json < [{"id": 1, "event_group_id": 1, "event_group": {event_group}, "created_by_user_id": 1, "created_by_user": {user}, "utc_timestamp": 0, "duration": 0}]
-  // < 401 < json < {"http": 401, "error": "unauthorized"}
-  // < 500 < json < {"http": 500, "error": "unable to fetch results"}
-  // 'GET /user/:int/events':
-  // function($, user_id) {
-  //   $.m.get_all($, 'SELECT * FROM events WHERE created_by_user_id=? ', [user_id], 
-  //     {"event_group": 'SELECT id, title, text FROM event_groups WHERE id=?',
-  //      "created_by_user": 'SELECT id, name, email FROM users WHERE id=?'});
-  // },
-
-  // > GET /user/:int/event_groups > json
-  // > get all event_groups for user
-  //
-  // < 200 < json < [{"id": 1, "title": "Event Group", "text": "additional info about event group"}]
-  // < 401 < json < {"http": 401, "error": "unauthorized"}
-  // < 500 < json < {"http": 500, "error": "unable to fetch results"}
-  'GET /user/:int/event_groups':
+  'GET AUTH /user/:id/event_groups':
+  // get all event_groups for user
+  //  likes token*
+  //  returns [{id, title, text}]
   function($, user_id) {
-    $.m.get_all($, 'SELECT event_groups.* FROM event_groups INNER JOIN user_has_event_groups ON user_has_event_groups.event_group_id = event_groups.id WHERE user_has_event_groups.user_id=? ', [user_id]);
+    if(emptyParams(user_id)) return $.error(400, 'missing params');
+
+    $.db.query('SELECT event_groups.id, event_groups.title, event_groups.text ' +
+      'FROM event_groups ' +
+      'INNER JOIN user_has_event_groups ON user_has_event_groups.event_group_id = event_groups.id ' +
+      'WHERE user_has_event_groups.user_id=?',
+      [user_id],
+      function(err, results){
+        if(err) return $.internalError(err);
+        return $.render(results);
+      }
+    );
   }
 
 };
