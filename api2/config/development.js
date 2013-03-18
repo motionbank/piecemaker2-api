@@ -13,7 +13,6 @@ module.exports = {
     headersResponseTime: false    
   },
 
-
   // mysql settings
   // see https://github.com/felixge/node-mysql#connection-options for options
   mysql: {

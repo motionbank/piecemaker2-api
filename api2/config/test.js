@@ -3,9 +3,8 @@
  */
 module.exports = {
 
-
   api: {
-    port: 8091,
+    port: 8090,
     accessLog: false,
     errorLog: './logs/error_log',
     controllers: './controllers',
@@ -13,7 +12,6 @@ module.exports = {
     jsonp: false,
     headersResponseTime: false    
   },
-
 
   // mysql settings
   // see https://github.com/felixge/node-mysql#connection-options for options
