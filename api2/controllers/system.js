@@ -8,8 +8,7 @@ module.exports = {
   // get unix timestamp with milliseconds
   //  returns time
   function($) {
-    // @todo Date is messed up?!
-    return $.render(new Date().toUTCString());
+    return $.render(Date.now() / 1000);
   }
 
 };
