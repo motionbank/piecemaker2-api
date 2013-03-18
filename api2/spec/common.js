@@ -59,9 +59,9 @@ before(function(done){
             done();
           });
 
-          // api.stderr.on('data', function (data) {
-          //   // console.log('stderr: ' + data);
-          // });
+          api.stderr.on('data', function (data) {
+            console.log('stderr: ' + data);
+          });
 
           // api.on('close', function (code) {
           //   console.log('child process exited with code ' + code);
