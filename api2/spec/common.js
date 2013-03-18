@@ -2,10 +2,8 @@ var mysql = require('mysql');
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 var config = require('../config/test.js');
-connection = null;
-
-var ls;
-
+var api;
+connection = null; // global!
 
 var createDb = function(done) {
   var mysqlDump = fs.readFileSync('./spec/db/create-db.sql', 'utf8');
@@ -54,20 +52,20 @@ before(function(done){
           if(err) return done(err);
 
           // start api
-          ls = spawn('node', ['api.js', '--env', 'test']);
+          api = spawn('node', ['api.js', '--env', 'test']);
 
-          ls.stdout.on('data', function (data) {
+          api.stdout.on('data', function (data) {
             // console.log('stdout: ' + data);
             done();
           });
 
-          ls.stderr.on('data', function (data) {
-            // console.log('stderr: ' + data);
-          });
+          // api.stderr.on('data', function (data) {
+          //   // console.log('stderr: ' + data);
+          // });
 
-          ls.on('close', function (code) {
-            console.log('child process exited with code ' + code);
-          });
+          // api.on('close', function (code) {
+          //   console.log('child process exited with code ' + code);
+          // });
 
           
         });
@@ -79,7 +77,7 @@ before(function(done){
 
 after(function(done){
   // stop api
-  ls.kill();
+  api.kill();
 
   deleteDb(function(err){
     if(err) return done(err);
