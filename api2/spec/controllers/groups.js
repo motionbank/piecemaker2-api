@@ -4,6 +4,7 @@ request = request('http://localhost:' + config.api.port);
 
 describe('controllers/groups.js', function(){
 
+
   describe('GET AUTH /groups', function(){
     it('gets all event_groups', function(done){
       request
@@ -242,6 +243,23 @@ describe('controllers/groups.js', function(){
         .get('/group/501/users.json?token=6a66515fcc6b585a69df6b50805146cf8fb91b9c')
         .expect('Content-Type', 'application/json')
         .expect(200, [ { id: 500, name: 'Hans', email: 'hans@example.com' } ])
+        .end(done);
+    });
+  });
+
+
+  describe('GET AUTH /group/:id/events?type=whatever', function(){
+    it('gets events with type', function(done){
+      request
+        .get('/group/501/events.json?type=whatever&token=6a66515fcc6b585a69df6b50805146cf8fb91b9c')
+        .expect('Content-Type', 'application/json')
+        .expect(200, [ { id: 502,
+          event_group_id: 501,
+          created_by_user_id: 500,
+          utc_timestamp: 0,
+          duration: 0,
+          created_by_user: { id: 500, name: 'Hans', email: 'hans@example.com', is_admin: 1 },
+          event_group: { id: 501, title: 'Event Group 1', text: 'some description' } } ])
         .end(done);
     });
   });

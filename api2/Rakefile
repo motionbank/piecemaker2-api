@@ -23,7 +23,7 @@ end
 
 desc "debug api (mattes env)"
 task :debug_mattes_env do
-  system 'nodemon -w . -w ../../node-rest-api/lib/ api.js'
+  system 'nodemon -w . -w ../../node-rest-api/lib/ api.js --env development'
 end
 
 desc "generate routes.html|.md"

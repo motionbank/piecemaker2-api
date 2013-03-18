@@ -322,7 +322,7 @@ module.exports = {
   },
 
   'GET AUTH /group/:id/events':
-  // get all events for event_groups
+  // get all events for event_groups, add vars (utc_timestamp, duration, type and other fields from event_fields) to filter
   //  likes token*
   //  returns [{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]
   function($, event_group_id) {
@@ -334,13 +334,27 @@ module.exports = {
       .then(function(next, err, allowed){
         if(!allowed) return $.error(403, 'missing rights');
 
-        // @TODO $.params ?field1=value1&...
         sequence.create()
           .then(function(next){
             // get event
-            $.db.query('SELECT id, event_group_id, created_by_user_id, `utc_timestamp`, duration ' +
-              'FROM events WHERE event_group_id=?',
-              [event_group_id],
+            var whereFields = [event_group_id];
+            if($.params['utc_timestamp']) whereFields.push($.params['utc_timestamp']);
+            if($.params['duration']) whereFields.push($.params['duration']);
+            
+            var eventFields = _.without(Object.keys($.params), 'token', 'utc_timestamp', 'duration');
+            var eventFieldArray = [];
+            for(var i=0; i < eventFields.length; i++) {
+              eventFieldArray.push('(event_fields.id=' + $.db.escape(eventFields[i]) + ' AND event_fields.value=' + $.db.escape($.params[ eventFields[i] ]) + ')');
+            }
+      
+            $.db.query('SELECT events.id, events.event_group_id, events.created_by_user_id, events.`utc_timestamp`, events.duration ' +
+              'FROM events ' +
+              (eventFields.length > 0 ? 'INNER JOIN event_fields ON event_fields.event_id=events.id ' : '') +
+              'WHERE events.event_group_id=? ' + 
+              ($.params['utc_timestamp'] ? 'AND events.`utc_timestamp`=? ' : '') + 
+              ($.params['duration'] ? 'AND events.`duration`=? ' : '') + 
+              (eventFields.length > 0 ? ' AND ' + eventFieldArray.join(' AND ') : ''),
+              whereFields,
               function(err, results){
                 if(err) return next(err);
 
