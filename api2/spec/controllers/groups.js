@@ -95,7 +95,8 @@ describe('controllers/groups.js', function(){
           utc_timestamp: 0,
           duration: 0,
           created_by_user: { id: 500, name: 'Hans', email: 'hans@example.com', is_admin: 1 },
-          event_group: { id: 501, title: 'Event Group 1', text: 'some description' } } ])
+          event_group: { id: 501, title: 'Event Group 1', text: 'some description' },
+          fields: { type: 'whatever' } } ])
         .end(done);
     });
   });
@@ -112,7 +113,8 @@ describe('controllers/groups.js', function(){
           utc_timestamp: 0,
           duration: 0,
           created_by_user: { id: 500, name: 'Hans', email: 'hans@example.com', is_admin: 1 },
-          event_group: { id: 501, title: 'Event Group 1', text: 'some description' } }
+          event_group: { id: 501, title: 'Event Group 1', text: 'some description' },
+          fields: { type: 'whatever' } }
         )
         .end(done);
     });
@@ -145,7 +147,8 @@ describe('controllers/groups.js', function(){
              name: 'Hans',
              email: 'hans@example.com',
              is_admin: 1 },
-          event_group: { id: 501, title: 'Event Group 1', text: 'some description' } }
+          event_group: { id: 501, title: 'Event Group 1', text: 'some description' },
+          fields: { field1: 'value1', field2: 'value2' } }
         )
         .end(done);
     });
@@ -177,7 +180,8 @@ describe('controllers/groups.js', function(){
              name: 'Hans',
              email: 'hans@example.com',
              is_admin: 1 },
-          event_group: { id: 501, title: 'Event Group 1', text: 'some description' } }
+          event_group: { id: 501, title: 'Event Group 1', text: 'some description' },
+          fields: { field1: 'value1', field2: 'value2' } }
         )
         .end(done);
     });
@@ -205,7 +209,8 @@ describe('controllers/groups.js', function(){
           utc_timestamp: 0,
           duration: 0,
           created_by_user: { id: 500, name: 'Hans', email: 'hans@example.com', is_admin: 1 },
-          event_group: { id: 501, title: 'Event Group 1', text: 'some description' } } ])
+          event_group: { id: 501, title: 'Event Group 1', text: 'some description' },
+          fields: { type: 'whatever' } } ])
         .end(done);
     });
   });
@@ -222,7 +227,8 @@ describe('controllers/groups.js', function(){
           utc_timestamp: 0,
           duration: 0,
           created_by_user: { id: 500, name: 'Hans', email: 'hans@example.com', is_admin: 1 },
-          event_group: { id: 501, title: 'Event Group 1', text: 'some description' } } ])
+          event_group: { id: 501, title: 'Event Group 1', text: 'some description' },
+          fields: { type: 'whatever' } } ])
         .end(done);
     });
   });
@@ -259,7 +265,8 @@ describe('controllers/groups.js', function(){
           utc_timestamp: 0,
           duration: 0,
           created_by_user: { id: 500, name: 'Hans', email: 'hans@example.com', is_admin: 1 },
-          event_group: { id: 501, title: 'Event Group 1', text: 'some description' } } ])
+          event_group: { id: 501, title: 'Event Group 1', text: 'some description' },
+          fields: { type: 'whatever' } } ])
         .end(done);
     });
   });

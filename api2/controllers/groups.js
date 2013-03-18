@@ -82,6 +82,47 @@ var includeEventGroup = function($, idField) {
   }     
 }
 
+var includeEventFields = function($) {
+  return function(next, err, model) {
+    if(err) return next(err);
+
+    if(model instanceof Array) {
+      var ids = includeHelperUniqIds(model, 'id'); // event_ids
+      if(!ids || ids.length == 0) next(null, model);
+      $.db.query('SELECT id, event_id, value ' +
+        'FROM event_fields WHERE event_id IN (' + ids.join(',') + ')',
+        function(err, results){
+          if(err) return next(err);
+          results = _.groupBy(results, function(elm){ return elm.event_id; })
+          for(var i=0; i < model.length; i++) {
+            model[i]['fields']= {};
+            if(results[ model[i]['id'] ]) {
+              results[ model[i]['id'] ].forEach(function(record){
+                model[i]['fields'][record.id] = record.value;
+              });
+            }
+          }
+          next(null, model);
+        }
+      );
+    } else {
+      $.db.query('SELECT id, value ' +
+        'FROM event_fields WHERE event_id=?',
+        model['id'],
+        function(err, results){
+          if(err) return next(err);
+          model['fields'] = {};
+          results.forEach(function(record){
+            model['fields'][record.id] = record.value;
+          });
+          next(null, model);
+        }
+      );
+    }
+  };
+}
+
+
 // extract ids from object and make ids unique ...
 var includeHelperUniqIds = function(model, idField) {
   var ids = _.pluck(model, idField); // extract
@@ -364,6 +405,7 @@ module.exports = {
           })
           .then(includeUser($, 'created_by_user_id'))
           .then(includeEventGroup($, 'event_group_id'))
+          .then(includeEventFields($))
           .then(function(next, err, events){
             if(err) return $.internalError(err);
             $.render(events);
@@ -399,6 +441,7 @@ module.exports = {
           })
           .then(includeUser($, 'created_by_user_id'))
           .then(includeEventGroup($, 'event_group_id'))
+          .then(includeEventFields($))
           .then(function(next, err, event){
             if(err) return $.internalError(err);
             $.render(event);
@@ -543,7 +586,6 @@ module.exports = {
       .then(function(next, err, allowed){
         if(!allowed) return $.error(403, 'missing rights');
 
-
         sequence.create()
           .then(function(next){
             $.db.query('SELECT events.id, events.event_group_id, events.created_by_user_id, events.`utc_timestamp`, events.duration ' +
@@ -559,14 +601,7 @@ module.exports = {
           })
           .then(includeUser($, 'created_by_user_id'))
           .then(includeEventGroup($, 'event_group_id'))
-          .then(function(next, err, event){
-            if(err) return $.internalError(err);
-            // load event fields
-            // @TODO
-            // SELECT id, value FROM event_fields WHERE event_id=?
-            next(null, event);
-
-          })
+          .then(includeEventFields($))
           .then(function(next, err, event){
             if(err) return $.internalError(err);
             $.render(event);
