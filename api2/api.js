@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
-// var API = require('../../node-rest-api/lib/api.js');
+// var API = require('../../node-rest-api/lib/api.js'); // mattes env
 var API = require('rest-api');
-
 
 // command line option parser ...
 var program = require('commander');
