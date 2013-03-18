@@ -12,10 +12,10 @@ __Rakefile__
 ```
 rake
 
-rake debug_mattes_env  # debug api (mattes env)
 rake default           # see usage
 rake routes            # generate routes.html|.md
-rake start_api         # start api
+rake start_api         # start api (production environment)
+rake start_api_dev     # start api (development environment)
 rake test              # test routes
 ```
 

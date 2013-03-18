@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-var API = require('../../node-rest-api/lib/api.js');
-// var API = require('rest-api');
+// var API = require('../../node-rest-api/lib/api.js');
+var API = require('rest-api');
 
 
 // command line option parser ...
