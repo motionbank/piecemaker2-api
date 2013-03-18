@@ -1,33 +1,20 @@
-# API, v2
+# Piecemaker API
  
-# Usage
+##  Usage
+```rake start_api``` or ```node api.js --env production```
 
-In index.js oben ggf. korrekt Lib auswählen. 
-```
-// var API = require('../../node-rest-api/lib/api.js'); // mattes env
-var API = require('rest-api'); // last module version from npm
-```
+## Configuration
+Please see ```config/development.js```, ```config/production.js``` and ```config/test.js```
 
-__Rakefile__
-```
-rake
+## Tests
+Run ```rake test```. Make sure to use a test database in ```config/test.js```. All data is erased during a test in the database specified in ```config/test.js```.
 
-rake default           # see usage
-rake routes            # generate routes.html|.md
-rake start_api         # start api (production environment)
-rake start_api_dev     # start api (development environment)
-rake test              # test routes
+## List all routes
+Run ```rake routes``` to generate ...
+
+```
+routes.html   HTML view
+routes.md     Markdown view
 ```
 
-## Rights 
-
-__User (is_admin=1)__
- * CRUD users
-
-__User (is_admin=0)__
- * Read users
- * Update/Delete current user
-
-__User (user_has_event_groups)__
- * CRUD own event_group
- * CRUD own events + fields
+See [recent list of routes](https://github.com/fjenett/piecemaker2/blob/master/api2/routes.md).
