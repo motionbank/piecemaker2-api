@@ -44,7 +44,7 @@ __DELETE AUTH /group/:id__
  * Returns: ```boolean```
   
 __GET AUTH /group/:id/events__
- * get all events for event_groups
+ * get all events for event_groups, add vars (utc_timestamp, duration, type and other fields from event_fields) to filter
  * Likes: ```token*```
  * Returns: ```[{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]```
   
@@ -89,7 +89,7 @@ __GET AUTH /users__
  * Returns: ```[{id, name, email, is_admin}]```
   
 __POST AUTH /user__
- * create new user
+ * create new user (requires user with is_admin=1)
  * Likes: ```token*, name*, email*```
  * Returns: ```{id}```
   
@@ -104,12 +104,12 @@ __GET AUTH /user/:id__
  * Returns: ```{id, name, email, is_admin}```
   
 __PUT AUTH /user/:id__
- * updates a user
+ * updates user details (user with is_admin=1 can update every user)
  * Likes: ```token*, name*, email*```
  * Returns: ```boolean```
   
 __DELETE AUTH /user/:id__
- * delete one user
+ * delete user (user with is_admin=1 can delete every user)
  * Likes: ```token*```
  * Returns: ```boolean```
   
