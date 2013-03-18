@@ -57,7 +57,37 @@ var emptyParams = function($, objects) {
   return false;
 }
 
-// @TODO is_admin check!
+var isAdmin = function($, userId, callback) {
+
+  if(_.isFunction(userId)) {
+    // use current logged in user
+    callback = userId;
+    try {
+      userId = $.api.user.id;  
+      callback(null, $.api.user.is_admin == true);
+    } catch(e) {
+      return callback(new Error('no user is logged in'));
+    }
+  } else {
+    // use userId from function call
+    if(!userId) {
+      return callback(new Error('no userId given'));
+    }
+
+    // get is_admin for userId
+    $.db.query('SELECT is_admin FROM users WHERE id=? AND is_disabled=0 LIMIT 1',
+      [userId],
+      function(err, result){
+        if(err) return callback(err);
+        if(result.length === 1) {
+          callback(null, result[0].is_admin == true);
+        } else {
+          return callback(null, false);
+        }
+      }
+    );  
+  }
+}
 
 module.exports = {
 
@@ -76,21 +106,25 @@ module.exports = {
   },
 
   'POST AUTH /user':
-  // create new user
+  // create new user (requires user with is_admin=1)
   //  likes token*, name*, email*
   //  returns {id}
   function($) {
     if(emptyParams($, ['name', 'email'])) return $.error(400, 'missing params');
 
-    var accessKey = 'secret123';
-    $.db.query('INSERT INTO users SET ' +
-      'name=?, email=?, password=SHA1(?), api_access_key=?',
-      [$.params.name, $.params.email, $.params.email, accessKey],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render({id: result.insertId});
-      }
-    );
+    isAdmin($, function(err, bool){
+      if(!bool) return $.error(403, 'no admin');
+
+      var accessKey = 'secret123';
+      $.db.query('INSERT INTO users SET ' +
+        'name=?, email=?, password=SHA1(?), api_access_key=?',
+        [$.params.name, $.params.email, $.params.email, accessKey],
+        function(err, result){
+          if(err) return $.internalError(err);
+          return $.render({id: result.insertId});
+        }
+      );
+    });
   },
 
   'GET AUTH /user/me':
@@ -126,43 +160,56 @@ module.exports = {
   },
 
   'PUT AUTH /user/:id':
-  // updates a user
+  // updates user details (user with is_admin=1 can update every user)
   //  likes token*, name*, email*
   //  returns boolean
   function($, user_id) {
     if(emptyParams(user_id)) return $.error(400, 'missing params');
     if(emptyParams($, ['name', 'email'])) return $.error(400, 'missing params');
 
-    var updateFields = selectiveUpdateFields($, ['name', 'email'], [user_id]);
-    if(updateFields) {
-      $.db.query('UPDATE users SET ' +
-        updateFields.string +
-        'WHERE id=? LIMIT 1',
-        updateFields.array,
-        function(err, result){
-          if(err) return $.internalError(err);
-          return $.render(result.affectedRows);
-        }
-      );
-    } else {
-      $.error(400, 'verify update fields');
-    }
+    isAdmin($, function(err, bool){
+      if(!bool && user_id != $.api.user.id) return $.error(402, 'no admin');
+
+      var updateFields = selectiveUpdateFields($, ['name', 'email'], [user_id]);
+      if(updateFields) {
+        $.db.query('UPDATE users SET ' +
+          updateFields.string +
+          'WHERE id=? LIMIT 1',
+          updateFields.array,
+          function(err, result){
+            if(err) return $.internalError(err);
+            return $.render(result.affectedRows);
+          }
+        );
+      } else {
+        $.error(400, 'verify update fields');
+      }
+
+
+    });
+
+
   },
 
   'DELETE AUTH /user/:id':
-  // delete one user
+  // delete user (user with is_admin=1 can delete every user)
   //  likes token*
   //  returns boolean
   function($, user_id) {
     if(emptyParams(user_id)) return $.error(400, 'missing params');
 
-    $.db.query('DELETE FROM users WHERE id=? LIMIT 1',
-      [user_id],
-      function(err, result){
-        if(err) return $.internalError(err);
-        return $.render(result.affectedRows);
-      }
-    );
+    isAdmin($, function(err, bool){
+      if(!bool && user_id != $.api.user.id) return $.error(402, 'no admin');
+
+      $.db.query('DELETE FROM users WHERE id=? LIMIT 1',
+        [user_id],
+        function(err, result){
+          if(err) return $.internalError(err);
+          return $.render(result.affectedRows);
+        }
+      );
+
+    });
   },
 
   'GET AUTH /user/:id/event_groups':
