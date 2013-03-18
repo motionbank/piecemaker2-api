@@ -6,7 +6,7 @@ module.exports = {
   api: {
     port: 8080,
     accessLog: false,
-    errorLog: './error_log',
+    errorLog: './logs/error_log',
     controllers: './controllers',
     cors: true,
     jsonp: true,
