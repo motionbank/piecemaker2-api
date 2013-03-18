@@ -5,7 +5,7 @@ module.exports = {
 
 
   api: {
-    port: 8090,
+    port: 8091,
     accessLog: false,
     errorLog: './logs/error_log',
     controllers: './controllers',
