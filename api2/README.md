@@ -11,7 +11,6 @@ npm install
 Please see ```config/development.js```, ```config/production.js``` and ```config/test.js```
 
 ## Tests
-Run 
 ```
 rake test
 ```
