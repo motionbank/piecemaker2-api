@@ -1,11 +1,22 @@
 {
-  "name": "piecemaker-api",
+  "name": "piecemaker-api2",
   "description": "piecemaker api",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
+
   "dependencies": {
-    "connect": "2.7.x",
-    "mysql": "2.0.x",
-    // "connect-xcors": "0.5.x"
+    "mysql": "2.0.0-alpha7",
+    "sequence":"2.2.1",
+    "async":"0.2.6",
+    "underscore":"1.4.x",
+    "commander":"1.1.1",
+    "rest-api":"*"
+  },
+
+  "devDependencies": {
+    "mocha": "1.8.2",
+    "supertest": "0.5.1"
   }
+
+
 }
