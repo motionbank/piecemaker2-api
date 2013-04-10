@@ -3,3 +3,6 @@
 
 config.js
 config.js.bak
+
+api/config.js
+api/config-bak.js
