@@ -9,7 +9,10 @@ Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
 # and relate it to all Package resources
 Exec <| tag == update |> -> Package <| |>
 
+
 node default {
     include apache
+    include nodejs
+    include piecemaker
 }
 
