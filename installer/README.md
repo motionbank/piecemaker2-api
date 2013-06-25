@@ -1,12 +1,12 @@
 # Use it local
 
-__Thanks to [Vagrant](http://www.vagrantup.com/) the local usage of the piecemaker api is super easy.__ 
+__Thanks to [Vagrant](http://www.vagrantup.com/) the local usage of the piecemaker API is super easy.__ 
+
 Vagrant is a tool to create and configure lightweight, reproducible, and portable development environments.
 
 ## Installation
 1. Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and install
 1. Download [Vagrant](http://downloads.vagrantup.com) and install
-1. Save the [Vagrantfile]() somewhere on your computer (if you are a nerd, git clone the file to receive updates)
 
 ## Usage
 Open your terminal ...
