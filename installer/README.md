@@ -4,36 +4,33 @@ __Thanks to [Vagrant](http://www.vagrantup.com/) the local usage of the piecemak
 
 Vagrant is a tool to create and configure lightweight, reproducible, and portable development environments.
 
-## Installation
+## Installation (do this once)
 1. Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and install
 1. Download [Vagrant](http://downloads.vagrantup.com) and install
 1. ```git clone https://github.com/fjenett/piecemaker2.git``
 
-## Usage
+## Usage 
 Open your terminal ...
 
 ```
-# change to installer directory
 [~/mattes]$ cd piecemaker2/installer
+[~/mattes]$ git pull # optional ;-)
 
-# start 
 [~/mattes/piecemaker2/installer]$ vagrant up
 [~/mattes/piecemaker2/installer]$ open http://10.10.55.10
-
-# stop
-[~/mattes/piecemaker2/installer]$ vagrant halt
-
-# reload
-[~/mattes/piecemaker2/installer]$ vagrant reload
 ```
 
-## How it works
-```vagrant up``` creates a virtual debian machine. It then configures this machine with details coming from
-```Vagrantfile``` using [Puppet](https://puppetlabs.com). 
+Use ```vagrant halt``` to stop the machine and ```vagrant reload``` to reload it.
 
-Packages beeing installed:
+
+## How it works
+```vagrant up``` creates a virtual debian machine. It then configures this machine 
+with details coming from ```Vagrantfile``` using [Puppet](https://puppetlabs.com). 
+The API is then started as daemon. Have a look at the log files in ```api/logs```.
+
+Packages being installed:
  * Apache
  * Nodejs
- * MySQL @TODO
+ * MySQL tdb
 
- The API is then started as daemon. Have a look at the log files in ```api/logs```.
+ 
