@@ -31,6 +31,8 @@ is ready, the actual Piecemaker API is started as a background daemon with [fore
 
 Please have a look at log files in ```piecemaker2/api/logs```. 
 
+Changes in ```piecemaker2/api``` will make the API restart.
+
 Packages being installed:
  * Apache
  * Nodejs
