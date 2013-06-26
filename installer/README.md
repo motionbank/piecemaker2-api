@@ -12,7 +12,7 @@ The installation takes about 20 minutes.
 1. Download and install [Vagrant](http://downloads.vagrantup.com)
 1. Type the following commands in your terminal ...
 
-```
+```bash
 git clone https://github.com/fjenett/piecemaker2.git
 cd piecemaker2 && git submodule init && git submodule update
 cd installer && vagrant up && vagrant reload && vagrant halt  
@@ -25,7 +25,7 @@ the virtual machine and use it for your local development and testing.
 
 In ```piecemaker2/installer``` run ...
 
-```
+```bash
 # start virtual machine
 vagrant up
 
