@@ -37,4 +37,5 @@ routes.html   HTML view
 routes.md     Markdown view
 ```
 
-See [recent list of routes](https://github.com/fjenett/piecemaker2/blob/master/api2/routes.md).
+See [recent list of routes](https://github.com/fjenett/piecemaker2/blob/master/api/routes.md).
+

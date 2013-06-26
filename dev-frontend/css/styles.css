@@ -1,0 +1,16 @@
+.request-output {
+  font-family: monospace;
+}
+
+.request-output.error {
+  color: #bd362f;
+}
+
+.request-output.success {
+  
+}
+
+.request-output.info {
+  color: #2f96b4;
+}
+
