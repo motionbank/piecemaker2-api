@@ -49,18 +49,18 @@ function die ( message ) {
 var pieceMaker1 = {
 	mysql : {
 		host: 'localhost',
-	    database: 'deborah_hay',
-	    user: 'pm',
-	    password: 'pm',
+	    database: 'jbmf',
+	    user: 'jbmf',
+	    password: 'jbmf',
 	    debug: false
 	}
 }
 var pieceMaker2 = {
 	mysql : {
 		host: 'localhost',
-	    database: 'deborah_hay_pm2',
-	    user: 'pm',
-	    password: 'pm',
+	    database: 'jbmf_pm2',
+	    user: 'jbmf',
+	    password: 'jbmf',
 	    debug: false
 	}
 }
@@ -237,7 +237,11 @@ new Sequential([
 					var userGroup = results[r];
 					if ( !newUsers[userGroup.created_by] ) continue; // no need to bind non-existant user
 					var userId = newUsers[userGroup.created_by].id;
-					if ( !newEventGroups[userGroup.piece_id] ) die( "Piece/group does not exit: "+userGroup.piece_id );
+					if ( !newEventGroups[userGroup.piece_id] ) {
+						console.log( "Piece/group does not exit: "+userGroup.piece_id );
+						console.log( "Ignored" );
+						continue;
+					}
 					var groupId = newEventGroups[userGroup.piece_id].id;
 					fns.push(
 						(function(u,g){
@@ -270,7 +274,7 @@ new Sequential([
 	// EVENTS, finally
 	function (cb) {
 		// TODO: events_tags, events_users 
-		pm1Conn.query('SELECT * FROM events',[],function(error, results){
+		pm1Conn.query('SELECT * FROM events ORDER BY id',[],function(error, results){
 			if ( error ) {
 				die(error)
 			} else {
@@ -320,7 +324,7 @@ new Sequential([
 					}
 					var createdBy = newUsers[event.created_by].id;
 					fns.push(
-						(function(t,d,g,u,o){
+						(function(t,d,g,u,o,e){
 							return function(cb){
 								pm2Conn.query(
 									'INSERT INTO events (`utc_timestamp`, duration, `event_group_id`, `created_by_user_id`) VALUES (?,?,?,?)',
@@ -338,7 +342,7 @@ new Sequential([
 										}
 								});
 							}
-						})(happenedAt.getTime(), duration, group, createdBy, event.id)
+						})(happenedAt.getTime(), duration, group, createdBy, event.id, event)
 					);
 					// add fields
 					for ( var f = 0, m = eventFields.length; f < m; f++ ) {
@@ -384,7 +388,7 @@ new Sequential([
 												}
 										})
 									}
-								})(event.id, p, value)
+								})(event.id, 'data-'+p, value)
 							);
 						}
 					}
@@ -397,7 +401,8 @@ new Sequential([
 	},
 	// VIDEOS are events too
 	function (cb) {
-		pm1Conn.query('SELECT * FROM videos AS v LEFT JOIN video_recordings AS r ON v.id = r.video_id',[],function(error, results){
+		pm1Conn.query('SELECT * FROM videos AS v JOIN video_recordings AS r ON v.id = r.video_id',[],
+						function(error, results){
 			if (error) {
 				die(error);
 			} else {
