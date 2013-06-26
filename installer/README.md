@@ -37,6 +37,6 @@ Changes in ```piecemaker2/api``` will make the API restart.
 Packages being installed:
  * Apache
  * Nodejs
- * MySQL tdb
+ * MySQL
 
  
