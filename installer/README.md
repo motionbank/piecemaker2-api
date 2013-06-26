@@ -5,6 +5,9 @@ __Thanks to [Vagrant](http://www.vagrantup.com/) the local usage of the piecemak
 Vagrant is a tool to create and configure lightweight, reproducible, and portable development environments.
 
 ## Installation (do this once)
+
+It takes about 20 minutes.
+
 1. Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and install
 1. Download [Vagrant](http://downloads.vagrantup.com) and install
 1. ```git clone https://github.com/fjenett/piecemaker2.git```
