@@ -4,3 +4,6 @@
 [submodule "nodejs"]
 	path = installer/puppet/modules/nodejs
 	url = https://github.com/willdurand/puppet-nodejs
+[submodule "installer/puppet/modules/stdlib"]
+	path = installer/puppet/modules/stdlib
+	url = https://github.com/puppetlabs/puppetlabs-stdlib.git
