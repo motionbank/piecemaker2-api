@@ -26,6 +26,31 @@ task :debug_mattes_env do
   system 'nodemon -w . -w ../../node-rest-api/lib/ api.js --env development'
 end
 
+desc "create tables in database and create admin user"
+task :init_db, :env do |t, args|
+  env = args[:env]
+
+  unless env
+    puts "Usage: rake init_db[env]"
+    exit
+  end
+
+  puts "Initialize with env: #{env}"
+
+  # load config 
+  env_host = /['|"](.*)?['|"]/.match(`cat config/#{env}.js | grep host:`)[1]
+  env_database = /['|"](.*)?['|"]/.match(`cat config/#{env}.js | grep database:`)[1]
+  env_user = /['|"](.*)?['|"]/.match(`cat config/#{env}.js | grep user:`)[1]
+  env_password = /['|"](.*)?['|"]/.match(`cat config/#{env}.js | grep password:`)[1]
+  
+  puts "Using MySQL: #{env_user}:#{env_password}@#{env_host}/#{env_database}"
+
+  command = "mysql --user='#{env_user}' --password='#{env_password}' --host='#{env_host}' #{env_database} < ./init_database.sql"
+  puts command
+  system command
+
+end
+
 desc "generate routes.html|.md"
 task :routes do
   routes = []
