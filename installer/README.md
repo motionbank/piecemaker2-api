@@ -27,16 +27,16 @@ In ```piecemaker2/installer``` run ...
 
 ```
 # start virtual machine
-$ vagrant up
+vagrant up
 
 # stop virtual machine
-$ vagrant halt
+vagrant halt
 
 # update virtual machine
-$ git pull && git submodule update && vagrant reload
+git pull && git submodule update && vagrant reload
 
 # delete virtual machine (including mysql databases)
-$ vagrant destroy
+vagrant destroy
 ```
 
 Once the virtual machine is running, open ```http://10.10.55.10``` in your browser. 
