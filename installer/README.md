@@ -8,6 +8,7 @@ Vagrant is a tool to create and configure lightweight, reproducible, and portabl
 1. Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and install
 1. Download [Vagrant](http://downloads.vagrantup.com) and install
 1. ```git clone https://github.com/fjenett/piecemaker2.git```
+1. ```cd piecemaker2 && git submodule init```
 
 ## Usage 
 Open your terminal ...
