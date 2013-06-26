@@ -32,18 +32,21 @@ class piecemaker {
     exec { "piecemaker.api.create.db.development":
       command => "mysqladmin --user='root' --password='vagrant' --host='localhost' create piecemaker_development_1",
       require => Class['mysql::server'],
+      logoutput => 'on_failure',
       unless => 'mysql piecemaker_development_1 >/dev/null 2>&1 </dev/null'
     }
 
     exec { "piecemaker.api.create.db.test":
       command => "mysqladmin --user='root' --password='vagrant' --host='localhost' create piecemaker_test_1",
       require => Class['mysql::server'],
+      logoutput => 'on_failure',
       unless => 'mysql piecemaker_test_1 >/dev/null 2>&1 </dev/null'
     }
 
     exec { "piecemaker.api.create.db.production":
       command => "mysqladmin --user='root' --password='vagrant' --host='localhost' create piecemaker_production_1",
       require => Class['mysql::server'],
+      logoutput => 'on_failure',
       unless => 'mysql piecemaker_production_1 >/dev/null 2>&1 </dev/null'
     }
 
