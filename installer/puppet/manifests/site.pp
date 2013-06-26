@@ -36,15 +36,9 @@ node default {
     version => 'v0.10.12',
   }
 
+  class { 'mysql': }
   class { 'mysql::server':
     config_hash => { 'root_password' => 'vagrant' }
-  }
-
-  mysql::db { 'piecemaker_development_1':
-    user     => 'root',
-    password => 'vagrant',
-    host     => 'localhost',
-    grant    => ['all'],
   }
 
 
