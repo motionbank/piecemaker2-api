@@ -17,10 +17,38 @@
 
       <h1>Piecemaker API</h1>
 
+
+
+      <!-- DEBUGGER -->
+      <form id="debugger">
+        <fieldset>
+          <legend>Debugger</legend>
+
+          <label>Request Type</label>
+          <select name="rtype">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+          </select>
+
+          <label>Request URL</label>
+          <input type="text" name="url" style="width:400px" value="http://10.10.55.10:8070/system/utc_timestamp.json" placeholder="http://10.10.55.10:8070/system/utc_timestamp.json">
+
+          <label>Request Params</label>
+          <input type="text" name="params" style="width:400px" value="" placeholder="key=value&amp;key2=value2">
+
+          <span class="help-block request-output" id="debugger-result"></span>
+          <button type="submit" class="btn btn-success">Send Request</button>
+        </fieldset>
+      </form>
+      <!-- /DEBUGGER -->
+
+
+
     </div><!-- /container -->
 
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/js.js"></script>
 
   </body>
 </html>
