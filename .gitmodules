@@ -1,3 +1,6 @@
 [submodule "installer/puppet/modules/mysql"]
 	path = installer/puppet/modules/mysql
 	url = https://github.com/puppetlabs/puppetlabs-mysql
+[submodule "nodejs"]
+	path = installer/puppet/modules/nodejs
+	url = https://github.com/willdurand/puppet-nodejs
