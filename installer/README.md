@@ -15,6 +15,7 @@ The installation takes about 20 minutes.
   1. ```cd piecemaker2 && git submodule init && git submodule update```
   1. ```cd installer && vagrant up && vagrant reload && vagrant halt```
 
+
 ## Usage 
 Once you successfully run through the installation steps above, you are able to start and stop 
 the virtual machine and use it for your local development and testing.
