@@ -23,7 +23,7 @@ var pool = mysql.createPool(config.mysql);
 // ---- add hooks
 api.beforeFunctionCall(function(req, res, next){
   pool.getConnection(function(err, db){
-    if(err) throw new ClientError({status: 503, message: 'database timeout'});
+    if(err) throw new ClientError({status: 503, message: 'database timeout: unable to connect to mysql'});
     api.setHandle('db', db);
     next();
   });

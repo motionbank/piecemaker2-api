@@ -27,7 +27,9 @@ node default {
   package { "tar":
       ensure => installed
   }
-
+  package { "rake":
+      ensure => installed
+  }
 
 
   include apache
