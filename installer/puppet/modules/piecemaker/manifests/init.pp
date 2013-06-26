@@ -63,6 +63,6 @@ class piecemaker {
       cwd => '/piecemaker/api',
       command => "forever start --watchDirectory . -a -l /piecemaker/api/logs/forever.log -o /piecemaker/api/logs/out.log -e /piecemaker/api/logs/err.log api.js --env development",
       logoutput => "on_failure",
-      require => [Package["forever"], Exec["piecemaker.npm.install"]]
+      require => [Package["forever"], Exec["piecemaker.npm.install", "piecemaker.api.config.update.development"]]
     }
 }
