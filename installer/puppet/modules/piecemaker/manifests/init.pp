@@ -1,5 +1,17 @@
 class piecemaker {
 
+    # npm install
+    exec { "piecemaker.npm.install":
+      cwd => '/piecemaker/api',
+      command => "npm install"
+    }
+
+    # create 3 databases
+    # @todo
+
+    # update config files
+    # @todo
+
     # start api
     exec { "piecemaker.api.start":
       cwd => '/piecemaker/api',
