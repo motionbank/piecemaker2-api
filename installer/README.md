@@ -15,7 +15,7 @@ The installation takes about 20 minutes.
 ```bash
 git clone https://github.com/fjenett/piecemaker2.git
 cd piecemaker2 && git submodule init && git submodule update
-cd installer && vagrant up && vagrant reload && vagrant halt  
+cd installer && vagrant up; vagrant reload; vagrant halt  
 ```
 
 
