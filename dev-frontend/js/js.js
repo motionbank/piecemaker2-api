@@ -22,6 +22,11 @@ function debuggerResult(string, status) {
 
 
 $(document).ready(function() {
+
+  $('#request-type').bind('change', function() {
+    $('#request-params').toggle();
+  });
+
   $('#debugger').bind('submit', function(e){
     e.preventDefault();
 
