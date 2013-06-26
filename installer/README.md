@@ -23,6 +23,9 @@ Open your terminal ...
 
 Use ```vagrant halt``` to stop the machine and ```vagrant reload``` to reload it.
 
+## Bug #16262 (mysql)
+Currently there is a bug in the mysql puppet module. [Bug #16262](http://projects.puppetlabs.com/issues/16262).
+After the very first ```vagrant up``` run ```vagrant reload``` and you are fine.
 
 ## How it works
 ```vagrant up``` creates a virtual debian machine and installs packages (see below).
