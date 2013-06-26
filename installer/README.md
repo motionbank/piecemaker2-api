@@ -32,7 +32,7 @@ vagrant up
 # stop virtual machine
 vagrant halt
 
-# update virtual machine
+# update virtual machine and api
 git pull && git submodule update && vagrant reload
 
 # delete virtual machine (including mysql databases)
