@@ -9,9 +9,10 @@ Vagrant is a tool to create and configure lightweight, reproducible, and portabl
 It takes about 20 minutes.
 
 1. Download [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and install
-1. Download [Vagrant](http://downloads.vagrantup.com) and install
-1. ```git clone https://github.com/fjenett/piecemaker2.git```
-1. ```cd piecemaker2 && git submodule init```
+2. Download [Vagrant](http://downloads.vagrantup.com) and install
+3. ```git clone https://github.com/fjenett/piecemaker2.git```
+4. ```cd piecemaker2```
+5. ```git submodule init && git submodule update```
 
 ## Usage 
 Open your terminal ...
