@@ -3,3 +3,7 @@ logs/*
 routes.html
 node_modules/*
 node_modules
+
+config/development.js
+config/production.js
+config/test.js
