@@ -37,7 +37,7 @@ class piecemaker {
         sed -i \"s/database: '',/database: 'piecemaker_development_1',/g\" development.js && 
         sed -i \"s/host: '',/host: 'localhost',/g\" development.js && 
         sed -i \"s/user: '',/user: 'root',/g\" development.js && 
-        sed -i \"s/password: '',/user: 'vagrant',/g\" development.js"
+        sed -i \"s/password: '',/password: 'vagrant',/g\" development.js"
     }
     exec { "piecemaker.api.config.update.test":
       cwd => '/piecemaker/api/config',
@@ -46,7 +46,7 @@ class piecemaker {
         sed -i \"s/database: '',/database: 'piecemaker_test_1',/g\" test.js &&
         sed -i \"s/host: '',/host: 'localhost',/g\" test.js &&
         sed -i \"s/user: '',/user: 'root',/g\" test.js && 
-        sed -i \"s/password: '',/user: 'vagrant',/g\" test.js"
+        sed -i \"s/password: '',/password: 'vagrant',/g\" test.js"
     }
     exec { "piecemaker.api.config.update.production":
       cwd => '/piecemaker/api/config',
@@ -55,8 +55,11 @@ class piecemaker {
         sed -i \"s/database: '',/database: 'piecemaker_production_1',/g\" production.js &&
         sed -i \"s/host: '',/host: 'localhost',/g\" production.js &&
         sed -i \"s/user: '',/user: 'root',/g\" production.js && 
-        sed -i \"s/password: '',/user: 'vagrant',/g\" production.js"
+        sed -i \"s/password: '',/password: 'vagrant',/g\" production.js"
     }
+
+    # init dbs
+    
 
     # start api
     exec { "piecemaker.api.start":
