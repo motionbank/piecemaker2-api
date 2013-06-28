@@ -49,18 +49,18 @@ function die ( message ) {
 var pieceMaker1 = {
 	mysql : {
 		host: 'localhost',
-	    database: 'jbmf',
-	    user: 'jbmf',
-	    password: 'jbmf',
+	    database: 'deborah_hay',
+	    user: 'pm',
+	    password: 'pm',
 	    debug: false
 	}
 }
 var pieceMaker2 = {
 	mysql : {
 		host: 'localhost',
-	    database: 'jbmf_pm2',
-	    user: 'jbmf',
-	    password: 'jbmf',
+	    database: 'deborah_hay_pm2',
+	    user: 'pm',
+	    password: 'pm',
 	    debug: false
 	}
 }
