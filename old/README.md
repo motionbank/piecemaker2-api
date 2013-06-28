@@ -4,19 +4,6 @@ piecemaker API
 For further API information see README.md in /api.
 
 
-Example DB
-----------
-__Use this DB for example datasets.__
-* https://dd15102.kasserver.com/mysqladmin
-* User: d015dedf
-* Pass: QUtNzpy3QF25gv3E
-
-Temporary DB
-------------
-__This DB is deleted from time to time.__
-* https://dd15102.kasserver.com/mysqladmin
-* User: d0161511
-* Pass: nmsN8dCS5yB3mFUk
 
 Create API Doc
 -------------
