@@ -151,10 +151,13 @@ new Sequential([
 					var user = results[u];
 					var userName = user.name ? user.name : user.login;
 					var userEmail = user.email ? user.email : user.login.toLowerCase().replace(/[^-_.a-z0-9]/,'')+'-fake@motionbank.org';
+					var userPassword = new Buffer(user.email+(new Date()).getTime()).toString('base64');
 					fns.push(
-						(function(n,e,o,l){
+						(function(n,e,o,l,p,a){
 							return function (cb) {
-								pm2Conn.query('INSERT INTO users (name, email) VALUES (?, ?)',[n,e],function(error,result){
+								pm2Conn.query( 'INSERT INTO users (name, email, password, api_access_key, is_admin) '+
+													'VALUES (?, ?, ?, SHA1(?), ?)', 
+											   [n,e,p,p,a], function(error,result){
 									if (error) {
 										die(error)
 									} else {
@@ -168,7 +171,7 @@ new Sequential([
 									}
 								});
 							}
-						})(userName, userEmail, user.id, user.login)
+						})(userName, userEmail, user.id, user.login, userPassword, user.role_name === 'group_admin')
 					);
 				}
 				new Sequential(fns,function(){
