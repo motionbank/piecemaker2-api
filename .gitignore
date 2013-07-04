@@ -2,3 +2,4 @@
 
 api/config.js
 *.bak
+app/config/*.js
