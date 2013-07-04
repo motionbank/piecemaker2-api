@@ -3,3 +3,5 @@
 api/config.js
 *.bak
 app/config/*.js
+api/config/*.js
+npm-shrinkwrap.json
