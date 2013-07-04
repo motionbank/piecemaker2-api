@@ -3,15 +3,25 @@
 // var API = require('../../node-rest-api/lib/api.js'); // mattes env
 var API = require('rest-api');
 
-// command line option parser ...
-var program = require('commander');
-program
-  .version('0.0.2')
-  .option('-e, --env [env]', 'Specify environment (production|development|test)')
-  .parse(process.argv);
+var ENV = 'production';
 
-var ENV = program.env || 'production';
-if(!~['production', 'development', 'test'].indexOf(ENV)) throw new Error('invalid ENV');
+// appfog adds options that are unknown to us and since commander dies() on these
+// i have to work around it here ..
+// https://github.com/visionmedia/commander.js/pull/138
+if ( process.env.env && process.env.env === 'appfog' ) {
+  ENV = process.env.env;
+} else {
+  // command line option parser ...
+  var program = require('commander');
+  program
+    .version('0.0.2')
+    .option('-e, --env [env]', 'Specify environment (production|development|test)')
+    .parse(process.argv);
+
+  ENV = program.env || 'production';
+}
+
+if(!~['production', 'development', 'test', 'appfog'].indexOf(ENV)) throw new Error('invalid ENV');
 
 var util = require('util');
 var config = require('./config/' + ENV + '.js');
