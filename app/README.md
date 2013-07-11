@@ -2,7 +2,7 @@
 
 __requires Mac OS 10.8 (64-bit)__
 
-Download XXX, open the app, click the "Test" button. It should print something like this:
+Download https://github.com/motionbank/piecemaker2/blob/master/app/piecemaker2/piecemaker2.app.zip, open the app, click the "Test" button. It should print something like this:
 
 ```
 workingDir:
