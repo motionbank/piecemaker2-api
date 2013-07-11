@@ -7,10 +7,10 @@ open the app, click the "Test" button. It should print something like this:
 
 ```
 workingDir:
-/Users/matthias/Desktop/piecemaker2.app
+/Volumes/Piecemaker2/piecemaker2.app
 
 which node:
-/Users/matthias/Desktop/piecemaker2.app/Contents/Resources/local/bin/node
+/Volumes/Piecemaker2/piecemaker2.app/Contents/Resources/local/bin/node
 
 stdout:
 It works!
