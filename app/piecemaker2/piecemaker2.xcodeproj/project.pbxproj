@@ -360,6 +360,7 @@
 				396EA7B3178F2E07003319B1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		396EA7B7178F2EB3003319B1 /* Build configuration list for PBXAggregateTarget "nodejs" */ = {
 			isa = XCConfigurationList;
@@ -368,6 +369,7 @@
 				396EA7B9178F2EB3003319B1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
