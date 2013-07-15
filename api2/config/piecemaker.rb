@@ -21,9 +21,9 @@ end
 
 environment :test do
   ActiveRecord::Base.establish_connection(:adapter  => 'em_mysql2',
-                                          :database => 'piecemaker2_test',
+                                          :database => 'piecemaker2',
                                           :username => 'root',
-                                          :password => 'root',
+                                          :password => '',
                                           :host     => 'localhost',
                                           :pool     => 1)
 end
