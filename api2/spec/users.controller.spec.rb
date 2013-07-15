@@ -1,11 +1,14 @@
 require "spec_helper.rb"
 
 describe UsersController::API do
-  it 'sets the content type' do
+
+  it 'returns all users' do
     with_api(Piecemaker) do
-      get_request({:query => {:callback => 'test'}}) do |c|
-        c.response_header['CONTENT_TYPE'].should =~ %r{^application/javascript}
+      get_request(:path => '/v1/users') do |c|
+        json = JSON.parse(c.response)
+        json[0]["name"].should eq("Matthias")
       end
     end
   end
+
 end

@@ -1,0 +1,107 @@
+D, [2013-07-16T01:42:43.385061 #12038] DEBUG -- :   [1m[36mUser Load (0.3ms)[0m  [1mSELECT `users`.* FROM `users`[0m
+E, [2013-07-16T01:42:43.385132 #12038] ERROR -- : Mysql2::Error: Table 'piecemaker2.users' doesn't exist: SELECT `users`.* FROM `users`
+D, [2013-07-16T01:47:02.911103 #12048] DEBUG -- :   [1m[36m (136.3ms)[0m  [1mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+D, [2013-07-16T01:47:03.102201 #12048] DEBUG -- :   [1m[35m (189.7ms)[0m  CREATE UNIQUE INDEX `unique_schema_migrations` ON `schema_migrations` (`version`) 
+D, [2013-07-16T01:47:03.107324 #12048] DEBUG -- :   [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT `schema_migrations`.* FROM `schema_migrations`[0m
+I, [2013-07-16T01:47:03.108744 #12048]  INFO -- : Migrating to CreateUsers (1)
+D, [2013-07-16T01:47:03.191188 #12048] DEBUG -- :   [1m[35m (81.2ms)[0m  CREATE TABLE `users` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255) NOT NULL) ENGINE=InnoDB
+D, [2013-07-16T01:47:03.196158 #12048] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:47:03.201664 #12048] DEBUG -- :   [1m[35mSQL (1.3ms)[0m  INSERT INTO `schema_migrations` (`version`) VALUES ('1')
+D, [2013-07-16T01:47:03.202500 #12048] DEBUG -- :   [1m[36m (0.5ms)[0m  [1mCOMMIT[0m
+D, [2013-07-16T01:47:08.916129 #12089] DEBUG -- :   [1m[36mUser Load (0.2ms)[0m  [1mSELECT `users`.* FROM `users`[0m
+D, [2013-07-16T01:50:26.156538 #12181] DEBUG -- :   [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:50:26.029447 #12181] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:50:26.029703 #12181] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:50:26.030837 #12181] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:50:26.034015 #12181] DEBUG -- :   [1m[35mFixture Delete (0.7ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:50:26.037010 #12181] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:50:26.037583 #12181] DEBUG -- :   [1m[35m (0.4ms)[0m  COMMIT
+D, [2013-07-16T01:50:26.037818 #12181] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:52:43.193491 #12209] DEBUG -- :   [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:52:43.054998 #12209] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:52:43.055319 #12209] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:52:43.056637 #12209] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:52:43.073390 #12209] DEBUG -- :   [1m[35mFixture Delete (0.2ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:52:43.076939 #12209] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:52:43.077802 #12209] DEBUG -- :   [1m[35m (0.7ms)[0m  COMMIT
+D, [2013-07-16T01:52:43.078011 #12209] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:53:23.273943 #12234] DEBUG -- :   [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:53:23.151901 #12234] DEBUG -- :   [1m[36m (0.4ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:53:23.152218 #12234] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:53:23.153325 #12234] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:53:23.155743 #12234] DEBUG -- :   [1m[35mFixture Delete (0.2ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:53:23.157761 #12234] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:53:23.158317 #12234] DEBUG -- :   [1m[35m (0.4ms)[0m  COMMIT
+D, [2013-07-16T01:53:23.158546 #12234] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:53:36.227258 #12257] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:53:36.227572 #12257] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:53:36.228689 #12257] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:53:36.231243 #12257] DEBUG -- :   [1m[35mFixture Delete (0.2ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:53:36.233439 #12257] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:53:36.234011 #12257] DEBUG -- :   [1m[35m (0.4ms)[0m  COMMIT
+D, [2013-07-16T01:53:36.234237 #12257] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:53:36.351675 #12257] DEBUG -- :   [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:53:48.337459 #12280] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:53:48.337737 #12280] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:53:48.338824 #12280] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:53:48.341215 #12280] DEBUG -- :   [1m[35mFixture Delete (0.2ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:53:48.343593 #12280] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:53:48.344165 #12280] DEBUG -- :   [1m[35m (0.4ms)[0m  COMMIT
+D, [2013-07-16T01:53:48.344405 #12280] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:53:48.457933 #12280] DEBUG -- :   [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:54:01.250036 #12303] DEBUG -- :   [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:54:01.125525 #12303] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:54:01.125917 #12303] DEBUG -- :   [1m[35m (0.2ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:54:01.127254 #12303] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:54:01.130059 #12303] DEBUG -- :   [1m[35mFixture Delete (0.3ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:54:01.132483 #12303] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:54:01.133071 #12303] DEBUG -- :   [1m[35m (0.4ms)[0m  COMMIT
+D, [2013-07-16T01:54:01.133345 #12303] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:54:12.202467 #12325] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:54:12.202732 #12325] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:54:12.203774 #12325] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:54:12.206211 #12325] DEBUG -- :   [1m[35mFixture Delete (0.2ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:54:12.208172 #12325] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:54:12.208726 #12325] DEBUG -- :   [1m[35m (0.4ms)[0m  COMMIT
+D, [2013-07-16T01:54:12.209012 #12325] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:54:12.325297 #12325] DEBUG -- :   [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:54:56.678606 #12350] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:54:56.678901 #12350] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:54:56.680001 #12350] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:54:56.682360 #12350] DEBUG -- :   [1m[35mFixture Delete (0.2ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:54:56.684329 #12350] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:54:56.684885 #12350] DEBUG -- :   [1m[35m (0.4ms)[0m  COMMIT
+D, [2013-07-16T01:54:56.685130 #12350] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:54:56.809967 #12350] DEBUG -- :   [1m[35mUser Load (0.3ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:55:08.607024 #12373] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:55:08.607320 #12373] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:55:08.608379 #12373] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:55:08.610758 #12373] DEBUG -- :   [1m[35mFixture Delete (0.2ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:55:08.612939 #12373] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:55:08.613488 #12373] DEBUG -- :   [1m[35m (0.4ms)[0m  COMMIT
+D, [2013-07-16T01:55:08.613716 #12373] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:55:08.728207 #12373] DEBUG -- :   [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:55:16.270305 #12395] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:55:16.270576 #12395] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:55:16.271651 #12395] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:55:16.274012 #12395] DEBUG -- :   [1m[35mFixture Delete (0.2ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:55:16.276361 #12395] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:55:16.276954 #12395] DEBUG -- :   [1m[35m (0.5ms)[0m  COMMIT
+D, [2013-07-16T01:55:16.277201 #12395] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:55:16.391006 #12395] DEBUG -- :   [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:56:00.256200 #12424] DEBUG -- :   [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:56:00.133085 #12424] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:56:00.133360 #12424] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:56:00.134420 #12424] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:56:00.136781 #12424] DEBUG -- :   [1m[35mFixture Delete (0.2ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:56:00.138984 #12424] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:56:00.139543 #12424] DEBUG -- :   [1m[35m (0.4ms)[0m  COMMIT
+D, [2013-07-16T01:56:00.139768 #12424] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m
+D, [2013-07-16T01:56:22.208506 #12447] DEBUG -- :   [1m[35mUser Load (0.2ms)[0m  SELECT `users`.* FROM `users`
+D, [2013-07-16T01:56:22.083329 #12447] DEBUG -- :   [1m[36m (0.2ms)[0m  [1mSELECT @@FOREIGN_KEY_CHECKS[0m
+D, [2013-07-16T01:56:22.083593 #12447] DEBUG -- :   [1m[35m (0.1ms)[0m  SET FOREIGN_KEY_CHECKS = 0
+D, [2013-07-16T01:56:22.084648 #12447] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mBEGIN[0m
+D, [2013-07-16T01:56:22.087081 #12447] DEBUG -- :   [1m[35mFixture Delete (0.2ms)[0m  DELETE FROM `users`
+D, [2013-07-16T01:56:22.089220 #12447] DEBUG -- :   [1m[36mFixture Insert (0.2ms)[0m  [1mINSERT INTO `users` (`name`, `id`) VALUES ('Matthias', 131705852)[0m
+D, [2013-07-16T01:56:22.089787 #12447] DEBUG -- :   [1m[35m (0.4ms)[0m  COMMIT
+D, [2013-07-16T01:56:22.090059 #12447] DEBUG -- :   [1m[36m (0.1ms)[0m  [1mSET FOREIGN_KEY_CHECKS = 1[0m

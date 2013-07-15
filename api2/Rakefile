@@ -25,8 +25,26 @@ task :ab_benchmark do
   system "ab -c 2 -n 100 http://localhost:9080/v1/users"
 end
 
+require 'active_record'
+
+desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x"
+task :migrate => :environment do
+  ActiveRecord::Migrator.migrate('db/migrate', nil )
+end
+
+task :environment do
+    ActiveRecord::Base.establish_connection(:adapter  => 'em_mysql2',
+                                          :database => 'piecemaker2',
+                                          :username => 'root',
+                                          :password => '',
+                                          :host     => 'localhost',
+                                          :pool     => 1)
+    
+  ActiveRecord::Base.logger = Logger.new(File.open('database.log', 'a'))
+end
+
+
 desc "run tests"
 task :test do
   system "rspec spec/*"
-  
 end
