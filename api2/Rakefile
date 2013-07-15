@@ -1,0 +1,32 @@
+task :default do
+  exec "rake -T"
+end
+
+desc "Run Development Server"
+task :run_dev do
+  # https://github.com/postrank-labs/goliath/wiki/Server
+  system "ruby piecemaker.rb --port 9080 \
+                             --environment dev \
+                             --log log/log.txt \
+                             --stdout"
+end
+
+desc "Run Production Server"
+task :run_prod do
+  # https://github.com/postrank-labs/goliath/wiki/Server
+  system "ruby piecemaker.rb --port 9080 \
+                             --environment prod \
+                             --log log/log.txt"
+end
+
+desc "run apache ab benchmarking"
+task :ab_benchmark do
+  # http://httpd.apache.org/docs/2.2/programs/ab.html
+  system "ab -c 2 -n 100 http://localhost:9080/v1/users"
+end
+
+desc "run tests"
+task :test do
+  system "rspec spec/*"
+  
+end
