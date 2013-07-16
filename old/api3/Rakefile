@@ -10,7 +10,8 @@ end
 
 desc "Run App in Production Environment"
 task :run_prod_env do
-  system "export NODE_ENV=production; node/bin/node app"
+  # system "export NODE_ENV=production; node/bin/node app"
+  system "export NODE_ENV=production; node app"
 end
 
 desc "Run App with nodemon"
