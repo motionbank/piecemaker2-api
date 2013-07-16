@@ -3,9 +3,14 @@ task :default do
   system 'rake -T'
 end
 
-desc "Run App"
+desc "Run App in Test Environment"
 task :run_test_env do
   system "export NODE_ENV=test; node app"
+end
+
+desc "Run App in Production Environment"
+task :run_prod_env do
+  system "export NODE_ENV=production; node app"
 end
 
 desc "Run App with nodemon"
@@ -16,5 +21,5 @@ end
 desc "Run ab benchmarks"
 task :ab_benchmark do
   # http://httpd.apache.org/docs/2.2/programs/ab.html
-  system "ab -c 2 -n 50 http://127.0.0.1:9050/users"
+  system "ab -c 5 -n 15000 http://127.0.0.1:9050/users"
 end
