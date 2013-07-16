@@ -1,5 +1,87 @@
 # ab benchmark
 
+## ab -c 3 -n 5000
+
+### ruby 90-100%, 2 threads, 40-44MB
+```
+Server Software:        Goliath
+Server Hostname:        127.0.0.1
+Server Port:            9080
+
+Document Path:          /v1/users
+Document Length:        36 bytes
+
+Concurrency Level:      3
+Time taken for tests:   9.763 seconds
+Complete requests:      5000
+Failed requests:        0
+Write errors:           0
+Total transferred:      805000 bytes
+HTML transferred:       180000 bytes
+Requests per second:    512.15 [#/sec] (mean)
+Time per request:       5.858 [ms] (mean)
+Time per request:       1.953 [ms] (mean, across all concurrent requests)
+Transfer rate:          80.52 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       3
+Processing:     2    6   5.4      5     129
+Waiting:        2    5   5.2      4     129
+Total:          3    6   5.4      5     129
+
+Percentage of the requests served within a certain time (ms)
+  50%      5
+  66%      5
+  75%      5
+  80%      5
+  90%     14
+  95%     19
+  98%     20
+  99%     21
+ 100%    129 (longest request)
+```
+
+### node 90-100%, 3 threads, 40-50MB
+```
+erver Software:        
+Server Hostname:        127.0.0.1
+Server Port:            9050
+
+Document Path:          /users
+Document Length:        36 bytes
+
+Concurrency Level:      3
+Time taken for tests:   4.827 seconds
+Complete requests:      5000
+Failed requests:        0
+Write errors:           0
+Total transferred:      930000 bytes
+HTML transferred:       180000 bytes
+Requests per second:    1035.82 [#/sec] (mean)
+Time per request:       2.896 [ms] (mean)
+Time per request:       0.965 [ms] (mean, across all concurrent requests)
+Transfer rate:          188.15 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       2
+Processing:     1    3   1.2      3      30
+Waiting:        1    3   1.2      2      29
+Total:          2    3   1.2      3      30
+
+Percentage of the requests served within a certain time (ms)
+  50%      3
+  66%      3
+  75%      3
+  80%      3
+  90%      4
+  95%      4
+  98%      6
+  99%      7
+ 100%     30 (longest request)
+ ```
+
 ## ab -c 5 -n 15000
 
 ### ruby 90-100%, 2 threads, 40-44MB
