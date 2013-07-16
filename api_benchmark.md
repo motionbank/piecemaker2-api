@@ -12,7 +12,7 @@
    * probably memory leaks
    * about 90-100% cpu 
    * 3 threads
-   * memory footprint, if no errors: 40-50MB
+   * memory footprint, if no errors: 40-50MB, with errors > 1.4GB
 
 ## ab -c 3 -n 5000
 
