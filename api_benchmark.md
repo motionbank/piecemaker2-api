@@ -1,8 +1,8 @@
 # ab benchmark
 
-# ab -c 5 -n 15000
+## ab -c 5 -n 15000
 
-## ruby 90-100%, 2 threads, 40-44MB
+### ruby 90-100%, 2 threads, 40-44MB
 
 ```
 Server Software:        Goliath
@@ -43,12 +43,12 @@ Percentage of the requests served within a certain time (ms)
  100%    200 (longest request)
  ``
 
-## node > 95%; 1 thread, 1,44 GB
+### node > 95%; 1 thread, 1,44 GB
 
 
-# ab -c 5 -n 20000
+## ab -c 5 -n 20000
 
-## ruby 90-100%, 2 threads, 40-44MB
+### ruby 90-100%, 2 threads, 40-44MB
 
 ```
 Server Software:        Goliath
@@ -89,7 +89,8 @@ Percentage of the requests served within a certain time (ms)
  100%    141 (longest request)
 ```
 
-## node 90-100%, 3 threads, 55-60MB
+
+### node 90-100%, 3 threads, 55-60MB
 
 ```
 Benchmarking 127.0.0.1 (be patient)
