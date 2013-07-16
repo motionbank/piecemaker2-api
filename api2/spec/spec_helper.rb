@@ -13,24 +13,25 @@ require 'erb'
 
 Goliath.env = :test
 
+
 RSpec.configure do |c|
   c.include Goliath::TestHelper
 
-  c.before(:all) do
+  c.before(:each) do
     ActiveRecord::Base.establish_connection(:adapter  => 'em_mysql2',
                                           :database => 'piecemaker2',
                                           :username => 'root',
                                           :password => '',
                                           :host     => 'localhost',
                                           :pool     => 1)
-    
+
     Dir['spec/fixtures/*'].each do |file|
       ActiveRecord::FixtureSet.create_fixtures('spec/fixtures', File.basename(file, '.*'))
     end
-    ActiveRecord::Base.logger = Logger.new(File.open('database.log', 'a'))
+    ActiveRecord::Base.logger = Logger.new(File.open('log/spec_database.log', 'a+'))
   end
 
-  c.after(:all) do
+  c.after(:each) do
     
   end
 end
