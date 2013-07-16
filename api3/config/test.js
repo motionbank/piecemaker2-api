@@ -1,4 +1,4 @@
-module.exports = function(app) {
+module.exports = function(app, express, orm) {
 
   // https://github.com/dresende/node-orm2#options
   var db = {
@@ -10,9 +10,12 @@ module.exports = function(app) {
     password : "",
     query    : {
       pool     : true,   // optional, false by default
-      debug    : true   // optional, false by default
+      debug    : false   // optional, false by default
     }
   };
+
+  app.listen(9050);
+  // app.use(express.logger());
 
   return {db: db}
 

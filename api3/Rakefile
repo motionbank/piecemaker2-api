@@ -7,3 +7,8 @@ desc "Run App"
 task :run do
   system "export NODE_ENV=test; node app"
 end
+
+desc "Run App with nodemon"
+task :nodemon do
+  system "export NODE_ENV=test; ./node_modules/.bin/nodemon -w . app.js"
+end
