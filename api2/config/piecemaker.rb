@@ -20,6 +20,7 @@ environment :development do
 end
 
 environment :test do
+  puts "hallo"
   ActiveRecord::Base.establish_connection(:adapter  => 'em_mysql2',
                                           :database => 'piecemaker2',
                                           :username => 'root',
