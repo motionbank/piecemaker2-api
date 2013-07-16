@@ -23,11 +23,9 @@ RSpec.configure do |c|
       blk.call
     end
   end
+  require './config/piecemaker.rb'
 
   c.before(:each) do
-    
-    # @todo: refactor this. work-around for loading test env config
-    require './config/piecemaker.rb'
     
     Dir['spec/fixtures/*'].each do |file|
       ActiveRecord::FixtureSet.create_fixtures('spec/fixtures', File.basename(file, '.*'))
