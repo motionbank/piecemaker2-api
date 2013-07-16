@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# curl http://localhost:9000/v1/users
+# curl http://localhost:9080/v1/users
 
 require 'rubygems'
 require 'goliath'

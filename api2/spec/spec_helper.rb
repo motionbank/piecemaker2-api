@@ -17,14 +17,18 @@ Goliath.env = :test
 RSpec.configure do |c|
   c.include Goliath::TestHelper
 
-  c.before(:each) do
-    ActiveRecord::Base.establish_connection(:adapter  => 'em_mysql2',
-                                          :database => 'piecemaker2',
-                                          :username => 'root',
-                                          :password => '',
-                                          :host     => 'localhost',
-                                          :pool     => 1)
+  # @todo: refactor this. work-around for loading test env config
+  def environment(env, &blk)
+    if env == :test
+      blk.call
+    end
+  end
 
+  c.before(:each) do
+    
+    # @todo: refactor this. work-around for loading test env config
+    require './config/piecemaker.rb'
+    
     Dir['spec/fixtures/*'].each do |file|
       ActiveRecord::FixtureSet.create_fixtures('spec/fixtures', File.basename(file, '.*'))
     end

@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'active_record'
+
 task :default do
   exec "rake -T"
 end
@@ -22,25 +25,23 @@ end
 desc "run apache ab benchmarking"
 task :ab_benchmark do
   # http://httpd.apache.org/docs/2.2/programs/ab.html
-  system "ab -c 2 -n 100 http://localhost:9080/v1/users"
+  system "ab -c 1 -n 5 http://127.0.0.1:9080/v1/users"
 end
 
-require 'active_record'
 
-desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x"
-task :migrate => :environment do
-  ActiveRecord::Migrator.migrate('db/migrate', nil )
-end
 
-task :environment do
-    ActiveRecord::Base.establish_connection(:adapter  => 'em_mysql2',
-                                          :database => 'piecemaker2',
-                                          :username => 'root',
-                                          :password => '',
-                                          :host     => 'localhost',
-                                          :pool     => 1)
-    
-  ActiveRecord::Base.logger = Logger.new(File.open('database.log', 'a'))
+desc "Migrate the database through scripts in db/migrate."
+task :migrate, :version do |t, args|
+
+  # @todo: refactor this. work-around for loading test env config
+  def environment(env, &blk)
+    if env == :test
+      blk.call
+    end
+  end
+  require './config/piecemaker.rb'
+  ActiveRecord::Base.logger = Logger.new(File.open('log/spec_database.log', 'a+'))
+  ActiveRecord::Migrator.migrate('db/migrate', args[:version] ? args[:version].to_i : nil )
 end
 
 
@@ -48,3 +49,4 @@ desc "run tests"
 task :test do
   system "rspec spec/*"
 end
+
