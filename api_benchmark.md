@@ -44,7 +44,13 @@ Percentage of the requests served within a certain time (ms)
 ```
 
 ### node > 95%; 1 thread, 1,44 GB
-
+```
+Benchmarking 127.0.0.1 (be patient)
+Send request failed!
+Send request failed!
+apr_socket_recv: Connection reset by peer (54)
+Total of 5 requests completed
+```
 
 ## ab -c 5 -n 20000
 
