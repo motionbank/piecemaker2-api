@@ -34,6 +34,7 @@ RSpec.configure do |c|
   end
 
   c.after(:each) do
-    
+    # nothing atm
+    # @info: create_fixtures creates clean tables
   end
 end
