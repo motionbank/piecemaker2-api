@@ -226,7 +226,7 @@ Requests/sec:   1468.31
 Transfer/sec:    273.87KB
 ```
 
-# API 2 (ruby)
+### API 2 (ruby)
 
 ```
 $ wrk -t5 -c10000 -d30s http://127.0.0.1:9080/v1/users
