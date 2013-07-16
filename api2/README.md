@@ -23,13 +23,14 @@ mysql --version
 # finally run 
 cd piecemaker/api2
 bundle install
-```
 
+# create database
+mysqladmin -uroot -p create piecemaker
 
-## Testing
-```bash
-cd piecmaker/api2
-bundle install
+# start mysql server
+mysql.server start
+
+# run tests
 rake test
 ```
 
