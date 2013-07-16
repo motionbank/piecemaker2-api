@@ -19,7 +19,7 @@ RSpec.configure do |c|
 
   # @todo: refactor this. work-around for loading test env config
   def environment(env, &blk)
-    if env == :test
+    if env == Goliath.env
       blk.call
     end
   end
