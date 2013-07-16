@@ -1,0 +1,9 @@
+desc "see usage"
+task :default do 
+  system 'rake -T'
+end
+
+desc "Run App"
+task :run do
+  system "export NODE_ENV=test; node app"
+end
