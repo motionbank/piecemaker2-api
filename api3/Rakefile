@@ -21,5 +21,5 @@ end
 desc "Run ab benchmarks"
 task :ab_benchmark do
   # http://httpd.apache.org/docs/2.2/programs/ab.html
-  system "ab -c 3 -n 5000 http://127.0.0.1:9050/users"
+  system "ab -c 4 -n 10000 http://127.0.0.1:9050/users"
 end

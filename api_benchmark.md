@@ -58,7 +58,7 @@ Percentage of the requests served within a certain time (ms)
 
 ### node 90-100%, 3 threads, 40-50MB
 ```
-erver Software:        
+Server Software:        
 Server Hostname:        127.0.0.1
 Server Port:            9050
 
@@ -206,4 +206,37 @@ Completed 14000 requests
 Completed 16000 requests
 apr_socket_recv: Operation timed out (60)
 Total of 16362 requests completed
+```
+
+
+# wrk
+https://github.com/wg/wrk
+
+### API 2 (node-orm)
+```
+$ wrk -t5 -c10000 -d30s http://127.0.0.1:9050/users
+Running 30s test @ http://127.0.0.1:9050/users
+  5 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   196.02ms   37.40ms 255.61ms   45.56%
+    Req/Sec   360.35    295.91   732.00     46.18%
+  44146 requests in 30.07s, 8.04MB read
+  Socket errors: connect 9752, read 15776, write 0, timeout 140647
+Requests/sec:   1468.31
+Transfer/sec:    273.87KB
+```
+
+# API 2 (ruby)
+
+```
+$ wrk -t5 -c10000 -d30s http://127.0.0.1:9080/v1/users
+Running 30s test @ http://127.0.0.1:9080/v1/users
+  5 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.09s   212.23ms   1.32s    87.94%
+    Req/Sec    56.67     71.95   221.00     78.80%
+  14082 requests in 30.07s, 2.16MB read
+  Socket errors: connect 9752, read 14518, write 0, timeout 138527
+Requests/sec:    468.36
+Transfer/sec:     73.64KB
 ```
