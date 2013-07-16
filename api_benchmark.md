@@ -1,5 +1,19 @@
 # ab benchmark
 
+## Summary
+
+ * Ruby
+   * always between 40-50MB memory footprint
+   * about 90-100% cpu 
+   * 2 threads
+   * 450 - 510 requests/seconds (even under heavy load)
+ * Node
+   * breaks under heavy load
+   * probably memory leaks
+   * about 90-100% cpu 
+   * 3 threads
+   * memory footprint, if no errors: 40-50MB
+
 ## ab -c 3 -n 5000
 
 ### ruby 90-100%, 2 threads, 40-44MB
