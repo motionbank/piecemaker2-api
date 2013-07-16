@@ -212,7 +212,7 @@ Total of 16362 requests completed
 # wrk
 https://github.com/wg/wrk
 
-### API 2 (node-orm)
+### API 3 (node-orm)
 ```
 $ wrk -t5 -c10000 -d30s http://127.0.0.1:9050/users
 Running 30s test @ http://127.0.0.1:9050/users
