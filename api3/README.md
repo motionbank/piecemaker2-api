@@ -62,7 +62,7 @@ When running in :development mode, open http://petstore.swagger.wordnik.com
 in your browser and use the service with this URL:
 ```http://localhost:9292/api/v1/swagger_doc```. Replace the port 9292 accordingly.
 
-#### Monitor the API
+### Monitor the API
 When running in :development mode, open http://127.0.0.1:9292/newrelic
 in your browser. For stats in production mode, sign up at 
 https://newrelic.com/ and paste your license key in ```config/config.yml```.
