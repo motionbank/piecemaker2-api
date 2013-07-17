@@ -10,7 +10,7 @@ describe Piecemaker::API do
   it "/api/v1/users returns all users" do
     get "/api/v1/users"
     last_response.status.should == 200
-    last_response.body.should == { :id => 1, :name => "peter" }.to_json
+    last_response.body.should == { :a => "b" }.to_json
   end
 
 end
