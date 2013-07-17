@@ -5,9 +5,7 @@ Sequel.migration do
 
       String :title, :size => 255
       String :text, :text => true
-      
-      
-      
+
     end
   end
 

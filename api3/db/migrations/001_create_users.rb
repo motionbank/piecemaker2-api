@@ -10,7 +10,6 @@ Sequel.migration do
       FalseClass :is_admin, :default => false
       FalseClass :is_disabled, :default => false
       
-      
       unique [:email]
 
     end
