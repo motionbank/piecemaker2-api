@@ -9,8 +9,6 @@ Sequel.migration do
       BigDecimal :utc_timestamp, :size => [20, 6], :null => false
       BigDecimal :duration, :size => [11, 6], :null => true
       
-      
-      
     end
   end
 
