@@ -15,19 +15,11 @@ RSpec.configure do |config|
   config.expect_with :rspec
 
   config.before(:all) do 
-    # empty database
-    DB.tables.each do |table|
-      DB[table].truncate
-    end
-    
+    system "rake db:reset[#{ENV["RACK_ENV"]}]"
   end
 
   config.after(:all) do 
-    # empty database
-    DB.tables.each do |table|
-      DB[table].truncate
-    end
-    
+    system "rake db:reset[#{ENV["RACK_ENV"]}]"    
   end
 
 end
