@@ -32,7 +32,7 @@ $ rake start:prod
 
 run tests 
    make sure that the database in config/config.yml exists!
-   create database with [createdb](http://www.postgresql.org/docs/9.2/static/app-createdb.html)
+   create database with $ createdb (http://www.postgresql.org/docs/9.2/static/app-createdb.html)
 $ rake spec
 
 reset gemset
