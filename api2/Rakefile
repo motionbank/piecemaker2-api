@@ -11,3 +11,7 @@ end
 task :default do
   exec "rake -T"
 end
+
+task :start_dev do
+  system "rackup"
+end
