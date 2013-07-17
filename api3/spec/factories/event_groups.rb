@@ -1,11 +1,11 @@
-EventGroup.factory :groupa do
-  id 21
+EventGroup.unrestrict_primary_key
+
+EventGroup.factory :alpha do
   title "Group A"
-  text "Event Group A"
+  text "Event Group Alpha"
 end
 
-EventGroup.factory :groupb do
-  id 22
+EventGroup.factory :beta do
   title "Group B"
-  text "Event Group B"
+  text "Event Group Beta"
 end
