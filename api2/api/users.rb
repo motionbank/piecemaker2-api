@@ -8,7 +8,6 @@ module Users
         # User.all
         # User.create(name: "Harald")
         User.count
-        
       end
 
       get "/:id" do
@@ -18,7 +17,7 @@ module Users
       post "/create" do
         {"a" => 4}
       end
-      
+
     end
 
   end
