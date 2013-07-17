@@ -32,6 +32,12 @@ $ rake start:prod
 
 run tests
 $ rake spec
+
+reset gemset
+$ rbenv gemset delete 2.0.0-p247 piecemaker-api
+$ rm Gemfile.lock
+$ gem install bundler
+$ bundle install
 ```
 
 
