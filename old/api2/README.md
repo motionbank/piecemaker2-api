@@ -1,5 +1,7 @@
 # Piecemaker API
 
+__with Grape and Mongoid DB__
+
 ## Installation
 @tdb
 
