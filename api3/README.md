@@ -30,7 +30,7 @@ $ rake start:dev
 start production
 $ rake start:prod
 
-run tests
+run tests (make sure that the database in config/config.yml exists!)
 $ rake spec
 
 reset gemset
