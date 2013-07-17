@@ -1,7 +1,7 @@
 Sequel.migration do
   up do
     create_table(:users) do
-      Integer :id
+      primary_key :id
 
       String :name, :size => 45, :null => false
       String :email, :size => 45, :unique => true
@@ -10,7 +10,7 @@ Sequel.migration do
       FalseClass :is_admin, :default => false
       FalseClass :is_disabled, :default => false
       
-      primary_key [:id]
+      
       unique [:email]
 
     end

@@ -44,6 +44,21 @@ task :environment, [:env] do |cmd, args|
 end
 
 namespace :db do
+  desc "Create admin user"
+  task :create_admin, :env do |cmd, args|
+    env = args[:env] || "development"
+    Rake::Task['environment'].invoke(env)
+
+    require "Digest"
+    DB[:users].insert(
+      :name => "Super Admin", 
+      :email => "super@example.com",
+      :password => Digest::SHA1.hexdigest("Super Admin"),
+      :api_access_key => "xadmin",
+      :is_admin => true
+      )
+  end
+
   desc "Run database migrations"
   task :migrate, :env do |cmd, args|
     env = args[:env] || "development"
@@ -68,8 +83,9 @@ namespace :db do
     env = args[:env] || "development"
     Rake::Task['environment'].invoke(env)
     DB.tables.each do |table|
-      # DB.run("DROP TABLE #{table}")
-      DB.drop_table(table)
+      # @todo: CASCADE equivalent command or DB.drop_table?
+      # DB.drop_table(table)
+      DB.run("DROP TABLE #{table} CASCADE")
     end
   end
  
