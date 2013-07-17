@@ -9,8 +9,7 @@ gem "rack-cors", "~> 0.2.8"
 gem "grape-swagger", "~> 0.6.0"
 gem "thin", "~> 1.5.1"
 
-gem "activerecord", "~> 4.0.0", :require => "active_record"
-gem "pg", "~> 0.15.1"
+gem "sequel", "~> 4.0.0"
 
 group :development do
   gem "rake", "~> 10.1.0"
