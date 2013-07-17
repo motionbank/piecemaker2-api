@@ -1,0 +1,6 @@
+development:
+  sessions:
+    default:
+      database: piecemaker
+      hosts:
+        - localhost:27017
