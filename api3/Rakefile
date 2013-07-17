@@ -38,19 +38,6 @@ namespace :start do
 end
 
 
-# namespace :db do
-#   desc "Apply migrations"
-#   task :migrate do
-#     Sequel.extension :migration
-#     Sequel.extension :schema_dumper
-#     # system "dropdb piecemaker2_test"
-#     # system "createdb piecemaker2_test"
-#     # system "psql -h localhost -d piecemaker2_test -U mattes -f db/postgresql_piecemaker2_test.# sql"
-#     # system "sequel -m db/migrations postgres://host/database"
-#   end
-# end
-
-
 task :environment, [:env] do |cmd, args|
   ENV["RACK_ENV"] = args[:env] || "development"
   require "./config/environment"
