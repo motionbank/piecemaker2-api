@@ -1,0 +1,5 @@
+.DS_Store
+.irbrc
+.bundle
+log
+Gemfile.lock
