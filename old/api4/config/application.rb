@@ -10,7 +10,6 @@ Dir[File.expand_path('../../api/*.rb', __FILE__)].each do |f|
   require f
 end
 
-Sequel::Model.plugin :json_serializer
 Dir[File.expand_path('../../models/*.rb', __FILE__)].each do |f|
   require f
 end

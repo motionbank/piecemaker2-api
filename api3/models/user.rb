@@ -1,5 +1,6 @@
-class User < Sequel::Model
+class User < Sequel::Model(:users)
   
-  
+  set_primary_key :id
+
   
 end

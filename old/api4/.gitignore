@@ -3,4 +3,3 @@
 .bundle
 log
 Gemfile.lock
-*.pid

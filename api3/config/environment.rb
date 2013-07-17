@@ -27,7 +27,7 @@ case ENV['RACK_ENV'].to_sym
     # puts "Using :test"
     DB = Sequel.connect(:adapter  => 'postgres', 
                         :host     => 'localhost', 
-                        :database => 'piecemaker2_test', 
+                        :database => 'piecemaker2_dev', 
                         :user     => 'mattes', 
                         :password => '',
                         :max_connections => 4)
