@@ -1,6 +1,6 @@
 # Piecemaker API
 
-__... with [Grape](https://github.com/intridea/grape) on [Rack](http://rack.github.io/) and [Sequel](https://github.com/jeremyevans/sequel)__
+__... with [Grape](https://github.com/intridea/grape) on [Rack](http://rack.github.io/) and [Sequel](https://github.com/jeremyevans/sequel).__
 
 
 ## Installation
@@ -13,7 +13,11 @@ $ git clone https://github.com/motionbank/piecemaker2.git
 $ cd piecemaker2/api3
 $ gem install bundler
 $ bundle install
+
+$ cp config/config.sample.yml config/config.yml
 ```
+
+Edit ```config/config.yml```.
 
 ## Usage
 ```
@@ -34,10 +38,10 @@ $ rake spec
 ### Explore the API
 When running in :development mode, open http://petstore.swagger.wordnik.com
 in your browser and use the service with this URL:
-```http://localhost:9292/api/swagger_doc```. Replace the port 9292 accordingly.
+```http://localhost:9292/api/v1/swagger_doc```. Replace the port 9292 accordingly.
 
 #### Monitor the API
-When running in :development mode, open http://localhost:9292/newrelic
+When running in :development mode, open http://127.0.0.1:9292/newrelic
 in your browser. For stats in production mode, sign up at 
 https://newrelic.com/ and paste your license key in ```config/config.yml```.
 
@@ -47,7 +51,7 @@ https://newrelic.com/ and paste your license key in ```config/config.yml```.
 Some further reading ...
 
  * https://github.com/intridea/grape
- * https://github.com/dblock/grape-on-rack
+ * https://github.com/dblock/grape-on-rack (was used as a template)
  * https://github.com/jeremyevans/sequel
  * http://sequel.rubyforge.org/documentation.html
  * https://github.com/mjijackson/sequel-factory

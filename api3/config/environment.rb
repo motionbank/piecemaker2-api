@@ -1,39 +1,20 @@
 require "sequel"
+require 'yaml'
+
+config = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
+
 
 ENV['RACK_ENV'] ||= :production
-ENV['NEW_RELIC_LICENSE_KEY'] = '6da10269e4f898f8f9b13b0242bb478b8437291b'
+ENV['NEW_RELIC_LICENSE_KEY'] = config["newrelic_license_key"]
+ENV["NEW_RELIC_APP_NAME"] = "Piecemaker API"
 
-
-case ENV['RACK_ENV'].to_sym
-  when :production
-    # puts "Using :production"
-    DB = Sequel.connect(:adapter  => 'postgres', 
-                        :host     => 'localhost', 
-                        :database => 'piecemaker2_prod', 
-                        :user     => 'mattes', 
-                        :password => '',
-                        :max_connections => 4)
-
-  when :development
-    # puts "Using :development"
-    DB = Sequel.connect(:adapter  => 'postgres', 
-                        :host     => 'localhost', 
-                        :database => 'piecemaker2_dev', 
-                        :user     => 'mattes', 
-                        :password => '',
-                        :max_connections => 4)
-
-  when :test
-    # puts "Using :test"
-    DB = Sequel.connect(:adapter  => 'postgres', 
-                        :host     => 'localhost', 
-                        :database => 'piecemaker2_dev', 
-                        :user     => 'mattes', 
-                        :password => '',
-                        :max_connections => 4)
-
-end
-
+DB = Sequel.connect(
+  :adapter  => config[ENV['RACK_ENV'].to_s]["adapter"] || 'postgres', 
+  :host     => config[ENV['RACK_ENV'].to_s]["host"] || 'localhost', 
+  :database => config[ENV['RACK_ENV'].to_s]["database"] || '', 
+  :user     => config[ENV['RACK_ENV'].to_s]["username"] || '', 
+  :password => config[ENV['RACK_ENV'].to_s]["password"] || '',
+  :max_connections => config[ENV['RACK_ENV'].to_s]["max_connections"] || 4)
 
 
 require File.expand_path('../application', __FILE__)

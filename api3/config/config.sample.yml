@@ -1,0 +1,26 @@
+# go to https://newrelic.com, sign up and get your license key
+newrelic_license_key: XXXX
+
+production:
+  adapter   : postgres
+  host      : localhost
+  database  : piecemaker2_prod
+  username  : XXX
+  password  : XXX
+  max_connections: 4
+
+development:
+  adapter   : postgres
+  host      : localhost
+  database  : piecemaker2_dev
+  username  : XXX
+  password  : XXX
+  max_connections: 4
+
+test:
+  adapter   : postgres
+  host      : localhost
+  database  : piecemaker2_test
+  username  : XXX
+  password  : XXX
+  max_connections: 4
