@@ -9,7 +9,11 @@ module Piecemaker
     
     mount ::Piecemaker::Users
     
-    add_swagger_documentation api_version: 'v1'
+
+    if ENV['RACK_ENV'].to_sym == :development
+      add_swagger_documentation api_version: 'v1'
+    end
+    
   end
 end
 
