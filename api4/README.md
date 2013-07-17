@@ -1,6 +1,6 @@
 # Piecemaker API
 
-__with Grape on Rack and Sequel__
+__with Grape on Rack and ActiveRecord__
 
 ## Installation
 
