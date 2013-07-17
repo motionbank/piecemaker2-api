@@ -42,6 +42,15 @@ $ gem install bundler
 $ bundle install
 ```
 
+### Benchmarks
+
+Use tools like [wrk](https://github.com/wg/wrk) (```brew install wrk```) or
+[ab](http://httpd.apache.org/docs/2.2/programs/ab.html).
+
+```
+$ wrk -d30 -t5 -c1000 http://127.0.0.1:9292/api/v1/users
+$ ab -c5 -n1000 http://127.0.0.1:9292/api/v1/users
+```
 
 ### Explore the API
 When running in :development mode, open http://petstore.swagger.wordnik.com
