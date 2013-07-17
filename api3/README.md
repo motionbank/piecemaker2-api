@@ -15,6 +15,11 @@ $ gem install bundler
 $ bundle install
 
 $ cp config/config.sample.yml config/config.yml
+
+optional (for postgresql):
+$ createdb piecemaker2_prod && rake db:migrate[production]
+$ createdb piecemaker2_dev && rake db:migrate[development]
+$ createdb piecemaker2_test
 ```
 
 Edit ```config/config.yml```.
@@ -49,7 +54,7 @@ Use tools like [wrk](https://github.com/wg/wrk) (```brew install wrk```) or
 
 ```
 $ wrk -d30 -t5 -c1000 http://127.0.0.1:9292/api/v1/users
-$ ab -c5 -n1000 http://127.0.0.1:9292/api/v1/users
+$ ab -c5 -n10000 http://127.0.0.1:9292/api/v1/users
 ```
 
 ### Explore the API
