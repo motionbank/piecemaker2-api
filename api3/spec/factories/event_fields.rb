@@ -1,24 +1,21 @@
-EventField.factory :field31a do
-  event_id 31
+EventField.unrestrict_primary_key
+
+EventField.factory :flag1 do
   id "flag1"
-  value "i am a field for event with id 31"
+  value "getting back to the dolphin thing"
 end
 
-EventField.factory :field31b do
-  event_id 31
+EventField.factory :flag2 do
   id "flag2"
-  value "i belong to event id 31"
+  value "no idea why"
 end
 
-EventField.factory :field31c do
-  event_id 31
+EventField.factory :flag3 do
   id "flag3"
-  value "dolphin power for event id 31 wtf?"
+  value "so this is it"
 end
 
-
-EventField.factory :field36 do
-  event_id 36
-  id "flag1"
-  value "same id for event field id: flag1"
+EventField.factory :flag4 do
+  id "flag4"
+  value "okay, enough"
 end

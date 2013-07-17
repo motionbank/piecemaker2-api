@@ -6,7 +6,7 @@ module Piecemaker
       
       desc "Returns all users."
       get "/" do
-        User.first || {}
+        User.all || []
       end
 
     end
