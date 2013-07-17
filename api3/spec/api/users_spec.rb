@@ -10,10 +10,6 @@ describe Piecemaker::API do
   before(:all) do
     @peter = User.make :peter
     @pan = User.make :pan
-
-    @foo = EventGroup.make :alpha, :id => 2
-    puts @foo.to_json
-
   end
 
   it "/api/v1/users returns all users" do
