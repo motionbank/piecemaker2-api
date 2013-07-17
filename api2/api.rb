@@ -1,7 +1,12 @@
 require 'grape'
 require 'mongoid'
 
-require './models/user'
+$LOAD_PATH << '.'
+
+# load models
+%w{user}.each do |m| 
+  require "models/#{m}"
+end
 
 module Piecemaker
   class APIv1 < Grape::API
@@ -10,22 +15,10 @@ module Piecemaker
     format :json
     default_format :json
 
-    resource 'users' do
-      desc "Return all users"
-      get "/" do
-        # User.all
-        # User.create(name: "Harald")
-        User.count
-        
-      end
-
-      get "/:id" do
-        {"a" => 3}
-      end
-
-      post "/create" do
-        {"a" => 4}
-      end
+    # load apis
+    %w{users}.each do |a|
+      require "api/#{a}"
+      mount Kernel.const_get("#{a.capitalize}::API")
     end
     
   end
