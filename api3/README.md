@@ -76,5 +76,6 @@ Some further reading ...
  * https://github.com/dblock/grape-on-rack (was used as a template)
  * https://github.com/jeremyevans/sequel
  * http://sequel.rubyforge.org/documentation.html
+ * http://sequel.rubyforge.org/rdoc/files/doc/schema_modification_rdoc.html
  * https://github.com/mjijackson/sequel-factory
  * http://rack.github.io/
