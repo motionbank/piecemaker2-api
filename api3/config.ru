@@ -1,6 +1,6 @@
 require File.expand_path('../config/environment', __FILE__)
 
-if ENV['RACK_ENV'] == 'development'
+if ENV['RACK_ENV'].to_sym == :development
   puts "Loading NewRelic in developer mode ..."
   require 'new_relic/rack/developer_mode'
   use NewRelic::Rack::DeveloperMode

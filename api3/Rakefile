@@ -12,6 +12,9 @@ end
 require 'rake'
 require 'rspec/core'
 require 'rspec/core/rake_task'
+require "sequel"
+
+
 
 RSpec::Core::RakeTask.new(:spec) do |spec|
   # do not run integration tests, doesn't work on TravisCI
@@ -35,12 +38,54 @@ namespace :start do
 end
 
 
+# namespace :db do
+#   desc "Apply migrations"
+#   task :migrate do
+#     Sequel.extension :migration
+#     Sequel.extension :schema_dumper
+#     # system "dropdb piecemaker2_test"
+#     # system "createdb piecemaker2_test"
+#     # system "psql -h localhost -d piecemaker2_test -U mattes -f db/postgresql_piecemaker2_test.# sql"
+#     # system "sequel -m db/migrations postgres://host/database"
+#   end
+# end
+
+
+task :environment, [:env] do |cmd, args|
+  ENV["RACK_ENV"] = args[:env] || "development"
+  require "./config/environment"
+end
+
 namespace :db do
-  desc "db create"
-  task :up do
-    system "dropdb piecemaker2_test"
-    system "createdb piecemaker2_test"
-    system "psql -h localhost -d piecemaker2_test -U mattes -f db/postgresql_piecemaker2_test.sql"
+  desc "Run database migrations"
+  task :migrate, :env do |cmd, args|
+    env = args[:env] || "development"
+    Rake::Task['environment'].invoke(env)
+ 
+    require 'sequel/extensions/migration'
+    Sequel::Migrator.apply(DB, "db/migrations")
   end
+ 
+  desc "Rollback the database"
+  task :rollback, :env do |cmd, args|
+    env = args[:env] || "development"
+    Rake::Task['environment'].invoke(env)
+ 
+    require 'sequel/extensions/migration'
+    version = (row = DB[:schema_info].first) ? row[:version] : nil
+    Sequel::Migrator.apply(DB, "db/migrations", version - 1)
+  end
+ 
+  desc "Nuke the database (drop all tables)"
+  task :nuke, :env do |cmd, args|
+    env = args[:env] || "development"
+    Rake::Task['environment'].invoke(env)
+    DB.tables.each do |table|
+      DB.run("DROP TABLE #{table}")
+    end
+  end
+ 
+  desc "Reset the database"
+  task :reset, [:env] => [:nuke, :migrate]
 end
 
