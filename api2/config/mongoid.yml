@@ -4,3 +4,9 @@ development:
       database: piecemaker
       hosts:
         - localhost:27017
+test:
+  sessions:
+    default:
+      database: piecemaker
+      hosts:
+        - localhost:27017
