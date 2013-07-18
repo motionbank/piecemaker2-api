@@ -54,6 +54,7 @@ module Piecemaker
           :password => Digest::SHA1.hexdigest(new_password))
 
         user.password = new_password
+        return user
       end
 
       # --------------------------------------------------
@@ -69,7 +70,7 @@ module Piecemaker
       end
       get "/:id" do
         _user = authorize!
-        User.find(:id => params[:id])
+        User.first(:id => params[:id])
       end
 
       # --------------------------------------------------
@@ -120,6 +121,7 @@ module Piecemaker
       # --------------------------------------------------
       desc "Returns all users."
       get "/" do
+        authorize!
         User.all || []
       end
 

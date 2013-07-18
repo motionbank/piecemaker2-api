@@ -21,8 +21,10 @@ module Piecemaker
     
     helpers Piecemaker::Helper::Auth
     
-    
     mount ::Piecemaker::Users
+    mount ::Piecemaker::EventGroups
+    mount ::Piecemaker::Events
+    mount ::Piecemaker::System
     
 
     if ENV['RACK_ENV'].to_sym == :development

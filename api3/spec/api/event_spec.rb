@@ -7,7 +7,7 @@ describe "Piecemaker::API Event" do
     Piecemaker::API
   end
 
-  before(:all) do
+  before(:each) do
     truncate_db
 
   end
