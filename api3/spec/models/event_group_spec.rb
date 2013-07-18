@@ -22,11 +22,11 @@ describe EventGroup do
   end
 
   it "has many events" do
-    @event_group.events.to_json.should == [@event].to_json
+    @event_group.events.should == [@event]
   end
 
   it "has many users" do
-    @event_group.users.to_json.should == [@pan].to_json
+    @event_group.users.should == [@pan]
   end
 
 

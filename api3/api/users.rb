@@ -20,7 +20,7 @@ module Piecemaker
         if user
           api_access_key = Piecemaker::Helper::generate_api_access_key
           user.update(:api_access_key => api_access_key)
-          return api_access_key
+          return {:api_access_key => api_access_key}
         else
           error!('Unauthorized', 401)
         end
