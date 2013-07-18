@@ -1,4 +1,5 @@
 # http://sequel.rubyforge.org/rdoc/classes/Sequel/Model/Associations/ClassMethods.html
+# http://sequel.rubyforge.org/rdoc/files/doc/association_basics_rdoc.html
 
 class User < Sequel::Model(:users)
   set_primary_key :id
