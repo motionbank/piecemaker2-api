@@ -19,11 +19,11 @@ describe User do
   end
 
   it "has many events" do
-    @pan.events.to_json.should == [@event].to_json
+    @pan.events.should == [@event]
   end
 
   it "has many event_groups" do
-    @pan.event_groups.to_json.should == [@event_group].to_json
+    @pan.event_groups.should == [@event_group]
   end
 
 end

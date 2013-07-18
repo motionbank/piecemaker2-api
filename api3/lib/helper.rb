@@ -9,6 +9,7 @@ module Piecemaker
     end
 
     def self.api_access_key_makes_sense?(api_access_key)
+      puts api_access_key
       api_access_key.length === API_ACCESS_KEY_LENGTH ? true : false
     end
 

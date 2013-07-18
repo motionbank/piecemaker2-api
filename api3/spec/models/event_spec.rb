@@ -18,15 +18,15 @@ describe Event do
   end
 
   it "has one user" do
-    @event.user.to_json.should == @pan.to_json
+    @event.user.should == @pan
   end
 
   it "has many event fields" do
-    @event.event_fields.to_json.should == [@event_field].to_json
+    @event.event_fields.should == [@event_field]
   end
 
   it "has one event group" do
-    @event.event_group.to_json.should == @event_group.to_json
+    @event.event_group.should == @event_group
   end
 
 end

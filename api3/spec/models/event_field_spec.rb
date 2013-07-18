@@ -18,7 +18,7 @@ describe EventField do
   end
 
   it "has one event" do
-    @event_field.event.to_json.should == @event.to_json
+    @event_field.event.should == @event
   end
 
 
