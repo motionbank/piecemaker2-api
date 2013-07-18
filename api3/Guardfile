@@ -13,6 +13,6 @@ end
 
 group :specs do
   guard 'rake', :task => 'spec:now' do
-    watch(%r{^(config|app|api|models|spec/api|spec/models)/.*})
+    watch(%r{^(config|app|api|models|lib|spec/api|spec/models)/.*})
   end
 end

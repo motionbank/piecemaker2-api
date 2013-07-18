@@ -5,7 +5,7 @@ User.unrestrict_primary_key
 User.factory :peter do
   name "Peter"
   email "peter@example.com"
-  password Digest::SHA1.hexdigest("Peter")
+  password Digest::SHA1.hexdigest("Peter") # important, that password == name
   api_access_key "xpeter"
   is_admin false
 end
@@ -13,7 +13,7 @@ end
 User.factory :pan do
   name "Pan"
   email "pan@example.com"
-  password Digest::SHA1.hexdigest("Pan")
+  password Digest::SHA1.hexdigest("Pan") # important, that password == name
   api_access_key "xpan"
   is_admin false
 end

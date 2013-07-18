@@ -1,6 +1,8 @@
 require "sequel"
 require 'yaml'
 
+require File.expand_path('../../lib/helper', __FILE__)
+
 config = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
 
 ENV['RACK_ENV'] ||= "production"

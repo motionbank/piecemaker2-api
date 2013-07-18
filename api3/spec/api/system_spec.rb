@@ -7,6 +7,10 @@ describe "Piecemaker::API System" do
     Piecemaker::API
   end
 
+  before(:all) do
+    truncate_db
+
+  end
 
   it "GET /api/v1/utc_timestamp returns server timestamp with milliseconds" do
     raise

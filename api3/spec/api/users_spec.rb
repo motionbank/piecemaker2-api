@@ -8,6 +8,8 @@ describe "Piecemaker::API User" do
   end
 
   before(:all) do
+    truncate_db
+    
     @peter = User.make :peter
     @pan = User.make :pan
   end
@@ -17,6 +19,17 @@ describe "Piecemaker::API User" do
     last_response.status.should == 200
     last_response.body.should == [@peter, @pan].to_json
   end
+
+  it "POST /api/v1/user/login returns new api access token on valid credentials", :focus do
+    post "/api/v1/user/login", :email => @peter.email, :password => @peter.name
+    last_response.status.should == 201
+    Piecemaker::Helper::api_access_key_makes_sense?(last_response.body).should eq(true)
+  end 
+
+  it "POST /api/v1/user/logout invalidates the current api access token" do
+    raise
+  end
+
 
   it "POST /api/v1/user creates new user" do
     raise
