@@ -22,12 +22,12 @@ end
 
 namespace :spec do
 
-  desc "run tests on change"
+  desc "watch files and run tests automatically"
   task :onchange do 
     system "guard -g specs"
   end
 
-  desc "run tests"
+  desc "run tests now"
   RSpec::Core::RakeTask.new(:now) do |spec|
     # do not run integration tests, doesn't work on TravisCI
     spec.pattern = FileList['spec/api/*_spec.rb', 'spec/models/*_spec.rb']
@@ -70,7 +70,7 @@ namespace :db do
       :name => "Super Admin", 
       :email => "super@example.com",
       :password => Digest::SHA1.hexdigest("Super Admin"),
-      :api_access_key => "xadmin",
+      :api_access_key => Piecemaker::Helper::API_Access_Key::generate,
       :is_admin => true
       )
   end
@@ -106,7 +106,7 @@ namespace :db do
     end
   end
  
-  desc "Reset the database"
+  desc "Reset the database (nuke & migrate)"
   task :reset, :env do |cmd, args|
     env = expand_env_string(args[:env])
     Rake::Task['db:nuke'].invoke(env)
