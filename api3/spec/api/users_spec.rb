@@ -23,9 +23,8 @@ describe "Piecemaker::API User" do
   it "POST /api/v1/user/login returns new api access token on valid credentials", :focus do
     post "/api/v1/user/login", :email => @peter.email, :password => @peter.name
     last_response.status.should == 201
-
     json = JSON.parse(last_response.body)
-    Piecemaker::Helper::api_access_key_makes_sense?(
+    Piecemaker::Helper::API_Access_Key::makes_sense?(
       json["api_access_key"]).should eq(true)
 
     post "/api/v1/user/login", :email => @peter.email, :password => "wrong"
@@ -40,14 +39,39 @@ describe "Piecemaker::API User" do
     post "/api/v1/user/login", :email => "", :password => @peter.name
     last_response.status.should == 401
 
+    post "/api/v1/user/login", :email => "", :password => "random_wrong"
+    last_response.status.should == 401
+
+    post "/api/v1/user/login", :email => ""
+    last_response.status.should == 400
+
+    post "/api/v1/user/login", :password => ""
+    last_response.status.should == 400
+
+    post "/api/v1/user/login"
+    last_response.status.should == 400
+
   end 
 
-  it "POST /api/v1/user/logout invalidates the current api access token" do
-    raise
+  it "POST /api/v1/user/logout invalidates the current api access token", :focus do
+    request_with_api_access_key_from_user @peter
+    post "/api/v1/user/logout"
+    last_response.status.should == 201
+    json = JSON.parse(last_response.body)
+    json.should == {"api_access_key" => nil}
+
+    header "X-Access-Key", "wrong"
+    post "/api/v1/user/logout"
+    last_response.status.should == 401
+
+    header "X-Access-Key", ""
+    post "/api/v1/user/logout"
+    last_response.status.should == 401
   end
 
 
   it "POST /api/v1/user creates new user" do
+    request_with_api_access_key_from_user @peter
     raise
   end
 

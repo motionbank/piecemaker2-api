@@ -7,6 +7,8 @@ module Piecemaker
 
     version 'v1', using: :path, vendor: 'piecemaker'
     
+    helpers Piecemaker::Helper::Auth
+    
     mount ::Piecemaker::Users
     
 
