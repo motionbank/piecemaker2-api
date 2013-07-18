@@ -40,16 +40,17 @@ task :default do
   exec "rake -T"
 end
 
-namespace :start do
-  desc "Start :development environment"
-  task :dev do
-    system "bundle exec guard -g default"
+desc "Start API with environment (prod|dev)"
+task :start, :env do |cmd, args|
+  env = expand_env_string(args[:env]) || "production"
+  if env == "production"
+    exec "RACK_ENV=production rackup"
+  elsif env == "development"
+    exec "bundle exec guard -g development"
+  else
+    puts "Please specify environment."
   end
-
-  desc "Start :production environment"
-  task :prod do
-    system "RACK_ENV=production rackup"
-  end
+    
 end
 
 
