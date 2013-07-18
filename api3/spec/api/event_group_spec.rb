@@ -31,12 +31,23 @@ describe "Piecemaker::API EventGroup" do
     json_parse(last_response.body).should =~ [@alpha.values, @beta.values]
   end
 
-  it "POST /api/v1/group create new event_group (and user_has_event_group record)" do
+  it "POST /api/v1/group create new event_group \ 
+    (together with user_has_event_groups record)" do
     header "X-Access-Key", @pan.api_access_key
     post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
     last_response.status.should == 201
+    
     returned_omega = json_parse(last_response.body)
-    returned_omega.should == EventGroup.first(:id => returned_omega[:id]).values
+    omega_from_database = EventGroup.first(:id => returned_omega[:id])
+    returned_omega.should == omega_from_database.values
+
+    # omega_via_association = @pan.event_groups.first(:id => omega_from_database.values.id)
+    # omega_via_association.values.should == omega_from_database.values
+
+    # puts "---------"
+    # puts @pan.event_groups.to_json
+    # puts @pan.event_groups_dataset.first(:id => omega_from_database.id).to_json
+    # puts "---------"
   end
 
   it "GET /api/v1/group/:id returns event_group with id" do
