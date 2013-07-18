@@ -15,11 +15,22 @@ require 'rspec/core/rake_task'
 require "sequel"
 
 
+namespace :spec do
 
-RSpec::Core::RakeTask.new(:spec) do |spec|
-  # do not run integration tests, doesn't work on TravisCI
-  spec.pattern = FileList['spec/api/*_spec.rb']
+  desc "run tests on change"
+  task :onchange do 
+    system "guard -g specs"
+  end
+
+  desc "run tests"
+  RSpec::Core::RakeTask.new(:now) do |spec|
+    # do not run integration tests, doesn't work on TravisCI
+    # spec.pattern = FileList['spec/api/*_spec.rb', 'spec/models/*_spec.rb']
+    spec.pattern = FileList['spec/models/*_spec.rb']
+  end  
 end
+
+
 
 task :default do
   exec "rake -T"
@@ -28,7 +39,7 @@ end
 namespace :start do
   desc "Start :development environment"
   task :dev do
-    system "bundle exec guard"
+    system "bundle exec guard -g default"
   end
 
   desc "Start :production environment"
@@ -85,6 +96,7 @@ namespace :db do
     DB.tables.each do |table|
       # @todo: CASCADE equivalent command for DB.drop_table?
       # DB.drop_table(table)
+      # DB[table.to_sym].drop(:cascade => true)
       DB.run("DROP TABLE #{table} CASCADE")
     end
   end

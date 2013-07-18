@@ -45,6 +45,14 @@ $ rbenv gemset delete 2.0.0-p247 piecemaker-api
 $ rm Gemfile.lock
 $ gem install bundler
 $ bundle install
+
+using IRB
+$ irb
+$irb require "sequel"
+$irb ENV["RACK_ENV"] = "development"
+$irb require "./config/environment"
+$irb DB
+$irb User
 ```
 
 ### Benchmarks

@@ -4,7 +4,7 @@ require 'yaml'
 config = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
 
 
-ENV['RACK_ENV'] ||= :production
+ENV['RACK_ENV'] ||= "production"
 ENV['NEW_RELIC_LICENSE_KEY'] = config["newrelic_license_key"]
 ENV["NEW_RELIC_APP_NAME"] = "Piecemaker API"
 
