@@ -4,7 +4,7 @@ module Piecemaker
 
     resource 'groups' do
 
-      desc "get all event_groups for current user (with read rights)"
+      desc "all event_groups for currently logged in user"
       get "/" do
         _user = authorize!
         # @todo acl!
@@ -15,7 +15,7 @@ module Piecemaker
 
     resource 'group' do
 
-      desc "create new event_group and record for user_has_event_groups"
+      desc "create new event_group (together with user_has_event_groups record)"
       params do
         requires :title, type: String, desc: "name of the group"
         requires :text, type: String, desc: "some additional description" # @todo type: Text not String
@@ -24,9 +24,15 @@ module Piecemaker
         _user = authorize!
         # @todo acl!
 
-        EventGroup.create(
+        event_group = EventGroup.create(
           :title => params[:title],
           :text  => params[:text])
+
+        UserHasEventGroup.create(
+          :user_id => _user.id,
+          :event_group_id => event_group.id)
+
+        return event_group
       end
 
     end
