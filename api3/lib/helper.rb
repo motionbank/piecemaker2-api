@@ -2,6 +2,7 @@ module Piecemaker
   module Helper
 
 
+
     module Auth
       # consider context of execution ...
       # included with 'helpers Piecemaker::Helper::Auth' in api
@@ -44,6 +45,13 @@ module Piecemaker
       def self.makes_sense?(api_access_key)
         api_access_key.length === API_ACCESS_KEY_LENGTH &&
           api_access_key.start_with?("0310X") ? true : false
+      end
+    end
+
+    module Password
+      def self.generate(length)
+        chars = [('a'..'z'),('A'..'Z'),(0..9)].map{|i| i.to_a}.flatten
+        (0...length).map{ chars[rand(chars.length)] }.join
       end
     end
 

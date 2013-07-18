@@ -3,6 +3,21 @@ require 'yaml'
 
 require File.expand_path('../../lib/helper', __FILE__)
 
+# @todo move this somewhere else!!
+module Sequel
+  class Model
+    def update_with_params!(params, *attributes)
+      attributes.each do |key, value|
+        if params.include?(key)
+          self[key] = params[key]
+        end
+      end
+    end
+  end
+end
+
+
+
 config = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
 
 ENV['RACK_ENV'] ||= "production"

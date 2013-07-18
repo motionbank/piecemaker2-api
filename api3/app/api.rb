@@ -12,7 +12,6 @@ module Piecemaker
       }.to_json, 500)
     end
 
-
     prefix 'api'
 
     format :json
@@ -21,6 +20,7 @@ module Piecemaker
     version 'v1', using: :path, vendor: 'piecemaker'
     
     helpers Piecemaker::Helper::Auth
+    
     
     mount ::Piecemaker::Users
     
