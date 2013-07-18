@@ -10,3 +10,8 @@ class User < Sequel::Model(:users)
     :join_table => :user_has_event_groups
   
 end
+
+# user_id, can,  in
+# 1,       read, event_groups(id)
+# 1        read, event_groups
+# 1,       write, event_groups()

@@ -105,6 +105,14 @@ describe "Piecemaker::API User" do
         :email => "michael@example.com",
         :is_admin => false
       last_response.status.should == 201
+      returned_user = json_parse(last_response.body)
+      # ignore password field, because it is returned plain/text on creation
+      returned_user.delete(:password) 
+
+      user_from_database = User.first(:id => returned_user[:id]).values
+      user_from_database.delete(:password)
+
+      returned_user.should == user_from_database
 
       # non-admins cant create users
       header "X-Access-Key", @peter.api_access_key
@@ -172,6 +180,7 @@ describe "Piecemaker::API User" do
       header "X-Access-Key", @hans_admin.api_access_key
       delete "/api/v1/user/#{@pan.id}"
       last_response.status.should == 200
+      User.first(:id => @pan.id).should eq(nil)
 
       # non-admins cant delete users
       header "X-Access-Key", @peter.api_access_key
