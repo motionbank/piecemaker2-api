@@ -100,6 +100,19 @@ module Piecemaker
         return user
       end
 
+      # --------------------------------------------------
+      desc "deletes user with id"
+      params do
+        requires :id, type: Integer, desc: "a user id"
+      end
+      delete "/:id" do
+        _user = authorize!(:admin_only)
+        user = User.find(:id => params[:id])
+        error!('Not found', 404) unless user
+
+        user.delete
+      end
+
     end
 
     resource 'users' do
