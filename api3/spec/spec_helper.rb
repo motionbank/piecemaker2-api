@@ -10,6 +10,12 @@ Dir[File.expand_path('../../spec/factories/*.rb', __FILE__)].each do |f|
   require f
 end
 
+def truncate_db
+  DB.tables.each do |table|
+    DB[table].truncate(:cascade => true)
+  end
+end
+
 RSpec.configure do |config|
   config.mock_with :rspec
   config.expect_with :rspec
