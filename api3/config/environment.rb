@@ -3,7 +3,6 @@ require 'yaml'
 
 config = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
 
-
 ENV['RACK_ENV'] ||= "production"
 ENV['NEW_RELIC_LICENSE_KEY'] = config["newrelic_license_key"]
 ENV["NEW_RELIC_APP_NAME"] = "Piecemaker API"
@@ -16,7 +15,4 @@ DB = Sequel.connect(
   :password => config[ENV['RACK_ENV'].to_s]["password"] || '',
   :max_connections => config[ENV['RACK_ENV'].to_s]["max_connections"] || 4)
 
-
 require File.expand_path('../application', __FILE__)
-
-
