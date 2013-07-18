@@ -98,7 +98,7 @@ describe "Piecemaker::API User" do
         @pan.values, @hans_admin.values, @klaus_disabled.values]
     end
 
-    it "POST /api/v1/user creates new user", :focus do
+    it "POST /api/v1/user creates new user" do
       header "X-Access-Key", @hans_admin.api_access_key
       post "/api/v1/user", 
         :name => "Michael",
@@ -125,15 +125,47 @@ describe "Piecemaker::API User" do
     end
 
     it "GET /api/v1/user/me returns currently logged in user" do
-      raise
+      header "X-Access-Key", @peter.api_access_key
+      get "/api/v1/user/me"
+      last_response.status.should == 200
+      json_parse(last_response.body).should == @peter.values
     end
 
     it "GET /api/v1/user/:id returns user for id" do
-      raise
+      header "X-Access-Key", @peter.api_access_key
+      get "/api/v1/user/#{@pan.id}"
+      last_response.status.should == 200
+      json_parse(last_response.body).should == @pan.values
     end
 
-    it "PUT /api/v1/user/:id updates user with id" do
-      raise
+    it "PUT /api/v1/user/:id updates user with id", :focus do
+      header "X-Access-Key", @hans_admin.api_access_key
+      put "/api/v1/user/#{@pan.id}", 
+        :name => "Michael",
+        :email => "michael@example.com",
+        :is_admin => true,
+        :is_disabled => true
+      last_response.status.should == 200
+
+      # was put persistant?
+      returned_pan = json_parse(last_response.body)
+      returned_pan.should == User.first(:id => returned_pan[:id]).values
+
+      # create new password
+      header "X-Access-Key", @hans_admin.api_access_key
+      put "/api/v1/user/#{@peter.id}", 
+        :new_password => true
+      last_response.status.should == 200
+
+      # was put persistant?
+      returned_peter = json_parse(last_response.body)
+      returned_peter[:password].should_not == @peter.password
+
+      # non-admins cant update users
+      header "X-Access-Key", @peter.api_access_key
+      put "/api/v1/user/#{@pan.id}", 
+        :name => "Michael"
+      last_response.status.should == 403
     end
 
     it "DELETE /api/v1/user/:id deletes user with id" do
