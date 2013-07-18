@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe User do
+describe EventGroup do
 
   before(:all) do
     truncate_db
@@ -13,18 +13,22 @@ describe User do
       :event_group_id => @event_group.id,
       :created_by_user_id => @pan.id
     
+    @event_field = EventField.make :flag1,
+      :event_id => @event.id
+
     @user_has_event_group = UserHasEventGroup.make :default,
       :user_id => @pan.id,
       :event_group_id => @event_group.id
   end
 
   it "has many events" do
-    @pan.events.to_json.should == [@event].to_json
+    @event_group.events.to_json.should == [@event].to_json
   end
 
-  it "has many event_groups" do
-    @pan.event_groups.to_json.should == [@event_group].to_json
+  it "has many users" do
+    @event_group.users.to_json.should == [@pan].to_json
   end
+
 
 end
 
