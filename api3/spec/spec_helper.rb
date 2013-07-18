@@ -17,6 +17,10 @@ def truncate_db
   end
 end
 
+def json_parse(string)
+  JSON.parse(string, {:symbolize_names => true})
+end
+
 # def set_api_access_key_for_user(user) # user id or user object
 #   if user.is_a? Integer
 #     user = User.first(:id => user)

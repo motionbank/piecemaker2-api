@@ -7,16 +7,18 @@ describe "Piecemaker::API User" do
     Piecemaker::API
   end
 
-  before(:all) do
-    truncate_db
-    
-    @peter = User.make :peter
-    @pan = User.make :pan
-    @hans_admin = User.make :hans_admin
-    @klaus_disabled = User.make :klaus_disabled
-  end
+
 
   describe "Authentication" do
+
+    before(:all) do
+      truncate_db
+      
+      @peter = User.make :peter
+      @pan = User.make :pan
+      @hans_admin = User.make :hans_admin
+      @klaus_disabled = User.make :klaus_disabled
+    end
 
     it "POST /api/v1/user/login returns new api access token on valid credentials" do
       post "/api/v1/user/login", :email => @peter.email, :password => @peter.name
@@ -71,51 +73,66 @@ describe "Piecemaker::API User" do
       header "X-Access-Key", ""
       post "/api/v1/user/logout"
       last_response.status.should == 401
+
+      header "X-Access-Key", nil
+      post "/api/v1/user/logout"
+      last_response.status.should == 400
     end
   end
 
+  describe "other" do
 
-  it "GET /api/v1/users returns all users" do
-    get "/api/v1/users"
-    last_response.status.should == 200
-    last_response.body.should == [@peter, @pan].to_json
+    before(:each) do
+      truncate_db
+      
+      @peter = User.make :peter
+      @pan = User.make :pan
+      @hans_admin = User.make :hans_admin
+      @klaus_disabled = User.make :klaus_disabled
+    end
+
+    it "GET /api/v1/users returns all users" do
+      get "/api/v1/users"
+      last_response.status.should == 200
+      json_parse(last_response.body).should =~ [@peter.values, 
+        @pan.values, @hans_admin.values, @klaus_disabled.values]
+    end
+
+    it "POST /api/v1/user creates new user", :focus do
+      header "X-Access-Key", @hans_admin.api_access_key
+      post "/api/v1/user", 
+        :name => "Michael",
+        :email => "michael@example.com"
+      last_response.status.should == 201
+
+      # test this once here, to verify authorize will block
+      # users that are disabled
+      header "X-Access-Key", @klaus_disabled.api_access_key
+      post "/api/v1/user", 
+        :name => "Michael",
+        :email => "michael@example.com"
+      last_response.status.should == 401
+    end
+
+    it "GET /api/v1/user/me returns currently logged in user" do
+      raise
+    end
+
+    it "GET /api/v1/user/:id returns user for id" do
+      raise
+    end
+
+    it "PUT /api/v1/user/:id updates user with id" do
+      raise
+    end
+
+    it "DELETE /api/v1/user/:id deletes user with id" do
+      raise
+    end
+
+    it "GET /api/v1/user/:id/event_groups returns all event_groups for user with id" do
+      raise
+    end
   end
-
-  it "POST /api/v1/user creates new user", :focus do
-    header "X-Access-Key", @hans_admin.api_access_key
-    post "/api/v1/user", 
-      :name => "Michael",
-      :email => "michael@example.com"
-    last_response.status.should == 201
-
-    # test this once here, to verify authorize will block
-    # users that are disabled
-    header "X-Access-Key", @klaus_disabled.api_access_key
-    post "/api/v1/user", 
-      :name => "Michael",
-      :email => "michael@example.com"
-    last_response.status.should == 401
-  end
-
-  it "GET /api/v1/user/me returns currently logged in user" do
-    raise
-  end
-
-  it "GET /api/v1/user/:id returns user for id" do
-    raise
-  end
-
-  it "PUT /api/v1/user/:id updates user with id" do
-    raise
-  end
-
-  it "DELETE /api/v1/user/:id deletes user with id" do
-    raise
-  end
-
-  it "GET /api/v1/user/:id/event_groups returns all event_groups for user with id" do
-    raise
-  end
-
 end
 

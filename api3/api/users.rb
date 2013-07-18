@@ -7,8 +7,8 @@ module Piecemaker
       # --------------------------------------------------
       desc "Log in user."
       params do
-        requires :email, type: String, desc: "Email address"
-        requires :password, type: String, desc: "Password"
+        requires :email, type: String, desc: "email address"
+        requires :password, type: String, desc: "password"
       end 
       post "/login" do
         require "Digest"
@@ -36,10 +36,17 @@ module Piecemaker
 
       # --------------------------------------------------
       desc "Creates new user."
+      params do
+        requires :name, type: String, desc: "users fullname or whatever"
+        requires :email, type: String, desc: "email address"
+        requires :is_admin, type: Boolean, desc: "make this user an admin"
+      end 
       post "/" do
         _user = authorize!(:admin_only)
-        
-
+        User.create(
+          :name   => params[:name],
+          :email  => params[:email],
+          :password => "xx")
       end
 
     end
