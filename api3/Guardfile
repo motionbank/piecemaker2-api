@@ -1,4 +1,4 @@
-group :default do
+group :development do
 
   guard 'bundler' do
     watch('Gemfile')
@@ -7,10 +7,6 @@ group :default do
   guard 'rack' do
     watch('Gemfile.lock')
     watch(%r{^(config|app|api)/.*})
-  end
-
-  guard 'rake', :task => 'spec' do
-    watch(%r{^(config|app|api|models|spec/api|spec/models)/.*})
   end
 
 end
