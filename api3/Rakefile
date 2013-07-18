@@ -14,6 +14,11 @@ require 'rspec/core'
 require 'rspec/core/rake_task'
 require "sequel"
 
+def expand_env_string(env)
+  return "development" if env == "dev"
+  return "production" if env == "prod"
+  return env
+end
 
 namespace :spec do
 
@@ -50,14 +55,14 @@ end
 
 
 task :environment, [:env] do |cmd, args|
-  ENV["RACK_ENV"] = args[:env] || "development"
+  ENV["RACK_ENV"] = expand_env_string(args[:env]) || "development"
   require "./config/environment"
 end
 
 namespace :db do
   desc "Create admin user"
   task :create_admin, :env do |cmd, args|
-    env = args[:env] || "development"
+    env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
 
     require "Digest"
@@ -72,7 +77,7 @@ namespace :db do
 
   desc "Run database migrations"
   task :migrate, :env do |cmd, args|
-    env = args[:env] || "development"
+    env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
  
     require 'sequel/extensions/migration'
@@ -81,7 +86,7 @@ namespace :db do
  
   desc "Rollback the database"
   task :rollback, :env do |cmd, args|
-    env = args[:env] || "development"
+    env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
  
     require 'sequel/extensions/migration'
@@ -91,7 +96,7 @@ namespace :db do
  
   desc "Nuke the database (drop all tables)"
   task :nuke, :env do |cmd, args|
-    env = args[:env] || "development"
+    env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
     DB.tables.each do |table|
       # @todo: CASCADE equivalent command for DB.drop_table?
@@ -102,6 +107,10 @@ namespace :db do
   end
  
   desc "Reset the database"
-  task :reset, [:env] => [:nuke, :migrate]
+  task :reset, :env do |cmd, args|
+    env = expand_env_string(args[:env])
+    Rake::Task['db:nuke'].invoke(env)
+    Rake::Task['db:migrate'].invoke(env)
+  end
 end
 
