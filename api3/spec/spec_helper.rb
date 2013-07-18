@@ -10,11 +10,27 @@ Dir[File.expand_path('../../spec/factories/*.rb', __FILE__)].each do |f|
   require f
 end
 
+
 def truncate_db
   DB.tables.each do |table|
     DB[table].truncate(:cascade => true)
   end
 end
+
+def set_api_access_key_for_user(user) # user id or user object
+  if user.is_a? Integer
+    user = User.first(:id => user)
+  end
+  api_access_key = Piecemaker::Helper::API_Access_Key::generate
+  user.update(:api_access_key => api_access_key)
+  api_access_key
+end
+
+def request_with_api_access_key_from_user(user)
+  api_access_key = set_api_access_key_for_user(@peter)
+  header "X-Access-Key", api_access_key
+end
+
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -30,8 +46,6 @@ RSpec.configure do |config|
     # @todo: user must do this via console. removed because it 
     # slows down testing process
     # system "rake db:reset[#{ENV["RACK_ENV"]}]"
-    
-    
   end
 
   config.after(:all) do 

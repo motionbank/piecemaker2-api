@@ -18,7 +18,7 @@ module Piecemaker
           :password => Digest::SHA1.hexdigest(params[:password]))
 
         if user
-          api_access_key = Piecemaker::Helper::generate_api_access_key
+          api_access_key = Piecemaker::Helper::API_Access_Key::generate
           user.update(:api_access_key => api_access_key)
           return {:api_access_key => api_access_key}
         else
@@ -30,7 +30,9 @@ module Piecemaker
       # --------------------------------------------------
       desc "Log out user"
       post "/logout" do
-        "login"
+        _user = authorize!
+        _user.update(:api_access_key => nil) ? {:api_access_key => nil} :
+          error!('Internal Server Error', 500)
       end
 
     end

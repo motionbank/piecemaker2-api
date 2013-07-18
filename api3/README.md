@@ -84,6 +84,7 @@ https://newrelic.com/ and paste your license key in ```config/config.yml```.
 Some further reading ...
 
  * https://github.com/intridea/grape
+ * http://intridea.github.io/grape/docs/index.html
  * https://github.com/dblock/grape-on-rack (was used as a template)
  * https://github.com/jeremyevans/sequel
  * http://sequel.rubyforge.org/documentation.html
