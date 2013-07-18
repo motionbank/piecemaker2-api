@@ -18,7 +18,7 @@ describe Event do
   end
 
   it "has one user" do
-    @event.user.to_json.should == @user.to_json
+    @event.user.to_json.should == @pan.to_json
   end
 
   it "has many event fields" do

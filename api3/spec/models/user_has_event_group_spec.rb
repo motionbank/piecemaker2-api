@@ -23,7 +23,7 @@ describe UserHasEventGroup do
   end
 
   it "has one user" do
-    @user_has_event_group.user.to_json.should == @user.to_json
+    @user_has_event_group.user.to_json.should == @pan.to_json
   end
 
   it "has one event group" do
