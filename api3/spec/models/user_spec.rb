@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe User do
+describe "Model User" do
 
   before(:all) do
     truncate_db

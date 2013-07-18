@@ -121,7 +121,7 @@ module Piecemaker
       # --------------------------------------------------
       desc "Returns all users."
       get "/" do
-        authorize!
+        authorize! :admin_only
         User.all || []
       end
 

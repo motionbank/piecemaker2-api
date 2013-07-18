@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Event do
+describe "Model Event" do
 
   before(:all) do
     truncate_db
