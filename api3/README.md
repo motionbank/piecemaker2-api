@@ -115,6 +115,10 @@ Some further reading ...
  * https://github.com/mjijackson/sequel-factory
  * http://rack.github.io/
 
+
  * https://www.startssl.com/
  * http://www.akadia.com/services/ssh_test_certificate.html
  * http://www.thebuzzmedia.com/designing-a-secure-rest-api-without-oauth-authentication/comment-page-1/#comment-269244
+
+
+ * http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
