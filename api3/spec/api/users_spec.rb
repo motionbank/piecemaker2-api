@@ -168,7 +168,7 @@ describe "Piecemaker::API User" do
       last_response.status.should == 403
     end
 
-    it "DELETE /api/v1/user/:id deletes user with id", :focus do
+    it "DELETE /api/v1/user/:id deletes user with id" do
       header "X-Access-Key", @hans_admin.api_access_key
       delete "/api/v1/user/#{@pan.id}"
       last_response.status.should == 200

@@ -45,15 +45,15 @@ module Piecemaker
       post "/" do
         _user = authorize!(:admin_only)
 
-        password = Piecemaker::Helper::Password::generate(6)
+        new_password = Piecemaker::Helper::Password::generate(6)
 
-        User.create(
+        user = User.create(
           :name     => params[:name],
           :email    => params[:email],
           :is_admin => params[:is_admin],
-          :password => Digest::SHA1.hexdigest(password))
+          :password => Digest::SHA1.hexdigest(new_password))
 
-        User.password = password
+        user.password = new_password
       end
 
       # --------------------------------------------------
