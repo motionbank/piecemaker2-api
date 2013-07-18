@@ -43,10 +43,11 @@ module Piecemaker
       end 
       post "/" do
         _user = authorize!(:admin_only)
+
         User.create(
           :name   => params[:name],
           :email  => params[:email],
-          :password => "xx")
+          :password => "Kffff ffdfd ffdfddfdf dfdfdfdfdfndddsf dfdfd dfsfsdfsdfds fsdfsdfsdf sdfsdfdsfsdf sdfosdfdsfdsfkjsdklf sldfkl")
       end
 
     end
