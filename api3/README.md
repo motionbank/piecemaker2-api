@@ -87,3 +87,6 @@ Some further reading ...
  * http://sequel.rubyforge.org/rdoc/files/doc/schema_modification_rdoc.html
  * https://github.com/mjijackson/sequel-factory
  * http://rack.github.io/
+
+ * https://www.startssl.com/
+ * http://www.akadia.com/services/ssh_test_certificate.html
