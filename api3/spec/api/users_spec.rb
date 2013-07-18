@@ -138,7 +138,7 @@ describe "Piecemaker::API User" do
       json_parse(last_response.body).should == @pan.values
     end
 
-    it "PUT /api/v1/user/:id updates user with id", :focus do
+    it "PUT /api/v1/user/:id updates user with id" do
       header "X-Access-Key", @hans_admin.api_access_key
       put "/api/v1/user/#{@pan.id}", 
         :name => "Michael",
@@ -168,8 +168,15 @@ describe "Piecemaker::API User" do
       last_response.status.should == 403
     end
 
-    it "DELETE /api/v1/user/:id deletes user with id" do
-      raise
+    it "DELETE /api/v1/user/:id deletes user with id", :focus do
+      header "X-Access-Key", @hans_admin.api_access_key
+      delete "/api/v1/user/#{@pan.id}"
+      last_response.status.should == 200
+
+      # non-admins cant delete users
+      header "X-Access-Key", @peter.api_access_key
+      delete "/api/v1/user/#{@pan.id}"
+      last_response.status.should == 403
     end
 
     it "GET /api/v1/user/:id/event_groups returns all event_groups for user with id" do
