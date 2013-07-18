@@ -3,7 +3,6 @@ module Piecemaker
   class Users < Grape::API
 
     resource 'user' do
-      require "Digest"
 
       # --------------------------------------------------
       desc "Log in user"
@@ -12,7 +11,7 @@ module Piecemaker
         requires :password, type: String, desc: "Password"
       end 
       post "/login" do
-        
+        require "Digest"
         user = User.first(
           :email => params[:email], 
           :password => Digest::SHA1.hexdigest(params[:password]))
