@@ -15,7 +15,7 @@ module Piecemaker
 
     resource 'group' do
 
-      desc "create new event_group and record for user_has_event_groups (allow everything for owner of event_group)"
+      desc "create new event_group and record for user_has_event_groups"
       params do
         requires :title, type: String, desc: "name of the group"
         requires :text, type: String, desc: "some additional description" # @todo type: Text not String
