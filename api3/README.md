@@ -75,6 +75,29 @@ When running in :development mode, open http://127.0.0.1:9292/newrelic
 in your browser. For stats in production mode, sign up at 
 https://newrelic.com/ and paste your license key in ```config/config.yml```.
 
+## Connecting to the API
+
+### Authentication
+```
+Login (retrieve access token):
+POST /api/v1/user/login with params email and password
+     returns {api_access_key: "xzy"}
+
+Perform authenticated requests by adding 
+ 'X-Access-Key' = 'xyz'
+to your request headers.
+
+Logout (invalidate access token)
+POST /api/v1/user/logout 
+```
+
+Ideally all API requests are made over a secure connection via SSL. So sending
+the password or the X-Access-Key in plain text should be secure. Sometimes the
+URL for requests is logged somewhere. To avoid spoofing in these cases, the 
+email is sent (in the body) as POST request, X-Access-Key is sent in the request
+headers.
+
+
 ## Development
 
  * Running only specify tests by adding ```:focus``` tag to test.
