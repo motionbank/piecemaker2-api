@@ -20,13 +20,26 @@ describe "Piecemaker::API User" do
     last_response.body.should == [@peter, @pan].to_json
   end
 
-  it "POST /api/v1/user/login returns new api access token on valid credentials" do
+  it "POST /api/v1/user/login returns new api access token on valid credentials", :focus do
     post "/api/v1/user/login", :email => @peter.email, :password => @peter.name
     last_response.status.should == 201
-    
+
     json = JSON.parse(last_response.body)
     Piecemaker::Helper::api_access_key_makes_sense?(
       json["api_access_key"]).should eq(true)
+
+    post "/api/v1/user/login", :email => @peter.email, :password => "wrong"
+    last_response.status.should == 401
+
+    post "/api/v1/user/login", :email => @peter.email, :password => ""
+    last_response.status.should == 401
+
+    post "/api/v1/user/login", :email => "", :password => ""
+    last_response.status.should == 401
+
+    post "/api/v1/user/login", :email => "", :password => @peter.name
+    last_response.status.should == 401
+
   end 
 
   it "POST /api/v1/user/logout invalidates the current api access token" do
