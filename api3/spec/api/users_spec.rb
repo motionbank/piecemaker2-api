@@ -12,6 +12,8 @@ describe "Piecemaker::API User" do
     
     @peter = User.make :peter
     @pan = User.make :pan
+    @hans_admin = User.make :hans_admin
+    @klaus_disabled = User.make :klaus_disabled
   end
 
   describe "Authentication" do
@@ -24,6 +26,10 @@ describe "Piecemaker::API User" do
         json["api_access_key"]).should eq(true)
 
       post "/api/v1/user/login", :email => @peter.email, :password => "wrong"
+      last_response.status.should == 401
+
+      post "/api/v1/user/login", :email => @klaus_disabled.email, 
+        :password => @klaus_disabled.name
       last_response.status.should == 401
 
       post "/api/v1/user/login", :email => @peter.email, :password => ""
@@ -76,11 +82,19 @@ describe "Piecemaker::API User" do
   end
 
   it "POST /api/v1/user creates new user", :focus do
-    header "X-Access-Key", @peter.api_access_key
+    header "X-Access-Key", @hans_admin.api_access_key
     post "/api/v1/user", 
       :name => "Michael",
       :email => "michael@example.com"
     last_response.status.should == 201
+
+    # test this once here, to verify authorize will block
+    # users that are disabled
+    header "X-Access-Key", @klaus_disabled.api_access_key
+    post "/api/v1/user", 
+      :name => "Michael",
+      :email => "michael@example.com"
+    last_response.status.should == 401
   end
 
   it "GET /api/v1/user/me returns currently logged in user" do
