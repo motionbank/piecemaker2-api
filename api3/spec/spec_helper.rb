@@ -17,19 +17,19 @@ def truncate_db
   end
 end
 
-def set_api_access_key_for_user(user) # user id or user object
-  if user.is_a? Integer
-    user = User.first(:id => user)
-  end
-  api_access_key = Piecemaker::Helper::API_Access_Key::generate
-  user.update(:api_access_key => api_access_key)
-  api_access_key
-end
-
-def request_with_api_access_key_from_user(user)
-  api_access_key = set_api_access_key_for_user(@peter)
-  header "X-Access-Key", api_access_key
-end
+# def set_api_access_key_for_user(user) # user id or user object
+#   if user.is_a? Integer
+#     user = User.first(:id => user)
+#   end
+#   api_access_key = Piecemaker::Helper::API_Access_Key::generate
+#   user.update(:api_access_key => api_access_key)
+#   api_access_key
+# end
+# 
+# def request_with_api_access_key_from_user(user)
+#   api_access_key = set_api_access_key_for_user(@peter)
+#   header "X-Access-Key", api_access_key
+# end
 
 
 RSpec.configure do |config|
