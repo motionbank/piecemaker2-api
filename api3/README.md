@@ -94,8 +94,8 @@ POST /api/v1/user/logout
 Ideally all API requests are made over a secure connection via SSL. So sending
 the password or the X-Access-Key in plain text should be secure. Sometimes the
 URL for requests is logged somewhere. To avoid spoofing in these cases, the 
-email param is sent (in the body) as POST request, X-Access-Key is sent in the request
-headers.
+email param is sent (in the body) as POST request, X-Access-Key is sent 
+in the request headers.
 
 
 ## Development
