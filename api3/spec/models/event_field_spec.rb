@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe EventField do
+describe "Model EventField" do
 
   before(:all) do
     truncate_db

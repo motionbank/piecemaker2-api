@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UserHasEventGroup do
+describe "Model UserHasEventGroup" do
 
   before(:all) do
     truncate_db

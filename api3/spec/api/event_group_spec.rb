@@ -24,14 +24,14 @@ describe "Piecemaker::API EventGroup" do
       :user_id => @hans_admin.id, :event_group_id => @alpha.id
   end
 
-  it "GET /api/v1/groups returns all event_groups for currently logged in user", :focus do
+  it "GET /api/v1/groups returns all event_groups for currently logged in user" do
     header "X-Access-Key", @pan.api_access_key
     get "/api/v1/groups"
     last_response.status.should == 200
     json_parse(last_response.body).should =~ [@alpha.values, @beta.values]
   end
 
-  it "POST /api/v1/group create new event_group (and user_has_event_group record)", :focus do
+  it "POST /api/v1/group create new event_group (and user_has_event_group record)" do
     header "X-Access-Key", @pan.api_access_key
     post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
     last_response.status.should == 201
@@ -39,14 +39,14 @@ describe "Piecemaker::API EventGroup" do
     returned_omega.should == EventGroup.first(:id => returned_omega[:id]).values
   end
 
-  it "GET /api/v1/group/:id returns event_group with id", :focus do
+  it "GET /api/v1/group/:id returns event_group with id" do
     header "X-Access-Key", @pan.api_access_key
     get "/api/v1/group/#{@alpha.id}"
     last_response.status.should == 200
     json_parse(last_response.body).should == @alpha.values
   end
 
-  it "PUT /api/v1/group/:id updates event_group with id", :focus do
+  it "PUT /api/v1/group/:id updates event_group with id" do
     header "X-Access-Key", @pan.api_access_key
     put "/api/v1/group/#{@alpha.id}", :title => "Omega", 
       :text => "Text for Omega"
@@ -55,7 +55,7 @@ describe "Piecemaker::API EventGroup" do
     returned_alpha.should == EventGroup.first(:id => returned_alpha[:id]).values
   end
 
-  it "DELETE /api/v1/group/:id deletes event_group with id", :focus do
+  it "DELETE /api/v1/group/:id deletes event_group with id" do
     header "X-Access-Key", @pan.api_access_key
     delete "/api/v1/group/#{@alpha.id}"
     last_response.status.should == 200
