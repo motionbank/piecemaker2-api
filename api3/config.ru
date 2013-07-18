@@ -1,6 +1,6 @@
 require File.expand_path('../config/environment', __FILE__)
 
-use Rack::SslEnforcer
+# use Rack::SslEnforcer
 
 if ENV['RACK_ENV'].to_sym == :development
   puts "Loading NewRelic in developer mode ..."
