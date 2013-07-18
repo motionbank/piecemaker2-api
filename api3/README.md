@@ -38,7 +38,7 @@ $ rake start:prod
 run tests 
    make sure that the test database in config/config.yml exists!
    create database with http://www.postgresql.org/docs/9.2/static/app-createdb.html
-$ rake spec
+$ rake db:reset[test] && rake spec:now
 
 reset gemset
 $ rbenv gemset delete 2.0.0-p247 piecemaker-api
@@ -75,6 +75,9 @@ When running in :development mode, open http://127.0.0.1:9292/newrelic
 in your browser. For stats in production mode, sign up at 
 https://newrelic.com/ and paste your license key in ```config/config.yml```.
 
+## Development
+
+ * Running only specify tests by adding ```:focus``` tag to test.
 
 ## Docs
 
@@ -90,3 +93,4 @@ Some further reading ...
 
  * https://www.startssl.com/
  * http://www.akadia.com/services/ssh_test_certificate.html
+ * http://www.thebuzzmedia.com/designing-a-secure-rest-api-without-oauth-authentication/comment-page-1/#comment-269244

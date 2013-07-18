@@ -7,6 +7,11 @@ describe "Piecemaker::API EventGroup" do
     Piecemaker::API
   end
 
+  before(:all) do
+    truncate_db
+
+  end
+
   it "GET /api/v1/groups returns all event_groups for currently logged in user" do
     raise
     # get all event_groups for current user (with read rights)

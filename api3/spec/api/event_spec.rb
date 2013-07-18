@@ -7,6 +7,10 @@ describe "Piecemaker::API Event" do
     Piecemaker::API
   end
 
+  before(:all) do
+    truncate_db
+
+  end
 
   it "POST /api/v1/event/:id/field creates a new field for event" do
     # alias 
