@@ -102,15 +102,25 @@ describe "Piecemaker::API User" do
       header "X-Access-Key", @hans_admin.api_access_key
       post "/api/v1/user", 
         :name => "Michael",
-        :email => "michael@example.com"
+        :email => "michael@example.com",
+        :is_admin => false
       last_response.status.should == 201
+
+      # non-admins cant create users
+      header "X-Access-Key", @peter.api_access_key
+      post "/api/v1/user", 
+        :name => "Michael",
+        :email => "michael@example.com",
+        :is_admin => false
+      last_response.status.should == 403
 
       # test this once here, to verify authorize will block
       # users that are disabled
       header "X-Access-Key", @klaus_disabled.api_access_key
       post "/api/v1/user", 
         :name => "Michael",
-        :email => "michael@example.com"
+        :email => "michael@example.com",
+        :is_admin => false
       last_response.status.should == 401
     end
 
