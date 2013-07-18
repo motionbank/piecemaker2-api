@@ -7,19 +7,28 @@ module Piecemaker
       # included with 'helpers Piecemaker::Helper::Auth' in api
       # http://intridea.github.io/grape/docs/index.html#Helpers
 
-      def authorize!
+      def authorize!(*args)
         api_access_key = headers['X-Access-Key'] || nil
         if api_access_key
-          user = User.first(:api_access_key => api_access_key)
+          user = User.first(:api_access_key => api_access_key,
+            :is_disabled => false)
           unless user
             error!('Unauthorized', 401)
           else
+            # verify additional user requirements from args
+
+            if args.include?(:admin_only)
+              error!('Forbidden', 403) unless user.is_admin 
+            end
+
+            # okay, i like you, come in!
             return user
           end
         else
           error!('Bad Request, Missing X-Access-Key', 400)
         end
       end
+
     end
 
     module API_Access_Key

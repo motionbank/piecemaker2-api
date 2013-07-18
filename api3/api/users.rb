@@ -5,7 +5,7 @@ module Piecemaker
     resource 'user' do
 
       # --------------------------------------------------
-      desc "Log in user"
+      desc "Log in user."
       params do
         requires :email, type: String, desc: "Email address"
         requires :password, type: String, desc: "Password"
@@ -14,8 +14,8 @@ module Piecemaker
         require "Digest"
         user = User.first(
           :email => params[:email], 
-          :password => Digest::SHA1.hexdigest(params[:password]))
-
+          :password => Digest::SHA1.hexdigest(params[:password]),
+          :is_disabled => false)
         if user
           api_access_key = Piecemaker::Helper::API_Access_Key::generate
           user.update(:api_access_key => api_access_key)
@@ -27,11 +27,19 @@ module Piecemaker
       end
 
       # --------------------------------------------------
-      desc "Log out user"
+      desc "Log out user."
       post "/logout" do
         _user = authorize!
         _user.update(:api_access_key => nil) ? {:api_access_key => nil} :
           error!('Internal Server Error', 500)
+      end
+
+      # --------------------------------------------------
+      desc "Creates new user."
+      post "/" do
+        _user = authorize!(:admin_only)
+        
+
       end
 
     end
