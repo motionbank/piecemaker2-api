@@ -44,7 +44,7 @@ module Piecemaker
       end
       get "/:id" do
         @_user = authorize!
-        EventGroup.first(:id => params[:id])
+        EventGroup.first(:id => params[:id]) || error!('Not found', 404)
       end
 
       # --------------------------------------------------
