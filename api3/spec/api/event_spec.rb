@@ -37,8 +37,7 @@ describe "Piecemaker::API Event" do
       last_response.status.should == 200
 
       # returned event matches factory event?
-      event = json_string_to_hash(last_response.body)
-      event.should == @big.values
+      json_string_to_hash(last_response.body).should == @big.values
     end
     #---------------------------------------------------------------------------
   end
@@ -124,7 +123,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "updates an event and deletes existing fields" do
     #---------------------------------------------------------------------------
-            header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @pan.api_access_key
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '8', 
         :duration => '9',
