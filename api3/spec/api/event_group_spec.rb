@@ -248,6 +248,16 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
 
 
+    #---------------------------------------------------------------------------
+    it "returns all events between time frame" do
+    #---------------------------------------------------------------------------
+      pending "events ordered by time ASC, event_fields ordered by key ASC"
+      get "/api/v1/group/:id/events/from/<utc_timestamp>/to/<utc_timestamp>"
+      # https://github.com/motionbank/piecemaker2/issues/42
+    end
+    #---------------------------------------------------------------------------
+
+
     #-------------------------------------------------------------------------
     it "ACL auto-testing" do
     #-------------------------------------------------------------------------
@@ -266,7 +276,7 @@ describe "Piecemaker::API EventGroup" do
     it "returns all users for event_group with id" do
     #---------------------------------------------------------------------------
       pending "order by name ASC"
-      
+
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/users"
       last_response.status.should == 200
