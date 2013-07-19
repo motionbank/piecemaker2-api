@@ -17,6 +17,8 @@ describe "Piecemaker::API EventGroup" do
     @alpha = EventGroup.make :alpha
     @beta = EventGroup.make :beta
 
+    @big_in_alpha = Event.make :big, :event_group_id => @alpha.id
+
     @pan_has_event_group = UserHasEventGroup.make :default,  
       :user_id => @pan.id, :event_group_id => @alpha.id
 
@@ -71,10 +73,18 @@ describe "Piecemaker::API EventGroup" do
 
   it "GET /api/v1/group/:id/events returns all events \
     (with event_fields) for event_group with id" do
-    raise
-    # get all events for event_groups, add vars (utc_timestamp, duration, type and other fields from event_fields) to filter
-    # Likes: token*
-    # Returns: [{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]
+    header "X-Access-Key", @pan.api_access_key
+    get "/api/v1/group/#{@alpha.id}/events"
+    last_response.status.should == 200
+    json_parse(last_response.body).should == [@big_in_alpha.values]
+  end
+
+  it "GET /api/v1/group/:id/users returns all \
+    users for event_group with id" do
+    header "X-Access-Key", @pan.api_access_key
+    get "/api/v1/group/#{@alpha.id}/users"
+    last_response.status.should == 200
+    json_parse(last_response.body).should =~ [@hans_admin.values, @pan.values]
   end
 
   it "GET /api/v1/group/:id/event/by_type/:type returns events by type" do
@@ -82,15 +92,8 @@ describe "Piecemaker::API EventGroup" do
     # get events with type
     # Likes: token*
     # Returns: [{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]
-
   end
 
-  it "GET /api/v1/group/:id/users returns all users for event_group with id" do
-    raise
-    # get all users for event_groups
-    # Likes: token*
-    # Returns: [{id, name, email}]
-  end
 
 end
 

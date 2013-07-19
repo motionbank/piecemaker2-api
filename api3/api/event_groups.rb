@@ -78,6 +78,33 @@ module Piecemaker
         @event_group.delete
       end
 
+      # --------------------------------------------------
+      desc "returns all events"
+      params do
+        requires :id, type: Integer, desc: "event group id"
+      end
+      get "/:id/events" do
+        @_user = authorize!
+        @event_group = EventGroup.first(:id => params[:id])
+        error!('Not found', 404) unless @event_group
+
+        Event.where(:event_group_id => @event_group.id)
+      end
+
+      # --------------------------------------------------
+      desc "returns all users for event_group with id"
+      params do
+        requires :id, type: Integer, desc: "event group id"
+      end
+      get "/:id/users" do
+        @_user = authorize!
+        @event_group = EventGroup.first(:id => params[:id])
+        error!('Not found', 404) unless @event_group
+
+        @event_group.users
+
+      end
+
     end
 
   end
