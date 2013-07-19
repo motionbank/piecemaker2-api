@@ -2,28 +2,40 @@ module Piecemaker
 
   class Events < Grape::API
 
-    resource 'event' do
+    #===========================================================================
+    resource 'event' do #=======================================================
+    #===========================================================================
 
-      # --------------------------------------------------
+
+      #_________________________________________________________________________
+      ##########################################################################
       desc "returns event with id"
+      #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "event id"
       end
-      get "/:id" do
+      #-------------------------------------------------------------------------
+      get "/:id" do  #/api/v1/event/:id
+      #-------------------------------------------------------------------------
         @_user = authorize!
         Event.first(:id => params[:id]) || error!('Not found', 404)
         # @todo return group as well
       end
 
-      # --------------------------------------------------
+
+      #_________________________________________________________________________
+      ##########################################################################
       desc "updates an event with id"
+      #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "event group id"
         requires :utc_timestamp, type: Float, desc: "utc timestamp"
         optional :duration, type: Float, desc: "duration"
         optional :fields, type: Hash, desc: "optional fields to create for this event {'field1': 'value', ...}"
       end
-      put "/:id" do
+      #-------------------------------------------------------------------------
+      put "/:id" do  #/api/v1/event/:id
+      #-------------------------------------------------------------------------
         @_user = authorize!
         @event = Event.first(:id => params[:id])
         error!('Not found', 404) unless @event
@@ -60,15 +72,19 @@ module Piecemaker
         end
 
         [@event, EventField.where(:event_id => @event.id)]
-        
       end
 
-      # --------------------------------------------------
+
+      #_________________________________________________________________________
+      ##########################################################################
       desc "deletes event with id"
+      #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "event id"
       end
-      delete "/:id" do
+      #-------------------------------------------------------------------------
+      delete "/:id" do  #/api/v1/event/:id
+      #-------------------------------------------------------------------------
         @_user = authorize!
         @event = Event.first(:id => params[:id])
         error!('Not found', 404) unless @event
@@ -76,22 +92,6 @@ module Piecemaker
         @event.delete
       end
 
-      # --------------------------------------------------
-      desc "creates a new field for event"
-      params do
-        requires :id, type: Integer, desc: "event id"
-        requires :key, type: String, desc: "key name (alias event_fields.id)"
-        requires :value, type: String, desc: "value to save" # @todo Text not String
-      end
-      post "/:id/field" do
-        @_user = authorize!
-        @event = Event.first(:id => params[:id])
-        error!('Not found', 404) unless @event
-
-        
-      end
-
     end
-
   end
 end
