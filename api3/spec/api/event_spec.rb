@@ -105,6 +105,14 @@ describe "Piecemaker::API Event" do
 
 
     #---------------------------------------------------------------------------
+    it "fails if key for event_field is too long" do
+    #---------------------------------------------------------------------------
+      pending "its already working, adding a test to be super safe though"
+    end
+    #---------------------------------------------------------------------------
+
+
+    #---------------------------------------------------------------------------
     it "updates an event and updates existing fields" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @pan.api_access_key
