@@ -61,6 +61,8 @@ describe "Piecemaker::API EventGroup" do
     returned_fields = returned[1]
     # @todo wtf? json_parse(...to_json) isnt there a dataset method for this?!
     event_fields_from_database_hash = json_parse(@event_from_database.event_fields.to_json)
+    returned_fields.should_not eq([])
+    returned_fields.should_not eq(nil)
     returned_fields.should =~ event_fields_from_database_hash
     
   end
