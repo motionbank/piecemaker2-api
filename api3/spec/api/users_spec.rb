@@ -210,25 +210,10 @@ describe "Piecemaker::API User" do
 
 
       #-------------------------------------------------------------------------
-      it "non-admins can't creates new user" do
+      it "ACL auto-testing" do
       #-------------------------------------------------------------------------
-        pending "acl checks tbd"
-        # @todo acl!
-        header "X-Access-Key", @peter.api_access_key
-        post "/api/v1/user", 
-          :name => "Michael",
-          :email => "michael@example.com",
-          :is_admin => false
-        last_response.status.should == 403
-
-        # test this once here, to verify authorize will block
-        # users that are disabled
-        header "X-Access-Key", @klaus_disabled.api_access_key
-        post "/api/v1/user", 
-          :name => "Michael",
-          :email => "michael@example.com",
-          :is_admin => false
-        last_response.status.should == 401
+        pending
+        # get roles and test against this routes
       end
       #-------------------------------------------------------------------------
     end
@@ -261,6 +246,15 @@ describe "Piecemaker::API User" do
         get "/api/v1/user/#{@pan.id}"
         last_response.status.should == 200
         json_string_to_hash(last_response.body).should == @pan.values
+      end
+      #-------------------------------------------------------------------------
+
+
+      #-------------------------------------------------------------------------
+      it "ACL auto-testing" do
+      #-------------------------------------------------------------------------
+        pending
+        # get roles and test against this routes
       end
       #-------------------------------------------------------------------------
     end
@@ -296,6 +290,15 @@ describe "Piecemaker::API User" do
         returned_peter[:password].should_not == @peter.password
       end
       #-------------------------------------------------------------------------
+
+
+      #-------------------------------------------------------------------------
+      it "ACL auto-testing" do
+      #-------------------------------------------------------------------------
+        pending
+        # get roles and test against this routes
+      end
+      #-------------------------------------------------------------------------
     end
 
 
@@ -312,17 +315,35 @@ describe "Piecemaker::API User" do
         User.first(:id => @pan.id).should eq(nil)
       end
       #-------------------------------------------------------------------------
+
+
+      #-------------------------------------------------------------------------
+      it "ACL auto-testing" do
+      #-------------------------------------------------------------------------
+        pending
+        # get roles and test against this routes
+      end
+      #-------------------------------------------------------------------------
     end
 
 
     ############################################################################
-    describe "GET /api/v1/user/:id/event_groups" do
+    describe "GET /api/v1/user/:id/groups" do
     ############################################################################  
 
       #-------------------------------------------------------------------------
       it "returns all event_groups for user with id" do
       #-------------------------------------------------------------------------
         pending
+      end
+      #-------------------------------------------------------------------------
+
+
+      #-------------------------------------------------------------------------
+      it "ACL auto-testing" do
+      #-------------------------------------------------------------------------
+        pending
+        # get roles and test against this routes
       end
       #-------------------------------------------------------------------------
     end
@@ -340,6 +361,15 @@ describe "Piecemaker::API User" do
         last_response.status.should == 200
         json_string_to_hash(last_response.body).should =~ [@peter.values, 
           @pan.values, @hans_admin.values, @klaus_disabled.values]
+      end
+      #-------------------------------------------------------------------------
+
+
+      #-------------------------------------------------------------------------
+      it "ACL auto-testing" do
+      #-------------------------------------------------------------------------
+        pending
+        # get roles and test against this routes
       end
       #-------------------------------------------------------------------------
     end
