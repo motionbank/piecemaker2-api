@@ -27,7 +27,7 @@ describe "Piecemaker::API EventGroup" do
   end
 
 
-  it "POST /api/v1/group/:id/event creates new event and event_fields", :focus do
+  it "POST /api/v1/group/:id/event creates new event and event_fields" do
     header "X-Access-Key", @pan.api_access_key
     post "/api/v1/group/#{@alpha.id}/event", 
       :utc_timestamp => '1', 
