@@ -112,14 +112,6 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
 
 
-    #---------------------------------------------------------------------------
-    it "links new event with user via user_has_event_groups" do
-    #---------------------------------------------------------------------------
-      pending
-    end
-    #---------------------------------------------------------------------------
-
-
     #-------------------------------------------------------------------------
     it "ACL auto-testing" do
     #-------------------------------------------------------------------------
@@ -145,6 +137,7 @@ describe "Piecemaker::API EventGroup" do
       @omega_from_database = EventGroup.first(:id => returned_omega[:id])
       returned_omega.should == @omega_from_database.values
 
+      # is the new event_group linked to users via user_has_event_groups?
       UserHasEventGroup.first(:user_id => @pan.id, 
         :event_group_id => returned_omega[:id]).should_not eq(nil)
     end
