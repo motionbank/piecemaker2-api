@@ -67,9 +67,10 @@ $ ab -c5 -n10000 http://127.0.0.1:9292/api/v1/users
 ```
 
 ### Explore the API
-When running in :development mode, open http://petstore.swagger.wordnik.com
-in your browser and use the service with this URL:
-```http://localhost:9292/api/v1/swagger_doc```. Replace the port 9292 accordingly.
+When running in :development mode, open http://motionbank.github.io/piecemaker2/swagger-ui/dist in your browser. Replace the port 9292 accordingly.
+
+Note: You can create a super admin with ```rake db:create_super_admin[env]```.
+
 
 ### Monitor the API
 When running in :development mode, open http://127.0.0.1:9292/newrelic
