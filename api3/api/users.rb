@@ -12,13 +12,13 @@ module Piecemaker
       end 
       post "/login" do
         require "Digest"
-        user = User.first(
+        @user = User.first(
           :email => params[:email], 
           :password => Digest::SHA1.hexdigest(params[:password]),
           :is_disabled => false)
-        if user
+        if @user
           api_access_key = Piecemaker::Helper::API_Access_Key::generate
-          user.update(:api_access_key => api_access_key)
+          @user.update(:api_access_key => api_access_key)
           return {:api_access_key => api_access_key}
         else
           error!('Unauthorized', 401)
@@ -29,8 +29,8 @@ module Piecemaker
       # --------------------------------------------------
       desc "Log out user."
       post "/logout" do
-        _user = authorize!
-        _user.update(:api_access_key => nil)
+        @_user = authorize!
+        @_user.update(:api_access_key => nil)
         {:api_access_key => nil}
       end
 
@@ -43,24 +43,24 @@ module Piecemaker
           :default => false
       end 
       post "/" do
-        _user = authorize!(:admin_only)
+        @_user = authorize!(:admin_only)
 
         new_password = Piecemaker::Helper::Password::generate(6)
 
-        user = User.create(
+        @user = User.create(
           :name     => params[:name],
           :email    => params[:email],
           :is_admin => params[:is_admin],
           :password => Digest::SHA1.hexdigest(new_password))
 
-        user.password = new_password
-        return user
+        @user.password = new_password
+        return @user
       end
 
       # --------------------------------------------------
       desc "returns currently logged in user"
       get "/me" do
-        _user = authorize!
+        @_user = authorize!
       end
 
       # --------------------------------------------------
@@ -69,7 +69,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "a user id"
       end
       get "/:id" do
-        _user = authorize!
+        @_user = authorize!
         User.first(:id => params[:id])
       end
 
@@ -84,21 +84,21 @@ module Piecemaker
         optional :new_password, type: Boolean, desc: "create new password"
       end
       put "/:id" do
-        _user = authorize!(:admin_only)
-        user = User.find(:id => params[:id])
-        error!('Not found', 404) unless user
+        @_user = authorize!(:admin_only)
+        @user = User.find(:id => params[:id])
+        error!('Not found', 404) unless @user
 
-        user.update_with_params!(params, :name, :email, :is_admin, :is_disabled)
+        @user.update_with_params!(params, :name, :email, :is_admin, :is_disabled)
 
         new_password = nil
         if params[:new_password]
           new_password = Piecemaker::Helper::Password::generate(6)
-          user.password = Digest::SHA1.hexdigest(new_password)
+          @user.password = Digest::SHA1.hexdigest(new_password)
         end
 
-        user.save        
-        user.password = new_password if new_password
-        return user
+        @user.save        
+        @user.password = new_password if new_password
+        return @user
       end
 
       # --------------------------------------------------
@@ -107,11 +107,11 @@ module Piecemaker
         requires :id, type: Integer, desc: "a user id"
       end
       delete "/:id" do
-        _user = authorize!(:admin_only)
-        user = User.find(:id => params[:id])
-        error!('Not found', 404) unless user
+        @_user = authorize!(:admin_only)
+        @user = User.find(:id => params[:id])
+        error!('Not found', 404) unless @user
 
-        user.delete
+        @user.delete
       end
 
     end

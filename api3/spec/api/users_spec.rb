@@ -110,10 +110,10 @@ describe "Piecemaker::API User" do
       # ignore password field, because it is returned plain/text on creation
       returned_user.delete(:password) 
 
-      user_from_database = User.first(:id => returned_user[:id]).values
-      user_from_database.delete(:password)
+      @user_from_database = User.first(:id => returned_user[:id]).values
+      @user_from_database.delete(:password)
 
-      returned_user.should == user_from_database
+      returned_user.should == @user_from_database
 
       # non-admins cant create users
       header "X-Access-Key", @peter.api_access_key
