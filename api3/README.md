@@ -103,14 +103,19 @@ in the request headers.
 __Super Admin < Admin < User__
 
 Super Admin
+```
  * CRUD admins
+```
 
 Admin
+```
  * CRUD users
  * CRUD event_groups
  * CRUD events
- 
+```
+
 User
+```
  * Read own user
  * Update own user (password i.e.)
  * Create event_groups
@@ -123,7 +128,7 @@ User
  * Delete own event_groups
  * Delete own events
  * Read UTC Timestamp
-
+```
 (events includes event_fields)
 
 
