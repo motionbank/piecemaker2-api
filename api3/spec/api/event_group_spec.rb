@@ -36,6 +36,8 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all event_groups for currently logged in user" do
     #---------------------------------------------------------------------------
+      pending "should be ordered by created date"
+
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/groups"
       last_response.status.should == 200
@@ -237,6 +239,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all events (with event_fields) for event_group with id" do
     #---------------------------------------------------------------------------
+      pending "events ordered by time ASC, event_fields ordered by key ASC"
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/events"
       last_response.status.should == 200
@@ -262,6 +265,8 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all users for event_group with id" do
     #---------------------------------------------------------------------------
+      pending "order by name ASC"
+      
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/users"
       last_response.status.should == 200
