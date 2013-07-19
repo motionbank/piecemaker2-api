@@ -75,7 +75,7 @@ namespace :db do
     DB[:users].insert(
       :name => "Super Admin", 
       :email => "super-admin@example.com",
-      :password => Digest::SHA1.hexdigest("admin"),
+      :password => Digest::SHA1.hexdigest("super-admin"),
       :api_access_key => api_access_key,
       :is_admin => true)
 
