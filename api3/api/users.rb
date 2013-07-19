@@ -117,7 +117,8 @@ module Piecemaker
         @user = User.first(:id => params[:id])
         error!('Not found', 404) unless @user
 
-        @user.update_with_params!(params, :name, :email, :is_admin, :is_disabled)
+        @user.update_with_params!(params, 
+          :name, :email, :is_admin, :is_disabled)
 
         new_password = nil
         if params[:new_password]
