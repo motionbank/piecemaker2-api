@@ -28,37 +28,92 @@ describe "Piecemaker::API User" do
       #-------------------------------------------------------------------------
       it "returns new api access token on valid credentials" do
       #-------------------------------------------------------------------------
-        post "/api/v1/user/login", :email => @peter.email, :password => @peter.name
+        post "/api/v1/user/login", 
+        :email => @peter.email, :password => @peter.name
         last_response.status.should == 201
         json = JSON.parse(last_response.body)
         Piecemaker::Helper::API_Access_Key::makes_sense?(
           json["api_access_key"]).should eq(true)
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails for right user but with wrong password" do
+      #-------------------------------------------------------------------------
         post "/api/v1/user/login", :email => @peter.email, :password => "wrong"
         last_response.status.should == 401
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails for disabled user" do
+      #-------------------------------------------------------------------------
         post "/api/v1/user/login", :email => @klaus_disabled.email, 
           :password => @klaus_disabled.name
         last_response.status.should == 401
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails when using empty password" do
+      #-------------------------------------------------------------------------
         post "/api/v1/user/login", :email => @peter.email, :password => ""
         last_response.status.should == 401
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails when using empty email and empty password" do
+      #-------------------------------------------------------------------------
         post "/api/v1/user/login", :email => "", :password => ""
         last_response.status.should == 401
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails when using empty email and correct password from valid user" do
+      #-------------------------------------------------------------------------
         post "/api/v1/user/login", :email => "", :password => @peter.name
         last_response.status.should == 401
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails when using empty email and any password string" do
+      #-------------------------------------------------------------------------
         post "/api/v1/user/login", :email => "", :password => "random_wrong"
         last_response.status.should == 401
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails when not sending password and email is empty" do
+      #-------------------------------------------------------------------------
         post "/api/v1/user/login", :email => ""
         last_response.status.should == 400
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails when not sending email and password is empty" do
+      #-------------------------------------------------------------------------
         post "/api/v1/user/login", :password => ""
         last_response.status.should == 400
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails when not sending email and password" do
+      #-------------------------------------------------------------------------
         post "/api/v1/user/login"
         last_response.status.should == 400
       end 
