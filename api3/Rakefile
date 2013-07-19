@@ -65,8 +65,8 @@ task :environment, [:env] do |cmd, args|
 end
 
 namespace :db do
-  desc "Create admin user"
-  task :create_admin, :env do |cmd, args|
+  desc "Create super admin"
+  task :create_super_admin, :env do |cmd, args|
     env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
 
