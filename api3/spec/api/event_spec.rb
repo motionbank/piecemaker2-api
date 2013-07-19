@@ -10,14 +10,24 @@ describe "Piecemaker::API Event" do
   before(:each) do
     truncate_db
 
+    @peter = User.make :peter
+    @pan = User.make :pan
+    @hans_admin = User.make :hans_admin
+    @klaus_disabled = User.make :klaus_disabled
+
+    @alpha = EventGroup.make :alpha
+    @beta = EventGroup.make :beta
+
+    @big = Event.make :big, :event_group_id => @alpha.id
+
   end
 
 
-  it "GET /api/v1/event/:id alias for /api/v1/event/:id" do
-    pending
-    # get details about one event
-    # Likes: token*
-    # Returns: {id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}
+  it "GET /api/v1/event/:id", :focus do
+    header "X-Access-Key", @hans_admin.api_access_key
+    get "/api/v1/event/#{@big.id}"
+    last_response.status.should == 200
+    json_parse(last_response.body).should == @big.values
   end
 
   it "POST /api/v1/event/:id creates new event and event_fields" do
@@ -41,7 +51,7 @@ describe "Piecemaker::API Event" do
     # Returns: boolean
   end
 
-  
+
 
 
   it "POST /api/v1/event/:id/field creates a new field for event" do

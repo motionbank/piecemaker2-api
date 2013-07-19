@@ -70,7 +70,7 @@ module Piecemaker
       end
       get "/:id" do
         @_user = authorize!
-        User.first(:id => params[:id])
+        User.first(:id => params[:id]) || error!('Not found', 404)
       end
 
       # --------------------------------------------------

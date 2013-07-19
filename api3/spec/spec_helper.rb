@@ -18,6 +18,7 @@ def truncate_db
 end
 
 def json_parse(string)
+  # @todo dont parse if empty string or nil
   JSON.parse(string, {:symbolize_names => true})
 end
 
