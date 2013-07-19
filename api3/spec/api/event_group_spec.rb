@@ -38,16 +38,12 @@ describe "Piecemaker::API EventGroup" do
     last_response.status.should == 201
     
     returned_omega = json_parse(last_response.body)
-    omega_from_database = EventGroup.first(:id => returned_omega[:id])
-    returned_omega.should == omega_from_database.values
+    @omega_from_database = EventGroup.first(:id => returned_omega[:id])
+    returned_omega.should == @omega_from_database.values
 
-    # omega_via_association = @pan.event_groups.first(:id => omega_from_database.values.id)
-    # omega_via_association.values.should == omega_from_database.values
+    UserHasEventGroup.first(:user_id => @pan.id, 
+      :event_group_id => returned_omega[:id]).should_not eq(nil)
 
-    # puts "---------"
-    # puts @pan.event_groups.to_json
-    # puts @pan.event_groups_dataset.first(:id => omega_from_database.id).to_json
-    # puts "---------"
   end
 
   it "GET /api/v1/group/:id returns event_group with id" do

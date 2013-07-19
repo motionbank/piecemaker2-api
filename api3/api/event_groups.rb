@@ -6,7 +6,7 @@ module Piecemaker
 
       desc "all event_groups for currently logged in user"
       get "/" do
-        _user = authorize!
+        @_user = authorize!
         # @todo acl!
         EventGroup.all || []
       end
@@ -21,18 +21,18 @@ module Piecemaker
         requires :text, type: String, desc: "some additional description" # @todo type: Text not String
       end 
       post "/" do
-        _user = authorize!
+        @_user = authorize!
         # @todo acl!
 
-        event_group = EventGroup.create(
+        @event_group = EventGroup.create(
           :title => params[:title],
           :text  => params[:text])
 
         UserHasEventGroup.create(
-          :user_id => _user.id,
-          :event_group_id => event_group.id)
+          :user_id => @_user.id,
+          :event_group_id => @event_group.id)
 
-        return event_group
+        return @event_group
       end
 
     end
