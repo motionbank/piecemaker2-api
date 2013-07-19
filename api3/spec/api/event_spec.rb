@@ -23,18 +23,11 @@ describe "Piecemaker::API Event" do
   end
 
 
-  it "GET /api/v1/event/:id", :focus do
+  it "GET /api/v1/event/:id returns event with id" do
     header "X-Access-Key", @hans_admin.api_access_key
     get "/api/v1/event/#{@big.id}"
     last_response.status.should == 200
     json_parse(last_response.body).should == @big.values
-  end
-
-  it "POST /api/v1/event/:id creates new event and event_fields" do
-    pending
-    # create new event and create new event_fields for all non-events table fields
-    # Likes: token*, utc_timestamp, duration, ...
-    # Returns: {id}
   end
 
   it "PUT /api/v1/event/:id updates an event with id" do
