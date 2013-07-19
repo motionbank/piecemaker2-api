@@ -32,14 +32,46 @@ describe "Piecemaker::API Event" do
     json_parse(last_response.body).should == @big.values
   end
 
+  # --------------------------------------------------
   describe "PUT /api/v1/event/:id", :focus do
 
-    it "updates an event" do
-      pending
+    it "updates an event (without fields)" do
+      header "X-Access-Key", @pan.api_access_key
+      put "/api/v1/event/#{@big.id}", 
+        :utc_timestamp => '6', 
+        :duration => '7'
+      last_response.status.should == 200
+
+      result = json_string_to_hash(last_response.body)
+
+      # returned event matches event in db?
+      event = result[0]
+      Event.first(:id => event[:id]).values.should == event
+      
+      # returned event_fields match event_fields in db?
+      event_fields = result[1]
+      event_fields.should =~ json_parse(@big.event_fields.to_json)
     end
 
     it "updates an event and creates new fields" do
-      pending
+      header "X-Access-Key", @pan.api_access_key
+      put "/api/v1/event/#{@big.id}", 
+        :utc_timestamp => '8', 
+        :duration => '9',
+        :fields => {
+          :new_key => "some value",
+          :another_new_key => "some more values"}
+      last_response.status.should == 200
+      
+      result = json_string_to_hash(last_response.body)
+      event = result[0]
+      event_fields = result[1]
+
+      event.should == Event[event[:id]].values
+
+      event_fields.should == EventField.where(
+        :event_id => event[:id]).all_values
+
     end
 
     it "updates an event and updates existing fields" do
@@ -48,46 +80,6 @@ describe "Piecemaker::API Event" do
 
     it "updates an event and deletes existing fields" do
       pending
-    end
-
-    it "updates an event with id" do
-      header "X-Access-Key", @pan.api_access_key
-      put "/api/v1/event/#{@big.id}", 
-        :utc_timestamp => '6', 
-        :duration => '7'
-      last_response.status.should == 200
-      returned = json_parse(last_response.body)
-
-      returned_event = returned[0]
-      event_from_database = Event.first(:id => returned_event[:id])
-      event_from_database.values.should == returned_event
-      
-      returned_fields = returned[1]
-      returned_fields.should =~ json_parse(@big.event_fields.to_json)
-
-      # create event fields for additional params
-      header "X-Access-Key", @pan.api_access_key
-      put "/api/v1/event/#{@big.id}", 
-        :utc_timestamp => '8', 
-        :duration => '9',
-        :fields => {
-          :key1 => "some value",
-          :another => "some more values"}
-      last_response.status.should == 200
-
-      returned = json_parse(last_response.body)
-
-      returned_event = returned[0]
-      @event_from_database = Event.first(:id => returned_event[:id])
-      @event_from_database.values.should == returned_event
-
-      returned_fields = returned[1]
-      # @todo wtf? json_parse(...to_json) isnt there a dataset method for this?!
-      event_fields_from_database_hash = json_parse(@event_from_database.event_fields.to_json)
-      returned_fields.should_not eq([])
-      returned_fields.should_not eq(nil)
-      event_fields_from_database_hash.should =~ returned_fields
-
     end
 
   end
