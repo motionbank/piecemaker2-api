@@ -98,6 +98,34 @@ URL for requests is logged somewhere. To avoid spoofing in these cases, the
 email param is sent (in the body) as POST request, X-Access-Key is sent 
 in the request headers.
 
+### User roles
+
+__Super Admin < Admin < User__
+
+Super Admin
+ * CRUD admins
+
+Admin
+ * CRUD users
+ * CRUD event_groups
+ * CRUD events
+ 
+User
+ * Read own user
+ * Update own user (password i.e.)
+ * Create event_groups
+ * Create events
+ * Read own event_groups
+ * Read own events
+ * Read users in event_group
+ * Update own event_groups
+ * Update own events
+ * Delete own event_groups
+ * Delete own events
+ * Read UTC Timestamp
+
+(events includes event_fields)
+
 
 ## Development
 
