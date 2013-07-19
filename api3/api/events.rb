@@ -42,7 +42,7 @@ module Piecemaker
             if event_fields_hash.has_key? id
               if value == "null"
                 # delete field
-                EventField.delete(:event_id => @event.id, :id => id).limit(1)
+                EventField.first(:event_id => @event.id, :id => id).delete
               else
                 # update field
                 EventField.first(

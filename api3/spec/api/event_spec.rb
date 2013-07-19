@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe "Piecemaker::API Event" do
   include Rack::Test::Methods
-
   def app
     Piecemaker::API
   end
@@ -21,19 +20,25 @@ describe "Piecemaker::API Event" do
     @big = Event.make :big, :event_group_id => @alpha.id
 
     @big_field = EventField.make :flag1, :event_id => @big.id
+  end
+
+  # -----------------------------------------------------------------------
+  describe "GET /api/v1/event/:id" do
+
+    it "returns event with id" do
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/event/#{@big.id}"
+      last_response.status.should == 200
+
+      # returned event matches factory event?
+      event = json_string_to_hash(last_response.body)
+      event.should == @big.values
+    end
 
   end
 
-
-  it "GET /api/v1/event/:id returns event with id" do
-    header "X-Access-Key", @hans_admin.api_access_key
-    get "/api/v1/event/#{@big.id}"
-    last_response.status.should == 200
-    json_parse(last_response.body).should == @big.values
-  end
-
-  # --------------------------------------------------
-  describe "PUT /api/v1/event/:id", :focus do
+  # -----------------------------------------------------------------------
+  describe "PUT /api/v1/event/:id" do
 
     it "updates an event (without fields)" do
       header "X-Access-Key", @pan.api_access_key
@@ -42,14 +47,14 @@ describe "Piecemaker::API Event" do
         :duration => '7'
       last_response.status.should == 200
 
-      result = json_string_to_hash(last_response.body)
+      result       = json_string_to_hash(last_response.body)
+      event        = result[0]
+      event_fields = result[1]
 
       # returned event matches event in db?
-      event = result[0]
-      Event.first(:id => event[:id]).values.should == event
+      Event[event[:id]].values.should == event
       
       # returned event_fields match event_fields in db?
-      event_fields = result[1]
       event_fields.should =~ json_parse(@big.event_fields.to_json)
     end
 
@@ -63,35 +68,83 @@ describe "Piecemaker::API Event" do
           :another_new_key => "some more values"}
       last_response.status.should == 200
       
-      result = json_string_to_hash(last_response.body)
-      event = result[0]
+      result       = json_string_to_hash(last_response.body)
+      event        = result[0]
       event_fields = result[1]
 
+      # returned event matches event in db?
       event.should == Event[event[:id]].values
 
+      # returned event_fields match event_fields in db?
+      event_fields.should == EventField.where(
+        :event_id => event[:id]).all_values
+    end
+
+    it "updates an event and updates existing fields" do
+      header "X-Access-Key", @pan.api_access_key
+      put "/api/v1/event/#{@big.id}", 
+        :utc_timestamp => '8', 
+        :duration => '9',
+        :fields => {
+          :flag1 => "new value for flag1"}
+      last_response.status.should == 200
+      
+      result       = json_string_to_hash(last_response.body)
+      event        = result[0]
+      event_fields = result[1]
+
+      # returned event matches event in db?
+      event.should == Event[event[:id]].values
+
+      # returned event_fields match event_fields in db?
       event_fields.should == EventField.where(
         :event_id => event[:id]).all_values
 
     end
 
-    it "updates an event and updates existing fields" do
-      pending
-    end
-
     it "updates an event and deletes existing fields" do
-      pending
+            header "X-Access-Key", @pan.api_access_key
+      put "/api/v1/event/#{@big.id}", 
+        :utc_timestamp => '8', 
+        :duration => '9',
+        :fields => {
+          :flag1 => "null"}
+      last_response.status.should == 200
+      
+      result       = json_string_to_hash(last_response.body)
+      event        = result[0]
+      event_fields = result[1]
+
+      # returned event matches event in db?
+      event.should == Event[event[:id]].values
+
+      # returned event_fields match event_fields in db?
+      event_fields.should == EventField.where(
+        :event_id => event[:id]).all_values
+
+      # event_field flag1 really deleted?
+      EventField.first(
+        :event_id => event[:id], 
+        :id => "flag1").should eq(nil)
     end
 
   end
 
-  it "DELETE /api/v1/event/:id deletes event with id" do
-    header "X-Access-Key", @pan.api_access_key
-    delete "/api/v1/event/#{@big.id}"
-    last_response.status.should == 200
-    Event.first(:id => @big.id).should eq(nil)
-    EventField.where(:event_id => @big.id).count.should eq(0)
-  end
+  # -----------------------------------------------------------------------
+  describe "DELETE /api/v1/event/:id" do
 
+    it "deletes event with id" do
+      header "X-Access-Key", @pan.api_access_key
+      delete "/api/v1/event/#{@big.id}"
+      last_response.status.should == 200
+
+      # is the event really deleted from the db?
+      Event.first(:id => @big.id).should eq(nil)
+
+      # are the event_fields deleted as well?
+      EventField.where(:event_id => @big.id).count.should eq(0)
+    end
+
+  end
 
 end
-
