@@ -88,7 +88,7 @@ describe "Piecemaker::API EventGroup" do
   end
 
   it "GET /api/v1/group/:id/event/by_type/:type returns events by type" do
-    raise
+    pending
     # get events with type
     # Likes: token*
     # Returns: [{id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}]

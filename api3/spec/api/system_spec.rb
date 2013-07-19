@@ -13,7 +13,7 @@ describe "Piecemaker::API System" do
   end
 
   it "GET /api/v1/utc_timestamp returns server timestamp with milliseconds" do
-    raise
+    pending
     # get unix timestamp with milliseconds
     # Likes: ``````
     # Returns: time

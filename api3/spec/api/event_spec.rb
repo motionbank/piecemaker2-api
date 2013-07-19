@@ -14,28 +14,28 @@ describe "Piecemaker::API Event" do
 
 
   it "GET /api/v1/event/:id alias for /api/v1/event/:id" do
-    raise
+    pending
     # get details about one event
     # Likes: token*
     # Returns: {id, event_group_id, event_group, created_by_user_id, created_by_user, utc_timestamp, duration}
   end
 
   it "POST /api/v1/event/:id creates new event and event_fields" do
-    raise
+    pending
     # create new event and create new event_fields for all non-events table fields
     # Likes: token*, utc_timestamp, duration, ...
     # Returns: {id}
   end
 
   it "PUT /api/v1/event/:id updates an event with id" do
-    raise
+    pending
     # updates a event
     # Likes: token*, utc_timestamp, duration
     # Returns: boolean
   end
 
   it "DELETE /api/v1/event/:id deletes event with id" do
-    raise
+    pending
     # delete one event
     # Likes: token*
     # Returns: boolean
@@ -51,7 +51,7 @@ describe "Piecemaker::API Event" do
     # create new field for event
     # Likes: token*, id*, value*
     # Returns: {id}
-    raise
+    pending
   end
 
   it "GET /api/v1/event/:id/field/:id returns field with id for event with id" do
@@ -59,7 +59,7 @@ describe "Piecemaker::API Event" do
     # get one field for event
     # Likes: token*
     # Returns: {value}
-    raise
+    pending
   end
 
   it "PUT /api/v1/event/:id/field/:id updates field with id for event with id" do
@@ -67,7 +67,7 @@ describe "Piecemaker::API Event" do
     # updates a field for an event
     # Likes: token*, value
     # Returns: boolean
-    raise
+    pending
   end
 
   it "DELETE /api/v1/event/:id/field/:id deletes field with id for event with id" do
@@ -75,7 +75,7 @@ describe "Piecemaker::API Event" do
     # delete one field for an event
     # Likes: token*
     # Returns: boolean
-    raise
+    pending
   end
 
 
