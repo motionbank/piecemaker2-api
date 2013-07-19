@@ -20,6 +20,8 @@ describe "Piecemaker::API Event" do
 
     @big = Event.make :big, :event_group_id => @alpha.id
 
+    @big_field = EventField.make :flag1, :event_id => @big.id
+
   end
 
 
@@ -30,91 +32,73 @@ describe "Piecemaker::API Event" do
     json_parse(last_response.body).should == @big.values
   end
 
-  it "PUT /api/v1/event/:id updates an event with id", :focus do
-    header "X-Access-Key", @pan.api_access_key
-    put "/api/v1/event/#{@big.id}", 
-      :utc_timestamp => '6', 
-      :duration => '7'
-    last_response.status.should == 200
-    returned = json_parse(last_response.body)
+  describe "PUT /api/v1/event/:id", :focus do
 
-    returned_event = returned[0]
-    event_from_database = Event.first(:id => returned_event[:id])
-    event_from_database.values.should == returned_event
-    
-    returned_fields = returned[1]
-    returned_fields.should eq([])
+    it "updates an event" do
+      pending
+    end
 
-    # create event fields for additional params
-    header "X-Access-Key", @pan.api_access_key
-    put "/api/v1/event/#{@big.id}", 
-      :utc_timestamp => '8', 
-      :duration => '9',
-      :fields => {
-        :key1 => "some value",
-        :another => "some more values"}
-    last_response.status.should == 200
+    it "updates an event and creates new fields" do
+      pending
+    end
 
-    returned = json_parse(last_response.body)
+    it "updates an event and updates existing fields" do
+      pending
+    end
 
-    returned_event = returned[0]
-    @event_from_database = Event.first(:id => returned_event[:id])
-    @event_from_database.values.should == returned_event
+    it "updates an event and deletes existing fields" do
+      pending
+    end
 
-    returned_fields = returned[1]
-    # @todo wtf? json_parse(...to_json) isnt there a dataset method for this?!
-    event_fields_from_database_hash = json_parse(@event_from_database.event_fields.to_json)
-    returned_fields.should_not eq([])
-    returned_fields.should_not eq(nil)
-    event_fields_from_database_hash.should =~ returned_fields
+    it "updates an event with id" do
+      header "X-Access-Key", @pan.api_access_key
+      put "/api/v1/event/#{@big.id}", 
+        :utc_timestamp => '6', 
+        :duration => '7'
+      last_response.status.should == 200
+      returned = json_parse(last_response.body)
 
+      returned_event = returned[0]
+      event_from_database = Event.first(:id => returned_event[:id])
+      event_from_database.values.should == returned_event
+      
+      returned_fields = returned[1]
+      returned_fields.should =~ json_parse(@big.event_fields.to_json)
+
+      # create event fields for additional params
+      header "X-Access-Key", @pan.api_access_key
+      put "/api/v1/event/#{@big.id}", 
+        :utc_timestamp => '8', 
+        :duration => '9',
+        :fields => {
+          :key1 => "some value",
+          :another => "some more values"}
+      last_response.status.should == 200
+
+      returned = json_parse(last_response.body)
+
+      returned_event = returned[0]
+      @event_from_database = Event.first(:id => returned_event[:id])
+      @event_from_database.values.should == returned_event
+
+      returned_fields = returned[1]
+      # @todo wtf? json_parse(...to_json) isnt there a dataset method for this?!
+      event_fields_from_database_hash = json_parse(@event_from_database.event_fields.to_json)
+      returned_fields.should_not eq([])
+      returned_fields.should_not eq(nil)
+      event_fields_from_database_hash.should =~ returned_fields
+
+    end
 
   end
 
   it "DELETE /api/v1/event/:id deletes event with id" do
-    pending
-    # delete one event
-    # Likes: token*
-    # Returns: boolean
+    header "X-Access-Key", @pan.api_access_key
+    delete "/api/v1/event/#{@big.id}"
+    last_response.status.should == 200
+    Event.first(:id => @big.id).should eq(nil)
+    EventField.where(:event_id => @big.id).count.should eq(0)
   end
-
-
-
-
-  it "POST /api/v1/event/:id/field creates a new field for event" do
-    # alias 
-    # POST AUTH /event/:event_id/field
-
-    # create new field for event
-    # Likes: token*, id*, value*
-    # Returns: {id}
-    pending
-  end
-
-  it "GET /api/v1/event/:id/field/:id returns field with id for event with id" do
-    # alias 
-    # get one field for event
-    # Likes: token*
-    # Returns: {value}
-    pending
-  end
-
-  it "PUT /api/v1/event/:id/field/:id updates field with id for event with id" do
-    # alias 
-    # updates a field for an event
-    # Likes: token*, value
-    # Returns: boolean
-    pending
-  end
-
-  it "DELETE /api/v1/event/:id/field/:id deletes field with id for event with id" do
-    # alias 
-    # delete one field for an event
-    # Likes: token*
-    # Returns: boolean
-    pending
-  end
-
 
 
 end
