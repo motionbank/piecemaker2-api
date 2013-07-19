@@ -71,13 +71,17 @@ namespace :db do
     Rake::Task['environment'].invoke(env)
 
     require "Digest"
+    api_access_key = Piecemaker::Helper::API_Access_Key::generate
     DB[:users].insert(
       :name => "Super Admin", 
-      :email => "super@example.com",
-      :password => Digest::SHA1.hexdigest("Super Admin"),
-      :api_access_key => Piecemaker::Helper::API_Access_Key::generate,
-      :is_admin => true
-      )
+      :email => "super-admin@example.com",
+      :password => Digest::SHA1.hexdigest("admin"),
+      :api_access_key => api_access_key,
+      :is_admin => true)
+
+    puts "Email         : super-admin@example.com"
+    puts "Password      : super-admin"
+    puts "API Access Key: #{api_access_key}"
   end
 
   desc "Run database migrations"

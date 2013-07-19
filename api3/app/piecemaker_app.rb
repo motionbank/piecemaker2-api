@@ -9,13 +9,6 @@ module Piecemaker
       @instance ||= Rack::Builder.new do
         api = Piecemaker::API
 
-        use Rack::Cors do
-          allow do
-            origins '*'
-            resource '*', headers: :any, methods: :get
-          end
-        end
-
         run api
       end.to_app
     end
