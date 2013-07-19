@@ -190,7 +190,7 @@ describe "Piecemaker::API User" do
     end
 
     it "GET /api/v1/user/:id/event_groups returns all event_groups for user with id" do
-      raise
+      pending
     end
   end
 end
