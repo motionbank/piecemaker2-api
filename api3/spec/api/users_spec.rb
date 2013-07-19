@@ -294,12 +294,6 @@ describe "Piecemaker::API User" do
         # was put persistant?
         returned_peter = json_string_to_hash(last_response.body)
         returned_peter[:password].should_not == @peter.password
-
-        # non-admins cant update users
-        header "X-Access-Key", @peter.api_access_key
-        put "/api/v1/user/#{@pan.id}", 
-          :name => "Michael"
-        last_response.status.should == 403
       end
       #-------------------------------------------------------------------------
     end
@@ -316,11 +310,6 @@ describe "Piecemaker::API User" do
         delete "/api/v1/user/#{@pan.id}"
         last_response.status.should == 200
         User.first(:id => @pan.id).should eq(nil)
-
-        # non-admins cant delete users
-        header "X-Access-Key", @peter.api_access_key
-        delete "/api/v1/user/#{@pan.id}"
-        last_response.status.should == 403
       end
       #-------------------------------------------------------------------------
     end
