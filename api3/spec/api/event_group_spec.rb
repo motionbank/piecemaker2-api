@@ -9,20 +9,23 @@ describe "Piecemaker::API EventGroup" do
   before(:each) do
     truncate_db
 
-    @peter = User.make :peter
-    @pan = User.make :pan
-    @hans_admin = User.make :hans_admin
+    @peter                = User.make :peter
+    @pan                  = User.make :pan
+    @hans_admin           = User.make :hans_admin
+  
+    @alpha                = EventGroup.make :alpha
+    @beta                 = EventGroup.make :beta
+  
+    @big_in_alpha         = Event.make :big, 
+                              :event_group_id => @alpha.id
 
-    @alpha = EventGroup.make :alpha
-    @beta = EventGroup.make :beta
-
-    @big_in_alpha = Event.make :big, :event_group_id => @alpha.id
-
-    @pan_has_event_group = UserHasEventGroup.make :default,  
-      :user_id => @pan.id, :event_group_id => @alpha.id
+    @pan_has_event_group  = UserHasEventGroup.make :default,  
+                              :user_id => @pan.id, 
+                              :event_group_id => @alpha.id
 
     @hans_has_event_group = UserHasEventGroup.make :default,  
-      :user_id => @hans_admin.id, :event_group_id => @alpha.id
+                              :user_id => @hans_admin.id, 
+                              :event_group_id => @alpha.id
   end
 
 
@@ -36,34 +39,41 @@ describe "Piecemaker::API EventGroup" do
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/groups"
       last_response.status.should == 200
-      json_parse(last_response.body).should =~ [@alpha.values]
+      json_string_to_hash(last_response.body).should =~ [@alpha.values]
     end
     #---------------------------------------------------------------------------
   end
 
 
   ##############################################################################
-  describe "POST /api/v1/group/:id/event " do
+  describe "POST /api/v1/group/:id/event" do
   ##############################################################################
 
     #---------------------------------------------------------------------------
-    it "creates and returns new event and event_fields" do
+    it "creates and returns new event (without additional event_fields)" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @pan.api_access_key
       post "/api/v1/group/#{@alpha.id}/event", 
         :utc_timestamp => '1', 
         :duration => '2'
       last_response.status.should == 201
-      returned = json_parse(last_response.body)
 
-      returned_event = returned[0]
-      event_from_database = Event.first(:id => returned_event[:id])
-      event_from_database.values.should == returned_event
+      result       = json_string_to_hash(last_response.body)
+      event        = result[0]
+      event_fields = result[1]
+
+      # was the event created?
+      Event[event[:id]].values.should == event
       
-      returned_fields = returned[1]
-      returned_fields.should eq([])
+      # no event_fields should be created!
+      event_fields.should eq([])
+    end
+    #---------------------------------------------------------------------------
 
-      # create event fields for additional params
+
+    #---------------------------------------------------------------------------
+    it "creates and returns new event (with additional event_fields)" do
+    #---------------------------------------------------------------------------
       header "X-Access-Key", @pan.api_access_key
       post "/api/v1/group/#{@alpha.id}/event", 
         :utc_timestamp => '3', 
@@ -73,18 +83,21 @@ describe "Piecemaker::API EventGroup" do
           :another => "some more values"}
       last_response.status.should == 201
 
-      returned = json_parse(last_response.body)
+      result       = json_string_to_hash(last_response.body)
+      event        = result[0]
+      event_fields = result[1]
 
-      returned_event = returned[0]
-      @event_from_database = Event.first(:id => returned_event[:id])
-      @event_from_database.values.should == returned_event
+      # was the event created?
+      Event[event[:id]].values.should == event
 
-      returned_fields = returned[1]
-      # @todo wtf? json_parse(...to_json) isnt there a dataset method for this?!
-      event_fields_from_database_hash = json_parse(@event_from_database.event_fields.to_json)
-      returned_fields.should_not eq([])
-      returned_fields.should_not eq(nil)
-      returned_fields.should =~ event_fields_from_database_hash
+      # are event_fields passed?
+      event_fields.should_not eq([])
+      event_fields.should_not eq(nil)
+      event_fields.should_not eq("")
+
+      # have the event_fields been saved?
+      event_fields.should =~ EventField.where(
+        :event_id => event[:id]).all_values
     end
     #---------------------------------------------------------------------------
 
@@ -130,7 +143,7 @@ describe "Piecemaker::API EventGroup" do
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}"
       last_response.status.should == 200
-      json_parse(last_response.body).should == @alpha.values
+      json_string_to_hash(last_response.body).should == @alpha.values
     end
     #---------------------------------------------------------------------------
   end
@@ -147,9 +160,10 @@ describe "Piecemaker::API EventGroup" do
       put "/api/v1/group/#{@alpha.id}", :title => "Omega", 
         :text => "Text for Omega"
       last_response.status.should == 200
-      returned_alpha = json_parse(last_response.body)
-      returned_alpha.should == EventGroup.first(
-        :id => returned_alpha[:id]).values
+
+      event_group = json_string_to_hash(last_response.body)
+      event_group.should == EventGroup.first(
+        :id => event_group[:id]).values
     end
     #---------------------------------------------------------------------------
   end
@@ -181,7 +195,7 @@ describe "Piecemaker::API EventGroup" do
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/events"
       last_response.status.should == 200
-      json_parse(last_response.body).should == [@big_in_alpha.values]
+      json_string_to_hash(last_response.body).should == [@big_in_alpha.values]
     end
     #---------------------------------------------------------------------------
   end
@@ -197,7 +211,8 @@ describe "Piecemaker::API EventGroup" do
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/users"
       last_response.status.should == 200
-      json_parse(last_response.body).should =~ [@hans_admin.values, @pan.values]
+      json_string_to_hash(last_response.body).should =~ [@hans_admin.values, 
+        @pan.values]
     end
     #---------------------------------------------------------------------------
   end

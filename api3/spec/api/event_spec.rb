@@ -9,17 +9,19 @@ describe "Piecemaker::API Event" do
   before(:each) do
     truncate_db
 
-    @peter = User.make :peter
-    @pan = User.make :pan
-    @hans_admin = User.make :hans_admin
+    @peter          = User.make :peter
+    @pan            = User.make :pan
+    @hans_admin     = User.make :hans_admin
     @klaus_disabled = User.make :klaus_disabled
 
-    @alpha = EventGroup.make :alpha
-    @beta = EventGroup.make :beta
+    @alpha          = EventGroup.make :alpha
+    @beta           = EventGroup.make :beta
 
-    @big = Event.make :big, :event_group_id => @alpha.id
+    @big            = Event.make :big, 
+                        :event_group_id => @alpha.id
 
-    @big_field = EventField.make :flag1, :event_id => @big.id
+    @big_field      = EventField.make :flag1, 
+                        :event_id => @big.id
   end
 
 
@@ -63,7 +65,7 @@ describe "Piecemaker::API Event" do
       Event[event[:id]].values.should == event
       
       # returned event_fields match event_fields in db?
-      event_fields.should =~ json_parse(@big.event_fields.to_json)
+      event_fields.should =~ json_string_to_hash(@big.event_fields.to_json)
     end
     #---------------------------------------------------------------------------
 
