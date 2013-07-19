@@ -14,9 +14,9 @@ describe "Piecemaker::API User" do
     before(:all) do
       truncate_db
       
-      @peter = User.make :peter
-      @pan = User.make :pan
-      @hans_admin = User.make :hans_admin
+      @peter          = User.make :peter
+      @pan            = User.make :pan
+      @hans_admin     = User.make :hans_admin
       @klaus_disabled = User.make :klaus_disabled
     end
 
@@ -31,9 +31,10 @@ describe "Piecemaker::API User" do
         post "/api/v1/user/login", 
         :email => @peter.email, :password => @peter.name
         last_response.status.should == 201
-        json = JSON.parse(last_response.body)
+
+        result = json_string_to_hash(last_response.body)
         Piecemaker::Helper::API_Access_Key::makes_sense?(
-          json["api_access_key"]).should eq(true)
+          result[:api_access_key]).should eq(true)
       end
       #-------------------------------------------------------------------------
 
@@ -133,13 +134,26 @@ describe "Piecemaker::API User" do
         header "X-Access-Key", @peter.api_access_key
         post "/api/v1/user/logout"
         last_response.status.should == 201
-        json = JSON.parse(last_response.body)
-        json.should == {"api_access_key" => nil}
 
+        result = json_string_to_hash(last_response.body)
+        result.should == {:api_access_key => nil}
+      end
+      #-------------------------------------------------------------------------
+
+
+      #-------------------------------------------------------------------------
+      it "fails if invalid header key" do
+      #-------------------------------------------------------------------------
         header "X-Access-Key", "wrong"
         post "/api/v1/user/logout"
         last_response.status.should == 401
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails if empty header key is sent" do
+      #-------------------------------------------------------------------------
         header "X-Access-Key", ""
         post "/api/v1/user/logout"
         last_response.status.should == 401
@@ -160,9 +174,9 @@ describe "Piecemaker::API User" do
     before(:each) do
       truncate_db
       
-      @peter = User.make :peter
-      @pan = User.make :pan
-      @hans_admin = User.make :hans_admin
+      @peter          = User.make :peter
+      @pan            = User.make :pan
+      @hans_admin     = User.make :hans_admin
       @klaus_disabled = User.make :klaus_disabled
     end
 
@@ -180,16 +194,26 @@ describe "Piecemaker::API User" do
           :email => "michael@example.com",
           :is_admin => false
         last_response.status.should == 201
-        returned_user = json_parse(last_response.body)
+
+        user = json_string_to_hash(last_response.body)
+
         # ignore password field, because is returned plain/text on creation
-        returned_user.delete(:password) 
+        user.delete(:password) 
 
-        @user_from_database = User.first(:id => returned_user[:id]).values
-        @user_from_database.delete(:password)
+        @user = User[user[:id]].values
+        @user.delete(:password)
 
-        returned_user.should == @user_from_database
+        user.should == @user
 
-        # non-admins cant create users
+      end
+      #-------------------------------------------------------------------------
+
+
+      #-------------------------------------------------------------------------
+      it "non-admins can't creates new user" do
+      #-------------------------------------------------------------------------
+        pending "acl checks tbd"
+        # @todo acl!
         header "X-Access-Key", @peter.api_access_key
         post "/api/v1/user", 
           :name => "Michael",
@@ -220,7 +244,7 @@ describe "Piecemaker::API User" do
         header "X-Access-Key", @peter.api_access_key
         get "/api/v1/user/me"
         last_response.status.should == 200
-        json_parse(last_response.body).should == @peter.values
+        json_string_to_hash(last_response.body).should == @peter.values
       end
       #-------------------------------------------------------------------------
     end
@@ -236,7 +260,7 @@ describe "Piecemaker::API User" do
         header "X-Access-Key", @peter.api_access_key
         get "/api/v1/user/#{@pan.id}"
         last_response.status.should == 200
-        json_parse(last_response.body).should == @pan.values
+        json_string_to_hash(last_response.body).should == @pan.values
       end
       #-------------------------------------------------------------------------
     end
@@ -258,7 +282,7 @@ describe "Piecemaker::API User" do
         last_response.status.should == 200
 
         # was put persistant?
-        returned_pan = json_parse(last_response.body)
+        returned_pan = json_string_to_hash(last_response.body)
         returned_pan.should == User.first(:id => returned_pan[:id]).values
 
         # create new password
@@ -268,7 +292,7 @@ describe "Piecemaker::API User" do
         last_response.status.should == 200
 
         # was put persistant?
-        returned_peter = json_parse(last_response.body)
+        returned_peter = json_string_to_hash(last_response.body)
         returned_peter[:password].should_not == @peter.password
 
         # non-admins cant update users
@@ -325,7 +349,7 @@ describe "Piecemaker::API User" do
         header "X-Access-Key", @hans_admin.api_access_key
         get "/api/v1/users"
         last_response.status.should == 200
-        json_parse(last_response.body).should =~ [@peter.values, 
+        json_string_to_hash(last_response.body).should =~ [@peter.values, 
           @pan.values, @hans_admin.values, @klaus_disabled.values]
       end
       #-------------------------------------------------------------------------
