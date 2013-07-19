@@ -85,7 +85,7 @@ module Piecemaker
       end
       put "/:id" do
         @_user = authorize!(:admin_only)
-        @user = User.find(:id => params[:id])
+        @user = User.first(:id => params[:id])
         error!('Not found', 404) unless @user
 
         @user.update_with_params!(params, :name, :email, :is_admin, :is_disabled)
@@ -108,7 +108,7 @@ module Piecemaker
       end
       delete "/:id" do
         @_user = authorize!(:admin_only)
-        @user = User.find(:id => params[:id])
+        @user = User.first(:id => params[:id])
         error!('Not found', 404) unless @user
 
         @user.delete

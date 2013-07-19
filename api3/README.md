@@ -2,6 +2,8 @@
 
 __... with [Grape](https://github.com/intridea/grape) on [Rack](http://rack.github.io/) and [Sequel](https://github.com/jeremyevans/sequel).__
 
+Using Sequel Models but without association definitions.
+
 ## Installation
 
 ```
