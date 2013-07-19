@@ -113,6 +113,7 @@ Some further reading ...
  * https://github.com/jeremyevans/sequel
  * http://sequel.rubyforge.org/documentation.html
  * http://sequel.rubyforge.org/rdoc/files/doc/schema_modification_rdoc.html
+ * http://sequel.rubyforge.org/rdoc/
  * https://github.com/mjijackson/sequel-factory
  * http://rack.github.io/
  

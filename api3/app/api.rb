@@ -1,9 +1,13 @@
 module Piecemaker
   class API < Grape::API
 
+    # rescue all
+    # https://github.com/intridea/grape/blob/master/lib/grape/endpoint.rb#L414
+
     # rescue errors coming from sequel
     rescue_from Sequel::DatabaseError do |e|
       # @todo: implement logging
+      # https://github.com/intridea/grape#logging
       $stderr.puts e.message if ["test", "development"].include?(ENV['RACK_ENV'])
       Rack::Response.new({
           'status' => 500,

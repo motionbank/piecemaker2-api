@@ -26,6 +26,47 @@ describe "Piecemaker::API EventGroup" do
       :user_id => @hans_admin.id, :event_group_id => @alpha.id
   end
 
+
+  it "POST /api/v1/group/:id/event creates new event and event_fields" do
+    header "X-Access-Key", @pan.api_access_key
+    post "/api/v1/group/#{@alpha.id}/event", 
+      :utc_timestamp => '1', 
+      :duration => '2'
+    last_response.status.should == 201
+    returned = json_parse(last_response.body)
+
+    returned_event = returned[0]
+    event_from_database = Event.first(:id => returned_event[:id])
+    event_from_database.values.should == returned_event
+    
+    returned_fields = returned[1]
+    returned_fields.should eq([])
+
+    # create event fields for additional params
+    header "X-Access-Key", @pan.api_access_key
+    post "/api/v1/group/#{@alpha.id}/event", 
+      :utc_timestamp => '3', 
+      :duration => '4',
+      :fields => {
+        :key1 => "some value",
+        :another => "some more values"}
+    last_response.status.should == 201
+
+    returned = json_parse(last_response.body)
+
+    returned_event = returned[0]
+    @event_from_database = Event.first(:id => returned_event[:id])
+    @event_from_database.values.should == returned_event
+
+    returned_fields = returned[1]
+    # @todo wtf? json_parse(...to_json) isnt there a dataset method for this?!
+    event_fields_from_database_hash = json_parse(@event_from_database.event_fields.to_json)
+    returned_fields.should =~ event_fields_from_database_hash
+    
+  end
+
+
+
   it "GET /api/v1/groups returns all event_groups for currently logged in user" do
     header "X-Access-Key", @pan.api_access_key
     get "/api/v1/groups"

@@ -19,6 +19,40 @@ module Piecemaker
       # --------------------------------------------------
       desc "create new event_group (together with user_has_event_groups record)"
       params do
+        requires :id, type: Integer, desc: "event group id"
+        requires :utc_timestamp, type: Float, desc: "utc timestamp"
+        optional :duration, type: Float, desc: "duration"
+        optional :fields, type: Hash, desc: "optional fields to create for this event {'field1': 'value', ...}"
+      end 
+      post "/:id/event" do
+        @_user = authorize!
+        # @todo acl!
+
+        @event_group = EventGroup.first(:id => params[:id]) || error!('Not found', 404)
+
+        @event = Event.create(
+          :event_group_id     => @event_group.id,
+          :created_by_user_id => @_user.id,
+          :utc_timestamp      => params[:utc_timestamp],
+          :duration           => params[:duration])
+
+        # create event fields
+        fields = []
+        if params[:fields]
+          params[:fields].each do |id, value|
+            fields << EventField.create(
+              :event_id => @event.id,
+              :id       => id,
+              :value    => value)
+          end
+        end
+        
+        [@event, fields]
+      end
+
+      # --------------------------------------------------
+      desc "create new event_group (together with user_has_event_groups record)"
+      params do
         requires :title, type: String, desc: "name of the group"
         requires :text, type: String, desc: "some additional description" # @todo type: Text not String
       end 
