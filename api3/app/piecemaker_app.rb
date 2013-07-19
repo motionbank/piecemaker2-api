@@ -4,6 +4,7 @@ module Piecemaker
     def initialize
     end
 
+
     def self.instance
       @instance ||= Rack::Builder.new do
         api = Piecemaker::API

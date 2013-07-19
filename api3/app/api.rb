@@ -1,9 +1,6 @@
 module Piecemaker
   class API < Grape::API
 
-    # rescue all
-    # https://github.com/intridea/grape/blob/master/lib/grape/endpoint.rb#L414
-
     # rescue errors coming from sequel
     rescue_from Sequel::DatabaseError do |e|
       # @todo: implement logging
@@ -33,6 +30,10 @@ module Piecemaker
 
     if ENV['RACK_ENV'].to_sym == :development
       add_swagger_documentation api_version: 'v1'
+      
+      # rescue from all thrown exceptions
+      # grape will return '500 Internal Server Error' in all other cases
+      rescue_from :all 
     end
     
   end

@@ -10,12 +10,14 @@ end
 
 NewRelic::Agent.manual_start
 
-Rack::Handler::Thin.run(Piecemaker::App.instance, {Port: 3100}) do |server|
+run Piecemaker::App.instance
+
+#Rack::Handler::Thin.run(Piecemaker::App.instance) do |server|
   # server.ssl = true 
   # server.ssl_options = {
   #     # :private_key_file => '/path/to/foo.key',
   #     # :cert_chain_file => '/path/to/bar.crt',
   #     :verify_peer => false,
   #   }
-end
+#end
 
