@@ -30,11 +30,45 @@ describe "Piecemaker::API Event" do
     json_parse(last_response.body).should == @big.values
   end
 
-  it "PUT /api/v1/event/:id updates an event with id" do
-    pending
-    # updates a event
-    # Likes: token*, utc_timestamp, duration
-    # Returns: boolean
+  it "PUT /api/v1/event/:id updates an event with id", :focus do
+    header "X-Access-Key", @pan.api_access_key
+    put "/api/v1/event/#{@big.id}", 
+      :utc_timestamp => '6', 
+      :duration => '7'
+    last_response.status.should == 200
+    returned = json_parse(last_response.body)
+
+    returned_event = returned[0]
+    event_from_database = Event.first(:id => returned_event[:id])
+    event_from_database.values.should == returned_event
+    
+    returned_fields = returned[1]
+    returned_fields.should eq([])
+
+    # create event fields for additional params
+    header "X-Access-Key", @pan.api_access_key
+    put "/api/v1/event/#{@big.id}", 
+      :utc_timestamp => '8', 
+      :duration => '9',
+      :fields => {
+        :key1 => "some value",
+        :another => "some more values"}
+    last_response.status.should == 200
+
+    returned = json_parse(last_response.body)
+
+    returned_event = returned[0]
+    @event_from_database = Event.first(:id => returned_event[:id])
+    @event_from_database.values.should == returned_event
+
+    returned_fields = returned[1]
+    # @todo wtf? json_parse(...to_json) isnt there a dataset method for this?!
+    event_fields_from_database_hash = json_parse(@event_from_database.event_fields.to_json)
+    returned_fields.should_not eq([])
+    returned_fields.should_not eq(nil)
+    event_fields_from_database_hash.should =~ returned_fields
+
+
   end
 
   it "DELETE /api/v1/event/:id deletes event with id" do

@@ -19,7 +19,11 @@ end
 
 def json_parse(string)
   # @todo dont parse if empty string or nil
-  JSON.parse(string, {:symbolize_names => true})
+  if string.class == String && string == "null"
+    nil
+  else
+    JSON.parse(string, {:symbolize_names => true})
+  end
 end
 
 # def set_api_access_key_for_user(user) # user id or user object
