@@ -22,9 +22,10 @@ describe "Piecemaker::API Event" do
     @big_field = EventField.make :flag1, :event_id => @big.id
   end
 
-  # -----------------------------------------------------------------------
+  # =======================================================================
   describe "GET /api/v1/event/:id" do
 
+    # ---------------------------
     it "returns event with id" do
       header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/event/#{@big.id}"
@@ -37,9 +38,10 @@ describe "Piecemaker::API Event" do
 
   end
 
-  # -----------------------------------------------------------------------
+  # =======================================================================
   describe "PUT /api/v1/event/:id" do
 
+    # ---------------------------------------
     it "updates an event (without fields)" do
       header "X-Access-Key", @pan.api_access_key
       put "/api/v1/event/#{@big.id}", 
@@ -58,6 +60,7 @@ describe "Piecemaker::API Event" do
       event_fields.should =~ json_parse(@big.event_fields.to_json)
     end
 
+    # ---------------------------------------------
     it "updates an event and creates new fields" do
       header "X-Access-Key", @pan.api_access_key
       put "/api/v1/event/#{@big.id}", 
@@ -80,6 +83,7 @@ describe "Piecemaker::API Event" do
         :event_id => event[:id]).all_values
     end
 
+    # --------------------------------------------------
     it "updates an event and updates existing fields" do
       header "X-Access-Key", @pan.api_access_key
       put "/api/v1/event/#{@big.id}", 
@@ -102,6 +106,7 @@ describe "Piecemaker::API Event" do
 
     end
 
+    # --------------------------------------------------
     it "updates an event and deletes existing fields" do
             header "X-Access-Key", @pan.api_access_key
       put "/api/v1/event/#{@big.id}", 
@@ -130,9 +135,10 @@ describe "Piecemaker::API Event" do
 
   end
 
-  # -----------------------------------------------------------------------
+  # =======================================================================
   describe "DELETE /api/v1/event/:id" do
 
+    # ---------------------------
     it "deletes event with id" do
       header "X-Access-Key", @pan.api_access_key
       delete "/api/v1/event/#{@big.id}"

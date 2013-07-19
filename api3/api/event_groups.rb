@@ -4,20 +4,19 @@ module Piecemaker
 
     resource 'groups' do
 
-      # --------------------------------------------------
-      desc "all event_groups for currently logged in user"
+      # ----------------------------------------------------------
+      desc "returns all event_groups for currently logged in user"
       get "/" do
         @_user = authorize!
         # @todo acl!
-        EventGroup.all || []
+        EventGroup.eager_graph(:users).where(:user_id => @_user.id)
       end
-
     end
 
     resource 'group' do
 
-      # --------------------------------------------------
-      desc "create new event_group (together with user_has_event_groups record)"
+      # ---------------------------------------------------
+      desc "creates and returns new event and event_fields"
       params do
         requires :id, type: Integer, desc: "event group id"
         requires :utc_timestamp, type: Float, desc: "utc timestamp"

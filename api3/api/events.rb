@@ -59,41 +59,6 @@ module Piecemaker
           end
         end
 
-=begin
-
-        if @event_fields
-          @event_fields.each do |event_field|
-            # puts event_field.values.inspect
-          end
-        end
-
-        fields = []
-        if params[:fields]
-          params[:fields].each do |id, value|
-            # try to find event field
-            @event_field = EventField.first(
-              :event_id => @event.id,
-              :id => id)
-            # nil deletes
-            if @event_field
-              # update existing event field
-              if @event_field.value != value
-                @event_field.value = value
-                @event_field.save
-              end
-            else
-              # create new event field
-              @event_field = EventField.create(
-                :event_id => @event.id,
-                :id => id,
-                :value => value)
-            end
-
-            fields << @event_field
-          end
-        end
-=end
-
         [@event, EventField.where(:event_id => @event.id)]
         
       end
