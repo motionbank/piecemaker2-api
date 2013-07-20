@@ -49,8 +49,10 @@ desc "Start API with environment (prod|dev)"
 task :start, :env do |cmd, args|
   env = expand_env_string(args[:env]) || "production"
   if env == "production"
+    puts "Starting in production mode ..."
     exec "RACK_ENV=production rackup"
   elsif env == "development"
+    puts "Starting in development mode ..."
     exec "bundle exec guard -g development"
   else
     puts "Please specify environment."
