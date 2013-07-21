@@ -17,7 +17,7 @@ $ bundle install
 
 $ cp config/config.sample.yml config/config.yml
 
-$ brew install postgres (and start postgres server)
+$ brew install postgres (and start postgres server, see installation output)
 $ createdb piecemaker2_prod && rake db:migrate[production]
 $ createdb piecemaker2_dev && rake db:migrate[development]
 $ createdb piecemaker2_test && rake db:migrate[test]
