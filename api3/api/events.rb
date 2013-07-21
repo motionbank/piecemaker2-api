@@ -18,8 +18,10 @@ module Piecemaker
       get "/:id" do  #/api/v1/event/:id
       #-------------------------------------------------------------------------
         @_user = authorize!
-        Event.first(:id => params[:id]) || error!('Not found', 404)
-        # @todo return group as well
+        @event = Event.first(:id => params[:id]) || error!('Not found', 404)
+        {:event => @event, 
+         :group => @event.event_group, 
+         :fields => @event.event_fields}
       end
 
 

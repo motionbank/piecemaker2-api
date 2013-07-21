@@ -162,7 +162,17 @@ module Piecemaker
         @event_group = EventGroup.first(:id => params[:id])
         error!('Not found', 404) unless @event_group
 
-        Event.where(:event_group_id => @event_group.id)
+        @events = Event.where(:event_group_id => @event_group.id)
+        # predefined filters
+        # ?from=<utc_timestamp>&to=<utc_timestamp>
+        
+
+        # filters on event_field keys
+
+        puts Event.eager_graph(:event_fields).sql
+
+        # no filters
+        # [{:event => Event.where(:event_group_id => @event_group.id), :fields => []# }]
       end
       
 
