@@ -6,7 +6,7 @@ __[Status](http://htmlpreview.github.io/?https://github.com/motionbank/piecemake
 
 ## Installation
 
-```
+```bash
 $ brew install rbenv
 $ brew install rbenv-gemset
 
@@ -17,7 +17,11 @@ $ bundle install
 
 $ cp config/config.sample.yml config/config.yml
 
-$ brew install postgres (and start postgres server, see installation output)
+# install and start postgres
+$ brew install postgres
+$ initdb /usr/local/var/postgres
+$ postgres -D /usr/local/var/postgres
+# create databases
 $ createdb piecemaker2_prod && rake db:migrate[production]
 $ createdb piecemaker2_dev && rake db:migrate[development]
 $ createdb piecemaker2_test && rake db:migrate[test]
@@ -153,3 +157,4 @@ Some further reading ...
  * http://www.akadia.com/services/ssh_test_certificate.html
  * http://www.thebuzzmedia.com/designing-a-secure-rest-api-without-oauth-authentication/comment-page-1/#comment-269244
  * http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+ * http://blog.willj.net/2011/05/31/setting-up-postgresql-for-ruby-on-rails-development-on-os-x/
