@@ -19,6 +19,9 @@ describe "Piecemaker::API EventGroup" do
     @big_in_alpha         = Event.make :big, 
                               :event_group_id => @alpha.id
 
+    @small_in_alpha       = Event.make :small, 
+                              :event_group_id => @alpha.id
+
     @pan_has_event_group  = UserHasEventGroup.make :default,  
                               :user_id => @pan.id, 
                               :event_group_id => @alpha.id
@@ -251,10 +254,11 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 200
 
       results       = json_string_to_hash(last_response.body)
-      puts results.inspect
+      # puts results.inspect
       results.should_not eq([])
+      results.should_not eq(nil)
 
-      pending 
+      results.should =~ [@big_in_alpha.values, @small_in_alpha.values]
 
       # results.each do |result|
       #   event = result[:event]
@@ -291,14 +295,14 @@ describe "Piecemaker::API EventGroup" do
     it "returns all events between time frame" do
     #---------------------------------------------------------------------------
       # pending "events ordered by time ASC, event_fields ordered by key ASC"
-      get "/api/v1/group/:id/events/from/<utc_timestamp>/to/<utc_timestamp>"
       # https://github.com/motionbank/piecemaker2/issues/42
-
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?from=0&to=10"
       last_response.status.should == 200
 
       results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [@big_in_alpha.values]
     end
     #---------------------------------------------------------------------------
 
@@ -327,6 +331,9 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 200
 
       results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [@big_in_alpha.values]
+
     end
     #---------------------------------------------------------------------------
 

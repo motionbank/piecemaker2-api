@@ -155,7 +155,7 @@ module Piecemaker
       params do
         requires :id, type: Integer, desc: "event group id"
         optional :from, type: Float, desc: ">= utc_timestamp"
-        optional :to, type: Float, desc: "< utc_timestamp"
+        optional :to, type: Float, desc: "<= utc_timestamp"
         optional :field, type: Hash, desc: "filter by event field key"
       end
       #-------------------------------------------------------------------------
@@ -165,33 +165,41 @@ module Piecemaker
         @event_group = EventGroup.first(:id => params[:id])
         error!('Not found', 404) unless @event_group
 
-        
+        if params[:from] && params[:to]
+          @events = Event.where(
+            :event_group_id => @event_group.id)
 
-        # filter: ?from=<utc_timestamp>&to=<utc_timestamp>
-        # if params[:from]
-        #   where  {:from >= 2}
-        # end
-# 
-        # if params[:to]
-        #   puts 1
-        #   # where[:to] < params[:from]
-        # end
-# 
-        # # filter: by event field key == value
-        # if params[:field]
-        #   puts params[:field]
-        # end
-# 
-        # DB[:events].
-        
-        #puts Event.eager_graph(:event_fields).where(:event_group_id => @event_group.id).to_json
+          @return_events = []
+          @events.each do |event|
+            event = JSON.parse(event.to_json, {:symbolize_names => true})
+            if event[:utc_timestamp] >= params[:from] && event[:utc_timestamp] <= params[:to]
+              @return_events << event
+            end
+          end
+          return @return_events
+
+        elsif params[:field]
+          @events = Event.where(
+            :event_group_id => @event_group.id)
 
 
-        # @events = Event.where(:event_group_id => @event_group.id)
-        # puts Event.eager_graph(:event_fields).sql
+          @return_events = []
+          @events.each do |event|
+            @event_fields = EventField.where(:event_id => event.id)
 
-        # no filters
-        # [{:event => Event.where(:event_group_id => @event_group.id), :fields => []# }]
+            hash = @event_fields.to_hash(:id, :value)
+            if hash.has_key? "type"
+              @return_events << event
+            end
+
+          end
+          return @return_events
+        else
+          @events = Event.where(
+            :event_group_id => @event_group.id)
+        end
+
+
       end
       
 
