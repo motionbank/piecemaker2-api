@@ -150,10 +150,13 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "returns all events"
+      desc "returns all events (filter options are connect with AND)"
       #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "event group id"
+        optional :from, type: Float, desc: ">= utc_timestamp"
+        optional :to, type: Float, desc: "< utc_timestamp"
+        optional :field, type: Hash, desc: "filter by event field key"
       end
       #-------------------------------------------------------------------------
       get "/:id/events" do  #/api/v1/group/:id/events
@@ -162,14 +165,30 @@ module Piecemaker
         @event_group = EventGroup.first(:id => params[:id])
         error!('Not found', 404) unless @event_group
 
-        @events = Event.where(:event_group_id => @event_group.id)
-        # predefined filters
-        # ?from=<utc_timestamp>&to=<utc_timestamp>
         
 
-        # filters on event_field keys
+        # filter: ?from=<utc_timestamp>&to=<utc_timestamp>
+        # if params[:from]
+        #   where  {:from >= 2}
+        # end
+# 
+        # if params[:to]
+        #   puts 1
+        #   # where[:to] < params[:from]
+        # end
+# 
+        # # filter: by event field key == value
+        # if params[:field]
+        #   puts params[:field]
+        # end
+# 
+        # DB[:events].
+        
+        #puts Event.eager_graph(:event_fields).where(:event_group_id => @event_group.id).to_json
 
-        puts Event.eager_graph(:event_fields).sql
+
+        # @events = Event.where(:event_group_id => @event_group.id)
+        # puts Event.eager_graph(:event_fields).sql
 
         # no filters
         # [{:event => Event.where(:event_group_id => @event_group.id), :fields => []# }]
