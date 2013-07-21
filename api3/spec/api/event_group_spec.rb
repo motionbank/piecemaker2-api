@@ -26,6 +26,12 @@ describe "Piecemaker::API EventGroup" do
     @hans_has_event_group = UserHasEventGroup.make :default,  
                               :user_id => @hans_admin.id, 
                               :event_group_id => @alpha.id
+
+    @flag1_field          = EventField.make :flag1,
+                              :event_id => @big_in_alpha.id
+
+    @type_field           = EventField.make :type,
+                              :event_id => @big_in_alpha.id
   end
 
 
@@ -234,21 +240,51 @@ describe "Piecemaker::API EventGroup" do
 
 
   ##############################################################################
-  describe "GET /api/v1/group/:id/events" do
+  describe "GET /api/v1/group/:id/events", :focus do
   ##############################################################################
     
     #---------------------------------------------------------------------------
     it "returns all events (with event_fields) for event_group with id" do
     #---------------------------------------------------------------------------
-      pending "events ordered by time ASC, event_fields ordered by key ASC"
+      # pending "events ordered by time ASC, event_fields ordered by key ASC"
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/events"
       last_response.status.should == 200
-      json_string_to_hash(last_response.body).should == [@big_in_alpha.values]
+
+      results       = json_string_to_hash(last_response.body)
+      puts results.inspect
+      results.should_not eq([])
+
+      results.each do |result|
+        event = result[:event]
+        event_fields = result[:fields]
+
+        event.should == @big_in_alpha.values
+        event_fields.should =~ [@flag1_field.values, @type_field.values]
+
+      end
+
+
+      # puts @big_in_alpha.event_fields.inspect
+      # json_string_to_hash(last_response.body).should == [@big_in_alpha.values]
     end
     #---------------------------------------------------------------------------
 
+    #-------------------------------------------------------------------------
+    it "ACL auto-testing" do
+    #-------------------------------------------------------------------------
+      pending
+      # get roles and test against this routes
+    end
+    #-------------------------------------------------------------------------
+  end
 
+
+  ##############################################################################
+  describe "GET /api/v1/group/:id/events" +
+           "?from=<utc_timestamp>&to=<utc_timestamp>" do
+  ##############################################################################
+    
     #---------------------------------------------------------------------------
     it "returns all events between time frame" do
     #---------------------------------------------------------------------------
@@ -258,6 +294,28 @@ describe "Piecemaker::API EventGroup" do
     end
     #---------------------------------------------------------------------------
 
+    #-------------------------------------------------------------------------
+    it "ACL auto-testing" do
+    #-------------------------------------------------------------------------
+      pending
+      # get roles and test against this routes
+    end
+    #-------------------------------------------------------------------------
+  end
+
+
+  ##############################################################################
+  describe "GET /api/v1/group/:id/events" +
+           "?<field_key>=<value>" do
+  ##############################################################################
+   
+    #---------------------------------------------------------------------------
+    it "returns all events filtered by field_key == value" do
+    #---------------------------------------------------------------------------
+      pending
+      # "GET /api/v1/group/:id/event/by_type/:type"
+    end
+    #---------------------------------------------------------------------------
 
     #-------------------------------------------------------------------------
     it "ACL auto-testing" do
@@ -283,28 +341,6 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 200
       json_string_to_hash(last_response.body).should =~ [@hans_admin.values, 
         @pan.values]
-    end
-    #---------------------------------------------------------------------------
-
-
-    #-------------------------------------------------------------------------
-    it "ACL auto-testing" do
-    #-------------------------------------------------------------------------
-      pending
-      # get roles and test against this routes
-    end
-    #-------------------------------------------------------------------------
-  end
-
-
-  ##############################################################################
-  describe "GET /api/v1/group/:id/event/by_type/:type" do
-  ##############################################################################
-    
-    #---------------------------------------------------------------------------
-    it "returns events in group by event field type" do
-    #---------------------------------------------------------------------------
-      pending
     end
     #---------------------------------------------------------------------------
 

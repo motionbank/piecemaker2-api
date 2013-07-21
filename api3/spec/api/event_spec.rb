@@ -30,14 +30,21 @@ describe "Piecemaker::API Event" do
   ##############################################################################
 
     #---------------------------------------------------------------------------
-    it "returns event with id" do
+    it "returns event with id (and return fields and group as well)" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/event/#{@big.id}"
       last_response.status.should == 200
 
       # returned event matches factory event?
-      json_string_to_hash(last_response.body).should == @big.values
+      results       = json_string_to_hash(last_response.body)
+      event         = results[:event]
+      event_fields  = results[:fields]
+      event_group  = results[:group]
+
+      event.should == @big.values
+      event_fields.should =~ [@big_field.values]
+      event_group.should == @alpha.values
     end
     #---------------------------------------------------------------------------
 

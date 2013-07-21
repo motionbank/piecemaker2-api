@@ -20,3 +20,8 @@ EventField.factory :flag4 do
   id "flag4"
   value "okay, enough"
 end
+
+EventField.factory :type do
+  id "type"
+  value "foobar"
+end
