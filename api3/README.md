@@ -20,7 +20,7 @@ $ cp config/config.sample.yml config/config.yml
 optional (for postgresql):
 $ createdb piecemaker2_prod && rake db:migrate[production]
 $ createdb piecemaker2_dev && rake db:migrate[development]
-$ createdb piecemaker2_test
+$ createdb piecemaker2_test && rake db:migrate[test]
 ```
 
 Edit ```config/config.yml```.
@@ -34,7 +34,7 @@ start development
 $ rake start:dev
 
 start production
-$ rake start:prod
+$ rake start[production]
 
 run tests 
    make sure that the test database in config/config.yml exists!
@@ -139,23 +139,17 @@ User
 
 ## Docs
 
-Some further reading ...
-
- * https://github.com/intridea/grape
  * http://intridea.github.io/grape/docs/index.html
- * https://github.com/dblock/grape-on-rack (was used as a template)
- * https://github.com/jeremyevans/sequel
- * http://sequel.rubyforge.org/documentation.html
- * http://sequel.rubyforge.org/rdoc/files/doc/schema_modification_rdoc.html
  * http://sequel.rubyforge.org/rdoc/
+ * http://sequel.rubyforge.org/documentation.html 
+
+
+Some further reading ...
+ * https://github.com/dblock/grape-on-rack (was used as a template)
  * https://github.com/mjijackson/sequel-factory
  * http://rack.github.io/
- 
  * https://www.relishapp.com/rspec/rspec-expectations/v/2-2/docs/matchers
-
  * https://www.startssl.com/
  * http://www.akadia.com/services/ssh_test_certificate.html
  * http://www.thebuzzmedia.com/designing-a-secure-rest-api-without-oauth-authentication/comment-page-1/#comment-269244
-
-
  * http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
