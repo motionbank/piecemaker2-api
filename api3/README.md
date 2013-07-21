@@ -22,9 +22,9 @@ $ brew install postgres
 $ initdb /usr/local/var/postgres
 $ postgres -D /usr/local/var/postgres
 # create databases
-$ createdb piecemaker2_prod && rake db:migrate[production]
-$ createdb piecemaker2_dev && rake db:migrate[development]
-$ createdb piecemaker2_test && rake db:migrate[test]
+$ createdb --username=XXX piecemaker2_prod && rake db:migrate[production]
+$ createdb --username=XXX piecemaker2_dev && rake db:migrate[development]
+$ createdb --username=XXX piecemaker2_test && rake db:migrate[test]
 ```
 
 Edit ```config/config.yml```.
