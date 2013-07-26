@@ -33,7 +33,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "event group id"
         requires :utc_timestamp, type: Float, desc: "utc timestamp"
         optional :duration, type: Float, desc: "duration"
-        optional :fields, type: String, desc: "optional fields to create for this event {'field1': 'value', ...}"
+        optional :fields, type: Hash, desc: "optional fields to create for this event {'field1': 'value', ...}"
       end
       #-------------------------------------------------------------------------
       put "/:id" do  #/api/v1/event/:id
@@ -52,7 +52,7 @@ module Piecemaker
 
       
         if params[:fields]
-          JSON.parse(params[:fields]).each do |id, value|
+          params[:fields].each do |id, value|
             if event_fields_hash.has_key? id
               if value == "null"
                 # delete field
@@ -64,9 +64,6 @@ module Piecemaker
                   :id => id).update(:value => value)
               end
             else
-
-              EventField.unrestrict_primary_key
-
               # create new field
               EventField.create(
                 :event_id => @event.id, 
