@@ -179,7 +179,7 @@ module Piecemaker
           @events.each do |event|
             event = JSON.parse(event.to_json, {:symbolize_names => true})
             if event[:utc_timestamp] >= params[:from] && event[:utc_timestamp] <= params[:to]
-              @return_events << event
+              @return_events << { :event => event, :fields => event.event_fields }
             end
           end
           return @return_events
@@ -197,14 +197,18 @@ module Piecemaker
             hash = @event_fields.to_hash(:id, :value)
 
             if hash.has_key?( "type" ) && hash[:type].to_s.eql?( find_hash[:type].to_s )
-              @return_events << event
+              @return_events << { :event => event, :fields => @event_fields }
             end
 
           end
           return @return_events
         else
-          @events = Event.where(
-            :event_group_id => @event_group.id)
+          @events = Event.where( :event_group_id => @event_group.id )
+          @return_events = []
+          @event.each do |event|
+            @return_events << { :event => event, :fields => event.event_fields }
+          end
+          return @return_events
         end
 
 
