@@ -34,7 +34,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "event group id"
         requires :utc_timestamp, type: Float, desc: "utc timestamp"
         optional :duration, type: Float, desc: "duration"
-        optional :fields, type: Hash, desc: "optional fields to create for this event {'field1': 'value', ...}"
+        optional :fields, type: String, desc: "optional fields to create for this event {'field1': 'value', ...}"
       end 
       #-------------------------------------------------------------------------
       post "/:id/event" do  #/api/v1/group/:id/event
@@ -54,7 +54,10 @@ module Piecemaker
         # create event fields
         fields = []
         if params[:fields]
-          params[:fields].each do |id, value|
+
+          EventField.unrestrict_primary_key
+
+          JSON.parse(params[:fields]).each do |id, value|
             fields << EventField.create(
               :event_id => @event.id,
               :id       => id,
@@ -84,6 +87,8 @@ module Piecemaker
         @event_group = EventGroup.create(
           :title => params[:title],
           :text  => params[:text])
+
+        UserHasEventGroup.unrestrict_primary_key
 
         UserHasEventGroup.create(
           :user_id => @_user.id,
@@ -156,7 +161,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "event group id"
         optional :from, type: Float, desc: ">= utc_timestamp"
         optional :to, type: Float, desc: "<= utc_timestamp"
-        optional :field, type: Hash, desc: "filter by event field key"
+        optional :field, type: String, desc: "filter by event field key"
       end
       #-------------------------------------------------------------------------
       get "/:id/events" do  #/api/v1/group/:id/events
@@ -182,13 +187,15 @@ module Piecemaker
           @events = Event.where(
             :event_group_id => @event_group.id)
 
+          find_hash = JSON.parse(params[:field])
 
           @return_events = []
           @events.each do |event|
             @event_fields = EventField.where(:event_id => event.id)
 
             hash = @event_fields.to_hash(:id, :value)
-            if hash.has_key? "type"
+
+            if hash.has_key?( "type" ) && hash[:type].to_s.eql?( find_hash[:type].to_s )
               @return_events << event
             end
 
