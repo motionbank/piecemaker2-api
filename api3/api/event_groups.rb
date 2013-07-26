@@ -65,7 +65,8 @@ module Piecemaker
           end
         end
         
-        [@event, fields]
+        { :event => @event, 
+          :fields => fields }
       end
       
 
