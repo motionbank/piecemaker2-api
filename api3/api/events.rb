@@ -19,9 +19,9 @@ module Piecemaker
       #-------------------------------------------------------------------------
         @_user = authorize!
         @event = Event.first(:id => params[:id]) || error!('Not found', 404)
-        {:event => @event, 
-         :group => @event.event_group, 
-         :fields => @event.event_fields}
+        
+        { :event => @event, 
+          :fields => @event.event_fields }
       end
 
 
@@ -76,7 +76,10 @@ module Piecemaker
           end
         end
 
-        [@event, EventField.where(:event_id => @event.id)]
+        {
+          :event => @event, 
+          :fields => EventField.where(:event_id => @event.id)
+        }
       end
 
 
@@ -94,7 +97,7 @@ module Piecemaker
         @event = Event.first(:id => params[:id])
         error!('Not found', 404) unless @event
 
-        @event.delete
+        { :event => @event.delete, :fields => [] }
       end
 
     end
