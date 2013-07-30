@@ -60,6 +60,19 @@ var srcEventFieldsToIgnore = [
 			);
 		},
 		function (next) {
+			destDb.insert(
+				'users',
+				['name','email','password'],
+				['Administrator',
+				 fakeEmailFromLogin('Administrator'),
+				 '1eda23758be9e36e5e0d2a6a87de584aaca0193f'],
+				function (err) {
+					assert.ifError(err);
+					next();
+				}
+			);
+		},
+		function (next) {
 			console.log( 'migrating users ...' );
 			migrateUsers( srcDb, destDb, next );
 		},
@@ -91,11 +104,41 @@ var srcEventFieldsToIgnore = [
 function migrateUsers ( srcDb, destDb, next ) {
 
 	async.waterfall([
-		function loadSourceUsers (next) {
-			srcDb.all('SELECT * FROM USERS',function(err,users){
-				assert.ifError(err);
-				next(null, users);
-			});
+		function loadExistingUsers (next) {
+			destDb.all(
+				'SELECT * FROM users',
+				function (err, users) {
+					assert.ifError(err);
+					next(null, users);
+				}
+			);
+		},
+		function loadSourceUsers (destUsers, next) {
+			var destEmails = [];
+			for (var i = 0; i < destUsers.length; i++) {
+				destEmails.push( destUsers[i].email );
+			}
+			srcDb.all(
+				'SELECT * FROM users '+
+					'WHERE email IS NULL '+
+					'OR email NOT IN ("'+destEmails.join('","')+'")',
+				function (err, users) {
+					assert.ifError(err);
+					var srcUsers = [];
+					async.each(
+						users,
+						function ( user, next ) {
+							if ( destEmails.indexOf( fakeEmailFromLogin(user.login) ) === -1 ) {
+								srcUsers.push( user );
+							}
+							next();
+						},
+						function ( err ) {
+							next(null, srcUsers);
+						}
+					);
+				}
+			);
 		},
 		function prepareAndSaveDestUsers (srcUsers, next) {
 			async.map( 
@@ -106,6 +149,7 @@ function migrateUsers ( srcDb, destDb, next ) {
 					async.each( 
 						destUsers, 
 						function saveUserData (userData, next) {
+							console.log( 'adding user '+userData.name );
 							destDb.insert(
 								'users',
 								['name', 'email', 'password', 'api_access_key', 'is_admin', 'is_disabled'],
@@ -133,7 +177,7 @@ function translateUserData ( srcUser, next ) {
 		null, 
 		{
 			name: 			srcUser.login,
-			email: 			(srcUser.email || srcUser.login + '@fake-email.motionbank.org').toLowerCase(),
+			email: 			srcUser.email || fakeEmailFromLogin( srcUser.login ),
 			password: 		sha1( srcUser.login + (Math.random() * 10 + (new Date().getTime())) ).substring(0,6),
 			api_access_key: sha1( ((new Date().getTime()) + Math.random() * 666) + srcUser.login ),
 			is_admin: 		srcUser.role_name === 'group_admin' ? true : false,
@@ -170,7 +214,7 @@ function getCreateMigrationUser ( destDb, next ) {
 						destDb.insert( 
 							'users',
 							['name', 'email', 'password'],
-							['Migration User', 'migration@fake-email@motionbank.org', sha1(new Date().getTime())],
+							['Migration User', fakeEmailFromLogin('Migration User'), sha1(new Date().getTime())],
 							function (err) {
 								assert.ifError(err);
 								destDb.all(
@@ -522,6 +566,8 @@ function migrateSrcEvents ( srcDb, destDb, srcDestTuple, nextZ ) {
 										assert.ifError(err);
 										if ( dbResult && dbResult.rows && dbResult.rows.length > 0 ) {
 											var event_id = dbResult.rows[0].id;
+											console.log( destEvent );
+											console.log( destEvent.fields );
 											async.each(
 												destEvent.fields,
 												function(field,next){
@@ -565,10 +611,10 @@ function migrateSrcEvents ( srcDb, destDb, srcDestTuple, nextZ ) {
 
 // This is being used for both video and normal events ...
 
-function translateSourceEventToDestEvent ( srcEvent, srcDestTuple, next ) {
+function translateSourceEventToDestEvent ( srcEvent, groupTuple, next ) {
 	var fields = [];
 	if ( srcEvent.recorded_at ) {
-		fields.push({id: 'event_type', value: 'video'});
+		fields.push({id: 'type', value: 'video'});
 	}
 	for ( var k in srcEvent ) {
 		if ( k && srcEvent.hasOwnProperty(k) && srcEvent[k] ) {
@@ -587,6 +633,9 @@ function translateSourceEventToDestEvent ( srcEvent, srcDestTuple, next ) {
 						continue;
 					}
 				}
+				if ( k === 'event_type' ) {
+					k = 'type';
+				}
 				fields.push({
 					id: k,
 					value: val
@@ -604,7 +653,7 @@ function translateSourceEventToDestEvent ( srcEvent, srcDestTuple, next ) {
 	next(
 		null,
 		{
-			event_group_id: 	srcDestTuple.dest.id,
+			event_group_id: 	groupTuple.dest.id,
 			created_by_user_id: getMigrationUser().id,
 			utc_timestamp:  	timestamp,
 			duration: 			duration,
@@ -625,6 +674,12 @@ function sha1 ( str ) {
 	return shasum.digest('hex');
 }
 
-// stub to be filled after users were created
+// Stub to be filled after users were created
 
 var getMigrationUser = null;
+
+// Generate fake email address for user without email
+
+function fakeEmailFromLogin ( login ) {
+	return (login.replace(/[^-.a-z]/ig,'-') + '@fake-email.motionbank.org').toLowerCase();
+}
