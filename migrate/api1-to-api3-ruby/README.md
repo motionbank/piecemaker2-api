@@ -20,4 +20,8 @@ db-migrate up --config
 Finally run the migration:
 ```
 node migrate.js
+# or if you need multiple config files name them:
+# config/config-xyz.js
+# then run migrate with "-p" (for "project"):
+# node migrate.js -p xyz
 ```

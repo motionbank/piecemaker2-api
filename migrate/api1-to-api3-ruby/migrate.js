@@ -1,11 +1,26 @@
 var mysql 	= require('mysql'),
 	pg 		= require('pg'),
 	sqlite3 = require('sqlite3'),
-	config  = require(__dirname+'/config/config'),
 	path 	= require('path'),
 	assert  = require('assert'),
 	async   = require('async'),
-	yaml    = require('js-yaml');
+	yaml    = require('js-yaml'),
+	argv	= require('optimist').argv;
+
+// This is a hack using db-migrate as a db agnostic connection
+
+var db_migrate_path = path.dirname( path.normalize( require.resolve('db-migrate') ) );
+var driver = require( db_migrate_path + '/lib/driver' );
+
+// Parse command line options
+
+var project = argv.p || argv.project || null;
+
+// Load appropriate config file
+
+var config  = require(__dirname+'/config/config'+(project ? '-'+project : ''));
+
+// Some global settings
 
 var srcEventFieldsToIgnore = [
 	'id', 'recorded_at', 'dur', 'happened_at', 'duration',
@@ -14,8 +29,7 @@ var srcEventFieldsToIgnore = [
 	'highlighted', 'primary'
 ];
 
-var db_migrate_path = path.dirname( path.normalize( require.resolve('db-migrate') ) );
-var driver = require( db_migrate_path + '/lib/driver' );
+// Let's begin with the migration
 
 (function migrate () {
 	var srcDb 	= null,
@@ -58,6 +72,10 @@ var driver = require( db_migrate_path + '/lib/driver' );
 			migrateGroups( srcDb, destDb, next );
 		},
 		function (next) {
+			console.log( 'establishing user to group relations ...' );
+			migrateUserHasGroups( srcDb, destDb, next );
+		},
+		function (next) {
 			console.log( 'migrating events ...' );
 			migrateEvents( srcDb, destDb, next );
 		}
@@ -71,16 +89,15 @@ var driver = require( db_migrate_path + '/lib/driver' );
 // -------------
 
 function migrateUsers ( srcDb, destDb, next ) {
-	var srcUsers = null;
-	async.series([
+
+	async.waterfall([
 		function loadSourceUsers (next) {
-			srcDb.all('SELECT * FROM USERS',function(err,results){
+			srcDb.all('SELECT * FROM USERS',function(err,users){
 				assert.ifError(err);
-				srcUsers = results;
-				next();
+				next(null, users);
 			});
 		},
-		function prepareAndSaveDestUsers (next) {
+		function prepareAndSaveDestUsers (srcUsers, next) {
 			async.map( 
 				srcUsers, 
 				translateUserData, 
@@ -116,7 +133,7 @@ function translateUserData ( srcUser, next ) {
 		null, 
 		{
 			name: 			srcUser.login,
-			email: 			srcUser.email || srcUser.login + '@fake-email.motionbank.org',
+			email: 			(srcUser.email || srcUser.login + '@fake-email.motionbank.org').toLowerCase(),
 			password: 		sha1( srcUser.login + (Math.random() * 10 + (new Date().getTime())) ).substring(0,6),
 			api_access_key: sha1( ((new Date().getTime()) + Math.random() * 666) + srcUser.login ),
 			is_admin: 		srcUser.role_name === 'group_admin' ? true : false,
@@ -179,19 +196,18 @@ function getCreateMigrationUser ( destDb, next ) {
 // --------------
 
 function migrateGroups ( srcDb, destDb, next ) {
-	var srcGroups = null;
-	async.series([
+
+	async.waterfall([
 		function loadSourceGroups (next) {
 			srcDb.all(
 				'SELECT * FROM pieces',
 				function ( err, pieces ) {
 					assert.ifError( err );
-					srcGroups = pieces;
-					next();
+					next(null, pieces);
 				}
 			);
 		},
-		function perpareAndSaveGroups (next) {
+		function perpareAndSaveGroups (srcGroups, next) {
 			async.map( 
 				srcGroups, 
 				translateGroupData,
@@ -230,28 +246,100 @@ function translateGroupData ( srcGroup, next ) {
 	);
 }
 
+// Link users and groups
+// =====================
+
+function migrateUserHasGroups ( srcDb, destDb, next ) {
+	
+	async.waterfall([
+		function (nextC) {
+			loadSourceGroups(srcDb, function(pieces){
+				nextC(null, pieces);
+			});
+		},
+		function (srcGroups, nextD) {
+			loadSrcDestGroupsMap(srcGroups, destDb, function(map){
+				nextD(null, map);
+			});
+		},
+		function (srcDestGroupMap, next) {
+			destDb.all(
+				'SELECT * FROM users',
+				function (err, users) {
+					assert.ifError(err);
+					var destUsersByLogin = [];
+					for ( var i = 0; i < users.length; i++ ) {
+						destUsersByLogin[users[i].name] = users[i];
+					}
+					next( null, srcDestGroupMap, destUsersByLogin );
+				}
+			);
+		},
+		function (srcDestGroupMap, destUsers, nextB) {
+			async.each(
+				srcDestGroupMap,
+				function ( tuple, next ) {
+					srcDb.all(
+						'SELECT users.login, events.piece_id FROM events '+
+						'JOIN users ON events.created_by = users.login OR '+
+									  'events.modified_by = users.login '+
+						'WHERE events.piece_id = ' + tuple.src.id + ' '+
+						'GROUP BY users.login, piece_id ',
+						function ( err, groupUsers ) {
+							assert.ifError( err );
+							async.each(
+								groupUsers,
+								function ( groupUser, next ) {
+									destDb.insert(
+										'user_has_event_groups',
+										['user_id','event_group_id'],
+										[destUsers[groupUser.login].id, tuple.dest.id],
+										function (err) {
+											assert.ifError(err);
+											next();
+										}
+									);
+								},
+								function () {
+									next();
+								}
+							);
+						}
+					);
+				},
+				function () {
+					nextB();
+				}
+			);
+		}
+	],function(){
+		console.log('done relating users to groups');
+		next();
+	});
+}
+
 // Migrate events
 // ==============
 
 function migrateEvents ( srcDb, destDb, nextA ) {
-	
-	var srcGroups, srcDestGroupMap, destUsers;
-	var sourceEventsByGroup = null;
 
-	async.series([
+	// TODO: missing are
+	// "event_tags -> tags"
+	// "event_users -> users"
+	// "event.id -> notes"
+	
+	async.waterfall([
 		function (nextC) {
 			loadSourceGroups(srcDb, function(pieces){
-				srcGroups = pieces;
-				nextC();
+				nextC(null,pieces);
 			});
 		},
-		function (nextD) {
+		function (srcGroups, nextD) {
 			loadSrcDestGroupsMap(srcGroups, destDb, function(map){
-				srcDestGroupMap = map;
-				nextD();
+				nextD(null,map);
 			});
 		},
-		function ( nextB ) {
+		function (srcDestGroupMap, nextB) {
 			var groupsDone = 0;
 			for ( var i = 0; i < srcDestGroupMap.length; i++ ) {
 				srcDestTuple = srcDestGroupMap[i];
@@ -314,8 +402,8 @@ function loadSrcDestGroupsMap (srcGroups, destDb, cb) {
 };
 
 function migrateSrcVideos ( srcDb, destDb, srcDestTuple, nextG ) {
-	var srcVideos = [];
-	async.series([
+
+	async.waterfall([
 		function loadSourceVideos (next) {
 			srcDb.all(
 				'SELECT * FROM videos '+
@@ -324,12 +412,11 @@ function migrateSrcVideos ( srcDb, destDb, srcDestTuple, nextG ) {
 				[srcDestTuple.src.id],
 				function (err, videos) {
 					assert.ifError(err);
-					srcVideos = videos;
-					next();
+					next(null, videos);
 				}
 			);
 		},
-		function prepareAndSaveSourceVideos (nextD) {
+		function prepareAndSaveSourceVideos (srcVideos, nextD) {
 			if ( srcVideos && srcVideos.length > 0 ) {
 				async.map(
 					srcVideos,
@@ -340,15 +427,6 @@ function migrateSrcVideos ( srcDb, destDb, srcDestTuple, nextG ) {
 						async.each(
 							destVideoEvents,
 							function(destVideo,next){
-								// destDb.insert(
-								// 	'events',
-								// 	['event_group_id', 'created_by_user_id', 
-								// 		'utc_timestamp', 'duration'],
-								// 	[destVideo.event_group_id, destVideo.created_by_user_id,
-								// 		destVideo.utc_timestamp, destVideo.duration],
-								// 	next
-								// );
-
 								var columns = ['event_group_id', 'created_by_user_id', 
 										'utc_timestamp', 'duration'];
 
@@ -407,20 +485,17 @@ function migrateSrcVideos ( srcDb, destDb, srcDestTuple, nextG ) {
 
 function migrateSrcEvents ( srcDb, destDb, srcDestTuple, nextZ ) {
 
-	var srcEvents = [];
-
-	async.series([
+	async.waterfall([
 		function loadSourceEvents (next) {
 			srcDb.all(
 				'SELECT * FROM events',
 				function ( err, events ) {
 					assert.ifError(err);
-					srcEvents = events;
-					next();
+					next(null, events);
 				}
 			);
 		},
-		function prepareAndSaveSourceEvents (nextB) {
+		function prepareAndSaveSourceEvents (srcEvents, nextB) {
 			if ( srcEvents && srcEvents.length > 0 ) {
 				async.map(
 					srcEvents,
@@ -487,6 +562,8 @@ function migrateSrcEvents ( srcDb, destDb, srcDestTuple, nextZ ) {
 		nextZ();
 	});
 }
+
+// This is being used for both video and normal events ...
 
 function translateSourceEventToDestEvent ( srcEvent, srcDestTuple, next ) {
 	var fields = [];
