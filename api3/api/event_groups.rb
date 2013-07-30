@@ -172,6 +172,9 @@ module Piecemaker
         error!('Not found', 404) unless @event_group
 
         if params[:from] && params[:to]
+
+          # find by from - to
+
           @events = Event.where(
             :event_group_id => @event_group.id)
 
@@ -182,13 +185,19 @@ module Piecemaker
               @return_events << { :event => event, :fields => event.event_fields }
             end
           end
+
           return @return_events
 
         elsif params[:field]
+
+          # find by field { type => value }
+
           @events = Event.where(
             :event_group_id => @event_group.id)
 
           find_hash = JSON.parse(params[:field])
+          find_key = find_hash.keys.first
+          find_value = find_hash[find_key]
 
           @return_events = []
           @events.each do |event|
@@ -196,19 +205,26 @@ module Piecemaker
 
             hash = @event_fields.to_hash(:id, :value)
 
-            if hash.has_key?( "type" ) && hash[:type].to_s.eql?( find_hash[:type].to_s )
+            if hash.has_key?( find_key ) && hash[find_key].to_s.eql?( find_value )
               @return_events << { :event => event, :fields => @event_fields }
             end
 
           end
+
           return @return_events
+
         else
+
+          # get all events
+
           @events = Event.where( :event_group_id => @event_group.id )
           @return_events = []
-          @event.each do |event|
+          @events.each do |event|
             @return_events << { :event => event, :fields => event.event_fields }
           end
+          
           return @return_events
+
         end
 
 
