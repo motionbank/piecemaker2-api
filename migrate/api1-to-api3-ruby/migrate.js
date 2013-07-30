@@ -1,11 +1,18 @@
 var mysql 	= require('mysql'),
 	pg 		= require('pg'),
 	sqlite3 = require('sqlite3'),
-	config  = require(__dirname+'/config'),
+	config  = require(__dirname+'/config/config'),
 	path 	= require('path'),
 	assert  = require('assert'),
 	async   = require('async'),
 	yaml    = require('js-yaml');
+
+var srcEventFieldsToIgnore = [
+	'id', 'recorded_at', 'dur', 'happened_at', 'duration',
+	'updated_at', 'created_at', 'created_by', 'modified_by',
+	'piece_id', 'parent_id', 'video_id', 'inherits_title',
+	'highlighted', 'primary'
+];
 
 var db_migrate_path = path.dirname( path.normalize( require.resolve('db-migrate') ) );
 var driver = require( db_migrate_path + '/lib/driver' );
@@ -19,7 +26,7 @@ var driver = require( db_migrate_path + '/lib/driver' );
 			driver.connect( config.srcDB.db, function(err, db){
 				assert.ifError(err);
 				srcDb = db;
-				console.log( "src db connected" );
+				console.log( "source db ("+config.srcDB.db.driver+") connected" );
 				next();
 			});
 		},
@@ -27,7 +34,7 @@ var driver = require( db_migrate_path + '/lib/driver' );
 			driver.connect( config.destDB.db, function(err, db){
 				assert.ifError(err);
 				destDb = db;
-				console.log( "dest db connected" );
+				console.log( "destination db ("+config.destDB.db.driver+") connected" );
 				next();
 			});
 		},
@@ -39,19 +46,23 @@ var driver = require( db_migrate_path + '/lib/driver' );
 			);
 		},
 		function (next) {
+			console.log( 'migrating users ...' );
 			migrateUsers( srcDb, destDb, next );
 		},
 		function (next) {
+			console.log( 'get / add migration user ...' );
 			getCreateMigrationUser( destDb, next );
 		},
 		function (next) {
+			console.log( 'migrating groups ...' );
 			migrateGroups( srcDb, destDb, next );
 		},
 		function (next) {
+			console.log( 'migrating events ...' );
 			migrateEvents( srcDb, destDb, next );
 		}
 	],function(){
-		console.log( 'done' );
+		console.log( 'fin!' );
 		process.exit();
 	});
 })();
@@ -322,7 +333,7 @@ function migrateSrcVideos ( srcDb, destDb, srcDestTuple, nextG ) {
 			if ( srcVideos && srcVideos.length > 0 ) {
 				async.map(
 					srcVideos,
-					(function(t){return function(v,n){ translateSourceVideoToEvent(v,t,n); };})(srcDestTuple),
+					(function(t){return function(v,n){ translateSourceEventToDestEvent(v,t,n); };})(srcDestTuple),
 					function (err, destVideoEvents) {
 						assert.ifError(err);
 						//console.log(destVideoEvents);
@@ -394,36 +405,6 @@ function migrateSrcVideos ( srcDb, destDb, srcDestTuple, nextG ) {
 	});
 }
 
-function translateSourceVideoToEvent (srcVideo, srcDestTuple, next) {
-	//console.log( srcVideo );
-	var fields = [
-			{id: 'event_type', value: 'video'}
-		],
-		skipFields = ['id','recorded_at','duration','piece_id',
-						'updated_at','created_at','primary', 'video_id']; 
-	for ( var k in srcVideo ) {
-		if ( k && srcVideo.hasOwnProperty(k) && srcVideo[k] ) {
-			if ( skipFields.indexOf(k) === -1 )
-			{
-				fields.push({
-					id: k,
-					value: srcVideo[k]
-				});
-			}
-		}
-	}
-	next(
-		null,
-		{
-			event_group_id: srcDestTuple.dest.id,
-			created_by_user_id: getMigrationUser().id,
-			utc_timestamp:  new Date( srcVideo.recorded_at ).getTime(), // TODO: ts/1000.0 ??
-			duration: 		srcVideo.duration,
-			fields: 		fields
- 		}
-	);
-}
-
 function migrateSrcEvents ( srcDb, destDb, srcDestTuple, nextZ ) {
 
 	var srcEvents = [];
@@ -444,7 +425,7 @@ function migrateSrcEvents ( srcDb, destDb, srcDestTuple, nextZ ) {
 				async.map(
 					srcEvents,
 					(function(t){
-						return function(e,n){ translateSourceEventToEvent(e,t,n); };
+						return function(e,n){ translateSourceEventToDestEvent(e,t,n); };
 					})( srcDestTuple ),
 					function (err, destEvents) {
 						//console.log(destEvents);
@@ -507,14 +488,14 @@ function migrateSrcEvents ( srcDb, destDb, srcDestTuple, nextZ ) {
 	});
 }
 
-function translateSourceEventToEvent ( srcEvent, srcDestTuple, next ) {
-	var fields = [], 
-		skipFields = ['id','recorded_at','dur', 'happened_at', 'duration','piece_id',
-					  'updated_at','created_at', 'created_by', 'modified_by',
-					  'parent_id','video_id','inherits_title','highlighted']; 
+function translateSourceEventToDestEvent ( srcEvent, srcDestTuple, next ) {
+	var fields = [];
+	if ( srcEvent.recorded_at ) {
+		fields.push({id: 'event_type', value: 'video'});
+	}
 	for ( var k in srcEvent ) {
 		if ( k && srcEvent.hasOwnProperty(k) && srcEvent[k] ) {
-			if ( skipFields.indexOf(k) === -1 )
+			if ( srcEventFieldsToIgnore.indexOf(k) === -1 )
 			{
 				var val = srcEvent[k];
 				if ( k === 'performers' ) {
@@ -536,14 +517,21 @@ function translateSourceEventToEvent ( srcEvent, srcDestTuple, next ) {
 			}
 		}
 	}
+	var timestamp = srcEvent.happened_at || srcEvent.recorded_at;
+	try {
+		timestamp = parseFloat( timestamp );
+	} catch ( e ) {
+		timestamp = new Date( srcEvent.happened_at ).getTime() / 1000.0;
+	}
+	var duration = srcEvent.duration || srcEvent.dur || 0;
 	next(
 		null,
 		{
-			event_group_id: srcDestTuple.dest.id,
+			event_group_id: 	srcDestTuple.dest.id,
 			created_by_user_id: getMigrationUser().id,
-			utc_timestamp:  new Date( srcEvent.happened_at ).getTime(), // TODO: ts/1000.0 ??
-			duration: 		srcEvent.dur || 0,
-			fields: 		fields
+			utc_timestamp:  	timestamp,
+			duration: 			duration,
+			fields: 			fields
 		}
 	);
 }
