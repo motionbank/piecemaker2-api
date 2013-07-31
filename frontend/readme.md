@@ -15,7 +15,7 @@ Some general information about frontend development
 
 - use [RequireJS](http://requirejs.org/) to load views/controllers/models when they're needed
 - protect routes depending on user group
-- check some security
+- check some security matters
 
 ## CSS Authoring
 
