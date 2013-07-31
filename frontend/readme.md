@@ -2,10 +2,25 @@
 
 Some general information about frontend development
 
+## Frameworks/Dependencies/Libraries
+
+- [Underscore](http://underscorejs.org/)
+- [Backbone](http://backbonejs.org/)
+- [Mustache](http://mustache.github.io/)
+- [jQuery](http://jquery.com/)
+- [jQuery UI](http://jqueryui.com/)
+- [jQuery Transit](http://ricostacruz.com/jquery.transit/)
+
+## Todos
+
+- use [RequireJS](http://requirejs.org/) to load views/controllers/models when they're needed
+
 ## CSS Authoring
 
-We're using [Compass](http://compass-style.org/), so every developer have to use it's compiler.
+Stylesheets are written in Sass/[Compass](http://compass-style.org/), so every developer have to use it's compiler.
 See the ./config.rb for additional information.
+
+[Bourbon](http://bourbon.io/) is included also.
 
 ### PhpStorm
 
