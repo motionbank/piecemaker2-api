@@ -22,6 +22,11 @@ Finally run the migration:
 node migrate.js
 # or if you need multiple config files name them:
 # config/config-xyz.js
-# then run migrate with "-p" (for "project"):
-# node migrate.js -p xyz
+# then run migrate with "--project":
+# node migrate.js --project xyz
+```
+
+If you want to erase the destination database before filling it with the pm1 data use:
+```
+node migrate.js --erase yes
 ```
