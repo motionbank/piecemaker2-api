@@ -14,6 +14,8 @@ Some general information about frontend development
 ## Todos
 
 - use [RequireJS](http://requirejs.org/) to load views/controllers/models when they're needed
+- protect routes depending on user group
+- check some security
 
 ## CSS Authoring
 
