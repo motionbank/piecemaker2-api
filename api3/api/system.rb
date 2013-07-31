@@ -13,8 +13,9 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/utc_timestamp" do  #/api/v1/system/utc_timestamp
       #-------------------------------------------------------------------------
-       # @todo
-       
+        return {
+          :utc_timestamp => Time.now.to_f
+        }
       end
 
     end

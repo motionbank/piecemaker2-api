@@ -1,3 +1,8 @@
+// Migrate data from a piecemaker 1 database to a piecemaker 2 (api3-ruby) database.
+// ---------------------------------------------------------------------------------
+
+// Please see README.md for details.
+
 var mysql 	= require('mysql'),
 	pg 		= require('pg'),
 	sqlite3 = require('sqlite3'),
@@ -14,7 +19,10 @@ var driver = require( db_migrate_path + '/lib/driver' );
 
 // Parse command line options
 
-var project = argv.p || argv.project || null;
+var project = argv.project || null;
+
+if ( project )
+	console.log( 'Running migration for project: ' + project );
 
 // Load appropriate config file
 
@@ -53,11 +61,16 @@ var srcEventFieldsToIgnore = [
 			});
 		},
 		function (next) {
-			destDb.runSql(
-				'TRUNCATE events, users, event_fields, event_groups, user_has_event_groups',
-				[],
-				next
-			);
+			if ( argv.erase === 'yes' ) {
+				console.log( '*** erasing destination database ***' );
+				destDb.runSql(
+					'TRUNCATE events, users, event_fields, event_groups, user_has_event_groups',
+					[],
+					next
+				);
+			} else {
+				next();
+			}
 		},
 		function (next) {
 			destDb.insert(
@@ -149,7 +162,7 @@ function migrateUsers ( srcDb, destDb, next ) {
 					async.each( 
 						destUsers, 
 						function saveUserData (userData, next) {
-							console.log( 'adding user '+userData.name );
+							//console.log( 'adding user '+userData.name );
 							destDb.insert(
 								'users',
 								['name', 'email', 'password', 'api_access_key', 'is_admin', 'is_disabled'],
@@ -389,7 +402,7 @@ function migrateEvents ( srcDb, destDb, nextA ) {
 				function (srcDestTuple, next) {
 					async.series([
 							function (next) {
-								console.log( 'starting group ' + srcDestTuple.src.title );
+								console.log( '  starting group ' + srcDestTuple.src.title );
 								next();
 							},
 							function (next) {
@@ -400,7 +413,7 @@ function migrateEvents ( srcDb, destDb, nextA ) {
 							}
 						],function(err){
 							assert.ifError(err);
-							console.log( 'finished group ' + srcDestTuple.src.title );
+							console.log( '  finished group ' + srcDestTuple.src.title );
 							next();
 						}
 					);
