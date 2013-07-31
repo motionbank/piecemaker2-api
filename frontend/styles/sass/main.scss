@@ -1,0 +1,246 @@
+/* ==========================================================================
+   Import libraries
+   ========================================================================== */
+
+@import '../bourbon/bourbon';
+
+/* ==========================================================================
+   Sizes
+   ========================================================================== */
+
+$header-height: 44px;
+$navigation-width: 60px;
+$wrapper-video-width: 500px; /* don't forget: the browser adds the padding to this value */
+
+/* ==========================================================================
+   Colors
+   ========================================================================== */
+
+$header-background: #030D1F;
+$border-color: #eee;
+
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+
+/* ==========================================================================
+   General improvements
+   ========================================================================== */
+
+/*
+ * Add correct box-sizing and better fonts smoothing
+ */
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid $border-color;
+  margin: 1em 0;
+  padding: 0;
+}
+
+/*
+ * Remove the gap between images and the bottom of their containers: h5bp.com/i/440
+ */
+
+img {
+  vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+  resize: vertical;
+}
+
+/*
+ * Chrome frame
+ */
+
+.chromeframe {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+/* ==========================================================================
+   General Styles
+   ========================================================================== */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-size: 14px;
+  line-height: 18px;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+header {
+  width:100%;
+  height: $header-height;
+  line-height: $header-height;
+  position: fixed;
+  background-color: $header-background;
+  padding:0 20px;
+
+  .logo {
+    color:rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+
+}
+
+/* ==========================================================================
+   Wrapper
+   ========================================================================== */
+
+#main-wrapper {
+  height:100%;
+
+  #content-section {
+    height:100%;
+    padding: $header-height 0 0 0;
+
+    #content {
+      height:100%;
+    }
+
+    #content-inner {
+      height:100%;
+    }
+
+  }
+
+}
+
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+
+nav {
+  width: $navigation-width;
+  height:100%;
+  padding: 0px;
+  float:left;
+  background-color: #eee;
+
+  ul {
+    list-style: none;
+    margin:0px;
+    padding:0px;
+
+    li {
+      margin:0px;
+      padding:0px;
+      width: $navigation-width;
+      height: $navigation-width;
+      border-bottom:1px solid #ccc;
+      @include transition(all 0.2s);
+
+      a {
+        text-decoration: none;
+        color:#000;
+        display: block;
+        width: $navigation-width !important;
+        height: $navigation-width !important;
+        line-height: $navigation-width !important;
+        text-align: center;
+
+        span {
+          height: $navigation-width !important;
+          line-height: $navigation-width !important;
+          color:rgba(0,0,0,0.2);
+          text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+          @include transition(all 0.2s);
+        }
+
+      }
+
+    }
+
+    li.active {
+      background-color: #ddd;
+
+      span {
+        color:rgba(0,0,0,0.3);
+      }
+    }
+
+  }
+
+}
+
+/* ==========================================================================
+   Wrapper - Left
+   ========================================================================== */
+
+.wrapper-left {
+  width: $wrapper-video-width;
+  height:100%;
+  float:left;
+  border-right:1px solid $border-color;
+
+  /* video content for pieces list view */
+  .video-content {
+    padding:0 0 20px 0;
+    border-bottom: 1px solid $border-color;
+
+    h1 {
+      margin:0 0 10px 0;
+      font-size: 16px;
+    }
+
+    p {
+      margin:0 0 10px 0;
+    }
+
+    video {
+      width: 100%;
+      margin:0 0 20px 0;
+    }
+  }
+
+}
+
+/* ==========================================================================
+   Wrapper - Right
+   ========================================================================== */
+
+.wrapper-right {
+  height:100%;
+}
