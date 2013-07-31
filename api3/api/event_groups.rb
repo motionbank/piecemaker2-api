@@ -175,14 +175,13 @@ module Piecemaker
 
           # find by from - to
 
-          @events = Event.where(
-            :event_group_id => @event_group.id)
+          @events = Event.where( :event_group_id => @event_group.id ).order( :utc_timestamp )
 
           @return_events = []
           @events.each do |event|
-            event = JSON.parse(event.to_json, {:symbolize_names => true})
-            if event[:utc_timestamp] >= params[:from] && event[:utc_timestamp] <= params[:to]
-              @return_events << { :event => event, :fields => event.event_fields }
+            ev = JSON.parse(event.to_json, {:symbolize_names => true})
+            if ev[:utc_timestamp] >= params[:from] && ev[:utc_timestamp] <= params[:to]
+              @return_events << { :event => ev, :fields => event.event_fields }
             end
           end
 
@@ -192,8 +191,7 @@ module Piecemaker
 
           # find by field { type => value }
 
-          @events = Event.where(
-            :event_group_id => @event_group.id)
+          @events = Event.where( :event_group_id => @event_group.id ).order( :utc_timestamp )
 
           find_hash = JSON.parse(params[:field])
           find_key = find_hash.keys.first
@@ -217,12 +215,12 @@ module Piecemaker
 
           # get all events
 
-          @events = Event.where( :event_group_id => @event_group.id )
+          @events = Event.where( :event_group_id => @event_group.id ).order( :utc_timestamp )
           @return_events = []
           @events.each do |event|
             @return_events << { :event => event, :fields => event.event_fields }
           end
-          
+
           return @return_events
 
         end

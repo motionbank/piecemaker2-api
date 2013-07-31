@@ -1,3 +1,8 @@
+// Migrate data from a piecemaker 1 database to a piecemaker 2 (api3-ruby) database.
+// ---------------------------------------------------------------------------------
+
+// Please see README.md for details.
+
 var mysql 	= require('mysql'),
 	pg 		= require('pg'),
 	sqlite3 = require('sqlite3'),
@@ -14,7 +19,10 @@ var driver = require( db_migrate_path + '/lib/driver' );
 
 // Parse command line options
 
-var project = argv.p || argv.project || null;
+var project = argv.project || null;
+
+if ( project )
+	console.log( 'Running migration for project: ' + project );
 
 // Load appropriate config file
 
@@ -53,11 +61,16 @@ var srcEventFieldsToIgnore = [
 			});
 		},
 		function (next) {
-			destDb.runSql(
-				'TRUNCATE events, users, event_fields, event_groups, user_has_event_groups',
-				[],
-				next
-			);
+			if ( argv.erase === 'yes' ) {
+				console.log( '*** erasing destination database ***' );
+				destDb.runSql(
+					'TRUNCATE events, users, event_fields, event_groups, user_has_event_groups',
+					[],
+					next
+				);
+			} else {
+				next();
+			}
 		},
 		function (next) {
 			destDb.insert(
@@ -149,7 +162,7 @@ function migrateUsers ( srcDb, destDb, next ) {
 					async.each( 
 						destUsers, 
 						function saveUserData (userData, next) {
-							console.log( 'adding user '+userData.name );
+							//console.log( 'adding user '+userData.name );
 							destDb.insert(
 								'users',
 								['name', 'email', 'password', 'api_access_key', 'is_admin', 'is_disabled'],
@@ -384,25 +397,31 @@ function migrateEvents ( srcDb, destDb, nextA ) {
 			});
 		},
 		function (srcDestGroupMap, nextB) {
-			var groupsDone = 0;
-			for ( var i = 0; i < srcDestGroupMap.length; i++ ) {
-				srcDestTuple = srcDestGroupMap[i];
-				async.series([
-						function (next) {
-							migrateSrcVideos( srcDb, destDb, srcDestTuple, next );
-						},
-						function (next) {
-							migrateSrcEvents( srcDb, destDb, srcDestTuple, next );
+			async.each(
+				srcDestGroupMap,
+				function (srcDestTuple, next) {
+					async.series([
+							function (next) {
+								console.log( '  starting group ' + srcDestTuple.src.title );
+								next();
+							},
+							function (next) {
+								migrateSrcVideos( srcDb, destDb, srcDestTuple, next );
+							},
+							function (next) {
+								migrateSrcEvents( srcDb, destDb, srcDestTuple, next );
+							}
+						],function(err){
+							assert.ifError(err);
+							console.log( '  finished group ' + srcDestTuple.src.title );
+							next();
 						}
-					],function(err){
-						assert.ifError(err);
-						groupsDone++;
-						if ( groupsDone === srcDestGroupMap.length ) {
-							nextB();
-						}
-					}
-				);
-			}
+					);
+				},
+				function () {
+					nextB();
+				}
+			);
 		}
 	],function(){
 		console.log('done migrating events');
@@ -566,8 +585,6 @@ function migrateSrcEvents ( srcDb, destDb, srcDestTuple, nextZ ) {
 										assert.ifError(err);
 										if ( dbResult && dbResult.rows && dbResult.rows.length > 0 ) {
 											var event_id = dbResult.rows[0].id;
-											console.log( destEvent );
-											console.log( destEvent.fields );
 											async.each(
 												destEvent.fields,
 												function(field,next){
@@ -644,10 +661,14 @@ function translateSourceEventToDestEvent ( srcEvent, groupTuple, next ) {
 		}
 	}
 	var timestamp = srcEvent.happened_at || srcEvent.recorded_at;
-	try {
-		timestamp = parseFloat( timestamp );
-	} catch ( e ) {
-		timestamp = new Date( srcEvent.happened_at ).getTime() / 1000.0;
+	var is_date_string = typeof timestamp === 'string' &&
+						 !(parseFloat( timestamp ).toString() === timestamp) && 
+					     !isNaN( new Date( timestamp ).getTime() );
+	if ( is_date_string ) {
+		timestamp = new Date( timestamp ).getTime() / 1000.0;
+	} else {
+		if ( typeof timestamp === 'string' )
+			timestamp = parseFloat( timestamp );
 	}
 	var duration = srcEvent.duration || srcEvent.dur || 0;
 	next(
