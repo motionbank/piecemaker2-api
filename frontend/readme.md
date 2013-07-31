@@ -1,17 +1,27 @@
-## Employee Directory ##
+# Coding Tips
 
-### Sample Application built with Backbone.js and Twitter Bootstrap ###
+Some general information about frontend development
 
-"Backbone Directory" is a simple Employee Directory application built with [Backbone.js](http://backbonejs.org) and [Twitter Bootstrap] (http://twitter.github.io/bootstrap/).
+## CSS Authoring
 
-Refer to [this blog post](http://coenraets.org/blog/2013/04/sample-application-with-backbone-js-and-twitter-bootstrap-updated-and-improved/) for more information about the application.
+We're using [Compass](http://compass-style.org/), so every developer have to use it's compiler.
+See the ./config.rb for additional information.
 
+### PhpStorm
 
-The application runs out-of-the-box with an in-memory data store.
+Some information for setting up PhpStorm while using RVM and OS X:
+Go to "Projects Settings - File Watchers" and add a custom file watcher with the following options:
 
-If you want to experiment the application with other persistence layers, download the REST services in the following repositories:
+![PhpStorm File Watcher](http://gopeter.de/misc/filewatcher.png)
 
-- [directory-rest-nodejs](https://github.com/ccoenraets/directory-rest-nodejs) (Node.js/MongoDB implementation)
-- [directory-rest-php](https://github.com/ccoenraets/directory-rest-php) (PHP implementation)
-- directory-rest-java (Java implementation coming soon)
+If you are using RVM, you have to add an environment variable:
 
+`GEM_PATH : path to your ruby version`
+
+For example:
+
+`GEM_PATH : /Users/peter_goebel/.rvm/gems/ruby-2.0.0-p247`
+
+### External file watcher
+
+If you are using another code editor, you can run an external file watcher, e.g. Scout [Scout](mhs.github.io/scout-app/) or [Prepos](http://alphapixels.com/prepros/).

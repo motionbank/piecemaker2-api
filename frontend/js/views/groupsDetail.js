@@ -1,4 +1,4 @@
-directory.PiecesDetailView = Backbone.View.extend({
+directory.GroupsDetailView = Backbone.View.extend({
 
     id: 'content-inner',
 
@@ -7,7 +7,7 @@ directory.PiecesDetailView = Backbone.View.extend({
         // save object vars
         var template = this.template();
         var el = this.el;
-        var obj = this;
+        var self = this;
 
         // get the id of the piece
         var data = {'id':this.model};
@@ -16,19 +16,19 @@ directory.PiecesDetailView = Backbone.View.extend({
         $(el).html(Mustache.to_html(template,data));
 
         // cache elements
-        var $video = obj.$('video');
+        var $video = self.$('video');
         var video = $video.get(0);
 
         // update timestamp on input field while playing video
         video.addEventListener('timeupdate',function(){
-            obj.$('#video-time').val(video.currentTime);
+            self.$('#video-time').val(video.currentTime);
         },false);
 
         // enable window resizing
-        obj.$('.wrapper-left').resizable({
+        self.$('.wrapper-left').resizable({
             minWidth: 150,
             autoHide: true,
-            handles: "e,w" // disable vertical resize
+            handles: "e" // disable vertical resize
         });
 
     }
