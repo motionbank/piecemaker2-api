@@ -60,6 +60,32 @@ $irb DB
 $irb User
 ```
 
+### The data
+
+#### Time
+
+Time on events is stored as UTC timestamp in the format XXXXXXXXXX.ZZZZ where the XX-part is a unix timestamp up to the seconds and ZZ-part is the fractions of a second. This dates back to how Ruby converts the Time class to Float:
+
+```
+Time.now.to_f
+# => 1375260337.49758
+```
+
+To get to a millisecond (JS / Java) timestamp just multiply by 1000:
+
+```javascript
+// JavaScript
+var dbTs = ...
+var jsTs = new Date( dbTs * 1000 );
+```
+```java
+// Java
+double dbTs = ...
+Date jTs = new Date( (long)( dbTs * 1000.0 ) );
+```
+
+The duration of an event is stored in seconds, so it's safe to just add it to a timestamp to get to the "finish time" of an event.
+
 ### Benchmarks
 
 Use tools like [wrk](https://github.com/wg/wrk) (```brew install wrk```) or
@@ -146,7 +172,6 @@ User
  * http://intridea.github.io/grape/docs/index.html
  * http://sequel.rubyforge.org/rdoc/
  * http://sequel.rubyforge.org/documentation.html 
-
 
 Some further reading ...
  * https://github.com/dblock/grape-on-rack (was used as a template)
