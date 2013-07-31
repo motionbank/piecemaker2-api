@@ -384,25 +384,31 @@ function migrateEvents ( srcDb, destDb, nextA ) {
 			});
 		},
 		function (srcDestGroupMap, nextB) {
-			var groupsDone = 0;
-			for ( var i = 0; i < srcDestGroupMap.length; i++ ) {
-				srcDestTuple = srcDestGroupMap[i];
-				async.series([
-						function (next) {
-							migrateSrcVideos( srcDb, destDb, srcDestTuple, next );
-						},
-						function (next) {
-							migrateSrcEvents( srcDb, destDb, srcDestTuple, next );
+			async.each(
+				srcDestGroupMap,
+				function (srcDestTuple, next) {
+					async.series([
+							function (next) {
+								console.log( 'starting group ' + srcDestTuple.src.title );
+								next();
+							},
+							function (next) {
+								migrateSrcVideos( srcDb, destDb, srcDestTuple, next );
+							},
+							function (next) {
+								migrateSrcEvents( srcDb, destDb, srcDestTuple, next );
+							}
+						],function(err){
+							assert.ifError(err);
+							console.log( 'finished group ' + srcDestTuple.src.title );
+							next();
 						}
-					],function(err){
-						assert.ifError(err);
-						groupsDone++;
-						if ( groupsDone === srcDestGroupMap.length ) {
-							nextB();
-						}
-					}
-				);
-			}
+					);
+				},
+				function () {
+					nextB();
+				}
+			);
 		}
 	],function(){
 		console.log('done migrating events');
@@ -566,8 +572,6 @@ function migrateSrcEvents ( srcDb, destDb, srcDestTuple, nextZ ) {
 										assert.ifError(err);
 										if ( dbResult && dbResult.rows && dbResult.rows.length > 0 ) {
 											var event_id = dbResult.rows[0].id;
-											console.log( destEvent );
-											console.log( destEvent.fields );
 											async.each(
 												destEvent.fields,
 												function(field,next){
@@ -644,10 +648,14 @@ function translateSourceEventToDestEvent ( srcEvent, groupTuple, next ) {
 		}
 	}
 	var timestamp = srcEvent.happened_at || srcEvent.recorded_at;
-	try {
-		timestamp = parseFloat( timestamp );
-	} catch ( e ) {
-		timestamp = new Date( srcEvent.happened_at ).getTime() / 1000.0;
+	var is_date_string = typeof timestamp === 'string' &&
+						 !(parseFloat( timestamp ).toString() === timestamp) && 
+					     !isNaN( new Date( timestamp ).getTime() );
+	if ( is_date_string ) {
+		timestamp = new Date( timestamp ).getTime() / 1000.0;
+	} else {
+		if ( typeof timestamp === 'string' )
+			timestamp = parseFloat( timestamp );
 	}
 	var duration = srcEvent.duration || srcEvent.dur || 0;
 	next(
