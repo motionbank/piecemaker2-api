@@ -170,6 +170,11 @@ module Piecemaker
         error!('Not found', 404) unless @event_group
 
         # @†odo refactor!
+        # [05.08.13 20:42:11] Matthias Kadenbach: ?field[type]=video&field[rating]=1
+        # [05.08.13 20:43:24] Matthias Kadenbach: ?field[type]=video&field[rating]
+        # 
+        # combine everything
+        # paging
 
         if params[:from] && params[:to]
 
