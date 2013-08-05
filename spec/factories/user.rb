@@ -1,4 +1,4 @@
-require "Digest"
+require "digest"
 
 User.factory :peter do
   name "Peter"
