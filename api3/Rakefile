@@ -74,16 +74,20 @@ namespace :db do
 
     require "Digest"
     api_access_key = Piecemaker::Helper::API_Access_Key::generate
+    time_now = Time.now.to_i
     DB[:users].insert(
       :name => "Super Admin", 
-      :email => "super-admin@example.com",
-      :password => Digest::SHA1.hexdigest("super-admin"),
+      :email => "super-admin-#{time_now}@example.com",
+      :password => Digest::SHA1.hexdigest("super-admin-#{time_now}"),
       :api_access_key => api_access_key,
       :is_admin => true)
 
-    puts "Email         : super-admin@example.com"
-    puts "Password      : super-admin"
-    puts "API Access Key: #{api_access_key}"
+    puts ""
+    puts "Email   : super-admin-#{time_now}@example.com"
+    puts "Password: super-admin-#{time_now}"
+    puts ""
+    puts "A fresh API Access Key has been generated '#{api_access_key}'."
+    puts "Please note that this key will change the next time this user logs in."
   end
 
   desc "Run database migrations"
