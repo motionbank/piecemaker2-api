@@ -9,32 +9,36 @@ describe "Piecemaker::API EventGroup" do
   before(:each) do
     truncate_db
 
-    @peter                = User.make :peter
-    @pan                  = User.make :pan
-    @hans_admin           = User.make :hans_admin
-  
-    @alpha                = EventGroup.make :alpha
-    @beta                 = EventGroup.make :beta
-  
-    @big_in_alpha         = Event.make :big, 
-                              :event_group_id => @alpha.id
+    factory_batch do 
 
-    @small_in_alpha       = Event.make :small, 
-                              :event_group_id => @alpha.id
+      @peter                = User.make :peter
+      @pan                  = User.make :pan
+      @hans_admin           = User.make :hans_admin
+    
+      @alpha                = EventGroup.make :alpha
+      @beta                 = EventGroup.make :beta
+    
+      @big_in_alpha         = Event.make :big, 
+                                :event_group_id => @alpha.id
 
-    @pan_has_event_group  = UserHasEventGroup.make :default,  
-                              :user_id => @pan.id, 
-                              :event_group_id => @alpha.id
+      @small_in_alpha       = Event.make :small, 
+                                :event_group_id => @alpha.id
 
-    @hans_has_event_group = UserHasEventGroup.make :default,  
-                              :user_id => @hans_admin.id, 
-                              :event_group_id => @alpha.id
+      @pan_has_event_group  = UserHasEventGroup.make :default,  
+                                :user_id => @pan.id, 
+                                :event_group_id => @alpha.id
 
-    @flag1_field          = EventField.make :flag1,
-                              :event_id => @big_in_alpha.id
+      @hans_has_event_group = UserHasEventGroup.make :default,  
+                                :user_id => @hans_admin.id, 
+                                :event_group_id => @alpha.id
 
-    @type_field           = EventField.make :type,
-                              :event_id => @big_in_alpha.id
+      @flag1_field          = EventField.make :flag1,
+                                :event_id => @big_in_alpha.id
+
+      @type_field           = EventField.make :type,
+                                :event_id => @big_in_alpha.id
+
+    end
   end
 
 

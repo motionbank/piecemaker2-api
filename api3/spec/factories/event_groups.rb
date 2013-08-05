@@ -1,6 +1,3 @@
-
-EventGroup.unrestrict_primary_key
-
 EventGroup.factory :alpha do
   title "Group A"
   text "Event Group Alpha"

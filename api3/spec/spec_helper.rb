@@ -17,6 +17,21 @@ def truncate_db
   end
 end
 
+def factory_batch(&block)
+  factories = %w(User Event EventGroup EventField UserHasEventGroup)
+  factories.each do |factory|
+    Object.const_get(factory).unrestrict_primary_key
+  end
+
+  block.call
+
+  factories.each do |factory|
+    Object.const_get(factory).restrict_primary_key
+  end
+end
+
+
+
 # deprecated, use json_string_to_hash instead
 def json_parse(string)
   # @todo dont parse if empty string or nil

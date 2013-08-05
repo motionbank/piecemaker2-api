@@ -1,6 +1,3 @@
-
-EventField.unrestrict_primary_key
-
 EventField.factory :flag1 do
   id "flag1"
   value "getting back to the dolphin thing"

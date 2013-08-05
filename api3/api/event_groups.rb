@@ -56,7 +56,6 @@ module Piecemaker
         if params[:fields]
 
           EventField.unrestrict_primary_key
-
           params[:fields].each do |id, value|
             fields << EventField.create(
               :event_id => @event.id,
@@ -90,7 +89,6 @@ module Piecemaker
           :text  => params[:text])
 
         UserHasEventGroup.unrestrict_primary_key
-
         UserHasEventGroup.create(
           :user_id => @_user.id,
           :event_group_id => @event_group.id)

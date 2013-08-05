@@ -14,10 +14,12 @@ describe "Piecemaker::API User" do
     before(:all) do
       truncate_db
       
-      @peter          = User.make :peter
-      @pan            = User.make :pan
-      @hans_admin     = User.make :hans_admin
-      @klaus_disabled = User.make :klaus_disabled
+      factory_batch do 
+        @peter          = User.make :peter
+        @pan            = User.make :pan
+        @hans_admin     = User.make :hans_admin
+        @klaus_disabled = User.make :klaus_disabled
+      end
     end
 
 

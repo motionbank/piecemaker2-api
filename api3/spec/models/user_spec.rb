@@ -5,17 +5,19 @@ describe "Model User" do
   before(:all) do
     truncate_db
     
-    @pan = User.make :pan
+    factory_batch do 
+      @pan = User.make :pan
 
-    @event_group = EventGroup.make :alpha
+      @event_group = EventGroup.make :alpha
 
-    @event = Event.make :big, 
-      :event_group_id => @event_group.id,
-      :created_by_user_id => @pan.id
-    
-    @user_has_event_group = UserHasEventGroup.make :default,
-      :user_id => @pan.id,
-      :event_group_id => @event_group.id
+      @event = Event.make :big, 
+        :event_group_id => @event_group.id,
+        :created_by_user_id => @pan.id
+      
+      @user_has_event_group = UserHasEventGroup.make :default,
+        :user_id => @pan.id,
+        :event_group_id => @event_group.id
+    end
   end
 
   it "has many events" do
