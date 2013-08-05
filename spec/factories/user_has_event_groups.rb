@@ -1,0 +1,2 @@
+UserHasEventGroup.factory do
+end
