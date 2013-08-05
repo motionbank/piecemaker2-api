@@ -40,11 +40,11 @@ describe "Piecemaker::API Event" do
       results       = json_string_to_hash(last_response.body)
       event         = results[:event]
       event_fields  = results[:fields]
-      event_group  = results[:group]
+      # event_group  = results[:group]
 
       event.should == @big.values
       event_fields.should =~ [@big_field.values]
-      event_group.should == @alpha.values
+      # event_group.should == @alpha.values
     end
     #---------------------------------------------------------------------------
 
@@ -73,8 +73,8 @@ describe "Piecemaker::API Event" do
       last_response.status.should == 200
 
       result       = json_string_to_hash(last_response.body)
-      event        = result[0]
-      event_fields = result[1]
+      event        = result[:event]
+      event_fields = result[:fields]
 
       # returned event matches event in db?
       Event[event[:id]].values.should == event
@@ -98,8 +98,8 @@ describe "Piecemaker::API Event" do
       last_response.status.should == 200
       
       result       = json_string_to_hash(last_response.body)
-      event        = result[0]
-      event_fields = result[1]
+      event        = result[:event]
+      event_fields = result[:fields]
 
       # returned event matches event in db?
       event.should == Event[event[:id]].values
@@ -131,8 +131,8 @@ describe "Piecemaker::API Event" do
       last_response.status.should == 200
       
       result       = json_string_to_hash(last_response.body)
-      event        = result[0]
-      event_fields = result[1]
+      event        = result[:event]
+      event_fields = result[:fields]
 
       # returned event matches event in db?
       event.should == Event[event[:id]].values
@@ -156,8 +156,8 @@ describe "Piecemaker::API Event" do
       last_response.status.should == 200
       
       result       = json_string_to_hash(last_response.body)
-      event        = result[0]
-      event_fields = result[1]
+      event        = result[:event]
+      event_fields = result[:fields]
 
       # returned event matches event in db?
       event.should == Event[event[:id]].values
