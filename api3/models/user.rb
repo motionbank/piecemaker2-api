@@ -3,6 +3,7 @@
 
 class User < Sequel::Model(:users)
   set_primary_key :id
+  set_dataset dataset.order(:name)
 
   one_to_many :events, :key => :created_by_user_id
 
