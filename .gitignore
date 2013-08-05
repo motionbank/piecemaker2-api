@@ -1,2 +1,10 @@
 .DS_Store
-node_modules
+.irbrc
+.bundle
+log/*
+!log/.gitkeep
+Gemfile.lock
+*.pid
+
+
+config/config.yml
