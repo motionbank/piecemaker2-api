@@ -369,6 +369,21 @@ describe "Piecemaker::API EventGroup" do
     end
     #---------------------------------------------------------------------------
 
+    #---------------------------------------------------------------------------
+    it "fails for correct key but invalid value" do
+    #---------------------------------------------------------------------------
+      # pending
+      header "X-Access-Key", @pan.api_access_key
+      get "/api/v1/group/#{@alpha.id}/events?field[type]=notfoobar"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+
+      results.should =~ []
+
+    end
+    #---------------------------------------------------------------------------
+
 
     #-------------------------------------------------------------------------
     it "ACL auto-testing" do
