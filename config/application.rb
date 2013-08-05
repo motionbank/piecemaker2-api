@@ -16,4 +16,4 @@ Dir[File.expand_path('../../models/*.rb', __FILE__)].each do |f|
 end
 
 require 'api'
-require 'Piecemaker_app'
+require 'piecemaker_app'
