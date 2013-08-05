@@ -34,14 +34,33 @@ end
 
 # deprecated, use json_string_to_hash instead
 def json_parse(string)
+  json_string_to_hash(string)
   # @todo dont parse if empty string or nil
-  if string.class == String && string == "null"
-    nil
-  else
-    JSON.parse(string, {:symbolize_names => true})
-  end
+  # if string.class == String && string == "null"
+  #   nil
+  # else
+  #   JSON.parse(string, {:symbolize_names => true})
+  # end
 end
 
+def times_to_s(obj)
+
+  if obj.is_a? Hash
+    
+    if obj.key? :created_at
+      obj[:created_at] = obj[:created_at].to_s
+    elsif obj.key? "created_at"
+      obj["created_at"] = obj["created_at"].to_s
+    end
+
+  elsif obj.is_a? Array
+    obj.each do |oneobj|
+      oneobj = times_to_s(oneobj)
+    end
+  end
+  
+  return obj
+end
 
 def json_string_to_hash(json)
   return nil if json.class == String && json == "null"

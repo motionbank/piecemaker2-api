@@ -148,7 +148,7 @@ describe "Piecemaker::API EventGroup" do
   ##############################################################################
     
     #---------------------------------------------------------------------------
-    it "create new event_group (together with user_has_event_groups record)" do
+    it "create new event_group (together with user_has_event_groups record)", :focus do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @pan.api_access_key
       post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
@@ -156,7 +156,7 @@ describe "Piecemaker::API EventGroup" do
       
       returned_omega = json_parse(last_response.body)
       @omega_from_database = EventGroup.first(:id => returned_omega[:id])
-      returned_omega.should == @omega_from_database.values
+      returned_omega.should == times_to_s(@omega_from_database.values)
 
       # is the new event_group linked to users via user_has_event_groups?
       UserHasEventGroup.first(:user_id => @pan.id, 

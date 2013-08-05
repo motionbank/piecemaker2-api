@@ -15,7 +15,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
         @_user = authorize!
         # @todo acl!
-        EventGroup.eager_graph(:users).where(:user_id => @_user.id)
+        EventGroup.eager_graph(:users).where(:user_id => @_user.id).order(:created_at)
       end
   
     end
