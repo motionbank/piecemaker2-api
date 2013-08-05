@@ -176,12 +176,20 @@ describe "Piecemaker::API User" do
     before(:each) do
       truncate_db
       
-      @peter          = User.make :peter
-      @pan            = User.make :pan
-      @hans_admin     = User.make :hans_admin
-      @klaus_disabled = User.make :klaus_disabled
-    end
+      factory_batch do 
+        @peter          = User.make :peter
+        @pan            = User.make :pan
+        @hans_admin     = User.make :hans_admin
+        @klaus_disabled = User.make :klaus_disabled
 
+
+        @alpha                      = EventGroup.make :alpha
+
+        @pan_has_event_group_alpha  = UserHasEventGroup.make :default,  
+                                      :user_id => @pan.id, 
+                                      :event_group_id => @alpha.id
+      end
+    end
 
     ############################################################################
     describe "POST /api/v1/user " do
@@ -330,13 +338,17 @@ describe "Piecemaker::API User" do
 
 
     ############################################################################
-    describe "GET /api/v1/user/:id/groups" do
+    describe "GET /api/v1/user/:id/groups", :focus do
     ############################################################################  
 
       #-------------------------------------------------------------------------
       it "returns all event_groups for user with id" do
       #-------------------------------------------------------------------------
-        pending
+        header "X-Access-Key", @peter.api_access_key
+        get "/api/v1/user/#{@pan.id}/groups"
+        last_response.status.should == 200
+        json_string_to_hash(last_response.body)
+          .should == times_to_s([@alpha.values])
       end
       #-------------------------------------------------------------------------
 

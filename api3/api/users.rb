@@ -149,6 +149,24 @@ module Piecemaker
         @user.delete
       end
 
+
+      #_________________________________________________________________________
+      ##########################################################################
+      desc "returns all event_groups for user with id"
+      #-------------------------------------------------------------------------
+      params do
+        requires :id, type: Integer, desc: "a user id"
+      end
+      #-------------------------------------------------------------------------
+      get "/:id/groups" do  #/api/v1/user/:id/groups
+      #-------------------------------------------------------------------------
+        @_user = authorize!
+        @user = User.first(:id => params[:id])
+        error!('Not found', 404) unless @user
+        
+        @user.event_groups
+      end
+
     end
 
 
