@@ -17,6 +17,9 @@ $ bundle install
 
 $ cp config/config.sample.yml config/config.yml
 
+# edit configuration
+$ vi config/config.yml
+
 # install and start postgres
 $ brew install postgres
 $ initdb /usr/local/var/postgres
@@ -25,9 +28,6 @@ $ postgres -D /usr/local/var/postgres
 $ createdb --username=XXX piecemaker2_prod && rake db:migrate[production]
 $ createdb --username=XXX piecemaker2_dev && rake db:migrate[development]
 $ createdb --username=XXX piecemaker2_test && rake db:migrate[test]
-
-# edit configuration
-$ vi config/config.yml
 
 # run tests to verify it works
 $ rake spec:now
