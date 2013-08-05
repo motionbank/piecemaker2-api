@@ -148,7 +148,7 @@ describe "Piecemaker::API EventGroup" do
   ##############################################################################
     
     #---------------------------------------------------------------------------
-    it "create new event_group (together with user_has_event_groups record)", :focus do
+    it "create new event_group (together with user_has_event_groups record)" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @pan.api_access_key
       post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
@@ -185,7 +185,8 @@ describe "Piecemaker::API EventGroup" do
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}"
       last_response.status.should == 200
-      json_string_to_hash(last_response.body).should == @alpha.values
+      json_string_to_hash(last_response.body)
+        .should == times_to_s(@alpha.values)
     end
     #---------------------------------------------------------------------------
 
@@ -213,8 +214,8 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 200
 
       event_group = json_string_to_hash(last_response.body)
-      event_group.should == EventGroup.first(
-        :id => event_group[:id]).values
+      event_group.should == times_to_s(EventGroup.first(
+        :id => event_group[:id]).values)
     end
     #---------------------------------------------------------------------------
 
