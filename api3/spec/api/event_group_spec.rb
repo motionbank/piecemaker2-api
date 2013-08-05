@@ -258,7 +258,16 @@ describe "Piecemaker::API EventGroup" do
       results.should_not eq([])
       results.should_not eq(nil)
 
-      results.should =~ [@big_in_alpha.values, @small_in_alpha.values]
+      results.should =~ [
+        {
+          :event => @big_in_alpha.values, 
+          :fields => [@flag1_field.values, @type_field.values]
+        }, 
+        {
+          :event => @small_in_alpha.values,
+          :fields => []
+        }
+      ]
 
       # results.each do |result|
       #   event = result[:event]
@@ -302,7 +311,12 @@ describe "Piecemaker::API EventGroup" do
 
       results       = json_string_to_hash(last_response.body)
 
-      results.should =~ [@big_in_alpha.values]
+      results.should =~ [
+        {
+          :event => @big_in_alpha.values, 
+          :fields => [@flag1_field.values, @type_field.values]
+        }
+      ]
     end
     #---------------------------------------------------------------------------
 
