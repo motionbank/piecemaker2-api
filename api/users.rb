@@ -1,3 +1,5 @@
+require "digest"
+
 module Piecemaker
 
   class Users < Grape::API
@@ -18,7 +20,6 @@ module Piecemaker
       #-------------------------------------------------------------------------
       post "/login" do  #/api/v1/user/login
       #-------------------------------------------------------------------------
-        require "Digest"
         @user = User.first(
           :email => params[:email], 
           :password => Digest::SHA1.hexdigest(params[:password]),

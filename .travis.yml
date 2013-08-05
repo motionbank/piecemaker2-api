@@ -8,4 +8,5 @@ before_script:
  - "cp config/config.sample.yml config/config.yml"
  - "sed -i 's/username  : XXX/username  : postgres/g' config/config.yml" 
  - "sed -i 's/password  : XXX/password  : /g' config/config.yml" 
+ - "cat config/config.yml" 
  - "rake db:migrate[test]"
