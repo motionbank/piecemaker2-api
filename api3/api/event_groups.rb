@@ -17,7 +17,6 @@ module Piecemaker
         # @todo acl!
         EventGroup.eager_graph(:users).where(:user_id => @_user.id)
       end
-  
     end
 
 
@@ -57,6 +56,7 @@ module Piecemaker
 
           EventField.unrestrict_primary_key
           params[:fields].each do |id, value|
+            error!('400 Bad Syntax', 400) if id.length > 32
             fields << EventField.create(
               :event_id => @event.id,
               :id       => id,
@@ -229,8 +229,6 @@ module Piecemaker
           return @return_events
 
         end
-
-
       end
       
 
