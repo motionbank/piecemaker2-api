@@ -1,2 +1,0 @@
-UserHasEventGroup.factory do
-end
