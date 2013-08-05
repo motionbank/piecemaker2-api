@@ -1,9 +1,0 @@
-.DS_Store
-.idea/
-
-api/config.js
-*.bak
-app/config/*.js
-api/config/*.js
-npm-shrinkwrap.json
-node_modules
