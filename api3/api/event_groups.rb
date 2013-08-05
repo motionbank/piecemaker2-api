@@ -169,6 +169,8 @@ module Piecemaker
         @event_group = EventGroup.first(:id => params[:id])
         error!('Not found', 404) unless @event_group
 
+        # @†odo refactor!
+
         if params[:from] && params[:to]
 
           # find by from - to
