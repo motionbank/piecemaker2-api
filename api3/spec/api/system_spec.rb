@@ -16,9 +16,19 @@ describe "Piecemaker::API System" do
   ##############################################################################
 
     #---------------------------------------------------------------------------
-    it "returns server timestamp with milliseconds" do
+    it "returns server timestamp with milliseconds", :focus do
     #---------------------------------------------------------------------------
-      pending
+      get "/api/v1/system/utc_timestamp"
+      last_response.status.should == 200
+      result = json_string_to_hash(last_response.body)
+
+      result[:utc_timestamp].is_a?(Float).should eq(true)
+
+      # timeout?
+      timeout = 10 # sec
+
+      result[:utc_timestamp].should >= (Time.now - timeout).utc.to_f
+      result[:utc_timestamp].should < (Time.now).utc.to_f
     end
     #---------------------------------------------------------------------------
   end
