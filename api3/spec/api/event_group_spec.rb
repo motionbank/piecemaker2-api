@@ -15,6 +15,7 @@ describe "Piecemaker::API EventGroup" do
       @pan                  = User.make :pan
       @hans_admin           = User.make :hans_admin
     
+      # create alpha BEFORE beta for "ordered by" specs
       @alpha                = EventGroup.make :alpha
       @beta                 = EventGroup.make :beta
     
@@ -24,9 +25,13 @@ describe "Piecemaker::API EventGroup" do
       @small_in_alpha       = Event.make :small, 
                                 :event_group_id => @alpha.id
 
-      @pan_has_event_group  = UserHasEventGroup.make :default,  
+      @pan_has_event_group_alpha  = UserHasEventGroup.make :default,  
                                 :user_id => @pan.id, 
                                 :event_group_id => @alpha.id
+
+      @pan_has_event_group_beta  = UserHasEventGroup.make :default,  
+                                :user_id => @pan.id, 
+                                :event_group_id => @beta.id
 
       @hans_has_event_group = UserHasEventGroup.make :default,  
                                 :user_id => @hans_admin.id, 
@@ -57,12 +62,12 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all event_groups for currently logged in user" do
     #---------------------------------------------------------------------------
-      pending "should be ordered by created date"
-
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/groups"
       last_response.status.should == 200
-      json_string_to_hash(last_response.body).should =~ [@alpha.values]
+
+      json_string_to_hash(last_response.body)
+        .should =~ times_to_s([@alpha.values, @beta.values])
     end
     #---------------------------------------------------------------------------
   end

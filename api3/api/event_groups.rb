@@ -15,7 +15,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
         @_user = authorize!
         # @todo acl!
-        EventGroup.eager_graph(:users).where(:user_id => @_user.id).order(:created_at)
+        EventGroup.eager_graph(:users).where(:user_id => @_user.id)
       end
   
     end
@@ -173,14 +173,14 @@ module Piecemaker
 
           # find by from - to
 
-          @events = Event.where( :event_group_id => @event_group.id ).order( :utc_timestamp )
+          @events = Event.where( :event_group_id => @event_group.id )
 
           @return_events = []
           @events.each do |event|
             ev = JSON.parse(event.to_json, {:symbolize_names => true})
             if ev[:utc_timestamp] >= params[:from] && ev[:utc_timestamp] <= params[:to]
               @return_events << { :event => ev, 
-                :fields => EventField.where(:event_id => event[:id]).order(:id)}
+                :fields => EventField.where(:event_id => event[:id])}
             end
           end
 
@@ -190,7 +190,7 @@ module Piecemaker
 
           # find by field { type => value }
 
-          @events = Event.where( :event_group_id => @event_group.id ).order( :utc_timestamp )
+          @events = Event.where( :event_group_id => @event_group.id )
 
           @return_events = []
           @events.each do |event|
@@ -219,11 +219,11 @@ module Piecemaker
 
           # get all events
 
-          @events = Event.where( :event_group_id => @event_group.id ).order( :utc_timestamp )
+          @events = Event.where( :event_group_id => @event_group.id )
           @return_events = []
           @events.each do |event|
             @return_events << { :event => event, 
-              :fields => EventField.where(:event_id => event.id).order(:id) }
+              :fields => EventField.where(:event_id => event.id) }
           end
 
           return @return_events
