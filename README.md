@@ -11,7 +11,7 @@ $ brew install rbenv
 $ brew install rbenv-gemset
 
 $ git clone https://github.com/motionbank/piecemaker2-api.git
-$ cd piecemaker2/api3
+$ cd piecemaker2-api
 $ gem install bundler
 $ bundle install
 
