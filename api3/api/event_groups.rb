@@ -160,7 +160,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "event group id"
         optional :from, type: Float, desc: ">= utc_timestamp"
         optional :to, type: Float, desc: "<= utc_timestamp"
-        optional :field, type: String, desc: "filter by event field key"
+        optional :field, type: Hash, desc: "filter by event field key"
       end
       #-------------------------------------------------------------------------
       get "/:id/events" do  #/api/v1/group/:id/events
@@ -191,19 +191,24 @@ module Piecemaker
 
           @events = Event.where( :event_group_id => @event_group.id ).order( :utc_timestamp )
 
-          find_hash = JSON.parse(params[:field])
-          find_key = find_hash.keys.first
-          find_value = find_hash[find_key]
-
           @return_events = []
           @events.each do |event|
-            @event_fields = EventField.where(:event_id => event.id)
 
-            hash = @event_fields.to_hash(:id, :value)
-
-            if hash.has_key?( find_key ) && hash[find_key].to_s.eql?( find_value )
-              @return_events << { :event => event, :fields => @event_fields }
+            @event_fields = EventField.where(
+              :event_id => event.id).to_hash(:id, :value)
+            
+            counter = 0
+            params[:field].each do |id, value|
+              if @event_fields.has_key?(id) && @event_fields[id] == value
+                counter += 1
+              end
             end
+            if counter == params[:field].length
+              @return_events << { 
+                :event => event, 
+                :fields => EventField.where(:event_id => event.id) }
+            end
+
 
           end
 

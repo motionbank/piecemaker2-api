@@ -273,19 +273,7 @@ describe "Piecemaker::API EventGroup" do
         }
       ]
 
-      # results.each do |result|
-      #   event = result[:event]
-      #   event_fields = result[:fields]
-# 
-      #   event.should == @big_in_alpha.values
-      #   event_fields.should =~ [@flag1_field.values, @type_field.values]
-# 
-      # end
-
       # pending "events ordered by time ASC, event_fields ordered by key ASC"
-
-      # puts @big_in_alpha.event_fields.inspect
-      # json_string_to_hash(last_response.body).should == [@big_in_alpha.values]
     end
     #---------------------------------------------------------------------------
 
@@ -336,24 +324,51 @@ describe "Piecemaker::API EventGroup" do
 
   ##############################################################################
   describe "GET /api/v1/group/:id/events" +
-           "?<field_key>=<value>" do
+           "?field[key]=value" do
   ##############################################################################
    
     #---------------------------------------------------------------------------
     it "returns all events filtered by field_key == value" do
     #---------------------------------------------------------------------------
       # pending
-      # "GET /api/v1/group/:id/event/by_type/:type"
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?field[type]=foobar"
       last_response.status.should == 200
 
       results       = json_string_to_hash(last_response.body)
 
-      results.should =~ [@big_in_alpha.values]
+      results.should =~ [
+        {
+          :event => @big_in_alpha.values, 
+          :fields => [@flag1_field.values, @type_field.values]
+        }
+      ]
 
     end
     #---------------------------------------------------------------------------
+
+    #---------------------------------------------------------------------------
+    it "returns all events filtered by field_key == value" +
+       "for multiple fields" do
+    #---------------------------------------------------------------------------
+      # pending
+      header "X-Access-Key", @pan.api_access_key
+      get "/api/v1/group/#{@alpha.id}/events?field[type]=foobar" + 
+          "&field[flag1]=getting%20back%20to%20the%20dolphin%20thing"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [
+        {
+          :event => @big_in_alpha.values, 
+          :fields => [@flag1_field.values, @type_field.values]
+        }
+      ]
+
+    end
+    #---------------------------------------------------------------------------
+
 
     #-------------------------------------------------------------------------
     it "ACL auto-testing" do
