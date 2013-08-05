@@ -6,5 +6,4 @@ log/*
 Gemfile.lock
 *.pid
 
-
 config/config.yml
