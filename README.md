@@ -2,7 +2,7 @@
 
 __... with [Grape](https://github.com/intridea/grape) on [Rack](http://rack.github.io/) and [Sequel](https://github.com/jeremyevans/sequel).__
 
-__[Status](http://htmlpreview.github.io/?https://github.com/motionbank/piecemaker2/blob/master/api3/rspec.html)__
+__[Status](http://htmlpreview.github.io/?https://raw.github.com/motionbank/piecemaker2-api/master/rspec.html)__
 
 ## Installation
 
@@ -10,7 +10,7 @@ __[Status](http://htmlpreview.github.io/?https://github.com/motionbank/piecemake
 $ brew install rbenv
 $ brew install rbenv-gemset
 
-$ git clone https://github.com/motionbank/piecemaker2.git
+$ git clone https://github.com/motionbank/piecemaker2-api.git
 $ cd piecemaker2/api3
 $ gem install bundler
 $ bundle install
@@ -97,7 +97,7 @@ $ ab -c5 -n10000 http://127.0.0.1:9292/api/v1/users
 ```
 
 ### Explore the API
-When running in :development mode, open http://motionbank.github.io/piecemaker2/swagger-ui/dist in your browser. Replace the port 9292 accordingly.
+When running in :development mode, open http://motionbank.github.io/piecemaker2-api/swagger-ui/dist in your browser. Replace the port 9292 accordingly.
 
 Note: You can create a super admin with ```rake db:create_super_admin[env]```.
 
