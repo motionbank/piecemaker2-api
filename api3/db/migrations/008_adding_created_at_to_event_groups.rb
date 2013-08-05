@@ -1,7 +1,7 @@
 Sequel.migration do
   up do
     alter_table(:event_groups) do
-      add_column :created_at, DateTime, :null => false, :default => Time.now
+      add_column :created_at, DateTime, :null => false
     end    
   end
 
