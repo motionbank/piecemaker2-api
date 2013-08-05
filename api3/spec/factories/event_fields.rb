@@ -22,3 +22,14 @@ EventField.factory :type do
   id "type"
   value "foobar"
 end
+
+
+EventField.factory :a do
+  id "a"
+  value "flag with id a"
+end
+
+EventField.factory :z do
+  id "z"
+  value "flag with id z"
+end

@@ -18,9 +18,9 @@ describe "Piecemaker::API EventGroup" do
       @alpha                = EventGroup.make :alpha
       @beta                 = EventGroup.make :beta
     
+      # create big_in_alpha BEFORE small_in_alpha for "ordered by" specs
       @big_in_alpha         = Event.make :big, 
                                 :event_group_id => @alpha.id
-
       @small_in_alpha       = Event.make :small, 
                                 :event_group_id => @alpha.id
 
@@ -37,6 +37,14 @@ describe "Piecemaker::API EventGroup" do
 
       @type_field           = EventField.make :type,
                                 :event_id => @big_in_alpha.id
+
+
+      # create z_field BEFORE a_field for "ordered by" specs
+      @z_field              = EventField.make :z,
+                                :event_id => @big_in_alpha.id
+      @a_field              = EventField.make :a,
+                                :event_id => @big_in_alpha.id
+
 
     end
   end
@@ -258,22 +266,20 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 200
 
       results       = json_string_to_hash(last_response.body)
-      # puts results.inspect
       results.should_not eq([])
       results.should_not eq(nil)
 
       results.should =~ [
         {
           :event => @big_in_alpha.values, 
-          :fields => [@flag1_field.values, @type_field.values]
+          :fields => [@a_field.values, @flag1_field.values, 
+                      @type_field.values, @z_field.values]
         }, 
         {
           :event => @small_in_alpha.values,
           :fields => []
         }
       ]
-
-      # pending "events ordered by time ASC, event_fields ordered by key ASC"
     end
     #---------------------------------------------------------------------------
 
@@ -284,6 +290,37 @@ describe "Piecemaker::API EventGroup" do
       # get roles and test against this routes
     end
     #-------------------------------------------------------------------------
+
+    #---------------------------------------------------------------------------
+    it "fails if the events are not ordered by utc_timestamp ASC" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @pan.api_access_key
+      get "/api/v1/group/#{@alpha.id}/events"
+      last_response.status.should == 200
+
+      results        = json_string_to_hash(last_response.body)
+      event_0        = results[0][:event]
+      event_1        = results[1][:event]
+
+      event_0.should == @small_in_alpha.values
+      event_1.should == @big_in_alpha.values
+    end
+    #---------------------------------------------------------------------------
+
+    #---------------------------------------------------------------------------
+    it "fails if the event fields are not ordered id ASC" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @pan.api_access_key
+      get "/api/v1/group/#{@alpha.id}/events"
+      last_response.status.should == 200
+
+      results        = json_string_to_hash(last_response.body)
+      event_fields_1 = results[1][:fields]
+
+      event_fields_1.should == [@a_field.values, @flag1_field.values, 
+                      @type_field.values, @z_field.values]
+    end
+    #---------------------------------------------------------------------------
   end
 
 
@@ -305,8 +342,8 @@ describe "Piecemaker::API EventGroup" do
 
       results.should =~ [
         {
-          :event => @big_in_alpha.values, 
-          :fields => [@flag1_field.values, @type_field.values]
+          :event => @small_in_alpha.values, 
+          :fields => []
         }
       ]
     end
@@ -340,7 +377,8 @@ describe "Piecemaker::API EventGroup" do
       results.should =~ [
         {
           :event => @big_in_alpha.values, 
-          :fields => [@flag1_field.values, @type_field.values]
+          :fields => [@a_field.values, @flag1_field.values, 
+                      @type_field.values, @z_field.values]
         }
       ]
 
@@ -348,7 +386,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
 
     #---------------------------------------------------------------------------
-    it "returns all events filtered by field_key == value" +
+    it "returns all events filtered by field_key == value " +
        "for multiple fields" do
     #---------------------------------------------------------------------------
       # pending
@@ -362,7 +400,8 @@ describe "Piecemaker::API EventGroup" do
       results.should =~ [
         {
           :event => @big_in_alpha.values, 
-          :fields => [@flag1_field.values, @type_field.values]
+          :fields => [@a_field.values, @flag1_field.values, 
+                      @type_field.values, @z_field.values]
         }
       ]
 
