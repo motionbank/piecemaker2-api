@@ -133,7 +133,14 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "fails if key for event_field is too long" do
     #---------------------------------------------------------------------------
-      pending "its already working, adding a test to be super safe though"
+      header "X-Access-Key", @pan.api_access_key
+      post "/api/v1/group/#{@alpha.id}/event", 
+        :utc_timestamp => '3', 
+        :duration => '4',
+        :fields => {
+          :key1___________________________________________________ => "content",
+          :another => "some more values"}
+      last_response.status.should == 400
     end
     #---------------------------------------------------------------------------
 
@@ -338,8 +345,6 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all events between time frame" do
     #---------------------------------------------------------------------------
-      # pending "events ordered by time ASC, event_fields ordered by key ASC"
-      # https://github.com/motionbank/piecemaker2/issues/42
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?from=0&to=10"
       last_response.status.should == 200
@@ -373,7 +378,6 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all events filtered by field_key == value" do
     #---------------------------------------------------------------------------
-      # pending
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?field[type]=foobar"
       last_response.status.should == 200
@@ -395,7 +399,6 @@ describe "Piecemaker::API EventGroup" do
     it "returns all events filtered by field_key == value " +
        "for multiple fields" do
     #---------------------------------------------------------------------------
-      # pending
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?field[type]=foobar" + 
           "&field[flag1]=getting%20back%20to%20the%20dolphin%20thing"
@@ -417,7 +420,6 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "fails for correct key but invalid value" do
     #---------------------------------------------------------------------------
-      # pending
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?field[type]=notfoobar"
       last_response.status.should == 200
@@ -447,8 +449,6 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all users for event_group with id" do
     #---------------------------------------------------------------------------
-      pending "order by name ASC"
-
       header "X-Access-Key", @pan.api_access_key
       get "/api/v1/group/#{@alpha.id}/users"
       last_response.status.should == 200
