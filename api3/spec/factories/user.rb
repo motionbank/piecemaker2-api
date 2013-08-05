@@ -1,7 +1,5 @@
 require "Digest"
 
-User.unrestrict_primary_key
-
 User.factory :peter do
   name "Peter"
   email "peter@example.com"
