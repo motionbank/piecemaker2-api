@@ -475,7 +475,15 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "adds a user to an event_group (via user_has_event_groups)" do
     #---------------------------------------------------------------------------
-      pending
+      header "X-Access-Key", @hans_admin.api_access_key
+      post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}"
+      last_response.status.should == 201
+
+      result       = json_string_to_hash(last_response.body)
+      result.should == {:status => true}
+
+      UserHasEventGroup.first(:user_id => @peter.id, 
+        :event_group_id => @alpha.id).should_not eq(nil)
     end
     #---------------------------------------------------------------------------
 
@@ -497,7 +505,16 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "deletes a user from an event_group (via user_has_event_groups)" do
     #---------------------------------------------------------------------------
-      pending
+      header "X-Access-Key", @hans_admin.api_access_key
+      post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}"
+      delete "/api/v1/group/#{@alpha.id}/user/#{@peter.id}"
+      last_response.status.should == 200
+
+      result       = json_string_to_hash(last_response.body)
+      result.should == {:status => true}
+
+      UserHasEventGroup.first(:user_id => @peter.id, 
+        :event_group_id => @alpha.id).should eq(nil)
     end
     #---------------------------------------------------------------------------
 

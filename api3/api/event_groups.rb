@@ -249,6 +249,61 @@ module Piecemaker
         @event_group.users
       end
 
+
+      #_________________________________________________________________________
+      ##########################################################################
+      desc "adds a user to an event_group"
+      #-------------------------------------------------------------------------
+      params do
+        requires :event_group_id, type: Integer, desc: "event_group id"
+        requires :user_id, type: Integer, desc: "user id"
+      end
+      #-------------------------------------------------------------------------
+      post "/:event_group_id/user/:user_id" do 
+        #/api/v1/group/:event_group_id/user/:user_id
+      #-------------------------------------------------------------------------
+        @_user = authorize!
+        @event_group = EventGroup.first(:id => params[:event_group_id])
+        error!('Event Group not found', 404) unless @event_group
+
+        @user = User.first(:id => params[:user_id])
+        error!('User not found', 404) unless @user
+        
+        UserHasEventGroup.unrestrict_primary_key
+        UserHasEventGroup.create(:user_id => params[:user_id],
+          :event_group_id => params[:event_group_id])
+
+        {:status => true}
+      end
+
+
+      #_________________________________________________________________________
+      ##########################################################################
+      desc "deletes a user from an event_group"
+      #-------------------------------------------------------------------------
+      params do
+        requires :event_group_id, type: Integer, desc: "event_group id"
+        requires :user_id, type: Integer, desc: "user id"
+      end
+      #-------------------------------------------------------------------------
+      delete "/:event_group_id/user/:user_id" do 
+        #/api/v1/group/:event_group_id/user/:user_id
+      #-------------------------------------------------------------------------
+        @_user = authorize!
+        @event_group = EventGroup.first(:id => params[:event_group_id])
+        error!('Event Group not found', 404) unless @event_group
+
+        @user = User.first(:id => params[:user_id])
+        error!('User not found', 404) unless @user
+        
+        @record = UserHasEventGroup.first(:user_id => params[:user_id],
+          :event_group_id => params[:event_group_id])
+
+        @record.delete if @record
+
+        {:status => true}
+      end
+
     end
   end
 end
