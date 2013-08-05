@@ -10,6 +10,7 @@ end
 
 NewRelic::Agent.manual_start
 
+use Rack::Deflater
 
 use Rack::Cors do
   allow do
