@@ -1,9 +1,0 @@
-{
-	"dev" : {
-		"driver": "postgres",
-		"host": "localhost",
-	    "database": "pm2_api3_jbmf_test",
-	    "user": "pm",
-	   	"password": "pm"
-   	}
-}

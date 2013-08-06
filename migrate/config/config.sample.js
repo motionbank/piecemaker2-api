@@ -2,7 +2,7 @@ module.exports = {
 	srcDB: {
 		db : {
 			driver: 'sqlite3',
-			filename: '/Users/fjenett/Desktop/jbmf-may-test.sqlite',
+			filename: '/THE/FULL/PATH/TO/YOUR/DB.sqlite',
 		    debug: false
 		}
 	},
@@ -10,9 +10,9 @@ module.exports = {
 		db : {
 			driver: 'postgres',
 			host: 'localhost',
-		    database: 'pm2_api3_jbmf_test',
-		    user: 'pm',
-		    password: 'pm',
+		    database: 'DATABASE_NAME_HERE',
+		    user: 'XXXX',
+		    password: 'XXXX',
 		    debug: false
 		}
 	}
