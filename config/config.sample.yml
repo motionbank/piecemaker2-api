@@ -4,6 +4,7 @@ newrelic_license_key: XXXX
 production:
   adapter   : postgres
   host      : localhost
+  port      : 5432
   database  : piecemaker2_prod
   username  : XXX
   password  : XXX
@@ -12,6 +13,7 @@ production:
 development:
   adapter   : postgres
   host      : localhost
+  port      : 5432
   database  : piecemaker2_dev
   username  : XXX
   password  : XXX
@@ -20,6 +22,7 @@ development:
 test:
   adapter   : postgres
   host      : localhost
+  port      : 5432
   database  : piecemaker2_test
   username  : XXX
   password  : XXX

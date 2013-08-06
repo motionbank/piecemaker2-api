@@ -30,6 +30,7 @@ DB = Sequel.connect(
   :database => CONFIG[ENV['RACK_ENV'].to_s]["database"] || '', 
   :user     => CONFIG[ENV['RACK_ENV'].to_s]["username"] || '', 
   :password => CONFIG[ENV['RACK_ENV'].to_s]["password"] || '',
+  :port => CONFIG[ENV['RACK_ENV'].to_s]["port"] || '5432',
   :max_connections => CONFIG[ENV['RACK_ENV'].to_s]["max_connections"] || 4)
 
 require File.expand_path('../application', __FILE__)
