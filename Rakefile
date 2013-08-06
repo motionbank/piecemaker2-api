@@ -52,7 +52,7 @@ task :daemon, :action do |cmd, args|
     puts "Starting API ..."
     exec "RACK_ENV=production && nohup rackup 0<&- &>" +
           "log/production_daemon.log & " +
-          "\necho $! > api.pid"
+          "\necho $! > api.pid; exit 0"
   elsif args[:action] == "stop"
     puts "Stopping API ..."
     exec "kill $(cat api.pid); rm api.pid"
