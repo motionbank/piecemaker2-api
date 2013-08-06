@@ -1,5 +1,6 @@
 # go to https://newrelic.com, sign up and get your license key
-newrelic_license_key: XXXX
+# leave empty to disable newrelic monitor support
+newrelic_license_key:
 
 production:
   adapter   : postgres
