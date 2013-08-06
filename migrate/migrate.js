@@ -274,8 +274,8 @@ function migrateGroups ( srcDb, destDb, next ) {
 						function saveDestGroup ( destGroup, next ) {
 							destDb.insert(
 								'event_groups',
-								['title','text'],
-								[destGroup.title,destGroup.text],
+								['title',		  'text',		  'created_at'],
+								[destGroup.title, destGroup.text, new Date().toUTCString()],
 								next
 							);
 						}, 

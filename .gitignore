@@ -6,4 +6,11 @@ log/*
 Gemfile.lock
 *.pid
 
+config/config.ymlnode_modules
+config/config-*
+config/database-*
+config/config.js
+config/database.json
 config/config.yml
+node_modules/*
+migrate/node_modules
