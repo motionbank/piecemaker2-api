@@ -45,15 +45,20 @@ task :default do
   exec "rake -T"
 end
 
+
 desc "Start|Stop production API (as deamon)"
 task :daemon, :action do |cmd, args|
   if args[:action] == "start"
-    puts "Starting API"
-    system "RACK_ENV=production rackup > /dev/null 2>log/production_error.log &"
+    puts "Starting API ..."
+    exec "RACK_ENV=production && nohup rackup 0<&- &>" +
+          "log/production_daemon.log & " +
+          "\necho $! > api.pid"
   elsif args[:action] == "stop"
-    puts "Stopping API"
+    puts "Stopping API ..."
+    exec "kill $(cat api.pid); rm api.pid"
   end
 end
+
 
 desc "Start API with environment (prod|dev)"
 task :start, :env do |cmd, args|
