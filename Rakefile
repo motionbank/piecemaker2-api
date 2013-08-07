@@ -77,7 +77,7 @@ task :daemon, :action do |cmd, args|
     check_pid_file
 
     # no process is running ... start a new one
-    system "RACK_ENV=production && rackup -D -P api.pid"
+    system "rackup -E production -D -P api.pid"
     sleep 0.5
     check_pid_file
 
@@ -109,7 +109,7 @@ task :start, :env do |cmd, args|
   env = expand_env_string(args[:env]) || "production"
   if env == "production"
     puts "Starting in production mode ..."
-    exec "RACK_ENV=production rackup"
+    exec "rackup -E production"
   elsif env == "development"
     puts "Starting in development mode ..."
     exec "bundle exec guard -g development"
