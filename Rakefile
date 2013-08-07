@@ -63,7 +63,7 @@ task :daemon, :action do |cmd, args|
       pid = IO.read("api.pid").to_i
 
       if(pid_exist?(pid))
-        puts "server is running (PID: #{pid})"
+        puts "api server is running (PID: #{pid})"
         exit 0
       end
 
@@ -82,7 +82,7 @@ task :daemon, :action do |cmd, args|
     check_pid_file
 
     # if you reached this, api was not started
-    puts "server not running"
+    puts "api server not running"
     exit 50
 
   elsif args[:action] == "stop"
@@ -99,7 +99,7 @@ task :daemon, :action do |cmd, args|
     check_pid_file
 
     # if you reached this, api was not started
-    puts "server not running"
+    puts "api server not running"
     exit 50
   end
 end
