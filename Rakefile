@@ -89,7 +89,8 @@ task :daemon, :action do |cmd, args|
     if File.exist?("api.pid")
       pid = IO.read("api.pid").to_i
       if(pid_exist?(pid))
-        system "kill $(cat api.pid); rm api.pid"
+        system "kill $(cat api.pid)"
+        File.delete("api.pid")
         exit 0
       end
     end
