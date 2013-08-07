@@ -48,14 +48,54 @@ end
 
 desc "Start|Stop production API (as deamon)"
 task :daemon, :action do |cmd, args|
+
+  def pid_exist?(pid)
+    begin
+      return Process.getpgid(pid)
+    rescue
+      return false
+    end
+  end
+
+  def check_pid_file
+    if File.exist?("api.pid")
+      # pid file exists: api running?
+      pid = IO.read("api.pid").to_i
+      puts "Checking pid #{pid}"
+
+      if(pid_exist?(pid))
+        puts "server is running (PID: #{pid})"
+        exit 0
+      end
+
+      # pid file exists, but process crashed maybe
+      # anyway, delete pid file
+      puts "deleting pid"
+      File.delete("api.pid")
+    end
+  end
+
   if args[:action] == "start"
-    puts "Starting API ..."
-    exec "RACK_ENV=production && nohup rackup 0<&- &>" +
-          "log/production_daemon.log & " +
-          "\necho $! > api.pid; exit 0"
+    check_pid_file
+
+    # no process is running ... start a new one
+    system "RACK_ENV=production && rackup -D -P api.pid"
+    sleep 0.5
+    check_pid_file
+
+    # if you reached this, api was not started
+    puts "server not running"
+    exit 50
+
   elsif args[:action] == "stop"
-    puts "Stopping API ..."
-    exec "kill $(cat api.pid); rm api.pid"
+    if File.exist?("api.pid")
+      pid = IO.read("api.pid").to_i
+      if(pid_exist?(pid))
+        system "kill $(cat api.pid); rm api.pid"
+        exit 0
+      end
+    end
+    exit 0
   end
 end
 
