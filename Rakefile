@@ -61,7 +61,6 @@ task :daemon, :action do |cmd, args|
     if File.exist?("api.pid")
       # pid file exists: api running?
       pid = IO.read("api.pid").to_i
-      puts "Checking pid #{pid}"
 
       if(pid_exist?(pid))
         puts "server is running (PID: #{pid})"
@@ -70,7 +69,6 @@ task :daemon, :action do |cmd, args|
 
       # pid file exists, but process crashed maybe
       # anyway, delete pid file
-      puts "deleting pid"
       File.delete("api.pid")
     end
   end
@@ -96,6 +94,12 @@ task :daemon, :action do |cmd, args|
       end
     end
     exit 0
+  elsif args[:action] == "status"
+    check_pid_file
+
+    # if you reached this, api was not started
+    puts "server not running"
+    exit 50
   end
 end
 
