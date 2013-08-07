@@ -77,7 +77,7 @@ task :daemon, :action do |cmd, args|
     check_pid_file
 
     # no process is running ... start a new one
-    system "rackup -E production -D -P api.pid"
+    system "rackup -E production -D -P api.pid > log/daemon_production.log"
     sleep 0.5
     check_pid_file
 
