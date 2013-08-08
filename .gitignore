@@ -6,6 +6,8 @@ log/*
 Gemfile.lock
 *.pid
 
+vendor
+
 config/config.ymlnode_modules
 config/config-*
 config/database-*
