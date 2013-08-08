@@ -1,6 +1,7 @@
 language: ruby
 rvm:
   - 2.0.0-p247
+  - jruby-19mode
 script: rspec
 services: postgresql
 before_script: 
