@@ -18,8 +18,8 @@ module Piecemaker
           else
             # verify additional user requirements from args
 
-            if args.include?(:admin_only)
-              error!('Forbidden', 403) unless user.is_admin 
+            if args.include?(:super_admin_only)
+              error!('Forbidden', 403) unless user.is_super_admin 
             end
 
             # okay, i like you, come in!

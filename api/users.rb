@@ -53,7 +53,7 @@ module Piecemaker
       params do
         requires :name, type: String, desc: "users fullname or whatever"
         requires :email, type: String, desc: "email address"
-        optional :is_admin, type: Boolean, desc: "make this user a super admin", 
+        optional :is_super_admin, type: Boolean, desc: "make this user a super admin", 
           :default => false
       end 
       #-------------------------------------------------------------------------
@@ -69,7 +69,7 @@ module Piecemaker
         @user = User.create(
           :name     => params[:name],
           :email    => params[:email],
-          :is_admin => params[:is_admin],
+          :is_super_admin => params[:is_super_admin],
           :password => Digest::SHA1.hexdigest(new_password))
 
         @user.password = new_password
@@ -110,7 +110,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "a user id"
         optional :name, type: String, desc: "users fullname or whatever"
         optional :email, type: String, desc: "email address"
-        optional :is_admin, type: Boolean, desc: "make this user a super admin"
+        optional :is_super_admin, type: Boolean, desc: "make this user a super admin"
         optional :is_disabled, type: Boolean, desc: "disable this user"
         optional :new_password, type: Boolean, desc: "create new password"
       end
@@ -122,7 +122,7 @@ module Piecemaker
         error!('Not found', 404) unless @user
 
         @user.update_with_params!(params, 
-          :name, :email, :is_admin, :is_disabled)
+          :name, :email, :is_super_admin, :is_disabled)
 
         new_password = nil
         if params[:new_password]

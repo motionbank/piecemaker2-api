@@ -202,7 +202,7 @@ describe "Piecemaker::API User" do
         post "/api/v1/user", 
           :name => "Michael",
           :email => "michael@example.com",
-          :is_admin => false
+          :is_super_admin => false
         last_response.status.should == 201
 
         user = json_string_to_hash(last_response.body)
@@ -226,13 +226,13 @@ describe "Piecemaker::API User" do
         post "/api/v1/user", 
           :name => "Michael",
           :email => "michael@example.com",
-          :is_admin => false
+          :is_super_admin => false
         last_response.status.should == 201
 
         post "/api/v1/user", 
           :name => "Michael 2",
           :email => "michael@example.com",
-          :is_admin => false
+          :is_super_admin => false
         last_response.status.should == 409
       end
       #-------------------------------------------------------------------------
@@ -300,7 +300,7 @@ describe "Piecemaker::API User" do
         put "/api/v1/user/#{@pan.id}", 
           :name => "Michael",
           :email => "michael@example.com",
-          :is_admin => true,
+          :is_super_admin => true,
           :is_disabled => true
         last_response.status.should == 200
 

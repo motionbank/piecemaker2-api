@@ -142,7 +142,7 @@ namespace :db do
       :email => "super-admin-#{time_now}@example.com",
       :password => Digest::SHA1.hexdigest("super-admin-#{time_now}"),
       :api_access_key => api_access_key,
-      :is_admin => true)
+      :is_super_admin => true)
 
     puts ""
     puts "Email   : super-admin-#{time_now}@example.com"

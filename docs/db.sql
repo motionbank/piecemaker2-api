@@ -13,7 +13,7 @@ CREATE  TABLE IF NOT EXISTS `d015dedf`.`users` (
   `password` VARCHAR(45) NOT NULL ,
   `api_access_key` VARCHAR(45) NULL ,
   `is_disabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
-  `is_admin` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
+  `is_super_admin` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8

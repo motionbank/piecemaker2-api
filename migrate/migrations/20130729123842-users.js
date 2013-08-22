@@ -16,7 +16,7 @@ exports.up = function(db, callback) {
 			api_access_key: {
 				type: 'string', length: 45
 			},
-			is_admin: { 
+			is_super_admin: { 
 				type: 'boolean', defaultValue: false },
 			is_disabled: { 
 				type: 'boolean', defaultValue: false }

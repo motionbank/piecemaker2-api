@@ -165,9 +165,9 @@ function migrateUsers ( srcDb, destDb, next ) {
 							//console.log( 'adding user '+userData.name );
 							destDb.insert(
 								'users',
-								['name', 'email', 'password', 'api_access_key', 'is_admin', 'is_disabled'],
+								['name', 'email', 'password', 'api_access_key', 'is_super_admin', 'is_disabled'],
 								[userData.name, userData.email, userData.password, userData.api_access_key, 
-									userData.is_admin, userData.is_disabled],
+									userData.is_super_admin, userData.is_disabled],
 								next
 							);
 						}, 
@@ -193,7 +193,7 @@ function translateUserData ( srcUser, next ) {
 			email: 			srcUser.email || fakeEmailFromLogin( srcUser.login ),
 			password: 		sha1( srcUser.login + (Math.random() * 10 + (new Date().getTime())) ).substring(0,6),
 			api_access_key: sha1( ((new Date().getTime()) + Math.random() * 666) + srcUser.login ),
-			is_admin: 		srcUser.role_name === 'group_admin' ? true : false,
+			is_super_admin: 		srcUser.role_name === 'group_admin' ? true : false,
 			is_disabled: 	false
 		}
 	);

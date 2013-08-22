@@ -5,7 +5,7 @@ User.factory :peter do
   email "peter@example.com"
   password Digest::SHA1.hexdigest("Peter") # important, that password == name
   api_access_key Piecemaker::Helper::API_Access_Key::generate
-  is_admin false
+  is_super_admin false
 end
 
 User.factory :pan do
@@ -13,7 +13,7 @@ User.factory :pan do
   email "pan@example.com"
   password Digest::SHA1.hexdigest("Pan") # important, that password == name
   api_access_key Piecemaker::Helper::API_Access_Key::generate
-  is_admin false
+  is_super_admin false
 end
 
 User.factory :hans_admin do
@@ -21,7 +21,7 @@ User.factory :hans_admin do
   email "hans@example.com"
   password Digest::SHA1.hexdigest("Hans") # important, that password == name
   api_access_key Piecemaker::Helper::API_Access_Key::generate
-  is_admin true
+  is_super_admin true
 end
 
 User.factory :klaus_disabled do
@@ -29,6 +29,6 @@ User.factory :klaus_disabled do
   email "klaus@example.com"
   password Digest::SHA1.hexdigest("Klaus") # important, that password == name
   api_access_key Piecemaker::Helper::API_Access_Key::generate
-  is_admin false
+  is_super_admin false
   is_disabled true
 end
