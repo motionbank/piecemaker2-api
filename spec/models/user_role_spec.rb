@@ -26,8 +26,7 @@ describe "Model UserRole" do
       @admin_allow_read_another_item = RolePermission.make :allow_read,
         :user_role_id => @user_role_admin.id,
         :entity => "another_item"
-
-
+        
 
       @pan = User.make :pan
 
