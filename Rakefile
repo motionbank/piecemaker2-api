@@ -212,7 +212,6 @@ namespace :db do
     end
     env = expand_env_string(args[:env])
     Rake::Task['environment'].invoke(env)
-    puts "COPY #{args[:table]} FROM '#{BASE_PATH}/db/init/#{args[:table]}.sql' WITH CSV HEADER"
     DB.run("COPY #{args[:table]} FROM '#{BASE_PATH}/db/init/#{args[:table]}.sql' WITH CSV HEADER")
   end
 
