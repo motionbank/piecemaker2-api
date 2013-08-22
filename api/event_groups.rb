@@ -298,6 +298,34 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
+      desc "updates attributes for user <-> event_group relation"
+      #-------------------------------------------------------------------------
+      params do
+        requires :event_group_id, type: Integer, desc: "event_group id"
+        requires :user_id, type: Integer, desc: "user id"
+        optional :user_role_id, type: String, desc: "user role"
+      end
+      #-------------------------------------------------------------------------
+      put "/:event_group_id/user/:user_id" do 
+        #/api/v1/group/:event_group_id/user/:user_id
+      #-------------------------------------------------------------------------
+        @_user = authorize!
+        @event_group = EventGroup.first(:id => params[:event_group_id])
+        error!('Event Group not found', 404) unless @event_group
+
+        @user_has_event_group = UserHasEventGroup.first(
+          :user_id => params[:user_id],
+          :event_group_id => params[:event_group_id])
+        error!('Relation not found', 404) unless @user_has_event_group
+        
+        @user_has_event_group.update_with_params!(params, :user_role_id)
+
+        @user_has_event_group.save
+      end
+
+
+      #_________________________________________________________________________
+      ##########################################################################
       desc "deletes a user from an event_group"
       #-------------------------------------------------------------------------
       params do

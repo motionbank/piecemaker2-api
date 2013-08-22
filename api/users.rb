@@ -53,7 +53,7 @@ module Piecemaker
       params do
         requires :name, type: String, desc: "users fullname or whatever"
         requires :email, type: String, desc: "email address"
-        optional :is_admin, type: Boolean, desc: "make this user an admin", 
+        optional :is_admin, type: Boolean, desc: "make this user a super admin", 
           :default => false
       end 
       #-------------------------------------------------------------------------
@@ -110,7 +110,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "a user id"
         optional :name, type: String, desc: "users fullname or whatever"
         optional :email, type: String, desc: "email address"
-        optional :is_admin, type: Boolean, desc: "make this user an admin"
+        optional :is_admin, type: Boolean, desc: "make this user a super admin"
         optional :is_disabled, type: Boolean, desc: "disable this user"
         optional :new_password, type: Boolean, desc: "create new password"
       end

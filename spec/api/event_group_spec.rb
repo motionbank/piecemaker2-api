@@ -52,7 +52,6 @@ describe "Piecemaker::API EventGroup" do
 
 
       @user_role_admin      = UserRole.make :admin
-      @user_role_user       = UserRole.make :user
 
     end
   end
@@ -533,7 +532,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
       post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}",
-        :user_role_id => 99999999999999999
+        :user_role_id => "non_existing_role_h42kj42kjkSDFsfq44_24%§$%"
       last_response.status.should == 404
     end
     #---------------------------------------------------------------------------
@@ -549,6 +548,71 @@ describe "Piecemaker::API EventGroup" do
   end
 
 
+
+  ##############################################################################
+  describe "PUT /api/v1/group/:id/user/:id" do
+  ##############################################################################
+    
+    #---------------------------------------------------------------------------
+    it "updates user_role_id in user_has_event_groups with valid id" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      put "/api/v1/group/#{@alpha.id}/user/#{@pan.id}",
+        :user_role_id => @user_role_admin.id
+      last_response.status.should == 200
+
+      user_has_event_group = json_string_to_hash(last_response.body)
+      
+      @user_has_event_group = UserHasEventGroup.first(
+        :user_id => @pan.id, 
+        :event_group_id => @alpha.id)
+
+      @user_has_event_group.values.should == user_has_event_group
+    end
+    #---------------------------------------------------------------------------
+
+
+    #---------------------------------------------------------------------------
+    it "updates user_role_id in user_has_event_groups with empty id" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      put "/api/v1/group/#{@alpha.id}/user/#{@pan.id}"
+      last_response.status.should == 200
+
+      user_has_event_group = json_string_to_hash(last_response.body)
+
+      @user_has_event_group = UserHasEventGroup.first(
+        :user_id => @pan.id, 
+        :event_group_id => @alpha.id)
+
+      @user_has_event_group.should_not eq(nil)
+      @user_has_event_group.user_role_id.should eq(nil)
+    end
+    #---------------------------------------------------------------------------
+
+
+    #---------------------------------------------------------------------------
+    it "updates user_role_id in user_has_event_groups with invalid id" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      put "/api/v1/group/#{@alpha.id}/user/#{@peter.id}",
+        :user_role_id => "non_existing_role_h42kj42kjkSDFsfq44_24%§$%"
+      last_response.status.should == 404
+    end
+    #---------------------------------------------------------------------------
+
+
+    #-------------------------------------------------------------------------
+    it "ACL auto-testing" do
+    #-------------------------------------------------------------------------
+      pending
+      # get roles and test against this routes
+    end
+    #-------------------------------------------------------------------------
+  end
+
+
+
   ##############################################################################
   describe "DELETE /api/v1/group/:id/user/:id" do
   ##############################################################################
@@ -557,7 +621,6 @@ describe "Piecemaker::API EventGroup" do
     it "deletes a user from an event_group (via user_has_event_groups)" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
-      post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}"
       delete "/api/v1/group/#{@alpha.id}/user/#{@peter.id}"
       last_response.status.should == 200
 
