@@ -68,7 +68,7 @@ module Piecemaker
           :email    => params[:email],
           :is_admin => params[:is_admin],
           :password => Digest::SHA1.hexdigest(new_password))
-
+        
         @user.password = new_password
         return @user
       end

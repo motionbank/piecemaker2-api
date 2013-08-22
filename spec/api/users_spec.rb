@@ -214,7 +214,26 @@ describe "Piecemaker::API User" do
         @user.delete(:password)
 
         user.should == @user
+      end
+      #-------------------------------------------------------------------------
 
+
+      #-------------------------------------------------------------------------
+      it "fails when trying to create the same user twice", :focus do
+      #-------------------------------------------------------------------------
+        header "X-Access-Key", @hans_admin.api_access_key
+
+        post "/api/v1/user", 
+          :name => "Michael",
+          :email => "michael@example.com",
+          :is_admin => false
+        last_response.status.should == 201
+
+        post "/api/v1/user", 
+          :name => "Michael",
+          :email => "michael@example.com",
+          :is_admin => false
+        last_response.status.should == 500
       end
       #-------------------------------------------------------------------------
 

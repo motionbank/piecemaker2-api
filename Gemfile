@@ -23,11 +23,15 @@ group :development do
   gem "guard-bundler", "~> 1.0.0"
   gem "guard-rack", "~> 1.2.2"
   gem "guard-rake", "~> 0.0.9"
+
+  gem "pry", "~> 0.9.12.2"
 end
 
 group :test do
   gem "rspec", "~> 2.14.1"
   gem "rack-test", "~> 0.6.2"
   gem "sequel-factory", "~> 1.0.0"
+
+  gem "pry", "~> 0.9.12.2"
 end
 

@@ -8,6 +8,20 @@ module Piecemaker
 
     version 'v1', using: :path, vendor: 'piecemaker'
     
+    # rescue from all thrown exceptions,
+    # return error code 500 and message with explanation
+    rescue_from :all do |e|
+      
+      # @todo implement logging
+      $stderr.puts e.message if ["development"].include?(ENV['RACK_ENV'])
+
+      Rack::Response.new({
+          'status' => 500,
+          'message' => e.message,
+          'param' => nil # e.param
+      }.to_json, 500)
+    end
+
     helpers Piecemaker::Helper::Auth
     
     mount ::Piecemaker::Users
@@ -19,23 +33,6 @@ module Piecemaker
     if ENV['RACK_ENV'].to_sym == :development
       add_swagger_documentation api_version: 'v1'
     end
-
-    # rescue from all thrown exceptions
-    # grape will return '500 Internal Server Error' in all other cases
-    rescue_from :all 
-    
-    # rescue errors coming from sequel
-    rescue_from Sequel::DatabaseError do |e|
-      # @todo: implement logging
-      # https://github.com/intridea/grape#logging
-      $stderr.puts e.message if ["test", "development"].include?(ENV['RACK_ENV'])
-      Rack::Response.new({
-          'status' => 500,
-          'message' => e.message,
-          'param' => nil # e.param
-      }.to_json, 500)
-    end
     
   end
 end
-
