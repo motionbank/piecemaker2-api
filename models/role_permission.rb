@@ -4,5 +4,4 @@ class RolePermission < Sequel::Model(:role_permissions)
 
   one_to_one :user_role, :key => :id, :primary_key => :user_role_id
 
-  
 end
