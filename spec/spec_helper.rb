@@ -18,7 +18,8 @@ def truncate_db
 end
 
 def factory_batch(&block)
-  factories = %w(User Event EventGroup EventField UserHasEventGroup)
+  factories = %w(User Event EventGroup 
+    EventField UserHasEventGroup UserRole RolePermission)
   factories.each do |factory|
     Object.const_get(factory).unrestrict_primary_key
   end

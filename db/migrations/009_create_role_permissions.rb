@@ -6,7 +6,7 @@ Sequel.migration do
       String :permission, :size => 50, :null => false
       String :entity, :size => 50, :null => false
 
-      primary_key [:user_role_id, :entity]
+      primary_key [:user_role_id, :permission, :entity]
 
     end
   end
