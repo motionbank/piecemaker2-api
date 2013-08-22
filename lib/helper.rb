@@ -2,7 +2,6 @@ module Piecemaker
   module Helper
 
 
-
     module Auth
       # consider context of execution ...
       # included with 'helpers Piecemaker::Helper::Auth' in api
