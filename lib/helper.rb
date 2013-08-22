@@ -32,6 +32,7 @@ module Piecemaker
 
     end
 
+
     module API_Access_Key
       API_ACCESS_KEY_LENGTH = 16
 
@@ -47,6 +48,7 @@ module Piecemaker
           api_access_key.start_with?("0310X") ? true : false
       end
     end
+
 
     module Password
       def self.generate(length)
