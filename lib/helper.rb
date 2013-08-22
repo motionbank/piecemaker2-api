@@ -17,12 +17,11 @@ module Piecemaker
             error!('Unauthorized', 401)
           else
             # verify additional user requirements from args
-
             if args.include?(:super_admin_only)
               error!('Forbidden', 403) unless user.is_super_admin 
             end
 
-            # okay, i like you, come in!
+            # okay, come in!
             return user
           end
         else
