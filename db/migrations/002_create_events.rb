@@ -4,7 +4,7 @@ Sequel.migration do
       primary_key :id
 
       Integer :event_group_id, :null => false
-      Integer :created_by_user_id
+      Integer :created_by_user_id, :null => true
 
       # BigDecimal :utc_timestamp, :size => [20, 6], :null => false
       # BigDecimal :duration, :size => [11, 6], :null => true      

@@ -82,8 +82,9 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @pan.api_access_key
       post "/api/v1/group/#{@alpha.id}/event", 
-        :utc_timestamp => '1', 
-        :duration => '2'
+        :utc_timestamp => '1.0', 
+        :duration => '2.0',
+        :type => 'my_type'
       last_response.status.should == 201
 
       result       = json_string_to_hash(last_response.body)
@@ -92,6 +93,11 @@ describe "Piecemaker::API EventGroup" do
 
       # was the event created?
       Event[event[:id]].values.should == event
+
+      # do the values match?
+      event[:utc_timestamp].should == 1.0
+      event[:duration].should == 2.0
+      event[:type].should == 'my_type'
       
       # no event_fields should be created!
       event_fields.should eq([])
@@ -104,8 +110,9 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @pan.api_access_key
       post "/api/v1/group/#{@alpha.id}/event", 
-        :utc_timestamp => '3', 
-        :duration => '4',
+        :utc_timestamp => '3.0', 
+        :duration => '4.0',
+        :type => 'my_type',
         :fields => {
           :key1 => "some value",
           :another => "some more values"}
@@ -137,6 +144,7 @@ describe "Piecemaker::API EventGroup" do
       post "/api/v1/group/#{@alpha.id}/event", 
         :utc_timestamp => '3', 
         :duration => '4',
+        :type => 'my_type',
         :fields => {
           :key1___________________________________________________ => "content",
           :another => "some more values"}

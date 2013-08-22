@@ -35,7 +35,7 @@ $ rake spec:now
 ```
 
 ## Usage
-```
+```bash
 see rake for some commands
 $ rake
 
@@ -173,6 +173,7 @@ User
  * Running only specify tests by adding ```:focus``` tag to test.
  * Add ```binding.pry``` in your code to debug (in dev|test env).
    See https://github.com/pry/pry/ for more information.
+ * Create SQL Dump: ```pg_dump -s piecemaker2_xxx > db/piecemaker2_xxx_dump.sql```
 
 ## Docs
 

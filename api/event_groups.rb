@@ -32,6 +32,7 @@ module Piecemaker
       params do
         requires :id, type: Integer, desc: "event group id"
         requires :utc_timestamp, type: Float, desc: "utc timestamp"
+        requires :type, type: String, desc: "type of event"
         optional :duration, type: Float, desc: "duration"
         optional :fields, type: Hash, desc: "optional fields to create for this event {'field1': 'value', ...}"
       end 
@@ -47,6 +48,7 @@ module Piecemaker
         @event = Event.create(
           :event_group_id     => @event_group.id,
           :created_by_user_id => @_user.id,
+          :type               => params[:type],
           :utc_timestamp      => params[:utc_timestamp],
           :duration           => params[:duration])
 

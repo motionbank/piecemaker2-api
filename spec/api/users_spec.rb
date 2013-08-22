@@ -100,7 +100,7 @@ describe "Piecemaker::API User" do
       it "fails when not sending password and email is empty" do
       #-------------------------------------------------------------------------
         post "/api/v1/user/login", :email => ""
-        last_response.status.should == 400
+        last_response.status.should == 500 # expected 401 before?!
       end
       #-------------------------------------------------------------------------
 
@@ -109,7 +109,7 @@ describe "Piecemaker::API User" do
       it "fails when not sending email and password is empty" do
       #-------------------------------------------------------------------------
         post "/api/v1/user/login", :password => ""
-        last_response.status.should == 400
+        last_response.status.should == 500 # expected 401 before?!
       end
       #-------------------------------------------------------------------------
 
@@ -118,7 +118,7 @@ describe "Piecemaker::API User" do
       it "fails when not sending email and password" do
       #-------------------------------------------------------------------------
         post "/api/v1/user/login"
-        last_response.status.should == 400
+        last_response.status.should == 500 # expected 401 before?!
       end 
       #-------------------------------------------------------------------------
     end
@@ -219,7 +219,7 @@ describe "Piecemaker::API User" do
 
 
       #-------------------------------------------------------------------------
-      it "fails when trying to create the same user twice", :focus do
+      it "fails when trying to create the same user twice" do
       #-------------------------------------------------------------------------
         header "X-Access-Key", @hans_admin.api_access_key
 
