@@ -230,10 +230,10 @@ describe "Piecemaker::API User" do
         last_response.status.should == 201
 
         post "/api/v1/user", 
-          :name => "Michael",
+          :name => "Michael 2",
           :email => "michael@example.com",
           :is_admin => false
-        last_response.status.should == 500
+        last_response.status.should == 409
       end
       #-------------------------------------------------------------------------
 

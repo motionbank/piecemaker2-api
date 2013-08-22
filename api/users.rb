@@ -61,6 +61,9 @@ module Piecemaker
       #-------------------------------------------------------------------------
         @_user = authorize!(:admin_only)
 
+        # check if user with this email exists and return appropriate error code
+        error!('Duplicate user', 409) if User.first(:email => params[:email])
+        
         new_password = Piecemaker::Helper::Password::generate(6)
 
         @user = User.create(
@@ -68,7 +71,7 @@ module Piecemaker
           :email    => params[:email],
           :is_admin => params[:is_admin],
           :password => Digest::SHA1.hexdigest(new_password))
-        
+
         @user.password = new_password
         return @user
       end
