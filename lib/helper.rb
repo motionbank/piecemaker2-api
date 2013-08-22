@@ -58,23 +58,3 @@ module Piecemaker
 
   end
 end
-
-=begin
-# borrowed from rails
-# https://github.com/rails/rails/blob/cb2bd4aa619d9329c42aaf6d9f8eacc616ce53f4/activesupport/lib/active_support/core_ext/hash/except.rb
-class Hash
-  # Return a hash that includes everything but the given keys. This is useful for
-  # limiting a set of parameters to everything but a few known toggles:
-
-  def except(*keys)
-    dup.except!(*keys)
-  end
-
-  def except!(*keys)
-    keys.each { |key| delete(key) }
-    self
-  end
-end
-=end
-
-
