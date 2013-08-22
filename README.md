@@ -134,38 +134,23 @@ URL for requests is logged somewhere. To avoid spoofing in these cases, the
 email param is sent (in the body) as POST request, X-Access-Key is sent 
 in the request headers.
 
-### User roles
 
-__Super Admin < Admin < User__
+### User Roles and Permissions
 
-Super Admin
-```
- * CRUD admins
-```
+Please refer to [db/init/user_roles.sql](db/init/user_roles.sql) and
+[db/init/role_permissions.sql](db/init/role_permissions.sql) for roles
+and permissions. Keep these files up-to-date, since they will be loaded
+into the database after a database reset.
 
-Admin
-```
- * CRUD users
- * CRUD event_groups
- * CRUD events
+You can easily create the sql files from an existing database table:
+```bash
+rake db:export_into_file[test,'user_roles']
+rake db:export_into_file[test,'role_permissions']
 ```
 
-User
-```
- * Read own user
- * Update own user (password i.e.)
- * Create event_groups
- * Create events
- * Read own event_groups
- * Read own events
- * Read users in event_group
- * Update own event_groups
- * Update own events
- * Delete own event_groups
- * Delete own events
- * Read UTC Timestamp
-```
-(events includes event_fields)
+```rake db:reset[database]``` calls 
+```rake db:import_from_file[test,'user_roles']``` and
+```rake db:import_from_file[test,'role_permissions']```.
 
 
 ## Development
@@ -174,6 +159,7 @@ User
  * Add ```binding.pry``` in your code to debug (in dev|test env).
    See https://github.com/pry/pry/ for more information.
  * Create SQL Dump: ```pg_dump -s piecemaker2_xxx > db/piecemaker2_xxx_dump.sql```
+
 
 ## Docs
 

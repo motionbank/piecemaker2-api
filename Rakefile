@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'bundler'
 
+BASE_PATH = File.dirname(File.absolute_path(__FILE__))
+
 begin
   Bundler.setup(:default, :development, :test)
 rescue Bundler::BundlerError => e
@@ -181,11 +183,39 @@ namespace :db do
     end
   end
  
-  desc "Reset the database (nuke & migrate)"
+  desc "Reset the database (nuke & migrate & import_from_file)"
   task :reset, :env do |cmd, args|
     env = expand_env_string(args[:env])
     Rake::Task['db:nuke'].invoke(env)
     Rake::Task['db:migrate'].invoke(env)
+    Rake::Task['db:import_from_file'].invoke(env, 'user_roles')
+    Rake::Task['db:import_from_file'].reenable # @todo use execute instead?
+    Rake::Task['db:import_from_file'].invoke(env, 'role_permissions')
   end
+
+  desc "Export table into file"
+  task :export_into_file, :env, :table do |cmd, args|
+    unless args[:table]
+      puts "Usage: rake db:export_into_file[env,'table']"
+      exit 1
+    end
+    env = expand_env_string(args[:env])
+    Rake::Task['environment'].invoke(env)
+    DB.run("COPY #{args[:table]} TO '#{BASE_PATH}/db/init/#{args[:table]}.sql' WITH CSV HEADER")
+  end
+
+  desc "Import table into database"
+  task :import_from_file, :env, :table do |cmd, args|
+    unless args[:table]
+      puts "Usage: rake db:import_from_file[env,'table']"
+      exit 1
+    end
+    env = expand_env_string(args[:env])
+    Rake::Task['environment'].invoke(env)
+    puts "COPY #{args[:table]} FROM '#{BASE_PATH}/db/init/#{args[:table]}.sql' WITH CSV HEADER"
+    DB.run("COPY #{args[:table]} FROM '#{BASE_PATH}/db/init/#{args[:table]}.sql' WITH CSV HEADER")
+  end
+
+
 end
 
