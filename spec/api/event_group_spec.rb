@@ -51,6 +51,9 @@ describe "Piecemaker::API EventGroup" do
                                 :event_id => @big_in_alpha.id
 
 
+      @user_role_admin      = UserRole.make :admin
+      @user_role_user       = UserRole.make :user
+
     end
   end
 
@@ -481,7 +484,31 @@ describe "Piecemaker::API EventGroup" do
   ##############################################################################
     
     #---------------------------------------------------------------------------
-    it "adds a user to an event_group (via user_has_event_groups)" do
+    it "adds a user to an event_group (via user_has_event_groups) " +
+       "and set user_role_id" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}", 
+        :user_role_id => @user_role_admin.id
+      last_response.status.should == 201
+
+      result       = json_string_to_hash(last_response.body)
+      result.should == {:status => true}
+
+      @user_has_event_group = UserHasEventGroup.first(
+        :user_id => @peter.id, 
+        :event_group_id => @alpha.id)
+
+      @user_has_event_group.should_not eq(nil)
+      @user_has_event_group.user_role_id.should == @user_role_admin.id
+
+    end
+    #---------------------------------------------------------------------------
+
+
+    #---------------------------------------------------------------------------
+    it "adds a user to an event_group (via user_has_event_groups) " +
+       "and set empty user_role_id" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
       post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}"
@@ -490,8 +517,24 @@ describe "Piecemaker::API EventGroup" do
       result       = json_string_to_hash(last_response.body)
       result.should == {:status => true}
 
-      UserHasEventGroup.first(:user_id => @peter.id, 
-        :event_group_id => @alpha.id).should_not eq(nil)
+      @user_has_event_group = UserHasEventGroup.first(
+        :user_id => @peter.id, 
+        :event_group_id => @alpha.id)
+
+      @user_has_event_group.should_not eq(nil)
+      @user_has_event_group.user_role_id.should == nil
+    end
+    #---------------------------------------------------------------------------
+
+
+    #---------------------------------------------------------------------------
+    it "adds a user to an event_group (via user_has_event_groups) " +
+       "and set invalid user_role_id" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}",
+        :user_role_id => 99999999999999999
+      last_response.status.should == 404
     end
     #---------------------------------------------------------------------------
 

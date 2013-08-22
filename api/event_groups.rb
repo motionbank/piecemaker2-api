@@ -266,6 +266,7 @@ module Piecemaker
       params do
         requires :event_group_id, type: Integer, desc: "event_group id"
         requires :user_id, type: Integer, desc: "user id"
+        optional :user_role_id, type: String, desc: "user role"
       end
       #-------------------------------------------------------------------------
       post "/:event_group_id/user/:user_id" do 
@@ -278,9 +279,18 @@ module Piecemaker
         @user = User.first(:id => params[:user_id])
         error!('User not found', 404) unless @user
         
+        if params[:user_role_id]
+          @user_role = UserRole.first(:id => params[:user_role_id])
+          error!('Invalid user role', 404) unless @user_role
+        else
+          params[:user_role_id] = nil # make sure its nil
+        end
+
         UserHasEventGroup.unrestrict_primary_key
-        UserHasEventGroup.create(:user_id => params[:user_id],
-          :event_group_id => params[:event_group_id])
+        UserHasEventGroup.create(
+          :user_id => params[:user_id],
+          :event_group_id => params[:event_group_id],
+          :user_role_id => params[:user_role_id])
 
         {:status => true}
       end

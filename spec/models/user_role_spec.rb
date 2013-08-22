@@ -6,36 +6,36 @@ describe "Model UserRole" do
     truncate_db
     
     factory_batch do 
-      @user_role_admin = UserRole.make :admin
-      @user_role_user = UserRole.make :user
-      @user_role_guest = UserRole.make :guest
+      @user_role_admin          = UserRole.make :admin
+      @user_role_user           = UserRole.make :user
+      @user_role_guest          = UserRole.make :guest
 
-      @user_allow_read_item = RolePermission.make :allow_read,
-        :user_role_id => @user_role_user.id,
-        :entity => "item"
+      @user_allow_read_item     = RolePermission.make :allow_read,
+                                    :user_role_id => @user_role_user.id,
+                                    :entity => "_awesome_item_xyz"
 
-      @user_forbid_delete_item = RolePermission.make :forbid_delete,
-        :user_role_id => @user_role_user.id,
-        :entity => "item"
+      @user_forbid_delete_item  = RolePermission.make :forbid_delete,
+                                    :user_role_id => @user_role_user.id,
+                                    :entity => "_awesome_item_xyz"
 
 
-      @admin_allow_read_item = RolePermission.make :allow_read,
-        :user_role_id => @user_role_admin.id,
-        :entity => "item"
+      @admin_allow_read_item    = RolePermission.make :allow_read,
+                                    :user_role_id => @user_role_admin.id,
+                                    :entity => "_awesome_item_xyz"
 
       @admin_allow_read_another_item = RolePermission.make :allow_read,
-        :user_role_id => @user_role_admin.id,
-        :entity => "another_item"
+                                        :user_role_id => @user_role_admin.id,
+                                        :entity => "_another_awesome_item_xyz"
         
 
-      @pan = User.make :pan
+      @pan                      = User.make :pan
 
-      @event_group = EventGroup.make :alpha
+      @event_group              = EventGroup.make :alpha
 
-      @user_has_event_group = UserHasEventGroup.make :default,
-        :user_id => @pan.id,
-        :event_group_id => @event_group.id,
-        :user_role_id => @user_role_admin.id
+      @user_has_event_group     = UserHasEventGroup.make :default,
+                                    :user_id => @pan.id,
+                                    :event_group_id => @event_group.id,
+                                    :user_role_id => @user_role_admin.id
     end
 
   end
