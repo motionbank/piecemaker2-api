@@ -287,484 +287,171 @@ a {
 <div id="div_group_2" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_2" class="passed">GET /api/v1/groups</dt>
-    <script type="text/javascript">makeRed('rspec-header');</script>
-    <script type="text/javascript">makeRed('div_group_2');</script>
-    <script type="text/javascript">makeRed('example_group_2');</script>
-    <script type="text/javascript">moveProgressBar('0.9');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns all event_groups for currently logged in user</span>
-      <span class="duration">0.30272s</span>
-      <div class="failure" id="failure_1">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:69:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">67</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">68</span>      get "/api/v1/groups"
-<span class="offending"><span class="linenum">69</span>      last_response.status.should == 200</span>
-<span class="linenum">70</span>
-<span class="linenum">71</span>      json_string_to_hash(last_response.body)
-<span class="linenum">72</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
+    <script type="text/javascript">moveProgressBar('0.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all event_groups for currently logged in user</span><span class='duration'>0.37410s</span></dd>
   </dl>
 </div>
 <div id="div_group_3" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_3" class="passed">POST /api/v1/group/:id/event</dt>
-    <script type="text/javascript">makeRed('div_group_3');</script>
-    <script type="text/javascript">makeRed('example_group_3');</script>
-    <script type="text/javascript">moveProgressBar('1.9');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">creates and returns new event (without additional event_fields)</span>
-      <span class="duration">0.15949s</span>
-      <div class="failure" id="failure_2">
-        <div class="message"><pre>expected: 201
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:90:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">88</span>        :duration => '2.0',
-<span class="linenum">89</span>        :type => 'my_type'
-<span class="offending"><span class="linenum">90</span>      last_response.status.should == 201</span>
-<span class="linenum">91</span>
-<span class="linenum">92</span>      result       = json_string_to_hash(last_response.body)
-<span class="linenum">93</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('2.9');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">creates and returns new event (with additional event_fields)</span>
-      <span class="duration">0.10809s</span>
-      <div class="failure" id="failure_3">
-        <div class="message"><pre>expected: 201
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:121:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">119</span>          :key1 => "some value",
-<span class="linenum">120</span>          :another => "some more values"}
-<span class="offending"><span class="linenum">121</span>      last_response.status.should == 201</span>
-<span class="linenum">122</span>
-<span class="linenum">123</span>      result       = json_string_to_hash(last_response.body)
-<span class="linenum">124</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('3.8');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">fails if key for event_field is too long</span>
-      <span class="duration">0.12008s</span>
-      <div class="failure" id="failure_4">
-        <div class="message"><pre>expected: 400
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:153:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">151</span>          :key1___________________________________________________ => "content",
-<span class="linenum">152</span>          :another => "some more values"}
-<span class="offending"><span class="linenum">153</span>      last_response.status.should == 400</span>
-<span class="linenum">154</span>    end
-<span class="linenum">155</span>    #---------------------------------------------------------------------------
-<span class="linenum">156</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('4.8');</script>
+    <script type="text/javascript">moveProgressBar('1.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">creates and returns new event (without additional event_fields)</span><span class='duration'>0.09789s</span></dd>
+    <script type="text/javascript">moveProgressBar('2.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">creates and returns new event (with additional event_fields)</span><span class='duration'>0.09396s</span></dd>
+    <script type="text/javascript">moveProgressBar('2.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if key for event_field is too long</span><span class='duration'>0.09783s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_3');</script>
+    <script type="text/javascript">makeYellow('example_group_3');</script>
+    <script type="text/javascript">moveProgressBar('3.5');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_4" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_4" class="passed">POST /api/v1/group</dt>
-    <script type="text/javascript">makeRed('div_group_4');</script>
-    <script type="text/javascript">makeRed('example_group_4');</script>
-    <script type="text/javascript">moveProgressBar('5.8');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">create new event_group (together with user_has_event_groups record)</span>
-      <span class="duration">0.09185s</span>
-      <div class="failure" id="failure_5">
-        <div class="message"><pre>expected: 201
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:177:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">175</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">176</span>      post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
-<span class="offending"><span class="linenum">177</span>      last_response.status.should == 201</span>
-<span class="linenum">178</span>      
-<span class="linenum">179</span>      returned_omega = json_parse(last_response.body)
-<span class="linenum">180</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('6.7');</script>
+    <script type="text/javascript">moveProgressBar('4.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">create new event_group (together with user_has_event_groups record)</span><span class='duration'>0.09912s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_4');</script>
+    <script type="text/javascript">makeYellow('example_group_4');</script>
+    <script type="text/javascript">moveProgressBar('4.9');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_5" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_5" class="passed">GET /api/v1/group/:id</dt>
-    <script type="text/javascript">makeRed('div_group_5');</script>
-    <script type="text/javascript">makeRed('example_group_5');</script>
-    <script type="text/javascript">moveProgressBar('7.7');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns event_group with id</span>
-      <span class="duration">0.08140s</span>
-      <div class="failure" id="failure_6">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:209:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">207</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">208</span>      get "/api/v1/group/#{@alpha.id}"
-<span class="offending"><span class="linenum">209</span>      last_response.status.should == 200</span>
-<span class="linenum">210</span>      json_string_to_hash(last_response.body)
-<span class="linenum">211</span>        .should == times_to_s(@alpha.values)
-<span class="linenum">212</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('8.7');</script>
+    <script type="text/javascript">moveProgressBar('5.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns event_group with id</span><span class='duration'>0.16536s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_5');</script>
+    <script type="text/javascript">makeYellow('example_group_5');</script>
+    <script type="text/javascript">moveProgressBar('6.3');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_6" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_6" class="passed">PUT /api/v1/group/:id</dt>
-    <script type="text/javascript">makeRed('div_group_6');</script>
-    <script type="text/javascript">makeRed('example_group_6');</script>
-    <script type="text/javascript">moveProgressBar('9.7');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">updates event_group with id</span>
-      <span class="duration">0.08759s</span>
-      <div class="failure" id="failure_7">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:236:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">234</span>      put "/api/v1/group/#{@alpha.id}", :title => "Omega", 
-<span class="linenum">235</span>        :text => "Text for Omega"
-<span class="offending"><span class="linenum">236</span>      last_response.status.should == 200</span>
-<span class="linenum">237</span>
-<span class="linenum">238</span>      event_group = json_string_to_hash(last_response.body)
-<span class="linenum">239</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('10.6');</script>
+    <script type="text/javascript">moveProgressBar('7.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates event_group with id</span><span class='duration'>0.10376s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_6');</script>
+    <script type="text/javascript">makeYellow('example_group_6');</script>
+    <script type="text/javascript">moveProgressBar('7.7');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_7" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_7" class="passed">DELETE /api/v1/group/:id</dt>
-    <script type="text/javascript">makeRed('div_group_7');</script>
-    <script type="text/javascript">makeRed('example_group_7');</script>
-    <script type="text/javascript">moveProgressBar('11.6');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">deletes event_group with id</span>
-      <span class="duration">0.10499s</span>
-      <div class="failure" id="failure_8">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:264:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">262</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">263</span>      delete "/api/v1/group/#{@alpha.id}"
-<span class="offending"><span class="linenum">264</span>      last_response.status.should == 200</span>
-<span class="linenum">265</span>      EventGroup.first(:id => @alpha.id).should eq(nil)
-<span class="linenum">266</span>    end
-<span class="linenum">267</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('12.6');</script>
+    <script type="text/javascript">moveProgressBar('8.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">deletes event_group with id</span><span class='duration'>0.10083s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_7');</script>
+    <script type="text/javascript">makeYellow('example_group_7');</script>
+    <script type="text/javascript">moveProgressBar('9.1');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_8" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_8" class="passed">GET /api/v1/group/:id/events</dt>
-    <script type="text/javascript">makeRed('div_group_8');</script>
-    <script type="text/javascript">makeRed('example_group_8');</script>
-    <script type="text/javascript">moveProgressBar('13.5');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns all events (with event_fields) for event_group with id</span>
-      <span class="duration">0.08427s</span>
-      <div class="failure" id="failure_9">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:289:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">287</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">288</span>      get "/api/v1/group/#{@alpha.id}/events"
-<span class="offending"><span class="linenum">289</span>      last_response.status.should == 200</span>
-<span class="linenum">290</span>
-<span class="linenum">291</span>      results       = json_string_to_hash(last_response.body)
-<span class="linenum">292</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('14.5');</script>
+    <script type="text/javascript">moveProgressBar('9.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all events (with event_fields) for event_group with id</span><span class='duration'>0.09560s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_8');</script>
+    <script type="text/javascript">makeYellow('example_group_8');</script>
+    <script type="text/javascript">moveProgressBar('10.5');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">moveProgressBar('15.5');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">fails if the events are not ordered by utc_timestamp ASC</span>
-      <span class="duration">0.09506s</span>
-      <div class="failure" id="failure_10">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:322:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">320</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">321</span>      get "/api/v1/group/#{@alpha.id}/events"
-<span class="offending"><span class="linenum">322</span>      last_response.status.should == 200</span>
-<span class="linenum">323</span>
-<span class="linenum">324</span>      results        = json_string_to_hash(last_response.body)
-<span class="linenum">325</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('16.5');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">fails if the event fields are not ordered id ASC</span>
-      <span class="duration">0.08169s</span>
-      <div class="failure" id="failure_11">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:338:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">336</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">337</span>      get "/api/v1/group/#{@alpha.id}/events"
-<span class="offending"><span class="linenum">338</span>      last_response.status.should == 200</span>
-<span class="linenum">339</span>
-<span class="linenum">340</span>      results        = json_string_to_hash(last_response.body)
-<span class="linenum">341</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
+    <script type="text/javascript">moveProgressBar('11.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if the events are not ordered by utc_timestamp ASC</span><span class='duration'>0.10320s</span></dd>
+    <script type="text/javascript">moveProgressBar('11.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if the event fields are not ordered id ASC</span><span class='duration'>0.10333s</span></dd>
   </dl>
 </div>
 <div id="div_group_9" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_9" class="passed">GET /api/v1/group/:id/events?from=&lt;utc_timestamp&gt;&amp;to=&lt;utc_timestamp&gt;</dt>
-    <script type="text/javascript">makeRed('div_group_9');</script>
-    <script type="text/javascript">makeRed('example_group_9');</script>
-    <script type="text/javascript">moveProgressBar('17.4');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns all events between time frame</span>
-      <span class="duration">0.10819s</span>
-      <div class="failure" id="failure_12">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:360:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">358</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">359</span>      get "/api/v1/group/#{@alpha.id}/events?from=0&to=10"
-<span class="offending"><span class="linenum">360</span>      last_response.status.should == 200</span>
-<span class="linenum">361</span>
-<span class="linenum">362</span>      results       = json_string_to_hash(last_response.body)
-<span class="linenum">363</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('18.4');</script>
+    <script type="text/javascript">moveProgressBar('12.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all events between time frame</span><span class='duration'>0.11320s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_9');</script>
+    <script type="text/javascript">makeYellow('example_group_9');</script>
+    <script type="text/javascript">moveProgressBar('13.3');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_10" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_10" class="passed">GET /api/v1/group/:id/events?field[key]=value</dt>
-    <script type="text/javascript">makeRed('div_group_10');</script>
-    <script type="text/javascript">makeRed('example_group_10');</script>
-    <script type="text/javascript">moveProgressBar('19.4');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns all events filtered by field_key == value</span>
-      <span class="duration">0.08167s</span>
-      <div class="failure" id="failure_13">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:393:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">391</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">392</span>      get "/api/v1/group/#{@alpha.id}/events?field[type]=foobar"
-<span class="offending"><span class="linenum">393</span>      last_response.status.should == 200</span>
-<span class="linenum">394</span>
-<span class="linenum">395</span>      results       = json_string_to_hash(last_response.body)
-<span class="linenum">396</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('20.3');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns all events filtered by field_key == value for multiple fields</span>
-      <span class="duration">0.09663s</span>
-      <div class="failure" id="failure_14">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:415:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">413</span>      get "/api/v1/group/#{@alpha.id}/events?field[type]=foobar" + 
-<span class="linenum">414</span>          "&field[flag1]=getting%20back%20to%20the%20dolphin%20thing"
-<span class="offending"><span class="linenum">415</span>      last_response.status.should == 200</span>
-<span class="linenum">416</span>
-<span class="linenum">417</span>      results       = json_string_to_hash(last_response.body)
-<span class="linenum">418</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('21.3');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">fails for correct key but invalid value</span>
-      <span class="duration">0.08323s</span>
-      <div class="failure" id="failure_15">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:435:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">433</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">434</span>      get "/api/v1/group/#{@alpha.id}/events?field[type]=notfoobar"
-<span class="offending"><span class="linenum">435</span>      last_response.status.should == 200</span>
-<span class="linenum">436</span>
-<span class="linenum">437</span>      results       = json_string_to_hash(last_response.body)
-<span class="linenum">438</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('22.3');</script>
+    <script type="text/javascript">moveProgressBar('14.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all events filtered by field_key == value</span><span class='duration'>0.11217s</span></dd>
+    <script type="text/javascript">moveProgressBar('14.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all events filtered by field_key == value for multiple fields</span><span class='duration'>0.09742s</span></dd>
+    <script type="text/javascript">moveProgressBar('15.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails for correct key but invalid value</span><span class='duration'>0.10477s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_10');</script>
+    <script type="text/javascript">makeYellow('example_group_10');</script>
+    <script type="text/javascript">moveProgressBar('16.1');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_11" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_11" class="passed">GET /api/v1/group/:id/users</dt>
-    <script type="text/javascript">makeRed('div_group_11');</script>
-    <script type="text/javascript">makeRed('example_group_11');</script>
-    <script type="text/javascript">moveProgressBar('23.3');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns all users for event_group with id</span>
-      <span class="duration">0.07954s</span>
-      <div class="failure" id="failure_16">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:464:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">462</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">463</span>      get "/api/v1/group/#{@alpha.id}/users"
-<span class="offending"><span class="linenum">464</span>      last_response.status.should == 200</span>
-<span class="linenum">465</span>      json_string_to_hash(last_response.body).should =~ [@hans_admin.values, 
-<span class="linenum">466</span>        @pan.values]
-<span class="linenum">467</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('24.2');</script>
+    <script type="text/javascript">moveProgressBar('16.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all users for event_group with id</span><span class='duration'>0.10996s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_11');</script>
+    <script type="text/javascript">makeYellow('example_group_11');</script>
+    <script type="text/javascript">moveProgressBar('17.6');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_12" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_12" class="passed">POST /api/v1/group/:id/user/:id</dt>
-    <script type="text/javascript">makeRed('div_group_12');</script>
-    <script type="text/javascript">makeRed('example_group_12');</script>
-    <script type="text/javascript">moveProgressBar('25.2');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">adds a user to an event_group (via user_has_event_groups) and set user_role_id</span>
-      <span class="duration">0.08150s</span>
-      <div class="failure" id="failure_17">
-        <div class="message"><pre>expected: 201
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:492:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">490</span>      post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}", 
-<span class="linenum">491</span>        :user_role_id => @user_role_admin.id
-<span class="offending"><span class="linenum">492</span>      last_response.status.should == 201</span>
-<span class="linenum">493</span>
-<span class="linenum">494</span>      result       = json_string_to_hash(last_response.body)
-<span class="linenum">495</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('26.2');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">adds a user to an event_group (via user_has_event_groups) and set empty user_role_id</span>
-      <span class="duration">0.10435s</span>
-      <div class="failure" id="failure_18">
-        <div class="message"><pre>expected: 201
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:514:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">512</span>      header "X-Access-Key", @hans_admin.api_access_key
-<span class="linenum">513</span>      post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}"
-<span class="offending"><span class="linenum">514</span>      last_response.status.should == 201</span>
-<span class="linenum">515</span>
-<span class="linenum">516</span>      result       = json_string_to_hash(last_response.body)
-<span class="linenum">517</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('27.1');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">adds a user to an event_group (via user_has_event_groups) and set invalid user_role_id</span>
-      <span class="duration">0.09552s</span>
-      <div class="failure" id="failure_19">
-        <div class="message"><pre>expected: 404
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:536:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">534</span>      post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}",
-<span class="linenum">535</span>        :user_role_id => "non_existing_role_h42kj42kjkSDFsfq44_24%§$%"
-<span class="offending"><span class="linenum">536</span>      last_response.status.should == 404</span>
-<span class="linenum">537</span>    end
-<span class="linenum">538</span>    #---------------------------------------------------------------------------
-<span class="linenum">539</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('28.1');</script>
+    <script type="text/javascript">moveProgressBar('18.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">adds a user to an event_group (via user_has_event_groups) and set user_role_id</span><span class='duration'>0.11269s</span></dd>
+    <script type="text/javascript">moveProgressBar('19.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">adds a user to an event_group (via user_has_event_groups) and set empty user_role_id</span><span class='duration'>0.11351s</span></dd>
+    <script type="text/javascript">moveProgressBar('19.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">adds a user to an event_group (via user_has_event_groups) and set invalid user_role_id</span><span class='duration'>0.10661s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_12');</script>
+    <script type="text/javascript">makeYellow('example_group_12');</script>
+    <script type="text/javascript">moveProgressBar('20.4');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_13" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_13" class="passed">PUT /api/v1/group/:id/user/:id</dt>
-    <script type="text/javascript">makeRed('div_group_13');</script>
-    <script type="text/javascript">makeRed('example_group_13');</script>
-    <script type="text/javascript">moveProgressBar('29.1');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">updates user_role_id in user_has_event_groups with valid id</span>
-      <span class="duration">0.16088s</span>
-      <div class="failure" id="failure_20">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:562:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">560</span>      put "/api/v1/group/#{@alpha.id}/user/#{@pan.id}",
-<span class="linenum">561</span>        :user_role_id => @user_role_admin.id
-<span class="offending"><span class="linenum">562</span>      last_response.status.should == 200</span>
-<span class="linenum">563</span>
-<span class="linenum">564</span>      user_has_event_group = json_string_to_hash(last_response.body)
-<span class="linenum">565</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('30.0');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">updates user_role_id in user_has_event_groups with empty id</span>
-      <span class="duration">0.08479s</span>
-      <div class="failure" id="failure_21">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:580:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">578</span>      header "X-Access-Key", @hans_admin.api_access_key
-<span class="linenum">579</span>      put "/api/v1/group/#{@alpha.id}/user/#{@pan.id}"
-<span class="offending"><span class="linenum">580</span>      last_response.status.should == 200</span>
-<span class="linenum">581</span>
-<span class="linenum">582</span>      user_has_event_group = json_string_to_hash(last_response.body)
-<span class="linenum">583</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('31.0');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">updates user_role_id in user_has_event_groups with invalid id</span>
-      <span class="duration">0.08419s</span>
-      <div class="failure" id="failure_22">
-        <div class="message"><pre>expected: 404
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:600:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">598</span>      put "/api/v1/group/#{@alpha.id}/user/#{@peter.id}",
-<span class="linenum">599</span>        :user_role_id => "non_existing_role_h42kj42kjkSDFsfq44_24%§$%"
-<span class="offending"><span class="linenum">600</span>      last_response.status.should == 404</span>
-<span class="linenum">601</span>    end
-<span class="linenum">602</span>    #---------------------------------------------------------------------------
-<span class="linenum">603</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('32.0');</script>
+    <script type="text/javascript">moveProgressBar('21.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates user_role_id in user_has_event_groups with valid id</span><span class='duration'>0.10891s</span></dd>
+    <script type="text/javascript">moveProgressBar('21.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates user_role_id in user_has_event_groups with empty id</span><span class='duration'>0.13184s</span></dd>
+    <script type="text/javascript">moveProgressBar('22.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates user_role_id in user_has_event_groups with invalid id</span><span class='duration'>0.10391s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_13');</script>
+    <script type="text/javascript">makeYellow('example_group_13');</script>
+    <script type="text/javascript">moveProgressBar('23.2');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_14" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_14" class="passed">DELETE /api/v1/group/:id/user/:id</dt>
-    <script type="text/javascript">makeRed('div_group_14');</script>
-    <script type="text/javascript">makeRed('example_group_14');</script>
-    <script type="text/javascript">moveProgressBar('33.0');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">deletes a user from an event_group (via user_has_event_groups)</span>
-      <span class="duration">0.09871s</span>
-      <div class="failure" id="failure_23">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_group_spec.rb:625:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">623</span>      header "X-Access-Key", @hans_admin.api_access_key
-<span class="linenum">624</span>      delete "/api/v1/group/#{@alpha.id}/user/#{@peter.id}"
-<span class="offending"><span class="linenum">625</span>      last_response.status.should == 200</span>
-<span class="linenum">626</span>
-<span class="linenum">627</span>      result       = json_string_to_hash(last_response.body)
-<span class="linenum">628</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('33.9');</script>
+    <script type="text/javascript">moveProgressBar('23.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">deletes a user from an event_group (via user_has_event_groups)</span><span class='duration'>0.16421s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_14');</script>
+    <script type="text/javascript">makeYellow('example_group_14');</script>
+    <script type="text/javascript">moveProgressBar('24.6');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
@@ -776,123 +463,42 @@ a {
 <div id="div_group_16" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_16" class="passed">GET /api/v1/event/:id</dt>
-    <script type="text/javascript">makeRed('div_group_16');</script>
-    <script type="text/javascript">makeRed('example_group_16');</script>
-    <script type="text/javascript">moveProgressBar('34.9');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns event with id (and return fields and group as well)</span>
-      <span class="duration">0.09875s</span>
-      <div class="failure" id="failure_24">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_spec.rb:39:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">37</span>      header "X-Access-Key", @hans_admin.api_access_key
-<span class="linenum">38</span>      get "/api/v1/event/#{@big.id}"
-<span class="offending"><span class="linenum">39</span>      last_response.status.should == 200</span>
-<span class="linenum">40</span>
-<span class="linenum">41</span>      # returned event matches factory event?
-<span class="linenum">42</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('35.9');</script>
+    <script type="text/javascript">moveProgressBar('25.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns event with id (and return fields and group as well)</span><span class='duration'>0.17236s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_16');</script>
+    <script type="text/javascript">makeYellow('example_group_16');</script>
+    <script type="text/javascript">moveProgressBar('26.0');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_17" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_17" class="passed">PUT /api/v1/event/:id</dt>
-    <script type="text/javascript">makeRed('div_group_17');</script>
-    <script type="text/javascript">makeRed('example_group_17');</script>
-    <script type="text/javascript">moveProgressBar('36.8');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">updates an event (without fields)</span>
-      <span class="duration">0.07259s</span>
-      <div class="failure" id="failure_25">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_spec.rb:75:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">73</span>        :utc_timestamp => '6', 
-<span class="linenum">74</span>        :duration => '7'
-<span class="offending"><span class="linenum">75</span>      last_response.status.should == 200</span>
-<span class="linenum">76</span>
-<span class="linenum">77</span>      result       = json_string_to_hash(last_response.body)
-<span class="linenum">78</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('37.8');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">updates an event and creates new fields</span>
-      <span class="duration">0.07205s</span>
-      <div class="failure" id="failure_26">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_spec.rb:100:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">98</span>          :new_key => "some value",
-<span class="linenum">99</span>          :another_new_key => "some more values"}
-<span class="offending"><span class="linenum">100</span>      last_response.status.should == 200</span>
-<span class="linenum">101</span>      
-<span class="linenum">102</span>      result       = json_string_to_hash(last_response.body)
-<span class="linenum">103</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('38.8');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">updates an event and updates existing fields</span>
-      <span class="duration">0.07608s</span>
-      <div class="failure" id="failure_27">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_spec.rb:124:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">122</span>        :fields => {
-<span class="linenum">123</span>          :flag1 => "new value for flag1"}
-<span class="offending"><span class="linenum">124</span>      last_response.status.should == 200</span>
-<span class="linenum">125</span>      
-<span class="linenum">126</span>      result       = json_string_to_hash(last_response.body)
-<span class="linenum">127</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('39.8');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">updates an event and deletes existing fields</span>
-      <span class="duration">0.07989s</span>
-      <div class="failure" id="failure_28">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_spec.rb:149:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">147</span>        :fields => {
-<span class="linenum">148</span>          :flag1 => "null"}
-<span class="offending"><span class="linenum">149</span>      last_response.status.should == 200</span>
-<span class="linenum">150</span>      
-<span class="linenum">151</span>      result       = json_string_to_hash(last_response.body)
-<span class="linenum">152</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('40.7');</script>
+    <script type="text/javascript">moveProgressBar('26.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates an event (without fields)</span><span class='duration'>0.09854s</span></dd>
+    <script type="text/javascript">moveProgressBar('27.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates an event and creates new fields</span><span class='duration'>0.11630s</span></dd>
+    <script type="text/javascript">moveProgressBar('28.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates an event and updates existing fields</span><span class='duration'>0.10272s</span></dd>
+    <script type="text/javascript">moveProgressBar('28.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates an event and deletes existing fields</span><span class='duration'>0.16926s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_17');</script>
+    <script type="text/javascript">makeYellow('example_group_17');</script>
+    <script type="text/javascript">moveProgressBar('29.5');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_18" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_18" class="passed">DELETE /api/v1/event/:id</dt>
-    <script type="text/javascript">makeRed('div_group_18');</script>
-    <script type="text/javascript">makeRed('example_group_18');</script>
-    <script type="text/javascript">moveProgressBar('41.7');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">deletes event with id</span>
-      <span class="duration">0.11156s</span>
-      <div class="failure" id="failure_29">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/event_spec.rb:189:in `block (3 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">187</span>      header "X-Access-Key", @pan.api_access_key
-<span class="linenum">188</span>      delete "/api/v1/event/#{@big.id}"
-<span class="offending"><span class="linenum">189</span>      last_response.status.should == 200</span>
-<span class="linenum">190</span>
-<span class="linenum">191</span>      # is the event really deleted from the db?
-<span class="linenum">192</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('42.7');</script>
+    <script type="text/javascript">moveProgressBar('30.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">deletes event with id</span><span class='duration'>0.12529s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_18');</script>
+    <script type="text/javascript">makeYellow('example_group_18');</script>
+    <script type="text/javascript">moveProgressBar('30.9');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
@@ -904,8 +510,8 @@ a {
 <div id="div_group_20" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_20" class="passed">GET /api/v1/utc_timestamp</dt>
-    <script type="text/javascript">moveProgressBar('43.6');</script>
-    <dd class="example passed"><span class="passed_spec_name">returns server timestamp with milliseconds</span><span class='duration'>0.06047s</span></dd>
+    <script type="text/javascript">moveProgressBar('31.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns server timestamp with milliseconds</span><span class='duration'>0.07386s</span></dd>
   </dl>
 </div>
 <div id="div_group_21" class="example_group passed">
@@ -921,53 +527,37 @@ a {
 <div id="div_group_23" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_23" class="passed">POST /api/v1/user/login</dt>
-    <script type="text/javascript">moveProgressBar('44.6');</script>
-    <dd class="example passed"><span class="passed_spec_name">returns new api access token on valid credentials</span><span class='duration'>0.00557s</span></dd>
-    <script type="text/javascript">moveProgressBar('45.6');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails for right user but with wrong password</span><span class='duration'>0.00439s</span></dd>
-    <script type="text/javascript">moveProgressBar('46.6');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails for disabled user</span><span class='duration'>0.00212s</span></dd>
-    <script type="text/javascript">moveProgressBar('47.5');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails when using empty password</span><span class='duration'>0.00214s</span></dd>
-    <script type="text/javascript">moveProgressBar('48.5');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails when using empty email and empty password</span><span class='duration'>0.00203s</span></dd>
-    <script type="text/javascript">moveProgressBar('49.5');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails when using empty email and correct password from valid user</span><span class='duration'>0.00201s</span></dd>
-    <script type="text/javascript">moveProgressBar('50.4');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails when using empty email and any password string</span><span class='duration'>0.00216s</span></dd>
-    <script type="text/javascript">moveProgressBar('51.4');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails when not sending password and email is empty</span><span class='duration'>0.00985s</span></dd>
-    <script type="text/javascript">moveProgressBar('52.4');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails when not sending email and password is empty</span><span class='duration'>0.00116s</span></dd>
-    <script type="text/javascript">moveProgressBar('53.3');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails when not sending email and password</span><span class='duration'>0.00093s</span></dd>
+    <script type="text/javascript">moveProgressBar('32.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns new api access token on valid credentials</span><span class='duration'>0.00691s</span></dd>
+    <script type="text/javascript">moveProgressBar('33.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails for right user but with wrong password</span><span class='duration'>0.00253s</span></dd>
+    <script type="text/javascript">moveProgressBar('33.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails for disabled user</span><span class='duration'>0.00312s</span></dd>
+    <script type="text/javascript">moveProgressBar('34.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when using empty password</span><span class='duration'>0.00337s</span></dd>
+    <script type="text/javascript">moveProgressBar('35.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when using empty email and empty password</span><span class='duration'>0.00298s</span></dd>
+    <script type="text/javascript">moveProgressBar('35.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when using empty email and correct password from valid user</span><span class='duration'>0.00237s</span></dd>
+    <script type="text/javascript">moveProgressBar('36.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when using empty email and any password string</span><span class='duration'>0.00242s</span></dd>
+    <script type="text/javascript">moveProgressBar('37.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when not sending password and email is empty</span><span class='duration'>0.01182s</span></dd>
+    <script type="text/javascript">moveProgressBar('38.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when not sending email and password is empty</span><span class='duration'>0.00144s</span></dd>
+    <script type="text/javascript">moveProgressBar('38.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when not sending email and password</span><span class='duration'>0.00112s</span></dd>
   </dl>
 </div>
 <div id="div_group_24" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_24" class="passed">POST /api/v1/user/logout </dt>
-    <script type="text/javascript">makeRed('div_group_24');</script>
-    <script type="text/javascript">makeRed('example_group_24');</script>
-    <script type="text/javascript">moveProgressBar('54.3');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">invalidates the current api access token</span>
-      <span class="duration">0.00251s</span>
-      <div class="failure" id="failure_30">
-        <div class="message"><pre>expected: 201
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/users_spec.rb:138:in `block (4 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">136</span>        header "X-Access-Key", @peter.api_access_key
-<span class="linenum">137</span>        post "/api/v1/user/logout"
-<span class="offending"><span class="linenum">138</span>        last_response.status.should == 201</span>
-<span class="linenum">139</span>
-<span class="linenum">140</span>        result = json_string_to_hash(last_response.body)
-<span class="linenum">141</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('55.3');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails if invalid header key</span><span class='duration'>0.00194s</span></dd>
-    <script type="text/javascript">moveProgressBar('56.3');</script>
-    <dd class="example passed"><span class="passed_spec_name">fails if empty header key is sent</span><span class='duration'>0.00249s</span></dd>
+    <script type="text/javascript">moveProgressBar('39.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">invalidates the current api access token</span><span class='duration'>0.00600s</span></dd>
+    <script type="text/javascript">moveProgressBar('40.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if invalid header key</span><span class='duration'>0.00249s</span></dd>
+    <script type="text/javascript">moveProgressBar('40.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if empty header key is sent</span><span class='duration'>0.00358s</span></dd>
   </dl>
 </div>
 <div id="div_group_25" class="example_group passed">
@@ -978,189 +568,81 @@ a {
 <div id="div_group_26" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_26" class="passed">POST /api/v1/user </dt>
-    <script type="text/javascript">makeRed('div_group_26');</script>
-    <script type="text/javascript">makeRed('example_group_26');</script>
-    <script type="text/javascript">moveProgressBar('57.2');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">creates new user</span>
-      <span class="duration">0.07725s</span>
-      <div class="failure" id="failure_31">
-        <div class="message"><pre>expected: 201
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/users_spec.rb:206:in `block (4 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">204</span>          :email => "michael@example.com",
-<span class="linenum">205</span>          :is_super_admin => false
-<span class="offending"><span class="linenum">206</span>        last_response.status.should == 201</span>
-<span class="linenum">207</span>
-<span class="linenum">208</span>        user = json_string_to_hash(last_response.body)
-<span class="linenum">209</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('58.2');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">fails when trying to create the same user twice</span>
-      <span class="duration">0.08769s</span>
-      <div class="failure" id="failure_32">
-        <div class="message"><pre>expected: 201
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/users_spec.rb:230:in `block (4 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">228</span>          :email => "michael@example.com",
-<span class="linenum">229</span>          :is_super_admin => false
-<span class="offending"><span class="linenum">230</span>        last_response.status.should == 201</span>
-<span class="linenum">231</span>
-<span class="linenum">232</span>        post "/api/v1/user", 
-<span class="linenum">233</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('59.2');</script>
+    <script type="text/javascript">moveProgressBar('41.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">creates new user</span><span class='duration'>0.08658s</span></dd>
+    <script type="text/javascript">moveProgressBar('42.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when trying to create the same user twice</span><span class='duration'>0.10858s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_26');</script>
+    <script type="text/javascript">makeYellow('example_group_26');</script>
+    <script type="text/javascript">moveProgressBar('42.9');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_27" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_27" class="passed">GET /api/v1/user/me</dt>
-    <script type="text/javascript">makeRed('div_group_27');</script>
-    <script type="text/javascript">makeRed('example_group_27');</script>
-    <script type="text/javascript">moveProgressBar('60.1');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns currently logged in user</span>
-      <span class="duration">0.07504s</span>
-      <div class="failure" id="failure_33">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/users_spec.rb:260:in `block (4 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">258</span>        header "X-Access-Key", @peter.api_access_key
-<span class="linenum">259</span>        get "/api/v1/user/me"
-<span class="offending"><span class="linenum">260</span>        last_response.status.should == 200</span>
-<span class="linenum">261</span>        json_string_to_hash(last_response.body).should == @peter.values
-<span class="linenum">262</span>      end
-<span class="linenum">263</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
+    <script type="text/javascript">moveProgressBar('43.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns currently logged in user</span><span class='duration'>0.08275s</span></dd>
   </dl>
 </div>
 <div id="div_group_28" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_28" class="passed">GET /api/v1/user/:id</dt>
-    <script type="text/javascript">makeRed('div_group_28');</script>
-    <script type="text/javascript">makeRed('example_group_28');</script>
-    <script type="text/javascript">moveProgressBar('61.1');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns user for id</span>
-      <span class="duration">0.07782s</span>
-      <div class="failure" id="failure_34">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/users_spec.rb:276:in `block (4 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">274</span>        header "X-Access-Key", @peter.api_access_key
-<span class="linenum">275</span>        get "/api/v1/user/#{@pan.id}"
-<span class="offending"><span class="linenum">276</span>        last_response.status.should == 200</span>
-<span class="linenum">277</span>        json_string_to_hash(last_response.body).should == @pan.values
-<span class="linenum">278</span>      end
-<span class="linenum">279</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('62.1');</script>
+    <script type="text/javascript">moveProgressBar('44.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user for id</span><span class='duration'>0.08829s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_28');</script>
+    <script type="text/javascript">makeYellow('example_group_28');</script>
+    <script type="text/javascript">moveProgressBar('45.0');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_29" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_29" class="passed">PUT /api/v1/user/:id</dt>
-    <script type="text/javascript">makeRed('div_group_29');</script>
-    <script type="text/javascript">makeRed('example_group_29');</script>
-    <script type="text/javascript">moveProgressBar('63.1');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">updates user with id</span>
-      <span class="duration">0.07304s</span>
-      <div class="failure" id="failure_35">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/users_spec.rb:305:in `block (4 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">303</span>          :is_super_admin => true,
-<span class="linenum">304</span>          :is_disabled => true
-<span class="offending"><span class="linenum">305</span>        last_response.status.should == 200</span>
-<span class="linenum">306</span>
-<span class="linenum">307</span>        # was put persistant?
-<span class="linenum">308</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('64.0');</script>
+    <script type="text/javascript">moveProgressBar('45.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates user with id</span><span class='duration'>0.14791s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_29');</script>
+    <script type="text/javascript">makeYellow('example_group_29');</script>
+    <script type="text/javascript">moveProgressBar('46.4');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_30" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_30" class="passed">DELETE /api/v1/user/:id deletes</dt>
-    <script type="text/javascript">makeRed('div_group_30');</script>
-    <script type="text/javascript">makeRed('example_group_30');</script>
-    <script type="text/javascript">moveProgressBar('65.0');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">user with id</span>
-      <span class="duration">0.07612s</span>
-      <div class="failure" id="failure_36">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/users_spec.rb:343:in `block (4 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">341</span>        header "X-Access-Key", @hans_admin.api_access_key
-<span class="linenum">342</span>        delete "/api/v1/user/#{@pan.id}"
-<span class="offending"><span class="linenum">343</span>        last_response.status.should == 200</span>
-<span class="linenum">344</span>        User.first(:id => @pan.id).should eq(nil)
-<span class="linenum">345</span>      end
-<span class="linenum">346</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('66.0');</script>
+    <script type="text/javascript">moveProgressBar('47.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">user with id</span><span class='duration'>0.10363s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_30');</script>
+    <script type="text/javascript">makeYellow('example_group_30');</script>
+    <script type="text/javascript">moveProgressBar('47.8');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_31" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_31" class="passed">GET /api/v1/user/:id/groups</dt>
-    <script type="text/javascript">makeRed('div_group_31');</script>
-    <script type="text/javascript">makeRed('example_group_31');</script>
-    <script type="text/javascript">moveProgressBar('66.9');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns all event_groups for user with id</span>
-      <span class="duration">0.07924s</span>
-      <div class="failure" id="failure_37">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/users_spec.rb:368:in `block (4 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">366</span>        header "X-Access-Key", @peter.api_access_key
-<span class="linenum">367</span>        get "/api/v1/user/#{@pan.id}/groups"
-<span class="offending"><span class="linenum">368</span>        last_response.status.should == 200</span>
-<span class="linenum">369</span>        json_string_to_hash(last_response.body)
-<span class="linenum">370</span>          .should == times_to_s([@alpha.values])
-<span class="linenum">371</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('67.9');</script>
+    <script type="text/javascript">moveProgressBar('48.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all event_groups for user with id</span><span class='duration'>0.07964s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_31');</script>
+    <script type="text/javascript">makeYellow('example_group_31');</script>
+    <script type="text/javascript">moveProgressBar('49.2');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_32" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_32" class="passed">GET /api/v1/users </dt>
-    <script type="text/javascript">makeRed('div_group_32');</script>
-    <script type="text/javascript">makeRed('example_group_32');</script>
-    <script type="text/javascript">moveProgressBar('68.9');</script>
-    <dd class="example failed">
-      <span class="failed_spec_name">returns all users</span>
-      <span class="duration">0.07173s</span>
-      <div class="failure" id="failure_38">
-        <div class="message"><pre>expected: 200
-     got: 500 (using ==)</pre></div>
-        <div class="backtrace"><pre>./spec/api/users_spec.rb:394:in `block (4 levels) in &lt;top (required)&gt;&#39;</pre></div>
-    <pre class="ruby"><code><span class="linenum">392</span>        header "X-Access-Key", @hans_admin.api_access_key
-<span class="linenum">393</span>        get "/api/v1/users"
-<span class="offending"><span class="linenum">394</span>        last_response.status.should == 200</span>
-<span class="linenum">395</span>        json_string_to_hash(last_response.body).should =~ [@peter.values, 
-<span class="linenum">396</span>          @pan.values, @hans_admin.values, @klaus_disabled.values]
-<span class="linenum">397</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
-      </div>
-    </dd>
-    <script type="text/javascript">moveProgressBar('69.9');</script>
+    <script type="text/javascript">moveProgressBar('50.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all users</span><span class='duration'>0.06112s</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
+    <script type="text/javascript">makeYellow('div_group_32');</script>
+    <script type="text/javascript">makeYellow('example_group_32');</script>
+    <script type="text/javascript">moveProgressBar('50.7');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">ACL auto-testing (PENDING: No reason given)</span></dd>
   </dl>
 </div>
@@ -1172,22 +654,25 @@ a {
 <div id="div_group_34" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_34" class="passed">Module API_Access_key</dt>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
     <script type="text/javascript">makeYellow('div_group_34');</script>
     <script type="text/javascript">makeYellow('example_group_34');</script>
-    <script type="text/javascript">moveProgressBar('70.8');</script>
+    <script type="text/javascript">moveProgressBar('51.4');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">generates an api access key (PENDING: No reason given)</span></dd>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
     <script type="text/javascript">makeYellow('div_group_34');</script>
     <script type="text/javascript">makeYellow('example_group_34');</script>
-    <script type="text/javascript">moveProgressBar('71.8');</script>
+    <script type="text/javascript">moveProgressBar('52.1');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">checks if an api access key makes sense (PENDING: No reason given)</span></dd>
   </dl>
 </div>
 <div id="div_group_35" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_35" class="passed">Module Password</dt>
+    <script type="text/javascript">makeYellow('rspec-header');</script>
     <script type="text/javascript">makeYellow('div_group_35');</script>
     <script type="text/javascript">makeYellow('example_group_35');</script>
-    <script type="text/javascript">moveProgressBar('72.8');</script>
+    <script type="text/javascript">moveProgressBar('52.8');</script>
     <dd class="example not_implemented"><span class="not_implemented_spec_name">generates a password (PENDING: No reason given)</span></dd>
   </dl>
 </div>
@@ -1198,128 +683,205 @@ a {
 </div>
 <div id="div_group_37" class="example_group passed">
   <dl style="margin-left: 30px;">
-  <dt id="example_group_37" class="passed">authorize!</dt>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('73.7');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">checks if api access key is present (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('74.7');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">checks if api access key matches user records and user is not disabled (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('75.7');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">passes for valid super admins when :super_admin_only (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('76.6');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">fails for non super admins when :super_admin_only (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('77.6');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">raises error if arguments number is not correct (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('78.6');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">handles UserHasEventGroup as @model (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('79.6');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">handles EventGroup as @model (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('80.5');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">handles Event as @model (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('81.5');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">handles EventField as @model (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('82.5');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">handles UserRole as @model (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('83.4');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">handles RolePermission as @model (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('84.4');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">raises error if @model cannot be handled (PENDING: No reason given)</span></dd>
-    <script type="text/javascript">makeYellow('div_group_37');</script>
-    <script type="text/javascript">makeYellow('example_group_37');</script>
-    <script type="text/javascript">moveProgressBar('85.4');</script>
-    <dd class="example not_implemented"><span class="not_implemented_spec_name">raises error if permission type is not allow or forbid (PENDING: No reason given)</span></dd>
+  <dt id="example_group_37" class="passed">get_permission_recursively</dt>
+    <script type="text/javascript">moveProgressBar('53.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns permission for role that inherits</span><span class='duration'>0.00258s</span></dd>
+    <script type="text/javascript">moveProgressBar('54.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns permission for role that does not inherit</span><span class='duration'>0.00067s</span></dd>
+    <script type="text/javascript">moveProgressBar('54.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns no permission when no permission exists</span><span class='duration'>0.00192s</span></dd>
   </dl>
 </div>
 <div id="div_group_38" class="example_group passed">
-  <dl style="margin-left: 0px;">
-  <dt id="example_group_38" class="passed">Model EventField</dt>
-    <script type="text/javascript">moveProgressBar('86.4');</script>
-    <dd class="example passed"><span class="passed_spec_name">has one event</span><span class='duration'>0.00113s</span></dd>
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_38" class="passed">get_user_by_api_acccess_key</dt>
+    <script type="text/javascript">moveProgressBar('55.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns enabled user by api access key</span><span class='duration'>0.00079s</span></dd>
+    <script type="text/javascript">moveProgressBar('56.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">does not return disabled users</span><span class='duration'>0.00061s</span></dd>
+    <script type="text/javascript">moveProgressBar('57.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns nil if api access key is nil</span><span class='duration'>0.00010s</span></dd>
+    <script type="text/javascript">moveProgressBar('57.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns nil if no api access key is found</span><span class='duration'>0.00009s</span></dd>
   </dl>
 </div>
 <div id="div_group_39" class="example_group passed">
-  <dl style="margin-left: 0px;">
-  <dt id="example_group_39" class="passed">Model EventGroup</dt>
-    <script type="text/javascript">moveProgressBar('87.3');</script>
-    <dd class="example passed"><span class="passed_spec_name">has many events</span><span class='duration'>0.00094s</span></dd>
-    <script type="text/javascript">moveProgressBar('88.3');</script>
-    <dd class="example passed"><span class="passed_spec_name">has many users</span><span class='duration'>0.00122s</span></dd>
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_39" class="passed">get_user_role_from_model</dt>
+    <script type="text/javascript">moveProgressBar('58.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user_role for UserHasEventGroup</span><span class='duration'>0.00011s</span></dd>
+    <script type="text/javascript">moveProgressBar('59.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user_role for EventGroup</span><span class='duration'>0.00064s</span></dd>
+    <script type="text/javascript">moveProgressBar('59.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when trying to return user_role for EventGroup with wrong user</span><span class='duration'>0.00055s</span></dd>
+    <script type="text/javascript">moveProgressBar('60.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user_role for Event</span><span class='duration'>0.00053s</span></dd>
+    <script type="text/javascript">moveProgressBar('61.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when trying to return user_role for Event with wrong user</span><span class='duration'>0.00049s</span></dd>
+    <script type="text/javascript">moveProgressBar('61.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user_role for EventField</span><span class='duration'>0.00087s</span></dd>
+    <script type="text/javascript">moveProgressBar('62.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when trying to return user_role for EventField with wrong user</span><span class='duration'>0.00091s</span></dd>
+    <script type="text/javascript">moveProgressBar('63.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">throws error if no valid model is passed</span><span class='duration'>0.00103s</span></dd>
   </dl>
 </div>
 <div id="div_group_40" class="example_group passed">
-  <dl style="margin-left: 0px;">
-  <dt id="example_group_40" class="passed">Model Event</dt>
-    <script type="text/javascript">moveProgressBar('89.3');</script>
-    <dd class="example passed"><span class="passed_spec_name">has one user</span><span class='duration'>0.00096s</span></dd>
-    <script type="text/javascript">moveProgressBar('90.2');</script>
-    <dd class="example passed"><span class="passed_spec_name">has many event fields</span><span class='duration'>0.00083s</span></dd>
-    <script type="text/javascript">moveProgressBar('91.2');</script>
-    <dd class="example passed"><span class="passed_spec_name">has one event group</span><span class='duration'>0.00108s</span></dd>
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_40" class="passed">authorize!</dt>
+    <script type="text/javascript">moveProgressBar('64.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when no or empty api access key is sent</span><span class='duration'>0.00185s</span></dd>
+    <script type="text/javascript">moveProgressBar('64.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails for invalid api access key</span><span class='duration'>0.00168s</span></dd>
+    <script type="text/javascript">moveProgressBar('65.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user if i am a super admin</span><span class='duration'>0.00174s</span></dd>
+    <script type="text/javascript">moveProgressBar('66.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user if super admin is needed and super admin given</span><span class='duration'>0.00207s</span></dd>
+    <script type="text/javascript">moveProgressBar('66.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if super admin is needed, but no super admin given</span><span class='duration'>0.00165s</span></dd>
+    <script type="text/javascript">moveProgressBar('67.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">only gets user roles for the currently logged in user</span><span class='duration'>0.00253s</span></dd>
+    <script type="text/javascript">moveProgressBar('68.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">raises error if permission type is not allow or forbid</span><span class='duration'>0.00255s</span></dd>
   </dl>
 </div>
 <div id="div_group_41" class="example_group passed">
-  <dl style="margin-left: 0px;">
-  <dt id="example_group_41" class="passed">Model RolePermission</dt>
-    <script type="text/javascript">moveProgressBar('92.2');</script>
-    <dd class="example passed"><span class="passed_spec_name">has one user role</span><span class='duration'>0.00102s</span></dd>
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_41" class="passed">Permission Matrix</dt>
   </dl>
 </div>
 <div id="div_group_42" class="example_group passed">
-  <dl style="margin-left: 0px;">
-  <dt id="example_group_42" class="passed">Model UserHasEventGroup</dt>
-    <script type="text/javascript">moveProgressBar('93.2');</script>
-    <dd class="example passed"><span class="passed_spec_name">has one user</span><span class='duration'>0.00120s</span></dd>
-    <script type="text/javascript">moveProgressBar('94.1');</script>
-    <dd class="example passed"><span class="passed_spec_name">has one event group</span><span class='duration'>0.00091s</span></dd>
+  <dl style="margin-left: 60px;">
+  <dt id="example_group_42" class="passed">entity    admin user guest</dt>
+    <script type="text/javascript">moveProgressBar('69.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">a         &gt;     &gt;    Y  (as guest)</span><span class='duration'>0.00840s</span></dd>
+    <script type="text/javascript">moveProgressBar('69.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">a         &gt;     &gt;    Y  (as user)</span><span class='duration'>0.01091s</span></dd>
+    <script type="text/javascript">moveProgressBar('70.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">a         &gt;     &gt;    Y  (as admin)</span><span class='duration'>0.00978s</span></dd>
+    <script type="text/javascript">moveProgressBar('71.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">b         &gt;     Y    -  (as guest)</span><span class='duration'>0.00817s</span></dd>
+    <script type="text/javascript">moveProgressBar('71.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">b         &gt;     Y    -  (as user)</span><span class='duration'>0.00796s</span></dd>
+    <script type="text/javascript">moveProgressBar('72.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">b         &gt;     Y    -  (as admin)</span><span class='duration'>0.00919s</span></dd>
+    <script type="text/javascript">moveProgressBar('73.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">c         Y     -    -  (as guest)</span><span class='duration'>0.00980s</span></dd>
+    <script type="text/javascript">moveProgressBar('73.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">c         Y     -    -  (as user)</span><span class='duration'>0.00947s</span></dd>
+    <script type="text/javascript">moveProgressBar('74.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">c         Y     -    -  (as admin)</span><span class='duration'>0.00860s</span></dd>
+    <script type="text/javascript">moveProgressBar('75.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">x         &gt;     &gt;    N  (as guest)</span><span class='duration'>0.00829s</span></dd>
+    <script type="text/javascript">moveProgressBar('76.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">x         &gt;     &gt;    N  (as user)</span><span class='duration'>0.00854s</span></dd>
+    <script type="text/javascript">moveProgressBar('76.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">x         &gt;     &gt;    N  (as admin)</span><span class='duration'>0.00947s</span></dd>
+    <script type="text/javascript">moveProgressBar('77.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">y         &gt;     N    -  (as guest)</span><span class='duration'>0.00961s</span></dd>
+    <script type="text/javascript">moveProgressBar('78.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">y         &gt;     N    -  (as user)</span><span class='duration'>0.00845s</span></dd>
+    <script type="text/javascript">moveProgressBar('78.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">y         &gt;     N    -  (as admin)</span><span class='duration'>0.00867s</span></dd>
+    <script type="text/javascript">moveProgressBar('79.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">z         N     -    -  (as guest)</span><span class='duration'>0.00819s</span></dd>
+    <script type="text/javascript">moveProgressBar('80.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">z         N     -    -  (as user)</span><span class='duration'>0.00898s</span></dd>
+    <script type="text/javascript">moveProgressBar('80.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">z         N     -    -  (as admin)</span><span class='duration'>0.00904s</span></dd>
+    <script type="text/javascript">moveProgressBar('81.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">r         &gt;     N    Y  (as guest)</span><span class='duration'>0.07686s</span></dd>
+    <script type="text/javascript">moveProgressBar('82.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">r         &gt;     N    Y  (as user)</span><span class='duration'>0.00803s</span></dd>
+    <script type="text/javascript">moveProgressBar('83.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">r         &gt;     N    Y  (as admin)</span><span class='duration'>0.00857s</span></dd>
+    <script type="text/javascript">moveProgressBar('83.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">s         N     &gt;    Y  (as guest)</span><span class='duration'>0.00818s</span></dd>
+    <script type="text/javascript">moveProgressBar('84.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">s         N     &gt;    Y  (as user)</span><span class='duration'>0.00898s</span></dd>
+    <script type="text/javascript">moveProgressBar('85.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">s         N     &gt;    Y  (as admin)</span><span class='duration'>0.00766s</span></dd>
+    <script type="text/javascript">moveProgressBar('85.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">t         Y     N    Y  (as guest)</span><span class='duration'>0.00839s</span></dd>
+    <script type="text/javascript">moveProgressBar('86.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">t         Y     N    Y  (as user)</span><span class='duration'>0.00835s</span></dd>
+    <script type="text/javascript">moveProgressBar('87.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">t         Y     N    Y  (as admin)</span><span class='duration'>0.00773s</span></dd>
+    <script type="text/javascript">moveProgressBar('88.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">u         N     Y    N  (as guest)</span><span class='duration'>0.00835s</span></dd>
+    <script type="text/javascript">moveProgressBar('88.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">u         N     Y    N  (as user)</span><span class='duration'>0.00808s</span></dd>
+    <script type="text/javascript">moveProgressBar('89.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">u         N     Y    N  (as admin)</span><span class='duration'>0.00766s</span></dd>
   </dl>
 </div>
 <div id="div_group_43" class="example_group passed">
   <dl style="margin-left: 0px;">
-  <dt id="example_group_43" class="passed">Model UserRole</dt>
-    <script type="text/javascript">moveProgressBar('95.1');</script>
-    <dd class="example passed"><span class="passed_spec_name">has many role permissions</span><span class='duration'>0.00114s</span></dd>
-    <script type="text/javascript">moveProgressBar('96.1');</script>
-    <dd class="example passed"><span class="passed_spec_name">has no role permissions</span><span class='duration'>0.00078s</span></dd>
-    <script type="text/javascript">moveProgressBar('97.0');</script>
-    <dd class="example passed"><span class="passed_spec_name">has many user has event groups</span><span class='duration'>0.00098s</span></dd>
-    <script type="text/javascript">moveProgressBar('98.0');</script>
-    <dd class="example passed"><span class="passed_spec_name">has no user has event groups</span><span class='duration'>0.00064s</span></dd>
+  <dt id="example_group_43" class="passed">Model EventField</dt>
+    <script type="text/javascript">moveProgressBar('90.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one event</span><span class='duration'>0.00094s</span></dd>
   </dl>
 </div>
 <div id="div_group_44" class="example_group passed">
   <dl style="margin-left: 0px;">
-  <dt id="example_group_44" class="passed">Model User</dt>
-    <script type="text/javascript">moveProgressBar('99.0');</script>
-    <dd class="example passed"><span class="passed_spec_name">has many events</span><span class='duration'>0.00101s</span></dd>
-    <script type="text/javascript">moveProgressBar('100.0');</script>
-    <dd class="example passed"><span class="passed_spec_name">has many event_groups</span><span class='duration'>0.00173s</span></dd>
+  <dt id="example_group_44" class="passed">Model EventGroup</dt>
+    <script type="text/javascript">moveProgressBar('90.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many events</span><span class='duration'>0.00089s</span></dd>
+    <script type="text/javascript">moveProgressBar('91.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many users</span><span class='duration'>0.00092s</span></dd>
   </dl>
 </div>
-<script type="text/javascript">document.getElementById('duration').innerHTML = "Finished in <strong>7.31886 seconds</strong>";</script>
-<script type="text/javascript">document.getElementById('totals').innerHTML = "103 examples, 38 failures, 37 pending";</script>
+<div id="div_group_45" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_45" class="passed">Model Event</dt>
+    <script type="text/javascript">moveProgressBar('92.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one user</span><span class='duration'>0.00086s</span></dd>
+    <script type="text/javascript">moveProgressBar('92.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many event fields</span><span class='duration'>0.00069s</span></dd>
+    <script type="text/javascript">moveProgressBar('93.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one event group</span><span class='duration'>0.00080s</span></dd>
+  </dl>
+</div>
+<div id="div_group_46" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_46" class="passed">Model RolePermission</dt>
+    <script type="text/javascript">moveProgressBar('94.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one user role</span><span class='duration'>0.00091s</span></dd>
+  </dl>
+</div>
+<div id="div_group_47" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_47" class="passed">Model UserHasEventGroup</dt>
+    <script type="text/javascript">moveProgressBar('95.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one user</span><span class='duration'>0.00091s</span></dd>
+    <script type="text/javascript">moveProgressBar('95.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one event group</span><span class='duration'>0.00098s</span></dd>
+  </dl>
+</div>
+<div id="div_group_48" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_48" class="passed">Model UserRole</dt>
+    <script type="text/javascript">moveProgressBar('96.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many role permissions</span><span class='duration'>0.00094s</span></dd>
+    <script type="text/javascript">moveProgressBar('97.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">has no role permissions</span><span class='duration'>0.00102s</span></dd>
+    <script type="text/javascript">moveProgressBar('97.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many user has event groups</span><span class='duration'>0.00085s</span></dd>
+    <script type="text/javascript">moveProgressBar('98.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">has no user has event groups</span><span class='duration'>0.00062s</span></dd>
+  </dl>
+</div>
+<div id="div_group_49" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_49" class="passed">Model User</dt>
+    <script type="text/javascript">moveProgressBar('99.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many events</span><span class='duration'>0.00095s</span></dd>
+    <script type="text/javascript">moveProgressBar('100.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many event_groups</span><span class='duration'>0.00149s</span></dd>
+  </dl>
+</div>
+<script type="text/javascript">document.getElementById('duration').innerHTML = "Finished in <strong>7.76111 seconds</strong>";</script>
+<script type="text/javascript">document.getElementById('totals').innerHTML = "142 examples, 0 failures, 24 pending";</script>
 </div>
 </div>
 </body>
