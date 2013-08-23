@@ -19,7 +19,6 @@ end
 
 def truncate_table(table)
   if table
-    table = table.to_s
     DB[table].truncate(:cascade => true)
   end
 end
