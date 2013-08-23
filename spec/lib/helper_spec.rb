@@ -6,6 +6,8 @@ describe "Module helper" do
   def app
     Piecemaker::API
   end
+  
+
 
   describe "Module API_Access_key" do
     it "generates an api access key" do
@@ -52,8 +54,8 @@ describe "Module helper" do
 
       factory_batch do 
   
-        @user_role_admin          = UserRole.make :admin
-        @user_role_user           = UserRole.make :user
+        @user_role_admin          = UserRole.make :admin # => pan
+        @user_role_user           = UserRole.make :user  # => 
         @user_role_guest          = UserRole.make :guest
         
 
@@ -124,7 +126,7 @@ describe "Module helper" do
 
         @event_group              = EventGroup.make :alpha
 
-        @user_has_event_group     = UserHasEventGroup.make :default,
+        @user_has_event_group      = UserHasEventGroup.make :default,
                                       :user_id => @pan.id,
                                       :event_group_id => @event_group.id,
                                       :user_role_id => @user_role_admin.id
@@ -233,18 +235,6 @@ describe "Module helper" do
           user_role_id.should eq(nil)
       end
 
-      it "returns user_role for UserRole" do
-        user_role_id = Piecemaker::Helper::Auth::get_user_role_from_model(
-          @user_role_admin, @pan)
-        user_role_id.should == @user_role_admin.id
-      end
-
-      it "returns user_role for RolePermission" do
-        user_role_id = Piecemaker::Helper::Auth::get_user_role_from_model(
-          @user_role_admin_allow_c, @pan)
-        user_role_id.should == @user_role_admin.id
-      end
-
       it "throws error if no valid model is passed" do
         expect {
           user_role_id = Piecemaker::Helper::Auth::get_user_role_from_model(
@@ -255,29 +245,27 @@ describe "Module helper" do
     end
 
 
+    # create dummy routes to test against ...
+    Piecemaker::API.get "/rspec_dummy_route_for_authorize_plain" do
+      authorize!
+    end
+
+    Piecemaker::API.get "/rspec_dummy_route_for_authorize_super_admin_only" do
+      authorize! :super_admin_only
+    end
+
+    Piecemaker::API.get "/rspec_dummy_route_for_authorize_permission" +
+            "/:permission/:user_id/:event_group_id" do
+      @user_has_event_group = UserHasEventGroup.first(
+        :user_id => params[:user_id],
+        :event_group_id => params[:event_group_id])
+      error!('Invalid :user_id, :event_group_id combination', 500) unless @user_has_event_group
+      authorize! params[:permission], @user_has_event_group 
+    end
+
+
     describe "authorize!" do
       
-      before(:all) do
-        # create dummy routes to test against ...
-
-        app.get "/rspec_dummy_route_for_authorize_plain" do
-          authorize!
-        end
-
-        app.get "/rspec_dummy_route_for_authorize_super_admin_only" do
-          authorize! :super_admin_only
-        end
-
-        app.get "/rspec_dummy_route_for_authorize_permission" +
-                "/:permission/:user_id/:event_group_id" do
-          @user_has_event_group = UserHasEventGroup.first(
-            :user_id => params[:user_id],
-            :event_group_id => params[:event_group_id])
-          error!('Invalid :user_id, :event_group_id combination', 500) unless @user_has_event_group
-          authorize! params[:permission], @user_has_event_group 
-        end
-      end
-
       it "fails when no or empty api access key is sent" do
         get "/api/v1/rspec_dummy_route_for_authorize_plain" 
         last_response.status.should == 400
@@ -317,9 +305,6 @@ describe "Module helper" do
         last_response.status.should == 403
       end
 
-
-      # verify permissions ...
-
       it "only gets user roles for the currently logged in user" do
         # sending @peters access key (logged in user)
         # trying to get @pans user role assignment (@user_has_event_group)
@@ -331,7 +316,7 @@ describe "Module helper" do
         last_response.status.should == 403
       end
 
-      it "raises error if permission type is not allow or forbid", :focus do
+      it "raises error if permission type is not allow or forbid" do
         header "X-Access-Key", @pan.api_access_key
         get "/api/v1/rspec_dummy_route_for_authorize_permission" +
             "/this_is_a_invalid_permission_type" +
@@ -340,6 +325,26 @@ describe "Module helper" do
         last_response.status.should == 500
       end
 
+      # verify permissions matrix ...
+      describe "Permission Matrix"  do
+
+        describe "entity    admin user guest" do
+          before(:each) do
+            truncate_table :user_has_event_groups
+          end
+        
+          it "a         >     >    Y" do
+            # sending @peters access key (logged in user)
+            # trying to get @pans user role assignment (@user_has_event_group)
+            header "X-Access-Key", @peter.api_access_key
+            get "/api/v1/rspec_dummy_route_for_authorize_permission" +
+                "/a" +
+                "/#{@user_has_event_group.user_id}" + 
+                "/#{@user_has_event_group.event_group_id}" 
+            last_response.status.should == 403
+          end
+        end
+      end
 
 
 
