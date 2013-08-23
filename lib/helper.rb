@@ -25,7 +25,7 @@ module Piecemaker
           else
             # if you are a super admin, dont check any further ...
             if @user.is_super_admin
-              # return @user
+              return @user
             end 
 
             # is this method for super users only?
@@ -44,14 +44,14 @@ module Piecemaker
             entity = args[0]
             @model = args[1]
 
-            # get user_role_id from @model
             user_role_id = self.get_user_role_from_model(@model)
             error!('Forbidden', 403) unless user_role_id
 
-            @role_permission = self.get_permission_recursively(user_role_id, entity)
+            @role_permission = self.get_permission_recursively(
+              user_role_id, entity)
             if @role_permission.permission == "allow"
               # okay, come in!
-              return user
+              return @user
             elsif @role_permission.permission == "forbid"
               error!('Forbidden', 403)
             else
@@ -63,6 +63,7 @@ module Piecemaker
           error!('Bad Request, Missing X-Access-Key in Headers', 400)
         end
       end
+
 
       def self.get_user_by_api_acccess_key(api_access_key)
         return nil unless api_access_key
