@@ -46,52 +46,10 @@ module Piecemaker
             @model = args[1]
 
             # get user_role_id from @model
-            user_role_id = nil
-            if @model.is_a? "UserHasEventGroup"
-              user_role_id = @model.user_role_id
+            user_role_id = self.get_user_role_from_model(@model)
+            error!('Forbidden', 403) unless user_role_id
 
-            elsif @model.is_a? "EventGroup"
-              @_user_has_event_group = UserHasEventGroup.first(
-                :user_id => @user.id, 
-                :event_group_id => @model.id)
-              error!('Forbidden', 403) unless @_user_has_event_group
-              user_role_id = @_user_has_event_group.user_role_id
-              @_user_has_event_group = nil
-
-            elsif @model.is_a? "Event"
-              @_user_has_event_group = UserHasEventGroup.first(
-                :user_id => @user.id,
-                :event_group_id => @model.event_group_id)
-              error!('Forbidden', 403) unless @_user_has_event_group
-              user_role_id = @_user_has_event_group.user_role_id
-              @_user_has_event_group = nil
-
-            elsif @model.is_a? "EventField"
-              @_event = Event.first(:id => @model.event_id)
-              error!('Forbidden', 403) unless @_event
-
-              @_user_has_event_group = UserHasEventGroup.first(
-                :user_id => @user.id,
-                :event_group_id => @_event.event_group_id)
-              error!('Forbidden', 403) unless @_user_has_event_group
-              user_role_id = @_user_has_event_group.user_role_id
-              
-              @_event = nil
-              @_user_has_event_group = nil
-
-            elsif @model.is_a? "UserRole"
-              user_role_id = @model.id
-
-            elsif @model.is_a? "RolePermission"
-              user_role_id = @model.user_role_id
-
-            else
-              raise ArgumentError, 
-                "Expected valid model as first argument"
-            end
-              
-
-            @role_permission = get_permission_recursively(user_role_id, entity)
+            @role_permission = self.get_permission_recursively(user_role_id, entity)
             if @role_permission.permission == "allow"
               # okay, come in!
               return user
@@ -107,13 +65,63 @@ module Piecemaker
         end
       end
 
+
+      def self.get_user_role_from_model(model, user)
+        if model.is_a? UserHasEventGroup
+          return model.user_role_id
+
+        elsif model.is_a? UserRole
+          return model.id
+
+        elsif model.is_a? RolePermission
+          return model.user_role_id
+
+        elsif model.is_a? EventGroup
+          @_user_has_event_group = UserHasEventGroup.first(
+            :user_id => user.id, 
+            :event_group_id => model.id)
+          return nil unless @_user_has_event_group
+          return @_user_has_event_group.user_role_id
+
+        elsif model.is_a? Event
+          @_user_has_event_group = UserHasEventGroup.first(
+            :user_id => user.id,
+            :event_group_id => model.event_group_id)
+          return nil unless @_user_has_event_group
+          return @_user_has_event_group.user_role_id
+
+        elsif model.is_a? EventField
+          @_event = Event.first(:id => model.event_id)
+          return nil unless @_event
+
+          @_user_has_event_group = UserHasEventGroup.first(
+            :user_id => user.id,
+            :event_group_id => @_event.event_group_id)
+          return nil unless @_user_has_event_group
+          return @_user_has_event_group.user_role_id
+
+        else
+          raise ArgumentError, 
+            "Expected valid model as first argument"
+        end
+      end
+
       
-      def get_permission_recursively(user_role_id, entity)
+      def self.get_permission_recursively(user_role, entity)
         entity = entity.to_s
+
+        if user_role.is_a? UserRole
+          user_role_id = user_role.id
+        else
+          user_role_id = user_role
+        end
+
+        # for debugging:
+        # puts "#{entity} - #{user_role_id}"
 
         # permission defined for this role?
         @role_permission = RolePermission.first(
-          :id => user_role_id, :entity => entity)
+          :user_role_id => user_role_id, :entity => entity)
 
         if @role_permission
           # yes, return it
@@ -123,7 +131,7 @@ module Piecemaker
           @user_role = UserRole.first(:id => user_role_id)
           if @user_role.inherit_from_id
             # check, if permission is defined for parent role ...
-            return get_permission_recursively(
+            return self.get_permission_recursively(
               @user_role.inherit_from_id, entity)
           else
             # wasnt able to find permission

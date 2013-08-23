@@ -1,19 +1,21 @@
 # make id random to avoid collission with init sql files
 
+prefix = "(RSPEC_PREFIX)-"
+
 UserRole.factory :admin do
-  id "my_random_DBIK342sd_admin"
-  inherit_from_id "my_random_FSFDF24233_user"
+  id prefix + "admin"
+  inherit_from_id prefix + "user"
   description "i am the boss"
 end
 
 UserRole.factory :user do
-  id "my_random_FSFDF24233_user"
-  inherit_from_id "my_random_SDFSDsadf1_guest"
+  id prefix + "user"
+  inherit_from_id  prefix + "guest"
   description "default user"
 end
 
 UserRole.factory :guest do
-  id "my_random_SDFSDsadf1_guest"
+  id prefix + "guest"
   inherit_from_id nil
   description "only guest access"
 end
