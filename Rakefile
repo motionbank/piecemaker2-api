@@ -222,7 +222,7 @@ end
 namespace :roles do
 
   desc "Generate roles and permissions matrix from database"
-  task :output, :env do |cmd, args|
+  task :output, :env, :format do |cmd, args|
     env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
 
@@ -275,10 +275,42 @@ namespace :roles do
       }
     end
 
+    output = {
+      :headers => @user_roles_ordered.map{|user_role| user_role.id },
+      :data => matrix
+    }
+
 
     # all done ... do something with the data
+    if args[:format] == "html"
+      
+      puts "<html>"
+        puts "<table>"
+          # header
+          puts "<tr>"
+            puts "<th>Entity</th>"
+            output[:headers].each do |h|
+              puts "<th>#{h}</th>"
+            end
+          puts "<tr>"
 
-    puts matrix    
+          # data
+          output[:data].each do |e|
+            puts "<tr>"
+              puts "<td>#{e[:entity]}</td>"
+              output[:headers].each do |p|
+                puts "<td class='#{e[:permissions][p]}'>#{e[:permissions][p]}</td>"
+              end
+            puts "</tr>"
+          end
+
+        puts "</table"
+      puts "</html>"
+
+    else # json
+      puts output
+    end
+      
   end
 
 end

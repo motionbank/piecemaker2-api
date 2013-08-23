@@ -152,6 +152,8 @@ rake db:export_into_file[test,'role_permissions']
 ```rake db:import_from_file[test,'user_roles']``` and
 ```rake db:import_from_file[test,'role_permissions']```.
 
+To generate a Roles and Permissions matrix for debugging or documentation,
+run ```rake roles:output[dev,html] > docs/roles.html```. 
 
 ## Development
 
