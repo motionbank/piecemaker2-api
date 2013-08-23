@@ -32,7 +32,8 @@ namespace :spec do
   desc "run tests now"
   RSpec::Core::RakeTask.new(:now) do |spec|
     # do not run integration tests, doesn't work on TravisCI
-    spec.pattern = FileList['spec/api/*_spec.rb', 'spec/models/*_spec.rb']
+    spec.pattern = FileList['spec/api/*_spec.rb', 'spec/models/*_spec.rb',
+      'spec/lib/*_spec.rb']
   end  
 
   desc "generate nice html view"

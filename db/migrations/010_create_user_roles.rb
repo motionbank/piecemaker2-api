@@ -3,6 +3,7 @@ Sequel.migration do
     create_table(:user_roles) do
 
       String :id, :size => 50
+      String :inherit_from_id, :size => 50
       String :description, :text => true, :null => true
 
       primary_key [:id]

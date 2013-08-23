@@ -1,11 +1,11 @@
-RolePermission.factory :allow_read do
-  permission "allow_read"
+# make entity random to avoid collission with init sql files
+
+RolePermission.factory :allow do
+  permission "allow"
+  entity "random_SFHJ4432D_entity"
 end
 
-RolePermission.factory :allow_write do
-  permission "allow_write"
-end
-
-RolePermission.factory :forbid_delete do
-  permission "forbid_delete"
+RolePermission.factory :forbid do
+  permission "forbid"
+  entity "random_SFHJ4432D_entity"
 end

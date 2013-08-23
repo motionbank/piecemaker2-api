@@ -23,7 +23,5 @@ describe "Model EventField" do
     @event_field.event.should == @event
   end
 
-
-
 end
 
