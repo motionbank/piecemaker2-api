@@ -115,7 +115,9 @@ describe "Module helper" do
 
 
         @pan                      = User.make :pan
-        @peter                      = User.make :peter
+        @peter                    = User.make :peter
+        @klaus_disabled           = User.make :klaus_disabled
+        @user_with_no_api_access_key = User.make :user_with_no_api_access_key
 
         @event_group              = EventGroup.make :alpha
 
@@ -155,10 +157,36 @@ describe "Module helper" do
           @user_role_user, @entity_prefix + "c")
         permission.should eq(nil)      
       end
-
     end
 
-    describe "get_user_role_from_model", :focus do
+    describe "get_user_by_api_acccess_key", :focus do
+      it "returns enabled user by api access key" do
+        user = Piecemaker::Helper::Auth::get_user_by_api_acccess_key(
+          @pan.api_access_key)
+        user.should == @pan
+      end
+
+      it "does not return disabled users" do
+        user = Piecemaker::Helper::Auth::get_user_by_api_acccess_key(
+          @klaus_disabled.api_access_key)
+        user.should == nil
+      end
+
+      it "returns nil if api access key is nil" do
+        user = Piecemaker::Helper::Auth::get_user_by_api_acccess_key(
+          nil)
+        user.should == nil
+      end
+
+      it "returns nil if no api access key is found" do
+        user = Piecemaker::Helper::Auth::get_user_by_api_acccess_key(
+          @user_with_no_api_access_key.api_access_key)
+        user.should == nil
+      end
+    end
+
+
+    describe "get_user_role_from_model" do
 
       it "returns user_role for UserHasEventGroup" do
         user_role_id = Piecemaker::Helper::Auth::get_user_role_from_model(

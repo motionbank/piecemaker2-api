@@ -32,3 +32,12 @@ User.factory :klaus_disabled do
   is_super_admin false
   is_disabled true
 end
+
+User.factory :user_with_no_api_access_key do
+  name "User without API Access Key"
+  email "user_with_no_api_access_key@example.com"
+  password Digest::SHA1.hexdigest("User without API Access Key") # important, that password == name
+  api_access_key nil
+  is_super_admin false
+  is_disabled false
+end

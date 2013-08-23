@@ -19,8 +19,7 @@ module Piecemaker
         api_access_key = headers['X-Access-Key'] || nil
         if api_access_key
           # check if api_access_key is valid and the user is not disabled
-          @user = User.first(:api_access_key => api_access_key,
-            :is_disabled => false)
+          @user = self.get_user_by_api_acccess_key(api_access_key)
           unless @user
             error!('Unauthorized', 401)
           else
@@ -65,6 +64,12 @@ module Piecemaker
         end
       end
 
+      def self.get_user_by_api_acccess_key(api_access_key)
+        return nil unless api_access_key
+        User.first(
+          :api_access_key => api_access_key,
+          :is_disabled => false)
+      end
 
       def self.get_user_role_from_model(model, user)
         if model.is_a? UserHasEventGroup
