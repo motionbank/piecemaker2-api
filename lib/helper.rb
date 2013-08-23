@@ -19,7 +19,8 @@ module Piecemaker
         api_access_key = headers['X-Access-Key'] || nil
         if api_access_key
           # check if api_access_key is valid and the user is not disabled
-          @user = self.get_user_by_api_acccess_key(api_access_key)
+          @user = Piecemaker::Helper::Auth::get_user_by_api_acccess_key(
+            api_access_key)
           unless @user
             error!('Unauthorized', 401)
           else
@@ -33,31 +34,32 @@ module Piecemaker
               error!('Forbidden', 403)
             end
 
-            # check permissions ...
             args.delete :super_admin_only
-
-            if args.count != 2
-              raise ArgumentError, 
-                "Expected 2 arguments: Model and Permission Entity"
-            end
-
-            entity = args[0]
-            @model = args[1]
-
-            user_role_id = self.get_user_role_from_model(@model)
-            error!('Forbidden', 403) unless user_role_id
-
-            @role_permission = self.get_permission_recursively(
-              user_role_id, entity)
-            if @role_permission.permission == "allow"
-              # okay, come in!
+            if args.count == 0
+              # only check if user is logged in
+              # and since we got here, he is
               return @user
-            elsif @role_permission.permission == "forbid"
-              error!('Forbidden', 403)
             else
-              raise TypeError, "Unknown permission value"
+              # verify permissions ...
+              entity = args[0]
+              @model = args[1]
+
+              user_role_id = Piecemaker::Helper::Auth::\
+                get_user_role_from_model(@model, @user)
+              error!('Forbidden', 403) unless user_role_id
+
+              @role_permission = Piecemaker::Helper::Auth::\
+                get_permission_recursively(user_role_id, entity)
+              if @role_permission.permission == "allow"
+                # okay, come in!
+                return @user
+              elsif @role_permission.permission == "forbid"
+                error!('Forbidden', 403)
+              else
+                raise TypeError, "Unknown permission value"
+              end
+
             end
-          
           end
         else
           error!('Bad Request, Missing X-Access-Key in Headers', 400)
@@ -74,12 +76,7 @@ module Piecemaker
 
       def self.get_user_role_from_model(model, user)
         if model.is_a? UserHasEventGroup
-          return model.user_role_id
-
-        elsif model.is_a? UserRole
-          return model.id
-
-        elsif model.is_a? RolePermission
+          return nil if user.id != model.user_id
           return model.user_role_id
 
         elsif model.is_a? EventGroup

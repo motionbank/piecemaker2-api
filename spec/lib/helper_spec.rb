@@ -2,9 +2,6 @@ require 'spec_helper'
 
 describe "Module helper" do
   
-#   subject { Class.new(Grape::API) }
-  # def app; subject end
-
   include Rack::Test::Methods
   def app
     Piecemaker::API
@@ -76,6 +73,11 @@ describe "Module helper" do
                                       :user_role_id => @user_role_admin.id,
                                       :entity => @entity_prefix + "u"
 
+        @user_role_admin_invalid_type  = RolePermission.make :invalid_permission_type,
+                                      :user_role_id => @user_role_admin.id,
+                                      :entity => "this_is_a_invalid_permission_type"
+
+
 
         @user_role_user_allow_b    = RolePermission.make :allow,
                                       :user_role_id => @user_role_user.id,
@@ -116,6 +118,7 @@ describe "Module helper" do
 
         @pan                      = User.make :pan
         @peter                    = User.make :peter
+        @hans_admin               = User.make :hans_admin
         @klaus_disabled           = User.make :klaus_disabled
         @user_with_no_api_access_key = User.make :user_with_no_api_access_key
 
@@ -136,10 +139,8 @@ describe "Module helper" do
       end
     end
 
-    # binding.pry
 
     describe "get_permission_recursively" do
-
       it "returns permission for role that inherits" do
         permission = Piecemaker::Helper::Auth::get_permission_recursively(
           @user_role_admin, @entity_prefix + "a")
@@ -187,7 +188,6 @@ describe "Module helper" do
 
 
     describe "get_user_role_from_model" do
-
       it "returns user_role for UserHasEventGroup" do
         user_role_id = Piecemaker::Helper::Auth::get_user_role_from_model(
           @user_has_event_group, @pan)
@@ -257,57 +257,92 @@ describe "Module helper" do
 
     describe "authorize!" do
       
-      it "checks if api access key is present" do
-        pending
+      before(:all) do
+        # create dummy routes to test against ...
+
+        app.get "/rspec_dummy_route_for_authorize_plain" do
+          authorize!
+        end
+
+        app.get "/rspec_dummy_route_for_authorize_super_admin_only" do
+          authorize! :super_admin_only
+        end
+
+        app.get "/rspec_dummy_route_for_authorize_permission" +
+                "/:permission/:user_id/:event_group_id" do
+          @user_has_event_group = UserHasEventGroup.first(
+            :user_id => params[:user_id],
+            :event_group_id => params[:event_group_id])
+          error!('Invalid :user_id, :event_group_id combination', 500) unless @user_has_event_group
+          authorize! params[:permission], @user_has_event_group 
+        end
       end
 
-      it "checks if api access key matches user records and user is not disabled" do
-        pending
+      it "fails when no or empty api access key is sent" do
+        get "/api/v1/rspec_dummy_route_for_authorize_plain" 
+        last_response.status.should == 400
+        
+        header "X-Access-Key", nil
+        get "/api/v1/rspec_dummy_route_for_authorize_plain" 
+        last_response.status.should == 400
       end
 
-      it "passes for valid super admins when :super_admin_only" do
-        pending
+      it "fails for invalid api access key" do
+        header "X-Access-Key", "i am an invalid api access key!!"
+        get "/api/v1/rspec_dummy_route_for_authorize_plain" 
+        last_response.status.should == 401
       end
 
-      it "fails for non super admins when :super_admin_only" do
-        pending
+      it "returns user if i am a super admin" do
+        header "X-Access-Key", @hans_admin.api_access_key
+        get "/api/v1/rspec_dummy_route_for_authorize_plain" 
+        last_response.status.should == 200
+
+        results = json_string_to_hash(last_response.body)
+        results.should == @hans_admin.values
       end
 
-      it "raises error if arguments number is not correct" do
-        pending
+      it "returns user if super admin is needed and super admin given" do
+        header "X-Access-Key", @hans_admin.api_access_key
+        get "/api/v1/rspec_dummy_route_for_authorize_super_admin_only" 
+        last_response.status.should == 200
+
+        results = json_string_to_hash(last_response.body)
+        results.should == @hans_admin.values
       end
 
-      it "handles UserHasEventGroup as @model" do
-        pending
+      it "fails if super admin is needed, but no super admin given" do
+        header "X-Access-Key", @peter.api_access_key
+        get "/api/v1/rspec_dummy_route_for_authorize_super_admin_only" 
+        last_response.status.should == 403
       end
 
-      it "handles EventGroup as @model" do
-        pending
+
+      # verify permissions ...
+
+      it "only gets user roles for the currently logged in user" do
+        # sending @peters access key (logged in user)
+        # trying to get @pans user role assignment (@user_has_event_group)
+        header "X-Access-Key", @peter.api_access_key
+        get "/api/v1/rspec_dummy_route_for_authorize_permission" +
+            "/a" +
+            "/#{@user_has_event_group.user_id}" + 
+            "/#{@user_has_event_group.event_group_id}" 
+        last_response.status.should == 403
       end
 
-      it "handles Event as @model" do
-        pending
+      it "raises error if permission type is not allow or forbid", :focus do
+        header "X-Access-Key", @pan.api_access_key
+        get "/api/v1/rspec_dummy_route_for_authorize_permission" +
+            "/this_is_a_invalid_permission_type" +
+            "/#{@user_has_event_group.user_id}" + 
+            "/#{@user_has_event_group.event_group_id}" 
+        last_response.status.should == 500
       end
 
-      it "handles EventField as @model" do
-        pending
-      end
 
-      it "handles UserRole as @model" do
-        pending
-      end
 
-      it "handles RolePermission as @model" do
-        pending
-      end
 
-      it "raises error if @model cannot be handled" do
-        pending
-      end
-
-      it "raises error if permission type is not allow or forbid" do
-        pending
-      end
     end
   end
 end
