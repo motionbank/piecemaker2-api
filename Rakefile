@@ -216,6 +216,70 @@ namespace :db do
     DB.run("COPY #{args[:table]} FROM '#{BASE_PATH}/db/init/#{args[:table]}.sql' WITH CSV HEADER")
   end
 
+end
+
+
+namespace :roles do
+
+  desc "Generate roles and permissions matrix from database"
+  task :output, :env do |cmd, args|
+    env = expand_env_string(args[:env]) || "development"
+    Rake::Task['environment'].invoke(env)
+
+    # build user roles array
+    def get_user_roles_ordered_by_inheritance(id, user_roles_ordered)
+      root_user_roles = UserRole.where(:inherit_from_id => id).all
+      if root_user_roles
+        root_user_roles.each do |user_role|
+          user_roles_ordered << user_role
+          get_user_roles_ordered_by_inheritance(
+            user_role.id, user_roles_ordered)
+        end
+      end
+    end
+
+    @user_roles_ordered = []
+    get_user_roles_ordered_by_inheritance(nil, @user_roles_ordered)
+    @user_roles_ordered.reverse!
+
+
+    # build role permissions array
+    @distinct_entities = RolePermission.distinct(:entity).select(:entity).order(:entity).all
+
+    # build matrix
+    matrix = []
+    @distinct_entities.each do |entity|
+      entity = entity.entity
+      
+      permissions = {}
+
+      @user_roles_ordered.each do |user_role|
+
+        permission = Piecemaker::Helper::Auth::get_permission_recursively(user_role, entity)
+        if permission
+          if permission.permission == "allow"
+            permissions[user_role.id] = "Y"
+          elsif permission.permission == "forbid"
+            permissions[user_role.id] = "N"
+          else
+            permissions[user_role.id] = "E"
+          end
+        else
+          permissions[user_role.id] = 'N'
+        end
+      end
+
+      matrix << {
+        :entity => entity,
+        :permissions => permissions
+      }
+    end
+
+
+    # all done ... do something with the data
+
+    puts matrix    
+  end
 
 end
 

@@ -1,4 +1,5 @@
 id,inherit_from_db,description
 admin,user,the force is with him
 user,guest,regular user
-guest,null,guest account for visitors
+special_user,guest,special user
+guest,,guest account for visitors
