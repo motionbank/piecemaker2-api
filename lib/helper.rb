@@ -112,7 +112,6 @@ module Piecemaker
         end
       end
 
-      
       def self.get_permission_recursively(user_role, entity)
         entity = entity.to_s
 

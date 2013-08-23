@@ -159,7 +159,7 @@ describe "Module helper" do
       end
     end
 
-    describe "get_user_by_api_acccess_key", :focus do
+    describe "get_user_by_api_acccess_key" do
       it "returns enabled user by api access key" do
         user = Piecemaker::Helper::Auth::get_user_by_api_acccess_key(
           @pan.api_access_key)
