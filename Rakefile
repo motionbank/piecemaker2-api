@@ -285,26 +285,37 @@ namespace :roles do
     if args[:format] == "html"
       
       puts "<html>"
+      puts "<head>"
+      puts "<style type='text/css'>"
+        puts IO.read(BASE_PATH + "/docs/roles_matrix.css")
+      puts "</style>"
+      puts "</head>"      
+      puts "<body>"
         puts "<table>"
           # header
+          puts "<thead>"
           puts "<tr>"
             puts "<th>Entity</th>"
             output[:headers].each do |h|
               puts "<th>#{h}</th>"
             end
           puts "<tr>"
+          puts "</thead>"
 
           # data
+          puts "<tbody>"
           output[:data].each do |e|
             puts "<tr>"
-              puts "<td>#{e[:entity]}</td>"
+              puts "<td class='entity'><input type='checkbox'> #{e[:entity]}</td>"
               output[:headers].each do |p|
-                puts "<td class='#{e[:permissions][p]}'>#{e[:permissions][p]}</td>"
+                puts "<td class='permission #{e[:permissions][p]}'>#{e[:permissions][p]}</td>"
               end
             puts "</tr>"
           end
+          puts "</tbody>"
 
         puts "</table"
+      puts "</body>"
       puts "</html>"
 
     else # json

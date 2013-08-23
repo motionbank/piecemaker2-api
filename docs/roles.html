@@ -1,5 +1,47 @@
 <html>
+<head>
+<style type='text/css'>
+body {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+tr:hover {
+  font-weight: bold;
+}
+
+td {
+  padding: 4px;
+}
+
+th {
+  border-bottom: 1px solid #000;
+  font-size: 1.1em;
+  padding: 0px 5px;
+}
+
+td.entity {
+  border-bottom: 1px solid #f0f0f0;
+  padding-right: 20px; 
+}
+
+td.permission {
+  text-align: center;
+}
+td.y {
+  background-color: green;
+}
+
+td.n {
+  background-color: red;
+}
+
+
+</style>
+</head>
+<body>
 <table>
+<thead>
 <tr>
 <th>Entity</th>
 <th>admin</th>
@@ -7,19 +49,23 @@
 <th>special_user</th>
 <th>guest</th>
 <tr>
+</thead>
+<tbody>
 <tr>
-<td>get_event_groups</td>
-<td class='Y'>Y</td>
-<td class='Y'>Y</td>
-<td class='N'>N</td>
-<td class='N'>N</td>
+<td class='entity'><input type='checkbox'> get_event_groups</td>
+<td class='permission Y'>Y</td>
+<td class='permission Y'>Y</td>
+<td class='permission N'>N</td>
+<td class='permission N'>N</td>
 </tr>
 <tr>
-<td>get_events</td>
-<td class='Y'>Y</td>
-<td class='N'>N</td>
-<td class='N'>N</td>
-<td class='N'>N</td>
+<td class='entity'><input type='checkbox'> get_events</td>
+<td class='permission Y'>Y</td>
+<td class='permission N'>N</td>
+<td class='permission N'>N</td>
+<td class='permission N'>N</td>
 </tr>
+</tbody>
 </table
+</body>
 </html>

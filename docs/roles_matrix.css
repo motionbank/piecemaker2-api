@@ -1,0 +1,36 @@
+body {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+tr:hover {
+  font-weight: bold;
+}
+
+td {
+  padding: 4px;
+}
+
+th {
+  border-bottom: 1px solid #000;
+  font-size: 1.1em;
+  padding: 0px 5px;
+}
+
+td.entity {
+  border-bottom: 1px solid #f0f0f0;
+  padding-right: 20px; 
+}
+
+td.permission {
+  text-align: center;
+}
+td.y {
+  background-color: green;
+}
+
+td.n {
+  background-color: red;
+}
+
+
