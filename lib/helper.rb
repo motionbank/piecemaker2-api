@@ -160,6 +160,7 @@ module Piecemaker
       end
 
       def self.makes_sense?(api_access_key)
+        return false unless api_access_key
         api_access_key.length === API_ACCESS_KEY_LENGTH &&
           api_access_key.start_with?("0310X") ? true : false
       end

@@ -11,18 +11,41 @@ describe "Module helper" do
 
   describe "Module API_Access_key" do
     it "generates an api access key" do
-      pending "no test written, yet"
+      key = Piecemaker::Helper::API_Access_Key::generate
+      key.should_not eq(nil)
+
+      key.length.should == Piecemaker::Helper::API_Access_Key::\
+        API_ACCESS_KEY_LENGTH
     end
 
     it "checks if an api access key makes sense" do
-      pending "no test written, yet"
+      key = Piecemaker::Helper::API_Access_Key::generate
+      result = Piecemaker::Helper::API_Access_Key::makes_sense? key
+      result.should == true
+    end
+
+    it "fails, if an api access key makes no sense" do
+      key = "aaaaaaaaaaaaaaaa"
+      result = Piecemaker::Helper::API_Access_Key::makes_sense? key
+      result.should == false
+    end
+
+    it "fails, if an api access key is empty" do
+      result = Piecemaker::Helper::API_Access_Key::makes_sense? nil
+      result.should == false
+
+      result = Piecemaker::Helper::API_Access_Key::makes_sense? ""
+      result.should == false
     end
 
   end
 
   describe "Module Password" do
     it "generates a password" do
-      pending "no test written, yet"
+      pw = Piecemaker::Helper::Password::generate(6)
+      pw.should_not eq(nil)
+      pw.should_not eq("")
+      pw.length.should == 6
     end
 
   end
