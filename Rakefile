@@ -221,6 +221,51 @@ end
 
 namespace :roles do
 
+  desc "Scan files for permission entities"
+  task :scan_entities, :verbose do |cmd, args|
+    entities = []
+    Dir[BASE_PATH + "/api/*"].each do |file|
+      line_no = 0
+      line_stack = []
+      IO.foreach(file) do |line|
+        line_no += 1
+        line_stack << line
+        authorize = line.scan(/authorize! .*/)
+
+        if authorize[0]
+
+          desc = []
+          url = []
+          line_stack.reverse.each do |lstack|
+            if desc.size == 0 || url.size == 0
+              desc = lstack.scan(/desc "(.*)"/) if desc.size == 0
+              url = lstack.scan(/((get|put|post|delete) .*)/) if url.size == 0
+            else
+              line_stack = []
+            end
+          end
+          line_stack = []
+
+          if args[:verbose]
+            puts "__#{authorize[0]}__"
+            puts url[0][0].gsub(/do */, "") + " in api/#{File.basename(file)}:#{line_no}"
+            puts desc
+            puts ""        
+          else
+            entities << authorize[0].scan(/:(.*)/)[0][0]
+          end
+        end
+      end
+    end
+
+    unless args[:verbose]
+      entities.uniq!
+      entities.delete("super_admin_only")
+      puts entities
+    end
+  end
+
+
   desc "Generate roles and permissions matrix from database"
   task :output, :env, :format do |cmd, args|
     env = expand_env_string(args[:env]) || "development"

@@ -59,7 +59,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       post "/" do  #/api/v1/user
       #-------------------------------------------------------------------------
-        @_user = authorize!
+        @_user = authorize! :super_admin_only
 
         # check if user with this email exists and return appropriate error code
         error!('Duplicate user', 409) if User.first(:email => params[:email])
@@ -117,7 +117,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       put "/:id" do  #/api/v1/user/:id
       #-------------------------------------------------------------------------
-        @_user = authorize!
+        @_user = authorize! :super_admin_only
         @user = User.first(:id => params[:id])
         error!('Not found', 404) unless @user
 
@@ -146,7 +146,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       delete "/:id" do  #/api/v1/user/:id
       #-------------------------------------------------------------------------
-        @_user = authorize!
+        @_user = authorize! :super_admin_only
         @user = User.first(:id => params[:id])
         error!('Not found', 404) unless @user
 
@@ -164,7 +164,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/:id/groups" do  #/api/v1/user/:id/groups
       #-------------------------------------------------------------------------
-        @_user = authorize!
+        @_user = authorize! :get_groups_for_user
         @user = User.first(:id => params[:id])
         error!('Not found', 404) unless @user
         
