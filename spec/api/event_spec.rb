@@ -68,7 +68,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "updates an event (without fields)" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '6', 
         :duration => '7'
@@ -90,7 +90,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "updates an event and creates new fields" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '8', 
         :duration => '9',
@@ -115,7 +115,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "updates an event and updates existing fields" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '8', 
         :duration => '9',
@@ -140,7 +140,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "updates an event and deletes existing fields" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '8', 
         :duration => '9',
@@ -184,7 +184,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "deletes event with id" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       delete "/api/v1/event/#{@big.id}"
       last_response.status.should == 200
 

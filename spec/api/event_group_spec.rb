@@ -82,7 +82,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "creates and returns new event (without additional event_fields)" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       post "/api/v1/group/#{@alpha.id}/event", 
         :utc_timestamp => '1.0', 
         :duration => '2.0',
@@ -110,7 +110,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "creates and returns new event (with additional event_fields)" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       post "/api/v1/group/#{@alpha.id}/event", 
         :utc_timestamp => '3.0', 
         :duration => '4.0',
@@ -142,7 +142,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "fails if key for event_field is too long" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       post "/api/v1/group/#{@alpha.id}/event", 
         :utc_timestamp => '3', 
         :duration => '4',
@@ -172,7 +172,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "create new event_group (together with user_has_event_groups record)" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
       last_response.status.should == 201
       
@@ -181,7 +181,7 @@ describe "Piecemaker::API EventGroup" do
       returned_omega.should == times_to_s(@omega_from_database.values)
 
       # is the new event_group linked to users via user_has_event_groups?
-      UserHasEventGroup.first(:user_id => @pan.id, 
+      UserHasEventGroup.first(:user_id => @hans_admin.id, 
         :event_group_id => returned_omega[:id]).should_not eq(nil)
     end
     #---------------------------------------------------------------------------
@@ -204,7 +204,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns event_group with id" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/group/#{@alpha.id}"
       last_response.status.should == 200
       json_string_to_hash(last_response.body)
@@ -230,7 +230,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "updates event_group with id" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       put "/api/v1/group/#{@alpha.id}", :title => "Omega", 
         :text => "Text for Omega"
       last_response.status.should == 200
@@ -259,7 +259,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "deletes event_group with id" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       delete "/api/v1/group/#{@alpha.id}"
       last_response.status.should == 200
       EventGroup.first(:id => @alpha.id).should eq(nil)
@@ -284,7 +284,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all events (with event_fields) for event_group with id" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/group/#{@alpha.id}/events"
       last_response.status.should == 200
 
@@ -317,7 +317,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "fails if the events are not ordered by utc_timestamp ASC" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/group/#{@alpha.id}/events"
       last_response.status.should == 200
 
@@ -333,7 +333,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "fails if the event fields are not ordered id ASC" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/group/#{@alpha.id}/events"
       last_response.status.should == 200
 
@@ -355,7 +355,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all events between time frame" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?from=0&to=10"
       last_response.status.should == 200
 
@@ -388,7 +388,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all events filtered by field_key == value" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?field[type]=foobar"
       last_response.status.should == 200
 
@@ -409,7 +409,7 @@ describe "Piecemaker::API EventGroup" do
     it "returns all events filtered by field_key == value " +
        "for multiple fields" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?field[type]=foobar" + 
           "&field[flag1]=getting%20back%20to%20the%20dolphin%20thing"
       last_response.status.should == 200
@@ -430,7 +430,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "fails for correct key but invalid value" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?field[type]=notfoobar"
       last_response.status.should == 200
 
@@ -459,11 +459,11 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "returns all users for event_group with id" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @pan.api_access_key
+      header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/group/#{@alpha.id}/users"
       last_response.status.should == 200
-      json_string_to_hash(last_response.body).should =~ [@hans_admin.values, 
-        @pan.values]
+      json_string_to_hash(last_response.body).should =~ [@pan.values, 
+        @hans_admin.values]
     end
     #---------------------------------------------------------------------------
 
