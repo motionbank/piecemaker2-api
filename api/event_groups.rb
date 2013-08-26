@@ -170,6 +170,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "event group id"
         optional :from, type: Float, desc: ">= utc_timestamp"
         optional :to, type: Float, desc: "<= utc_timestamp"
+        optional :type, type: String, desc: "event type "
         optional :field, type: Hash, desc: "filter by event field key"
       end
       #-------------------------------------------------------------------------
@@ -178,76 +179,60 @@ module Piecemaker
         @event_group = EventGroup.first(:id => params[:id])
         error!('Not found', 404) unless @event_group
 
-        @_user = authorize! :get_events, @event_group
-        
+        authorize! :get_events, @event_group 
 
-        # @†odo refactor!
-        # [05.08.13 20:42:11] Matthias Kadenbach: ?field[type]=video&field[rating]=1
-        # [05.08.13 20:43:24] Matthias Kadenbach: ?field[type]=video&field[rating]
-        # 
-        # combine everything
-        # paging
+        # @todo: paging
 
-        if params[:from] && params[:to]
+        where = [{:event_group_id => @event_group.id}]
 
-          # find by from - to
+        where << {:type => params[:type]} if params[:type]
+        where << ['utc_timestamp >= ?', params[:from]] if params[:from]
+        where << ['utc_timestamp <= ?', params[:to]] if params[:to]
 
-          @events = Event.where( :event_group_id => @event_group.id )
+        @events = Event.where( where )
 
-          @return_events = []
-          @events.each do |event|
-            ev = JSON.parse(event.to_json, {:symbolize_names => true})
-            if ev[:utc_timestamp] >= params[:from] && ev[:utc_timestamp] <= params[:to]
-              @return_events << { :event => ev, 
-                :fields => EventField.where(:event_id => event[:id])}
-            end
-          end
+        @return_events = []
+        if params[:field]
+          # futher field conditions to check ...
 
-          return @return_events
-
-        elsif params[:field]
-
-          # find by field { type => value }
-
-          @events = Event.where( :event_group_id => @event_group.id )
-
-          @return_events = []
           @events.each do |event|
 
+            # get all event fields for this event
             @event_fields = EventField.where(
-              :event_id => event.id).to_hash(:id, :value)
+              :event_id => event.id)
+            _event_fields = @event_fields.to_hash(:id, :value)
             
+            # verify that field conditions apply ...
             counter = 0
             params[:field].each do |id, value|
-              if @event_fields.has_key?(id) && @event_fields[id] == value
+              if _event_fields.has_key?(id) && _event_fields[id] == value
                 counter += 1
               end
             end
+
+            # if all conditions are true, return this event 
+            # (with its event fields)
             if counter == params[:field].length
               @return_events << { 
                 :event => event, 
-                :fields => EventField.where(:event_id => event.id) }
+                :fields => @event_fields }
             end
 
-
+            # free space
+            @event_fields, _event_fields = nil
           end
 
-          return @return_events
-
         else
+          # no further field conditions ...
 
-          # get all events
-
-          @events = Event.where( :event_group_id => @event_group.id )
-          @return_events = []
+          # @todo get list of event ids and fetch them in one batch
           @events.each do |event|
             @return_events << { :event => event, 
               :fields => EventField.where(:event_id => event.id) }
           end
-
-          return @return_events
-
         end
+
+        return @return_events
       end
       
 

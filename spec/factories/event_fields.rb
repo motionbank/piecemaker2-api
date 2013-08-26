@@ -18,11 +18,6 @@ EventField.factory :flag4 do
   value "okay, enough"
 end
 
-EventField.factory :type do
-  id "type"
-  value "foobar"
-end
-
 
 EventField.factory :a do
   id "a"

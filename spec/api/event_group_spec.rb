@@ -40,9 +40,6 @@ describe "Piecemaker::API EventGroup" do
       @flag1_field          = EventField.make :flag1,
                                 :event_id => @big_in_alpha.id
 
-      @type_field           = EventField.make :type,
-                                :event_id => @big_in_alpha.id
-
 
       # create z_field BEFORE a_field for "ordered by" specs
       @z_field              = EventField.make :z,
@@ -251,7 +248,7 @@ describe "Piecemaker::API EventGroup" do
         {
           :event => @big_in_alpha.values, 
           :fields => [@a_field.values, @flag1_field.values, 
-                      @type_field.values, @z_field.values]
+                      @z_field.values]
         }, 
         {
           :event => @small_in_alpha.values,
@@ -288,7 +285,7 @@ describe "Piecemaker::API EventGroup" do
       event_fields_1 = results[1][:fields]
 
       event_fields_1.should == [@a_field.values, @flag1_field.values, 
-                      @type_field.values, @z_field.values]
+                      @z_field.values]
     end
     #---------------------------------------------------------------------------
   end
@@ -325,10 +322,10 @@ describe "Piecemaker::API EventGroup" do
   ##############################################################################
    
     #---------------------------------------------------------------------------
-    it "returns all events filtered by field_key == value" do
+    it "returns all events filtered by event type" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
-      get "/api/v1/group/#{@alpha.id}/events?field[type]=foobar"
+      get "/api/v1/group/#{@alpha.id}/events?type=big"
       last_response.status.should == 200
 
       results       = json_string_to_hash(last_response.body)
@@ -337,7 +334,7 @@ describe "Piecemaker::API EventGroup" do
         {
           :event => @big_in_alpha.values, 
           :fields => [@a_field.values, @flag1_field.values, 
-                      @type_field.values, @z_field.values]
+                      @z_field.values]
         }
       ]
 
@@ -345,12 +342,12 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
 
     #---------------------------------------------------------------------------
-    it "returns all events filtered by field_key == value " +
-       "for multiple fields" do
+    it "returns all events filtered by multiple fields" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
-      get "/api/v1/group/#{@alpha.id}/events?field[type]=foobar" + 
-          "&field[flag1]=getting%20back%20to%20the%20dolphin%20thing"
+      get "/api/v1/group/#{@alpha.id}/events?type=big" + 
+          "&field[flag1]=getting%20back%20to%20the%20dolphin%20thing" +
+          "&field[z]=flag%20with%20id%20z"
       last_response.status.should == 200
 
       results       = json_string_to_hash(last_response.body)
@@ -359,7 +356,7 @@ describe "Piecemaker::API EventGroup" do
         {
           :event => @big_in_alpha.values, 
           :fields => [@a_field.values, @flag1_field.values, 
-                      @type_field.values, @z_field.values]
+                      @z_field.values]
         }
       ]
 
@@ -367,16 +364,14 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
 
     #---------------------------------------------------------------------------
-    it "fails for correct key but invalid value" do
+    it "returns empty array for non existing type" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
-      get "/api/v1/group/#{@alpha.id}/events?field[type]=notfoobar"
+      get "/api/v1/group/#{@alpha.id}/events?type=i_dont_exist"
       last_response.status.should == 200
 
-      results       = json_string_to_hash(last_response.body)
-
+      results = json_string_to_hash(last_response.body)
       results.should =~ []
-
     end
     #---------------------------------------------------------------------------
   end
