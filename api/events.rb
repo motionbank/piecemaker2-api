@@ -9,7 +9,8 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "returns event with id"
+      desc "returns event with id" +
+           " (requires get_events permission)"
       #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "event id"
@@ -17,8 +18,9 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/:id" do  #/api/v1/event/:id
       #-------------------------------------------------------------------------
-        @_user = authorize!
-        @event = Event.first(:id => params[:id]) || error!('Not found', 404)
+        @event = Event.first(:id => params[:id])
+        error!('Not found', 404) unless @event
+        authorize! :get_events, @event
         
         { :event => @event, 
           :fields => @event.event_fields }
@@ -27,7 +29,8 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "updates an event with id"
+      desc "updates an event with id" +
+           " (requires update_event permission)"
       #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "event group id"
@@ -38,9 +41,9 @@ module Piecemaker
       #-------------------------------------------------------------------------
       put "/:id" do  #/api/v1/event/:id
       #-------------------------------------------------------------------------
-        @_user = authorize!
         @event = Event.first(:id => params[:id])
         error!('Not found', 404) unless @event
+        authorize! :update_event, @event
 
         # @todo wrap this into transaction
 
@@ -84,7 +87,8 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "deletes event with id"
+      desc "deletes event with id" +
+           " (requires delete_event permission)"
       #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "event id"
@@ -92,9 +96,10 @@ module Piecemaker
       #-------------------------------------------------------------------------
       delete "/:id" do  #/api/v1/event/:id
       #-------------------------------------------------------------------------
-        @_user = authorize!
         @event = Event.first(:id => params[:id])
         error!('Not found', 404) unless @event
+
+        authorize! :delete_event, @event
 
         { :event => @event.delete, :fields => [] }
       end

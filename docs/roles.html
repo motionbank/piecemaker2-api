@@ -28,13 +28,18 @@ td.entity {
 td.permission {
   text-align: center;
 }
-td.y {
+td.Yes {
   background-color: green;
 }
 
-td.n {
+td.No {
   background-color: red;
 }
+
+td.Def {
+  background-color: yellow;
+}
+
 
 
 </style>
@@ -52,18 +57,88 @@ td.n {
 </thead>
 <tbody>
 <tr>
-<td class='entity'><input type='checkbox'> get_event_groups</td>
-<td class='permission Y'>Y</td>
-<td class='permission Y'>Y</td>
-<td class='permission N'>N</td>
-<td class='permission N'>N</td>
+<td class='entity'><input type='checkbox'> get_event_groups (not used)</td>
+<td class='permission Yes'>Yes</td>
+<td class='permission Yes'>Yes</td>
+<td class='permission No'>No</td>
+<td class='permission No'>No</td>
 </tr>
 <tr>
 <td class='entity'><input type='checkbox'> get_events</td>
-<td class='permission Y'>Y</td>
-<td class='permission N'>N</td>
-<td class='permission N'>N</td>
-<td class='permission N'>N</td>
+<td class='permission Yes'>Yes</td>
+<td class='permission No'>No</td>
+<td class='permission No'>No</td>
+<td class='permission No'>No</td>
+</tr>
+<tr>
+<td class='entity'><input type='checkbox'> create_new_event</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+</tr>
+<tr>
+<td class='entity'><input type='checkbox'> get_event_group</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+</tr>
+<tr>
+<td class='entity'><input type='checkbox'> update_event_group</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+</tr>
+<tr>
+<td class='entity'><input type='checkbox'> delete_event_group</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+</tr>
+<tr>
+<td class='entity'><input type='checkbox'> get_users_for_event_group</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+</tr>
+<tr>
+<td class='entity'><input type='checkbox'> add_user_to_event_group</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+</tr>
+<tr>
+<td class='entity'><input type='checkbox'> update_users_attributes_for_event_group</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+</tr>
+<tr>
+<td class='entity'><input type='checkbox'> delete_user_in_event_group</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+</tr>
+<tr>
+<td class='entity'><input type='checkbox'> update_event</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+</tr>
+<tr>
+<td class='entity'><input type='checkbox'> delete_event</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
+<td class='permission Def'>Def</td>
 </tr>
 </tbody>
 </table

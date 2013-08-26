@@ -25,12 +25,17 @@ td.entity {
 td.permission {
   text-align: center;
 }
-td.y {
+td.Yes {
   background-color: green;
 }
 
-td.n {
+td.No {
   background-color: red;
 }
+
+td.Def {
+  background-color: yellow;
+}
+
 
 

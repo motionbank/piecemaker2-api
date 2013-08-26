@@ -219,50 +219,63 @@ namespace :db do
 end
 
 
+
+
+def scan_entities(verbose)
+  return_value = []
+
+  entities = []
+  Dir[BASE_PATH + "/api/*"].each do |file|
+    line_no = 0
+    line_stack = []
+    IO.foreach(file) do |line|
+      line_no += 1
+      line_stack << line
+      authorize = line.scan(/authorize! .*/)
+
+      if authorize[0]
+
+        desc = []
+        url = []
+        line_stack.reverse.each do |lstack|
+          if desc.size == 0 || url.size == 0
+            desc = lstack.scan(/desc "(.*)"/) if desc.size == 0
+            url = lstack.scan(/((get|put|post|delete) .*)/) if url.size == 0
+          else
+            line_stack = []
+          end
+        end
+        line_stack = []
+
+        if verbose
+          return_value << [
+            "__#{authorize[0]}__",
+            url[0][0].gsub(/do */, "") + " in api/#{File.basename(file)}:#{line_no}",
+            desc,
+            ""
+          ]       
+        else
+          _entity = authorize[0].scan(/:(.*), @/).flatten[0]
+          entities << _entity if _entity
+        end
+      end
+    end
+  end
+
+  unless verbose
+    entities.uniq!
+    entities.delete("super_admin_only")
+    return entities
+  else
+    return return_value
+  end
+end
+
 namespace :roles do
 
   desc "Scan files for permission entities"
   task :scan_entities, :verbose do |cmd, args|
-    entities = []
-    Dir[BASE_PATH + "/api/*"].each do |file|
-      line_no = 0
-      line_stack = []
-      IO.foreach(file) do |line|
-        line_no += 1
-        line_stack << line
-        authorize = line.scan(/authorize! .*/)
-
-        if authorize[0]
-
-          desc = []
-          url = []
-          line_stack.reverse.each do |lstack|
-            if desc.size == 0 || url.size == 0
-              desc = lstack.scan(/desc "(.*)"/) if desc.size == 0
-              url = lstack.scan(/((get|put|post|delete) .*)/) if url.size == 0
-            else
-              line_stack = []
-            end
-          end
-          line_stack = []
-
-          if args[:verbose]
-            puts "__#{authorize[0]}__"
-            puts url[0][0].gsub(/do */, "") + " in api/#{File.basename(file)}:#{line_no}"
-            puts desc
-            puts ""        
-          else
-            entities << authorize[0].scan(/:(.*)/)[0][0]
-          end
-        end
-      end
-    end
-
-    unless args[:verbose]
-      entities.uniq!
-      entities.delete("super_admin_only")
-      puts entities
-    end
+    puts scan_entities(args[:verbose])
   end
 
 
@@ -270,6 +283,7 @@ namespace :roles do
   task :output, :env, :format do |cmd, args|
     env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
+    entities = scan_entities(false)
 
     # build user roles array
     def get_user_roles_ordered_by_inheritance(id, user_roles_ordered)
@@ -303,15 +317,32 @@ namespace :roles do
         permission = Piecemaker::Helper::Auth::get_permission_recursively(user_role, entity)
         if permission
           if permission.permission == "allow"
-            permissions[user_role.id] = "Y"
+            permissions[user_role.id] = "Yes"
           elsif permission.permission == "forbid"
-            permissions[user_role.id] = "N"
+            permissions[user_role.id] = "No"
           else
-            permissions[user_role.id] = "E"
+            permissions[user_role.id] = "Error"
           end
         else
-          permissions[user_role.id] = 'N'
+          permissions[user_role.id] = 'No'
         end
+      end
+
+      deleted_entity = entities.delete(entity)
+
+      matrix << {
+        :entity => entity + (deleted_entity ? "" : " (not used)"),
+        :permissions => permissions
+      }
+
+      
+    end
+
+    entities.each do |entity|
+
+      permissions = {}
+      @user_roles_ordered.each do |user_role|
+        permissions[user_role.id] = "Def"
       end
 
       matrix << {

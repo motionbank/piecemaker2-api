@@ -155,6 +155,9 @@ rake db:export_into_file[test,'role_permissions']
 To generate a Roles and Permissions matrix for debugging or documentation,
 run ```rake roles:output[dev,html] > docs/roles.html```. 
 
+To output all entities used in the API, run 
+```rake roles:scan_entities[verbose]```
+
 ## Development
 
  * Running only specify tests by adding ```:focus``` tag to test.
