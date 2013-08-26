@@ -11,18 +11,18 @@ describe "Module helper" do
 
   describe "Module API_Access_key" do
     it "generates an api access key" do
-      pending
+      pending "no test written, yet"
     end
 
     it "checks if an api access key makes sense" do
-      pending
+      pending "no test written, yet"
     end
 
   end
 
   describe "Module Password" do
     it "generates a password" do
-      pending
+      pending "no test written, yet"
     end
 
   end

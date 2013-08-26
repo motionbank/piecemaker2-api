@@ -236,15 +236,6 @@ describe "Piecemaker::API User" do
         last_response.status.should == 409
       end
       #-------------------------------------------------------------------------
-
-
-      #-------------------------------------------------------------------------
-      it "ACL auto-testing" do
-      #-------------------------------------------------------------------------
-        pending
-        # get roles and test against this routes
-      end
-      #-------------------------------------------------------------------------
     end
 
 
@@ -275,15 +266,6 @@ describe "Piecemaker::API User" do
         get "/api/v1/user/#{@pan.id}"
         last_response.status.should == 200
         json_string_to_hash(last_response.body).should == @pan.values
-      end
-      #-------------------------------------------------------------------------
-
-
-      #-------------------------------------------------------------------------
-      it "ACL auto-testing" do
-      #-------------------------------------------------------------------------
-        pending
-        # get roles and test against this routes
       end
       #-------------------------------------------------------------------------
     end
@@ -319,15 +301,6 @@ describe "Piecemaker::API User" do
         returned_peter[:password].should_not == @peter.password
       end
       #-------------------------------------------------------------------------
-
-
-      #-------------------------------------------------------------------------
-      it "ACL auto-testing" do
-      #-------------------------------------------------------------------------
-        pending
-        # get roles and test against this routes
-      end
-      #-------------------------------------------------------------------------
     end
 
 
@@ -342,15 +315,6 @@ describe "Piecemaker::API User" do
         delete "/api/v1/user/#{@pan.id}"
         last_response.status.should == 200
         User.first(:id => @pan.id).should eq(nil)
-      end
-      #-------------------------------------------------------------------------
-
-
-      #-------------------------------------------------------------------------
-      it "ACL auto-testing" do
-      #-------------------------------------------------------------------------
-        pending
-        # get roles and test against this routes
       end
       #-------------------------------------------------------------------------
     end
@@ -370,15 +334,6 @@ describe "Piecemaker::API User" do
           .should == times_to_s([@alpha.values])
       end
       #-------------------------------------------------------------------------
-
-
-      #-------------------------------------------------------------------------
-      it "ACL auto-testing" do
-      #-------------------------------------------------------------------------
-        pending
-        # get roles and test against this routes
-      end
-      #-------------------------------------------------------------------------
     end
 
 
@@ -394,15 +349,6 @@ describe "Piecemaker::API User" do
         last_response.status.should == 200
         json_string_to_hash(last_response.body).should =~ [@peter.values, 
           @pan.values, @hans_admin.values, @klaus_disabled.values]
-      end
-      #-------------------------------------------------------------------------
-
-
-      #-------------------------------------------------------------------------
-      it "ACL auto-testing" do
-      #-------------------------------------------------------------------------
-        pending
-        # get roles and test against this routes
       end
       #-------------------------------------------------------------------------
     end
