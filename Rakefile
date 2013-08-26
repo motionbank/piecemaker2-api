@@ -279,7 +279,7 @@ namespace :roles do
   end
 
 
-  desc "Generate roles and permissions matrix from database"
+  desc "Generate roles and permissions matrix from database (format:html|json)"
   task :output, :env, :format do |cmd, args|
     env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
