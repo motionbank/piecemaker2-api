@@ -36,6 +36,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "event group id"
         requires :utc_timestamp, type: Float, desc: "utc timestamp"
         optional :duration, type: Float, desc: "duration"
+        optional :type, type: String, desc: "type of event"
         optional :fields, type: Hash, desc: "optional fields to create for this event {'field1': 'value', ...}"
       end
       #-------------------------------------------------------------------------
@@ -47,7 +48,7 @@ module Piecemaker
 
         # @todo wrap this into transaction
 
-        @event.update_with_params!(params, :utc_timestamp, :duration)
+        @event.update_with_params!(params, :utc_timestamp, :duration, :type)
         @event.save
 
         @event_fields = EventField.where(:event_id => @event.id)

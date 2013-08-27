@@ -83,8 +83,9 @@ module Piecemaker
       #-------------------------------------------------------------------------
       post "/" do  #/api/v1/group
       #-------------------------------------------------------------------------
-        @_user = authorize! :super_admin_only
+        @_user = authorize!
         
+
 
         @event_group = EventGroup.create(
           :title => params[:title],
@@ -94,6 +95,7 @@ module Piecemaker
         UserHasEventGroup.create(
           :user_id => @_user.id,
           :event_group_id => @event_group.id)
+        # @todo add "admin" role 
 
         return @event_group
       end
@@ -157,6 +159,7 @@ module Piecemaker
 
         authorize! :delete_event_group, @event_group
 
+        # @todo check if at least one group admin available
         @event_group.delete
       end
        
