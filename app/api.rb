@@ -27,6 +27,7 @@ module Piecemaker
     mount ::Piecemaker::Users
     mount ::Piecemaker::EventGroups
     mount ::Piecemaker::Events
+    mount ::Piecemaker::UserRoles
     mount ::Piecemaker::System
     
 
