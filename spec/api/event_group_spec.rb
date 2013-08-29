@@ -152,6 +152,7 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 400
     end
     #---------------------------------------------------------------------------
+    
   end
 
 
@@ -175,6 +176,23 @@ describe "Piecemaker::API EventGroup" do
         :event_group_id => returned_omega[:id]).should_not eq(nil)
     end
     #---------------------------------------------------------------------------
+
+    #---------------------------------------------------------------------------
+    it "makes the currently logged in user the owner" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
+      last_response.status.should == 201
+
+      returned_omega = json_parse(last_response.body)
+      returned_omega[:created_by_user_id].should == @hans_admin.id
+    end
+    #---------------------------------------------------------------------------
+
+    it "assigns admin-like role to owner of event group" do
+      pending "waiting for role definitions (what is an admin-like role?)"
+    end
+
   end
 
 
@@ -226,6 +244,14 @@ describe "Piecemaker::API EventGroup" do
       delete "/api/v1/group/#{@alpha.id}"
       last_response.status.should == 200
       EventGroup.first(:id => @alpha.id).should eq(nil)
+    end
+    #---------------------------------------------------------------------------
+
+    #---------------------------------------------------------------------------
+    it "make sure there is at least ony user that has delete permissions" +
+       " before deleting" do
+    #---------------------------------------------------------------------------
+      pending "waiting for role definitions"
     end
     #---------------------------------------------------------------------------
   end

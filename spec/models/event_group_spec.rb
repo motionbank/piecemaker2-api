@@ -32,6 +32,10 @@ describe "Model EventGroup" do
     @event_group.users.should == [@pan]
   end
 
+  it "has one user" do
+    @event_group.user.should == @pan
+  end
+
 
 end
 
