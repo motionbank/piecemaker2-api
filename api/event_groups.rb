@@ -174,7 +174,7 @@ module Piecemaker
         optional :from, type: Float, desc: ">= utc_timestamp"
         optional :to, type: Float, desc: "<= utc_timestamp"
         optional :type, type: String, desc: "event type "
-        optional :field, type: Hash, desc: "filter by event field key"
+        optional :fields, type: Hash, desc: "filter by event field key"
       end
       #-------------------------------------------------------------------------
       get "/:id/events" do  #/api/v1/group/:id/events
@@ -195,7 +195,7 @@ module Piecemaker
         @events = Event.where( where )
 
         @return_events = []
-        if params[:field]
+        if params[:fields]
           # futher field conditions to check ...
 
           @events.each do |event|
@@ -207,7 +207,7 @@ module Piecemaker
             
             # verify that field conditions apply ...
             counter = 0
-            params[:field].each do |id, value|
+            params[:fields].each do |id, value|
               if _event_fields.has_key?(id) && _event_fields[id] == value
                 counter += 1
               end
@@ -215,7 +215,7 @@ module Piecemaker
 
             # if all conditions are true, return this event 
             # (with its event fields)
-            if counter == params[:field].length
+            if counter == params[:fields].length
               @return_events << { 
                 :event => event, 
                 :fields => @event_fields }
