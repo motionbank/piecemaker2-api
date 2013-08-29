@@ -148,7 +148,8 @@ describe "Module helper" do
         @klaus_disabled           = User.make :klaus_disabled
         @user_with_no_api_access_key = User.make :user_with_no_api_access_key
 
-        @event_group              = EventGroup.make :alpha
+        @event_group              = EventGroup.make :alpha,
+                                      :created_by_user_id => @hans_admin.id
 
         @user_has_event_group      = UserHasEventGroup.make :default,
                                       :user_id => @pan.id,

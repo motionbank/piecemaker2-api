@@ -88,8 +88,9 @@ module Piecemaker
 
 
         @event_group = EventGroup.create(
-          :title => params[:title],
-          :text  => params[:text])
+          :created_by_user_id => @user.id,
+          :title              => params[:title],
+          :text               => params[:text])
 
         UserHasEventGroup.unrestrict_primary_key
         UserHasEventGroup.create(
@@ -123,7 +124,8 @@ module Piecemaker
       #_________________________________________________________________________
       ##########################################################################
       desc "updates event_group with id" + 
-           " (requires update_event_group permission)"
+           " (requires update_event_group permission" + 
+           " and user is owner)"
       #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "event group id"
@@ -137,6 +139,8 @@ module Piecemaker
         error!('Not found', 404) unless @event_group
 
         authorize! :update_event_group, @event_group
+
+        
 
         @event_group.update_with_params!(params, :title, :text)
         @event_group.save

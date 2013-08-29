@@ -25,7 +25,8 @@ describe "Model UserRole" do
 
       @pan                 = User.make :pan
 
-      @event_group         = EventGroup.make :alpha
+      @event_group         = EventGroup.make :alpha,
+                              :created_by_user_id => @pan.id
 
       @user_has_event_group = UserHasEventGroup.make :default,
                                 :user_id => @pan.id,

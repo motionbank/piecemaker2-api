@@ -8,7 +8,8 @@ describe "Model User" do
     factory_batch do 
       @pan = User.make :pan
 
-      @event_group = EventGroup.make :alpha
+      @event_group = EventGroup.make :alpha,
+                      :created_by_user_id => @pan.id
 
       @event = Event.make :big, 
         :event_group_id => @event_group.id,

@@ -15,8 +15,10 @@ describe "Piecemaker::API Event" do
       @hans_admin     = User.make :hans_admin
       @klaus_disabled = User.make :klaus_disabled
 
-      @alpha          = EventGroup.make :alpha
-      @beta           = EventGroup.make :beta
+      @alpha          = EventGroup.make :alpha,
+                          :created_by_user_id => @hans_admin.id
+      @beta           = EventGroup.make :beta,
+                          :created_by_user_id => @hans_admin.id
 
       @big            = Event.make :big, 
                           :event_group_id => @alpha.id

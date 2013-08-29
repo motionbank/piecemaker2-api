@@ -183,7 +183,8 @@ describe "Piecemaker::API User" do
         @klaus_disabled = User.make :klaus_disabled
 
 
-        @alpha                      = EventGroup.make :alpha
+        @alpha                      = EventGroup.make :alpha,
+                                        :created_by_user_id => @hans_admin.id
 
         @pan_has_event_group_alpha  = UserHasEventGroup.make :default,  
                                       :user_id => @pan.id, 

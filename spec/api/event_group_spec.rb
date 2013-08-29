@@ -16,8 +16,10 @@ describe "Piecemaker::API EventGroup" do
       @hans_admin           = User.make :hans_admin
     
       # create alpha BEFORE beta for "ordered by" specs
-      @alpha                = EventGroup.make :alpha
-      @beta                 = EventGroup.make :beta
+      @alpha                = EventGroup.make :alpha, 
+                                :created_by_user_id => @hans_admin.id
+      @beta                 = EventGroup.make :beta,
+                                :created_by_user_id => @hans_admin.id
     
       # create big_in_alpha BEFORE small_in_alpha for "ordered by" specs
       @big_in_alpha         = Event.make :big, 
