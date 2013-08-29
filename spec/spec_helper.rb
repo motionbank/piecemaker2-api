@@ -42,7 +42,6 @@ end
 # deprecated, use json_string_to_hash instead
 def json_parse(string)
   json_string_to_hash(string)
-  # @todo dont parse if empty string or nil
   # if string.class == String && string == "null"
   #   nil
   # else
@@ -118,13 +117,13 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
 
   config.before(:all) do 
-    # @todo: user must do this via console. removed because it 
-    # slows down testing process
+    # user must do this via console. dont do it here.
     # system "rake db:reset[#{ENV["RACK_ENV"]}]"
   end
 
   config.after(:all) do 
-    # @todo: do we need this? it slows down testing process ...
+    # activate if you thing this is necessary...
+    # it slows down testing process though
     # system "rake db:reset[#{ENV["RACK_ENV"]}]"    
   end
 

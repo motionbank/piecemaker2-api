@@ -86,7 +86,7 @@ module Piecemaker
         @_user = authorize!
         
         @event_group = EventGroup.create(
-          :created_by_user_id => @user.id,
+          :created_by_user_id => @_user.id,
           :title              => params[:title],
           :text               => params[:text])
 
@@ -94,7 +94,7 @@ module Piecemaker
         UserHasEventGroup.create(
           :user_id => @_user.id,
           :event_group_id => @event_group.id)
-        # @todo add "admin" role 
+          # @todo add "admin" role 
 
         return @event_group
       end
