@@ -221,17 +221,27 @@ module Piecemaker
             end
 
             # free space
-            @event_fields, _event_fields = nil
+            @events, @event_fields, _event_fields = nil
           end
 
         else
           # no further field conditions ...
 
-          # @todo get list of event ids and fetch them in one batch
+          all_event_ids = []
+          @events.each do |event|
+            all_event_ids << event.id
+          end
+
+          @event_fields = EventField.where(:event_id => all_event_ids)
+          @event_fields = @event_fields.to_hash_groups(:event_id, nil)
+
           @events.each do |event|
             @return_events << { :event => event, 
-              :fields => EventField.where(:event_id => event.id) }
+              :fields => @event_fields[event.id] || [] }
           end
+
+          # free space
+          @events, @event_fields, all_event_ids = nil
         end
 
         return @return_events
