@@ -82,37 +82,6 @@ irb
 ```
 
 
-
-
-### The data
-
-#### Time
-
-Time on events is stored as UTC timestamp in the format XXXXXXXXXX.ZZZZ where the XX-part is a unix timestamp up to the seconds and ZZ-part is the fractions of a second. This dates back to how Ruby converts the Time class to Float:
-
-```
-Time.now.to_f
-# => 1375260337.49758
-```
-
-To get to a millisecond (JS / Java) timestamp just multiply by 1000:
-
-```javascript
-// JavaScript
-var dbTs = ...
-var jsTs = new Date( dbTs * 1000 );
-```
-```java
-// Java
-double dbTs = ...
-Date jTs = new Date( (long)( dbTs * 1000.0 ) );
-```
-
-The duration of an event is stored in seconds, so it's safe to just add it to a timestamp to get to the "finish time" of an event.
-
-
-
-
 ## The API
 
 ### Connecting to the API
@@ -180,12 +149,39 @@ $ ab -c5 -n10000 http://127.0.0.1:9292/api/v1/users
 ```rake spec:now``` or ```rake spec:onchange```.
 Running only specify tests by adding ```:focus``` tag to test.
 
+### Our Time definition
+Time on events is stored as UTC timestamp in the format XXXXXXXXXX.ZZZZ where 
+the XX-part is a unix timestamp up to the seconds and ZZ-part is the fractions 
+of a second. This dates back to how Ruby converts the Time class to Float:
+
+```
+Time.now.to_f
+# => 1375260337.49758
+```
+
+To get to a millisecond (JS / Java) timestamp just multiply by 1000:
+
+```javascript
+// JavaScript
+var dbTs = ...
+var jsTs = new Date( dbTs * 1000 );
+```
+```java
+// Java
+double dbTs = ...
+Date jTs = new Date( (long)( dbTs * 1000.0 ) );
+```
+
+The duration of an event is stored in seconds, so it's safe to just add it 
+to a timestamp to get to the "finish time" of an event.
+
+
 ### Other Developer Hints
  
  * Add ```binding.pry``` in your code to debug (in dev|test env).
    See https://github.com/pry/pry/ for more information.
  * Create SQL Dump: ```pg_dump -s piecemaker2_xxx > db/piecemaker2_xxx_dump.sql```
- * Reset Gemset
+ * Reset Gemset  
 ```bash
 # reset gemset
 rbenv gemset delete 2.0.0-p247 piecemaker-api
