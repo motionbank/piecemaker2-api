@@ -35,3 +35,4 @@ group :test do
   gem "pry", "~> 0.9.12.2"
 end
 
+ruby "2.0.0"

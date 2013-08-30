@@ -64,21 +64,30 @@ var srcEventFieldsToIgnore = [
 			if ( argv.erase === 'yes' ) {
 				console.log( '*** erasing destination database ***' );
 				destDb.runSql(
-					'TRUNCATE events, users, event_fields, event_groups, user_has_event_groups',
+					'TRUNCATE users, '+
+							 //'user_roles, role_permissions, '+
+							 'user_has_event_groups, '+
+							 'events, event_fields, '+
+							 'event_groups',
 					[],
-					next
+					function () {
+						console.log('*** database erased ***');
+						next();
+					}
 				);
 			} else {
 				next();
 			}
 		},
 		function (next) {
+			console.log( 'adding Administrator' );
 			destDb.insert(
 				'users',
-				['name','email','password'],
+				['name','email','password', 'is_super_admin'],
 				['Administrator',
 				 fakeEmailFromLogin('Administrator'),
-				 '1eda23758be9e36e5e0d2a6a87de584aaca0193f'],
+				 '1eda23758be9e36e5e0d2a6a87de584aaca0193f',
+				 true],
 				function (err) {
 					assert.ifError(err);
 					next();
@@ -193,7 +202,7 @@ function translateUserData ( srcUser, next ) {
 			email: 			srcUser.email || fakeEmailFromLogin( srcUser.login ),
 			password: 		sha1( srcUser.login + (Math.random() * 10 + (new Date().getTime())) ).substring(0,6),
 			api_access_key: sha1( ((new Date().getTime()) + Math.random() * 666) + srcUser.login ),
-			is_super_admin: 		srcUser.role_name === 'group_admin' ? true : false,
+			is_super_admin: srcUser.role_name === 'group_admin' ? true : false,
 			is_disabled: 	false
 		}
 	);
@@ -226,8 +235,11 @@ function getCreateMigrationUser ( destDb, next ) {
 					if ( !migrationUser ) {
 						destDb.insert( 
 							'users',
-							['name', 'email', 'password'],
-							['Migration User', fakeEmailFromLogin('Migration User'), sha1(new Date().getTime())],
+							['name', 'email', 'password', 'is_super_admin'], // TODO: super admin?
+							[ 'Migration User', 
+							  fakeEmailFromLogin('Migration User'), 
+							  sha1(new Date().getTime()),
+							  true ],
 							function (err) {
 								assert.ifError(err);
 								destDb.all(
@@ -349,8 +361,8 @@ function migrateUserHasGroups ( srcDb, destDb, next ) {
 								function ( groupUser, next ) {
 									destDb.insert(
 										'user_has_event_groups',
-										['user_id','event_group_id'],
-										[destUsers[groupUser.login].id, tuple.dest.id],
+										['user_id',						'event_group_id', 'user_role_id'],
+										[destUsers[groupUser.login].id, tuple.dest.id, 	  'guest'], // TODO: guest?
 										function (err) {
 											assert.ifError(err);
 											next();
@@ -491,15 +503,16 @@ function migrateSrcVideos ( srcDb, destDb, srcDestTuple, nextG ) {
 							destVideoEvents,
 							function(destVideo,next){
 								var columns = ['event_group_id', 'created_by_user_id', 
-										'utc_timestamp', 'duration'];
+										'utc_timestamp', 'duration', 'type'];
 
 								var values = [destVideo.event_group_id, destVideo.created_by_user_id,
-										destVideo.utc_timestamp, destVideo.duration];
+										destVideo.utc_timestamp, destVideo.duration, 'video'];
 
 								destDb.runSql(
 									'INSERT INTO events ('+columns.join(',')+') '+
-											'VALUES ('+values.join(',')+') '+
+											'VALUES (?,?,?,?,?) '+
 											'RETURNING id', // TODO: only works with Postgres
+									values,
 									function (err, dbResult) {
 										assert.ifError(err);
 										if ( dbResult && dbResult.rows && dbResult.rows.length > 0 ) {
@@ -572,15 +585,16 @@ function migrateSrcEvents ( srcDb, destDb, srcDestTuple, nextZ ) {
 							function(destEvent, next){
 
 								var columns = ['event_group_id', 'created_by_user_id', 
-										'utc_timestamp', 'duration'];
+										'utc_timestamp', 'duration', 'type'];
 
 								var values = [destEvent.event_group_id, destEvent.created_by_user_id,
-										destEvent.utc_timestamp, destEvent.duration];
+										destEvent.utc_timestamp, destEvent.duration, destEvent.event_type];
 
 								destDb.runSql(
 									'INSERT INTO events ('+columns.join(',')+') '+
-											'VALUES ('+values.join(',')+') '+
+											'VALUES (?,?,?,?,?) '+
 											'RETURNING id', // TODO: only works with Postgres
+									values,
 									function (err, dbResult) {
 										assert.ifError(err);
 										if ( dbResult && dbResult.rows && dbResult.rows.length > 0 ) {
@@ -678,6 +692,7 @@ function translateSourceEventToDestEvent ( srcEvent, groupTuple, next ) {
 			created_by_user_id: getMigrationUser().id,
 			utc_timestamp:  	timestamp,
 			duration: 			duration,
+			event_type: 		srcEvent.event_type || 'marker',
 			fields: 			fields
 		}
 	);

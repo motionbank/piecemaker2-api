@@ -16,8 +16,6 @@ module Sequel
   end
 end
 
-
-
 CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
 
 ENV['RACK_ENV'] ||= "production"
@@ -25,15 +23,19 @@ ENV['NEW_RELIC_LICENSE_KEY'] = CONFIG["newrelic_license_key"]
 ENV["NEW_RELIC_APP_NAME"] = "Piecemaker API"
 
 begin
-  DB = Sequel.connect(
-    :test => true, #test that a valid database connection can be made
-    :adapter  => CONFIG[ENV['RACK_ENV'].to_s]["adapter"] || 'postgres', 
-    :host     => CONFIG[ENV['RACK_ENV'].to_s]["host"] || 'localhost', 
-    :database => CONFIG[ENV['RACK_ENV'].to_s]["database"] || '', 
-    :user     => CONFIG[ENV['RACK_ENV'].to_s]["username"] || '', 
-    :password => CONFIG[ENV['RACK_ENV'].to_s]["password"] || '',
-    :port     => CONFIG[ENV['RACK_ENV'].to_s]["port"] || '5432',
-    :max_connections => CONFIG[ENV['RACK_ENV'].to_s]["max_connections"] || 4)
+  if ENV.has_key? 'DATABASE_URL' and not ENV['DATABASE_URL'].empty?
+    DB = Sequel.connect( ENV['DATABASE_URL'] )
+  else
+    DB = Sequel.connect(
+      :test => true, #test that a valid database connection can be made
+      :adapter  => CONFIG[ENV['RACK_ENV'].to_s]["adapter"] || 'postgres', 
+      :host     => CONFIG[ENV['RACK_ENV'].to_s]["host"] || 'localhost', 
+      :database => CONFIG[ENV['RACK_ENV'].to_s]["database"] || '', 
+      :user     => CONFIG[ENV['RACK_ENV'].to_s]["username"] || '', 
+      :password => CONFIG[ENV['RACK_ENV'].to_s]["password"] || '',
+      :port     => CONFIG[ENV['RACK_ENV'].to_s]["port"] || '5432',
+      :max_connections => CONFIG[ENV['RACK_ENV'].to_s]["max_connections"] || 4)
+  end
 rescue=>ex
   puts ex.message
   exit 77
