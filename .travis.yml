@@ -10,3 +10,4 @@ before_script:
  - "sed -i 's/password  : XXX/password  : /g' config/config.yml" 
  - "cat config/config.yml" 
  - "rake db:migrate[test]"
+ - "rm Gemfile.lock"

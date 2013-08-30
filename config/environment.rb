@@ -24,7 +24,7 @@ ENV["NEW_RELIC_APP_NAME"] = "Piecemaker API"
 
 begin
   if ENV.has_key? 'DATABASE_URL' and not ENV['DATABASE_URL'].empty?
-    puts 'RUNNING ON HEROKU'
+    #puts 'RUNNING ON HEROKU'
     DB = Sequel.connect( ENV['DATABASE_URL'] )
   else
     DB = Sequel.connect(
