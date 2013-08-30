@@ -16,7 +16,7 @@ module Sequel
   end
 end
 
-CONFIG = []
+CONFIG = Hash.new
 
 unless ENV['ON_HEROKU']
   CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
