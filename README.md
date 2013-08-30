@@ -31,14 +31,14 @@ a pre-compiled Mac OS X .app package.
 brew install rbenv # optional, but recommended
 brew install rbenv-gemset # optional, but recommended
 
+# clone piecemaker2-api and install gem dependencies
 git clone https://github.com/motionbank/piecemaker2-api.git
 cd piecemaker2-api
 gem install bundler
 bundle install
 
+# create new configuration file and edit it
 cp config/config.sample.yml config/config.yml
-
-# edit configuration
 vi config/config.yml
 
 # run migrations and set-up databases
