@@ -13,34 +13,37 @@ __... with [Grape](https://github.com/intridea/grape) on [Rack](http://rack.gith
 Please go to https://github.com/motionbank/piecemaker2-app to download
 a pre-compiled Mac OS X .app package.
 
+## Prerequisites
+
+ * Ruby 2.0.0-p247
+ * PostgreSQL
 
 ## Installation for Developers
 
 ```bash
-$ brew install rbenv
-$ brew install rbenv-gemset
+brew install rbenv # optional, but recommended
+brew install rbenv-gemset # optional, but recommended
 
-$ git clone https://github.com/motionbank/piecemaker2-api.git
-$ cd piecemaker2-api
-$ gem install bundler
-$ bundle install
+# create PostgreSQL databases
+#  piecemaker2_prod, piecemaker2_dev, piecemaker2_test
 
-$ cp config/config.sample.yml config/config.yml
+git clone https://github.com/motionbank/piecemaker2-api.git
+cd piecemaker2-api
+gem install bundler
+bundle install
+
+cp config/config.sample.yml config/config.yml
 
 # edit configuration
-$ vi config/config.yml
+vi config/config.yml
 
-# install and start postgres
-$ brew install postgres
-$ initdb /usr/local/var/postgres
-$ postgres -D /usr/local/var/postgres
-# create databases
-$ createdb --username=XXX piecemaker2_prod && rake db:migrate[production]
-$ createdb --username=XXX piecemaker2_dev && rake db:migrate[development]
-$ createdb --username=XXX piecemaker2_test && rake db:migrate[test]
+# run migrations and set-up databases
+rake db:migrate[production]
+rake db:migrate[development]
+rake db:migrate[test]
 
 # run tests to verify it works
-$ rake spec:now
+rake spec:now
 ```
 
 ## Usage
