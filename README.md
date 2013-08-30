@@ -83,7 +83,7 @@ irb
 
 ## The API
 
-### Connecting to the API
+### Authorization (via Client)
 ```
 Login and retrieve access token
 POST /api/v1/user/login with params email and password
