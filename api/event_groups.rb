@@ -34,7 +34,7 @@ module Piecemaker
         requires :utc_timestamp, type: Float, desc: "utc timestamp"
         requires :type, type: String, desc: "type of event"
         optional :duration, type: Float, desc: "duration"
-        optional :fields, type: Hash, desc: "optional fields to create for this event {'field1': 'value', ...}"
+        optional :fields, type: Hash, desc: "optional fields to create for this event"
       end 
       #-------------------------------------------------------------------------
       post "/:id/event" do  #/api/v1/group/:id/event
