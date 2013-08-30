@@ -1,11 +1,19 @@
 # Piecemaker API 
-[![Build Status](https://travis-ci.org/motionbank/piecemaker2-api.png?branch=master)](https://travis-ci.org/motionbank/piecemaker2-api)
 
 __... with [Grape](https://github.com/intridea/grape) on [Rack](http://rack.github.io/) and [Sequel](https://github.com/jeremyevans/sequel).__
 
-__[Status](http://htmlpreview.github.io/?https://raw.github.com/motionbank/piecemaker2-api/master/rspec.html)__
 
-## Installation
+[![Build Status](https://travis-ci.org/motionbank/piecemaker2-api.png?branch=master)](https://travis-ci.org/motionbank/piecemaker2-api)
+__[RSpec status](http://htmlpreview.github.io/?https://raw.github.com/motionbank/piecemaker2-api/master/rspec.html)__
+
+
+## Download for Users
+
+Please go to https://github.com/motionbank/piecemaker2-app to download
+a pre-compiled Mac OS X .app package.
+
+
+## Installation for Developers
 
 ```bash
 $ brew install rbenv
