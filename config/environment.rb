@@ -16,15 +16,16 @@ module Sequel
   end
 end
 
-CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
+unless ENV['ON_HEROKU']
+  CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
+end
 
 ENV['RACK_ENV'] ||= "production"
-ENV['NEW_RELIC_LICENSE_KEY'] = CONFIG["newrelic_license_key"]
+ENV['NEW_RELIC_LICENSE_KEY'] = CONFIG["newrelic_license_key"] || 'XXXXXX'
 ENV["NEW_RELIC_APP_NAME"] = "Piecemaker API"
 
 begin
-  if ENV.has_key? 'DATABASE_URL' and not ENV['DATABASE_URL'].empty?
-    #puts 'RUNNING ON HEROKU'
+  if ENV['ON_HEROKU']
     DB = Sequel.connect( ENV['DATABASE_URL'] )
   else
     DB = Sequel.connect(
