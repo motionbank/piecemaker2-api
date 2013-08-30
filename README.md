@@ -17,15 +17,19 @@ a pre-compiled Mac OS X .app package.
 
  * Ruby 2.0.0-p247
  * PostgreSQL
+ * [rbenv](https://github.com/sstephenson/rbenv), optional, but recommended
+ * 3 fresh PostgreSQL databases:  
+   see http://www.postgresql.org/docs/9.2/static/app-createdb.html
+   * piecemaker2_prod
+   * piecemaker2_dev
+   * piecemaker2_test
+
 
 ## Installation for Developers
 
 ```bash
 brew install rbenv # optional, but recommended
 brew install rbenv-gemset # optional, but recommended
-
-# create PostgreSQL databases
-#  piecemaker2_prod, piecemaker2_dev, piecemaker2_test
 
 git clone https://github.com/motionbank/piecemaker2-api.git
 cd piecemaker2-api
@@ -46,36 +50,39 @@ rake db:migrate[test]
 rake spec:now
 ```
 
+
 ## Usage
 ```bash
-see rake for some commands
-$ rake
+# see rake for commands
+rake
 
-start development
-$ rake start:dev
+rake daemon[action]                  # Start|Stop production API (as deamon)
+rake db:create_super_admin[env]      # Create super admin
+rake db:export_into_file[env,table]  # Export table into file
+rake db:import_from_file[env,table]  # Import table into database
+rake db:migrate[env]                 # Run database migrations
+rake db:nuke[env]                    # Nuke the database (drop all tables)
+rake db:reset[env]                   # Reset the database (nuke & migrate & import_from_file)
+rake db:rollback[env]                # Rollback the database
+rake roles:output[env,format]        # Generate roles and permissions matrix from database (format:html|json)
+rake roles:scan_entities[verbose]    # Scan files for permission entities
+rake spec:html                       # generate nice html view
+rake spec:now                        # run tests now
+rake spec:onchange                   # watch files and run tests automatically
+rake start[env]                      # Start API with environment (prod|dev)
 
-start production
-$ rake start[production]
 
-run tests 
-   make sure that the test database in config/config.yml exists!
-   create database with http://www.postgresql.org/docs/9.2/static/app-createdb.html
-$ rake db:reset[test] && rake spec:now
-
-reset gemset
-$ rbenv gemset delete 2.0.0-p247 piecemaker-api
-$ rm Gemfile.lock
-$ gem install bundler
-$ bundle install
-
-using IRB
-$ irb
-$irb require "sequel"
-$irb ENV["RACK_ENV"] = "development"
-$irb require "./config/environment"
-$irb DB
-$irb User
+# using IRB
+irb
+ $irb require "sequel"
+ $irb ENV["RACK_ENV"] = "development"
+ $irb require "./config/environment"
+ $irb DB
+ $irb User
 ```
+
+
+
 
 ### The data
 
@@ -103,32 +110,14 @@ Date jTs = new Date( (long)( dbTs * 1000.0 ) );
 
 The duration of an event is stored in seconds, so it's safe to just add it to a timestamp to get to the "finish time" of an event.
 
-### Benchmarks
 
-Use tools like [wrk](https://github.com/wg/wrk) (```brew install wrk```) or
-[ab](http://httpd.apache.org/docs/2.2/programs/ab.html).
 
+
+## The API
+
+### Connecting to the API
 ```
-$ wrk -d30 -t5 -c1000 http://127.0.0.1:9292/api/v1/users
-$ ab -c5 -n10000 http://127.0.0.1:9292/api/v1/users
-```
-
-### Explore the API
-When running in :development mode, open http://motionbank.github.io/piecemaker2-api/swagger-ui/dist in your browser. Replace the port 9292 accordingly.
-
-Note: You can create a super admin with ```rake db:create_super_admin[env]```.
-
-
-### Monitor the API
-When running in :development mode, open http://127.0.0.1:9292/newrelic
-in your browser. For stats in production mode, sign up at 
-https://newrelic.com/ and paste your license key in ```config/config.yml```.
-
-## Connecting to the API
-
-### Authentication
-```
-Login (retrieve access token):
+Login and retrieve access token
 POST /api/v1/user/login with params email and password
      returns {api_access_key: "xzy"}
 
@@ -146,9 +135,7 @@ URL for requests is logged somewhere. To avoid spoofing in these cases, the
 email param is sent (in the body) as POST request, X-Access-Key is sent 
 in the request headers.
 
-
-### User Roles and Permissions
-
+### Roles and Permissions
 Please refer to [db/init/user_roles.sql](db/init/user_roles.sql) and
 [db/init/role_permissions.sql](db/init/role_permissions.sql) for roles
 and permissions. Keep these files up-to-date, since they will be loaded
@@ -160,7 +147,7 @@ rake db:export_into_file[test,'user_roles']
 rake db:export_into_file[test,'role_permissions']
 ```
 
-```rake db:reset[database]``` calls 
+To import ...
 ```rake db:import_from_file[test,'user_roles']``` and
 ```rake db:import_from_file[test,'role_permissions']```.
 
@@ -170,12 +157,42 @@ run ```rake roles:output[dev,html] > docs/roles.html```.
 To output all entities used in the API, run 
 ```rake roles:scan_entities[verbose]```
 
-## Development
 
- * Running only specify tests by adding ```:focus``` tag to test.
+### Monitor the API
+When running in :development mode, open http://127.0.0.1:9292/newrelic
+in your browser. For stats in :production mode, sign up at 
+https://newrelic.com/ and paste your license key in ```config/config.yml```.
+
+### Explore and learn with [Swagger](https://github.com/wordnik/swagger-core/wiki)...
+When running in :development mode, open http://motionbank.github.io/piecemaker2-api/swagger-ui/dist in your browser.
+Note: You can create a super admin with ```rake db:create_super_admin[env]```.
+
+### Benchmarks
+Use tools like [wrk](https://github.com/wg/wrk) (```brew install wrk```) or
+[ab](http://httpd.apache.org/docs/2.2/programs/ab.html).
+
+```
+$ wrk -d30 -t5 -c1000 http://127.0.0.1:9292/api/v1/users
+$ ab -c5 -n10000 http://127.0.0.1:9292/api/v1/users
+```
+
+### Run Specs
+```rake spec:now``` or ```rake spec:onchange```.
+Running only specify tests by adding ```:focus``` tag to test.
+
+### Other Developer Hints
+ 
  * Add ```binding.pry``` in your code to debug (in dev|test env).
    See https://github.com/pry/pry/ for more information.
  * Create SQL Dump: ```pg_dump -s piecemaker2_xxx > db/piecemaker2_xxx_dump.sql```
+ * Reset Gemset
+```bash
+# reset gemset
+rbenv gemset delete 2.0.0-p247 piecemaker-api
+rm Gemfile.lock
+gem install bundler
+bundle install
+```
 
 
 ## Docs
