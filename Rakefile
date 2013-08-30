@@ -38,7 +38,7 @@ namespace :spec do
 
   desc "generate nice html view"
   task :html do
-    system "rspec --format html --out rspec.html"
+    system "rspec --format html --out docs/rspec.html"
   end
 end
 

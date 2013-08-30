@@ -5,7 +5,7 @@ __... with [Grape](https://github.com/intridea/grape) on [Rack](http://rack.gith
 
 [![Build Status](https://travis-ci.org/motionbank/piecemaker2-api.png?branch=master)](https://travis-ci.org/motionbank/piecemaker2-api)  
 
-[RSpec status](http://htmlpreview.github.io/?https://raw.github.com/motionbank/piecemaker2-api/master/rspec.html)
+[RSpec status](http://htmlpreview.github.io/?https://raw.github.com/motionbank/piecemaker2-api/master/docs/rspec.html)
 
 
 ## Download for Users
