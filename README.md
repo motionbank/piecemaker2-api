@@ -71,7 +71,6 @@ rake spec:now                        # run tests now
 rake spec:onchange                   # watch files and run tests automatically
 rake start[env]                      # Start API with environment (prod|dev)
 
-
 # using IRB
 irb
  $irb require "sequel"
@@ -181,7 +180,8 @@ to a timestamp to get to the "finish time" of an event.
  * Add ```binding.pry``` in your code to debug (in dev|test env).
    See https://github.com/pry/pry/ for more information.
  * Create SQL Dump: ```pg_dump -s piecemaker2_xxx > db/piecemaker2_xxx_dump.sql```
- * Reset Gemset  
+
+__Reset Gemset__
 ```bash
 # reset gemset
 rbenv gemset delete 2.0.0-p247 piecemaker-api
