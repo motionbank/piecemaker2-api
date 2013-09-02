@@ -5,6 +5,7 @@ require File.expand_path('../config/environment', __FILE__)
 if ENV['ENABLE_NEWRELIC']
   puts "Loading NewRelic ..."
   if ENV['NEW_RELIC_LICENSE_KEY']
+    require 'newrelic_rpm'
     require 'new_relic/rack/developer_mode'
     use NewRelic::Rack::DeveloperMode
     NewRelic::Agent.manual_start
