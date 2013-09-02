@@ -227,7 +227,8 @@ module Piecemaker
         else
           # no further field conditions ...
           @events.each do |event|
-            @return_events << { :event => event, 
+            @return_events << { 
+              :event => event, 
               :fields => @event_fields[event.id] || [] }
           end
         end
