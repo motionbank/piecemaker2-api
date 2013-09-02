@@ -1,4 +1,7 @@
 class ApiNewRelicInstrumenter < Grape::Middleware::Base
+
+  # see http://artsy.github.io/blog/2012/11/29/measuring-performance-in-grape-apis-with-new-relic/
+  # see https://gist.github.com/dblock/4170469
   include NewRelic::Agent::Instrumentation::ControllerInstrumentation
  
   def call_with_newrelic(&block)
@@ -17,7 +20,6 @@ class ApiNewRelicInstrumenter < Grape::Middleware::Base
  
   def call(env)
     @env = env
-    #if ENV['NEW_RELIC_ID']
     if ENV['ENABLE_NEWRELIC']
       call_with_newrelic do
         super
@@ -43,8 +45,8 @@ class ApiNewRelicInstrumenter < Grape::Middleware::Base
     path = route.route_path.gsub(/^.+:version\/|^\/|:|\(.+\)/, '').tr('/', '-')
     "api.#{route.route_version}.#{path}"
   end
- 
 end
+
 
 module Piecemaker
   class API < Grape::API

@@ -10,6 +10,8 @@ production:
   username  : XXX
   password  : XXX
   max_connections: 4
+  newrelic_monitor: false
+  newrelic_developer: false
 
 development:
   adapter   : postgres
@@ -19,6 +21,8 @@ development:
   username  : XXX
   password  : XXX
   max_connections: 4
+  newrelic_monitor: false
+  newrelic_developer: true
 
 test:
   adapter   : postgres
@@ -28,3 +32,5 @@ test:
   username  : XXX
   password  : XXX
   max_connections: 4
+  newrelic_monitor: false
+  newrelic_developer: false

@@ -18,19 +18,26 @@ end
 
 
 
-unless ENV['ON_HEROKU']
-  CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
-
-  ENV['ENABLE_NEWRELIC'] = CONFIG["enable_newrelic"].to_s
-  ENV['NEW_RELIC_LICENSE_KEY'] = CONFIG["newrelic_license_key"]
-else
+if ENV['ON_HEROKU']
   CONFIG = Hash.new
+else
+  CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
+  ENV['ENABLE_NEWRELIC'] = CONFIG["enable_newrelic"].to_s
+  ENV['NEWRELIC_LICENSE_KEY'] = CONFIG["newrelic_license_key"]
+
+  ENV['NEWRELIC_MONITOR'] = CONFIG[ENV['RACK_ENV'].to_s]["newrelic_monitor"].to_s
+  ENV['NEWRELIC_DEVELOPER'] = CONFIG[ENV['RACK_ENV'].to_s]["newrelic_developer"].to_s
 end
 
 ENV['RACK_ENV'] ||= "production"
-ENV["NEW_RELIC_APP_NAME"] = "Piecemaker API"
 ENV['ENABLE_NEWRELIC'] ||= 0
-ENV['NEW_RELIC_LICENSE_KEY'] ||= nil
+ENV['NEWRELIC_LICENSE_KEY'] ||= nil
+
+ENV['NEWRELIC_MONITOR'] = 'false' if ENV['NEWRELIC_MONITOR'].nil?
+ENV['NEWRELIC_DEVELOPER'] = 'false' if ENV['NEWRELIC_DEVELOPER'].nil?
+
+
+ENV["NEWRELIC_APP_NAME"] = "Piecemaker API"
 
 
 begin
@@ -54,3 +61,5 @@ end
 
 
 require File.expand_path('../application', __FILE__)
+
+

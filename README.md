@@ -127,9 +127,10 @@ To output all entities used in the API, run
 
 
 ### Monitor the API
-When running in :development mode, open http://127.0.0.1:9292/newrelic
-in your browser. For stats in :production mode, sign up at 
-https://newrelic.com/ and paste your license key in ```config/config.yml```.
+Enable [NewRelic](https://newrelic.com) support in ```config/config.yml```. A license key is needed
+when newrelic_monitor is true only.  
+Set newrelic_developer to true and go to http://127.0.0.1:9292/newrelic for
+performance stats.
 
 ### Explore and learn with [Swagger](https://github.com/wordnik/swagger-core/wiki)...
 When running in :development mode, open http://motionbank.github.io/piecemaker2-api/swagger-ui/dist in your browser.
@@ -174,6 +175,22 @@ Date jTs = new Date( (long)( dbTs * 1000.0 ) );
 The duration of an event is stored in seconds, so it's safe to just add it 
 to a timestamp to get to the "finish time" of an event.
 
+### ENV variables
+```
+RACK_ENV = production|development
+
+optional...
+ENABLE_NEWRELIC = true|false
+NEWRELIC_LICENSE_KEY = key
+NEWRELIC_MONITOR = true|false
+NEWRELIC_DEVELOPER = true|false
+
+ON_HEROKU
+  DATABASE_URL
+
+
+
+```
 
 ### Other Developer Hints
  

@@ -16,26 +16,28 @@ use Rack::Deflater
 use Rack::Cors do
   allow do
     origins '*'
-    resource '*', :headers => :any, :methods => [:get, :post, :put, :delete, :options]
+    resource '*', :headers => :any, 
+      :methods => [:get, :post, :put, :delete, :options]
   end
 end
-
 
 
 if ENV['ENABLE_NEWRELIC']
   puts "Loading NewRelic ..."
-  if ENV['NEW_RELIC_LICENSE_KEY']
-    require 'newrelic_rpm'
-    require 'new_relic/rack/developer_mode'
-    
-    use NewRelic::Rack::DeveloperMode
-    NewRelic::Agent.manual_start
-  else
-    puts "Missing NewRelic license key in config" 
+  require 'newrelic_rpm'
+  require 'new_relic/rack/developer_mode'
+
+  puts "NewRelic Developer Mode: " + ENV["NEWRELIC_DEVELOPER"]
+  puts "NewRelic Monitor Mode: " + ENV["NEWRELIC_MONITOR"]
+
+  if ENV["NEWRELIC_MONITOR"] and not ENV['NEWRELIC_LICENSE_KEY']
+    puts "Error: Missing NewRelic license key in config!" 
   end
+
+  use NewRelic::Rack::DeveloperMode
+  NewRelic::Agent.manual_start
 end
 
 
 run Piecemaker::API
-
 
