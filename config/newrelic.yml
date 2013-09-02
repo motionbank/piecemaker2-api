@@ -245,6 +245,7 @@ test:
 production:
   <<: *default_settings
   monitor_mode: true
+  developer_mode: true
 
 # Many applications have a staging environment which behaves
 # identically to production.  Support for that environment is provided
