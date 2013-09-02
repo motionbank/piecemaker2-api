@@ -62,9 +62,6 @@ GEM
     newrelic-grape (1.3.1)
       grape
       newrelic_rpm
-    newrelic-sequel (0.0.5)
-      newrelic_rpm (~> 3.0)
-      sequel (> 3.22)
     newrelic_rpm (3.6.5.130)
     pg (0.15.1)
     pry (0.9.12.2)
@@ -124,7 +121,6 @@ DEPENDENCIES
   guard-rake (~> 0.0.9)
   json (~> 1.7.7)
   newrelic-grape (~> 1.3.1)
-  newrelic-sequel (~> 0.0.5)
   newrelic_rpm (~> 3.6.5.130)
   pg (~> 0.15.1)
   pry (~> 0.9.12.2)
