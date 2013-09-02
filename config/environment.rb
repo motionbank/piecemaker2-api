@@ -1,21 +1,6 @@
 require "sequel"
 require 'yaml'
-
 require File.expand_path('../../lib/helper', __FILE__)
-
-# @todo move this somewhere else!!
-module Sequel
-  class Model
-    def update_with_params!(params, *attributes)
-      attributes.each do |key, value|
-        if params.include?(key)
-          self[key] = params[key]
-        end
-      end
-    end
-  end
-end
-
 
 
 if ENV['ON_HEROKU']

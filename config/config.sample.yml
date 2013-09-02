@@ -1,4 +1,5 @@
 # go to https://newrelic.com, sign up and get your license key
+# license key is only needed, when newrelic_monitor is true
 enable_newrelic: false
 newrelic_license_key:
 

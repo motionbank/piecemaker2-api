@@ -3,15 +3,10 @@ source "http://rubygems.org"
 gem "rack", "~> 1.4.1"
 gem "grape", "~> 0.5.0"
 gem "json", "~> 1.7.7"
-
 gem "newrelic_rpm", "~> 3.6.5.130"
 gem "newrelic-grape", "~> 1.3.1"
-
-
 gem "rack-cors", "~> 0.2.8"
 gem "grape-swagger", "~> 0.6.0"
-
-
 gem "sequel", "~> 4.0.0"
 gem "pg", "~> 0.15.1"
 

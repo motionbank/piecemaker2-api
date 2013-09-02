@@ -1,3 +1,16 @@
+module Sequel
+  class Model
+    def update_with_params!(params, *attributes)
+      attributes.each do |key, value|
+        if params.include?(key)
+          self[key] = params[key]
+        end
+      end
+    end
+  end
+end
+
+
 module Piecemaker
   module Helper
 
