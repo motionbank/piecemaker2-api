@@ -191,28 +191,22 @@ module Piecemaker
         where << ['utc_timestamp >= ?', params[:from]] if params[:from]
         where << ['utc_timestamp <= ?', params[:to]] if params[:to]
 
+        # load event
         @events = Event.where( where )
 
+        # load all event fields (for all events) in one query
+        @event_fields = EventField
+          .where(:event_id => @events.map{|event| event.id})
+          .to_hash_groups(:event_id, nil)
+        
         @return_events = []
         if params[:fields]
           # futher field conditions to check ...
-
-          all_event_ids = []
-          @events.each do |event|
-            all_event_ids << event.id
-          end
-
-          @event_fields = EventField.where(:event_id => all_event_ids)
-          @event_fields = @event_fields.to_hash_groups(:event_id, nil)
-
           @events.each do |event|
 
-            # get all event fields for this event
-            #@event_fields = EventField.where(
-            #  :event_id => event.id)
-            # _event_fields = @event_fields.to_hash(:id, :value)
-            
+            # get event fields for this event
             _event_fields = @event_fields[event.id].to_hash(:id, :value)
+
             # verify that field conditions apply ...
             counter = 0
             params[:fields].each do |id, value|
@@ -226,32 +220,20 @@ module Piecemaker
             if counter == params[:fields].length
               @return_events << { 
                 :event => event, 
-                :fields => @event_fields }
+                :fields => @event_fields || [] }
             end
-
-            # free space
-            @events, @event_fields, _event_fields = nil
           end
 
         else
           # no further field conditions ...
-
-          all_event_ids = []
-          @events.each do |event|
-            all_event_ids << event.id
-          end
-
-          @event_fields = EventField.where(:event_id => all_event_ids)
-          @event_fields = @event_fields.to_hash_groups(:event_id, nil)
-
           @events.each do |event|
             @return_events << { :event => event, 
               :fields => @event_fields[event.id] || [] }
           end
-
-          # free space
-          @events, @event_fields, all_event_ids = nil
         end
+
+        # free memory
+        @events, @event_fields = nil
 
         return @return_events
       end
