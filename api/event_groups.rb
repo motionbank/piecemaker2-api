@@ -197,13 +197,22 @@ module Piecemaker
         if params[:fields]
           # futher field conditions to check ...
 
+          all_event_ids = []
+          @events.each do |event|
+            all_event_ids << event.id
+          end
+
+          @event_fields = EventField.where(:event_id => all_event_ids)
+          @event_fields = @event_fields.to_hash_groups(:event_id, nil)
+
           @events.each do |event|
 
             # get all event fields for this event
-            @event_fields = EventField.where(
-              :event_id => event.id)
-            _event_fields = @event_fields.to_hash(:id, :value)
+            #@event_fields = EventField.where(
+            #  :event_id => event.id)
+            # _event_fields = @event_fields.to_hash(:id, :value)
             
+            _event_fields = @event_fields[event.id].to_hash(:id, :value)
             # verify that field conditions apply ...
             counter = 0
             params[:fields].each do |id, value|
