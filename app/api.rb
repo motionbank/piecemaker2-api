@@ -34,6 +34,10 @@ module Piecemaker
     if ENV['RACK_ENV'].to_sym == :development
       add_swagger_documentation api_version: 'v1'
     end
+
+    if ENV['ENABLE_NEWRELIC']
+      extend NewRelic::Agent::Instrumentation::Rack
+    end
     
   end
 end
