@@ -10,26 +10,8 @@ if ENV['ENABLE_NEWRELIC']
   if ENV['NEW_RELIC_LICENSE_KEY']
     require 'newrelic_rpm'
     require 'new_relic/rack/developer_mode'
-
-
-    class ApiNewRelicInstrumenter < Grape::Middleware::Base
-      include NewRelic::Agent::Instrumentation::ControllerInstrumentation
-
-      def call(env)
-
-        trace_options = {
-          category: :rack,
-          path: env['api.endpoint'].routes.first.route_path,
-          request: request }
-
-        perform_action_with_newrelic_trace(trace_options) do
-          yield
-        end
-
-      end
-    end
-
-    use ApiNewRelicInstrumenter
+    
+    use NewRelic::Rack::DeveloperMode
     NewRelic::Agent.manual_start
   else
     puts "Missing NewRelic license key in config" 
