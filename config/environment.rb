@@ -16,15 +16,19 @@ module Sequel
   end
 end
 
-CONFIG = Hash.new
+
 
 unless ENV['ON_HEROKU']
   CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
+else
+  CONFIG = Hash.new
 end
 
 ENV['RACK_ENV'] ||= "production"
-ENV['NEW_RELIC_LICENSE_KEY'] = CONFIG["newrelic_license_key"] || 'XXXXXX'
+ENV['ENABLE_NEWRELIC'] = CONFIG["enable_newrelic"].to_s
+ENV['NEW_RELIC_LICENSE_KEY'] = CONFIG["newrelic_license_key"] || nil
 ENV["NEW_RELIC_APP_NAME"] = "Piecemaker API"
+
 
 begin
   if ENV['ON_HEROKU']

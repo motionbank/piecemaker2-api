@@ -1,5 +1,5 @@
 # go to https://newrelic.com, sign up and get your license key
-# leave empty to disable newrelic monitor support
+enable_newrelic: false
 newrelic_license_key:
 
 production:
