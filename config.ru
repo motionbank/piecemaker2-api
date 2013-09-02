@@ -7,12 +7,13 @@ if ENV['ENABLE_NEWRELIC']
   if ENV['NEW_RELIC_LICENSE_KEY']
     require 'new_relic/rack/developer_mode'
     use NewRelic::Rack::DeveloperMode
+    NewRelic::Agent.manual_start
   else
     puts "Missing NewRelic license key in config" 
   end
 end
 
-NewRelic::Agent.manual_start
+
 
 use Rack::Deflater
 
