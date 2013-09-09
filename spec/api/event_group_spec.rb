@@ -349,7 +349,7 @@ describe "Piecemaker::API EventGroup" do
 
   ##############################################################################
   describe "GET /api/v1/group/:id/events" +
-           "?field[key]=value" do
+           "?fields[key]=value" do
   ##############################################################################
    
     #---------------------------------------------------------------------------
@@ -377,8 +377,8 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/group/#{@alpha.id}/events?type=big" + 
-          "&field[flag1]=getting%20back%20to%20the%20dolphin%20thing" +
-          "&field[z]=flag%20with%20id%20z"
+          "&fields[flag1]=getting%20back%20to%20the%20dolphin%20thing" +
+          "&fields[z]=flag%20with%20id%20z"
       last_response.status.should == 200
 
       results       = json_string_to_hash(last_response.body)
