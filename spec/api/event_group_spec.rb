@@ -193,7 +193,12 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
 
     it "assigns admin-like role to owner of event group" do
-      pending "waiting for role definitions (what is an admin-like role?)"
+      header "X-Access-Key", @hans_admin.api_access_key
+      post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
+      last_response.status.should == 201
+
+      returned_omega = json_parse(last_response.body)
+      returned_omega[:user_role_id].should == "group_admin"
     end
 
   end
