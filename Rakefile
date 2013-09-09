@@ -131,23 +131,28 @@ end
 
 namespace :db do
   desc "Create super admin"
-  task :create_super_admin, :env do |cmd, args|
+  task :create_super_admin, :env, :username do |cmd, args|
     env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
 
     require "Digest"
     api_access_key = Piecemaker::Helper::API_Access_Key::generate
     time_now = Time.now.to_i
+
+    name = args[:username] || "Super Admin"
+    email = args[:username] || "super-admin-#{time_now}@example.com"
+    password = args[:username] || "super-admin-#{time_now}"
+
     DB[:users].insert(
-      :name => "Super Admin", 
-      :email => "super-admin-#{time_now}@example.com",
-      :password => Digest::SHA1.hexdigest("super-admin-#{time_now}"),
+      :name => name, 
+      :email => email,
+      :password => Digest::SHA1.hexdigest(password),
       :api_access_key => api_access_key,
       :is_super_admin => true)
 
     puts ""
-    puts "Email   : super-admin-#{time_now}@example.com"
-    puts "Password: super-admin-#{time_now}"
+    puts "Email   : #{email}"
+    puts "Password: #{password}"
     puts ""
     puts "A fresh API Access Key has been generated '#{api_access_key}'."
     puts "Please note that this key will change the next time this user logs in."
