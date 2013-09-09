@@ -198,7 +198,10 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 201
 
       returned_omega = json_parse(last_response.body)
-      returned_omega[:user_role_id].should == "group_admin"
+      UserHasEventGroup.first(
+        :user_id => @hans_admin.id, 
+        :event_group_id => returned_omega[:id],
+        :user_role_id => "group_admin").should_not eq(nil)
     end
 
   end

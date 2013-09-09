@@ -7,7 +7,7 @@ describe "Piecemaker::API UserRole" do
   end
 
   before(:each) do
-    truncate_db
+    truncate_db(false)
 
     factory_batch do 
       @hans_admin          = User.make :hans_admin

@@ -93,8 +93,8 @@ module Piecemaker
         UserHasEventGroup.unrestrict_primary_key
         UserHasEventGroup.create(
           :user_id => @_user.id,
-          :event_group_id => @event_group.id)
-          # @todo add "admin" role 
+          :event_group_id => @event_group.id,
+          :user_role_id => "group_admin")
 
         return @event_group
       end

@@ -11,15 +11,29 @@ Dir[File.expand_path('../../spec/factories/*.rb', __FILE__)].each do |f|
 end
 
 
-def truncate_db
+def truncate_db(init_with_defaults_after_truncate=true)
   DB.tables.each do |table|
     DB[table].truncate(:cascade => true)
   end
+
+  if init_with_defaults_after_truncate
+    DB.run("COPY user_roles FROM '#{File.expand_path("../../db/init", __FILE__)}/user_roles.sql' WITH CSV HEADER")
+    DB.run("COPY role_permissions FROM '#{File.expand_path("../../db/init", __FILE__)}/role_permissions.sql' WITH CSV HEADER")
+  end
 end
 
-def truncate_table(table)
+def truncate_table(table, init_with_defaults_after_truncate=true)
   if table
     DB[table].truncate(:cascade => true)
+  end
+
+  if init_with_defaults_after_truncate
+    case table
+    when "user_roles"
+      DB.run("COPY user_roles FROM '#{File.expand_path("../../db/init", __FILE__)}/user_roles.sql' WITH CSV HEADER")
+    when "role_permissions"
+      DB.run("COPY role_permissions FROM '#{File.expand_path("../../db/init", __FILE__)}/role_permissions.sql' WITH CSV HEADER")
+    end
   end
 end
 
