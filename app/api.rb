@@ -64,7 +64,8 @@ module Piecemaker
     rescue_from :all do |e|
       
       # @todo implement logging
-      $stderr.puts e if ["development"].include?(ENV['RACK_ENV'])
+      $stderr.puts e if ["development", "test"].include?(ENV['RACK_ENV'])
+      # raise e if ["test"].include?(ENV['RACK_ENV'])
 
       Rack::Response.new({
           'status' => 500,

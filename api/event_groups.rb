@@ -173,7 +173,7 @@ module Piecemaker
         optional :from, type: Float, desc: ">= utc_timestamp"
         optional :to, type: Float, desc: "<= utc_timestamp"
         optional :type, type: String, desc: "event type "
-        optional :fields, type: Hash, desc: "filter by event field key"
+        optional :field, type: Hash, desc: "filter by event field key"
       end
       #-------------------------------------------------------------------------
       get "/:id/events" do  #/api/v1/group/:id/events
@@ -200,27 +200,37 @@ module Piecemaker
           .to_hash_groups(:event_id, nil)
         
         @return_events = []
-        if params[:fields]
+        if params[:field]
           # futher field conditions to check ...
           @events.each do |event|
-
-            # get event fields for this event
-            _event_fields = @event_fields[event.id].to_hash(:id, :value)
+            # puts @event_fields[event.id].inspect
+            # # get event fields for this event
+            # if @event_fields[event.id]
+            #   _event_fields = @event_fields[event.id].to_hash(:id, :value)
+            # else
+            #   _event_fields = {}
+            # end
 
             # verify that field conditions apply ...
             counter = 0
-            params[:fields].each do |id, value|
-              if _event_fields.has_key?(id) && _event_fields[id] == value
-                counter += 1
+
+            params[:field].each do |id, value|
+
+              @event_fields[event.id].each do |_event_field|
+                # puts _event_fields.inspect
+                # if _event_fields.has_key?(id) && _event_fields[id] == value
+                if _event_field.id == id && _event_field.value == value
+                  counter += 1
+                end
               end
             end
 
             # if all conditions are true, return this event 
             # (with its event fields)
-            if counter == params[:fields].length
+            if counter == params[:field].length
               @return_events << { 
                 :event => event, 
-                :fields => @event_fields || [] }
+                :fields => @event_fields[event.id] || [] }
             end
           end
 
