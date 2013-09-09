@@ -203,23 +203,12 @@ module Piecemaker
         if params[:fields]
           # futher field conditions to check ...
           @events.each do |event|
-            # puts @event_fields[event.id].inspect
-            # # get event fields for this event
-            # if @event_fields[event.id]
-            #   _event_fields = @event_fields[event.id].to_hash(:id, :value)
-            # else
-            #   _event_fields = {}
-            # end
 
             # verify that field conditions apply ...
             counter = 0
-
             params[:fields].each do |id, value|
-
-              @event_fields[event.id].each do |_event_field|
-                # puts _event_fields.inspect
-                # if _event_fields.has_key?(id) && _event_fields[id] == value
-                if _event_field.id == id && _event_field.value == value
+              @event_fields[event.id].each do |event_field|
+                if event_field.id == id && event_field.value == value
                   counter += 1
                 end
               end
