@@ -328,8 +328,8 @@ module Piecemaker
         @user_has_event_group.save
 
         # @todo
-        # check if there is at least one guy with "delete_event_group" 
-        # permission in the event group
+        # check if there is at least one guy with "group_admin" 
+        # role in the event group
       end
 
 
@@ -361,8 +361,8 @@ module Piecemaker
         {:status => true}
 
         # @todo
-        # check if there is at least one guy with "delete_event_group" 
-        # permission in the event group
+        # check if there is at least one guy with "group_admin" 
+        # role in the event group
       end
 
     end

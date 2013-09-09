@@ -558,8 +558,8 @@ describe "Piecemaker::API EventGroup" do
 
 
     #---------------------------------------------------------------------------
-    it "fails to update (the user_role_id) the user if he is the " + 
-       "only one left with delete_event_group permissions" do
+    it "fails to update (the user_role_id) if the user is the " + 
+       "only one left with group_admin role" do
     #---------------------------------------------------------------------------
       pending "no test yet"
     end
@@ -589,7 +589,7 @@ describe "Piecemaker::API EventGroup" do
 
     #---------------------------------------------------------------------------
     it "fails to delete the user if he is the only one left " +
-       " with delete_event_group permissions" do
+       " with group_admin role" do
     #---------------------------------------------------------------------------
       pending "no test yet"
     end
