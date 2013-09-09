@@ -283,7 +283,7 @@ describe "Piecemaker::API EventGroup" do
         }, 
         {
           :event => @small_in_alpha.values,
-          :fields => []
+          :fields => [@small_event_field.values]
         }
       ]
     end
@@ -339,7 +339,7 @@ describe "Piecemaker::API EventGroup" do
       results.should =~ [
         {
           :event => @small_in_alpha.values, 
-          :fields => []
+          :fields => [@small_event_field.values]
         }
       ]
     end
