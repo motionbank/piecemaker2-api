@@ -32,15 +32,18 @@ describe "Piecemaker::API EventGroup" do
 
       @pan_has_event_group_alpha  = UserHasEventGroup.make :default,  
                                 :user_id => @pan.id, 
-                                :event_group_id => @alpha.id
+                                :event_group_id => @alpha.id,
+                                :user_role_id => "group_admin"
 
       @pan_has_event_group_beta  = UserHasEventGroup.make :default,  
                                 :user_id => @pan.id, 
-                                :event_group_id => @beta.id
+                                :event_group_id => @beta.id,
+                                :user_role_id => "group_admin"
 
       @hans_has_event_group = UserHasEventGroup.make :default,  
                                 :user_id => @hans_admin.id, 
-                                :event_group_id => @alpha.id
+                                :event_group_id => @alpha.id,
+                                :user_role_id => "group_admin"
 
       @flag1_field          = EventField.make :flag1,
                                 :event_id => @big_in_alpha.id
@@ -541,7 +544,7 @@ describe "Piecemaker::API EventGroup" do
         :event_group_id => @alpha.id)
 
       @user_has_event_group.should_not eq(nil)
-      @user_has_event_group.user_role_id.should eq(nil)
+      @user_has_event_group.user_role_id.should eq("group_admin")
     end
     #---------------------------------------------------------------------------
 

@@ -323,13 +323,19 @@ module Piecemaker
           :event_group_id => params[:event_group_id])
         error!('Relation not found', 404) unless @user_has_event_group
         
-        @user_has_event_group.update_with_params!(params, :user_role_id)
-
-        @user_has_event_group.save
-
-        # @todo
         # check if there is at least one guy with "group_admin" 
         # role in the event group
+        if params[:user_role_id] && params[:user_role_id] != "group_admin"
+          group_admins_count = UserHasEventGroup.where(
+            :event_group_id => params[:event_group_id],
+            :user_role_id => "group_admin").count
+          unless group_admins_count >= 1
+            error!('Every event group needs at least one group admin', 409) 
+          end
+        end
+
+        @user_has_event_group.update_with_params!(params, :user_role_id)
+        @user_has_event_group.save
       end
 
 
@@ -352,6 +358,16 @@ module Piecemaker
 
         @user = User.first(:id => params[:user_id])
         error!('User not found', 404) unless @user
+
+        # check if there is at least one guy with "group_admin" 
+        # role in the event group
+        group_admins_count = UserHasEventGroup.where(
+          :event_group_id => params[:event_group_id],
+          :user_role_id => "group_admin").count
+        unless group_admins_count >= 1
+          
+          error!('Every event group needs at least one group admin', 409) 
+        end
         
         @record = UserHasEventGroup.first(:user_id => params[:user_id],
           :event_group_id => params[:event_group_id])
@@ -359,10 +375,6 @@ module Piecemaker
         @record.delete if @record
 
         {:status => true}
-
-        # @todo
-        # check if there is at least one guy with "group_admin" 
-        # role in the event group
       end
 
     end
