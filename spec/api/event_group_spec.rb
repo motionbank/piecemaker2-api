@@ -257,14 +257,6 @@ describe "Piecemaker::API EventGroup" do
       EventGroup.first(:id => @alpha.id).should eq(nil)
     end
     #---------------------------------------------------------------------------
-
-    #---------------------------------------------------------------------------
-    it "make sure there is at least ony user that has delete permissions" +
-       " before deleting" do
-    #---------------------------------------------------------------------------
-      pending "waiting for role definitions"
-    end
-    #---------------------------------------------------------------------------
   end
 
 
@@ -563,6 +555,15 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 404
     end
     #---------------------------------------------------------------------------
+
+
+    #---------------------------------------------------------------------------
+    it "fails to update (the user_role_id) the user if he is the " + 
+       "only one left with delete_event_group permissions" do
+    #---------------------------------------------------------------------------
+      pending "no test yet"
+    end
+    #---------------------------------------------------------------------------
   end
 
 
@@ -583,6 +584,14 @@ describe "Piecemaker::API EventGroup" do
 
       UserHasEventGroup.first(:user_id => @peter.id, 
         :event_group_id => @alpha.id).should eq(nil)
+    end
+    #---------------------------------------------------------------------------
+
+    #---------------------------------------------------------------------------
+    it "fails to delete the user if he is the only one left " +
+       " with delete_event_group permissions" do
+    #---------------------------------------------------------------------------
+      pending "no test yet"
     end
     #---------------------------------------------------------------------------
   end
