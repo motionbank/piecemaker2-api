@@ -27,6 +27,9 @@ describe "Piecemaker::API EventGroup" do
       @small_in_alpha       = Event.make :small, 
                                 :event_group_id => @alpha.id
 
+      @small_event_field    = EventField.make :flag1,
+                                :event_id => @small_in_alpha.id
+
       @pan_has_event_group_alpha  = UserHasEventGroup.make :default,  
                                 :user_id => @pan.id, 
                                 :event_group_id => @alpha.id
