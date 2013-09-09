@@ -174,6 +174,7 @@ module Piecemaker
         optional :to, type: Float, desc: "<= utc_timestamp"
         optional :type, type: String, desc: "event type "
         optional :fields, type: Hash, desc: "filter by event field key"
+        optional :count_only, type: Boolean, desc: "return count of events only"
       end
       #-------------------------------------------------------------------------
       get "/:id/events" do  #/api/v1/group/:id/events
@@ -235,7 +236,11 @@ module Piecemaker
         # free memory
         @events, @event_fields = nil
 
-        return @return_events
+        if params[:count_only]
+          return {"count" => @return_events.count}
+        else
+          return @return_events
+        end
       end
       
 

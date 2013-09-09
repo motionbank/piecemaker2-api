@@ -289,6 +289,23 @@ describe "Piecemaker::API EventGroup" do
     end
     #---------------------------------------------------------------------------
 
+
+    #---------------------------------------------------------------------------
+    it "returns the event counter only" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/group/#{@alpha.id}/events?count_only=true"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+      results.should_not eq([])
+      results.should_not eq(nil)
+
+      results.should == {:count => 2}
+    end
+    #---------------------------------------------------------------------------
+
+
     #---------------------------------------------------------------------------
     it "fails if the events are not ordered by utc_timestamp ASC" do
     #---------------------------------------------------------------------------
