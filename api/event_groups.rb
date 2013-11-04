@@ -207,9 +207,11 @@ module Piecemaker
             # verify that field conditions apply ...
             counter = 0
             params[:fields].each do |id, value|
-              @event_fields[event.id].each do |event_field|
-                if event_field.id == id && event_field.value == value
-                  counter += 1
+              if @event_fields[event.id]
+                @event_fields[event.id].each do |event_field|
+                  if event_field.id == id && event_field.value == value
+                    counter += 1
+                  end
                 end
               end
             end
