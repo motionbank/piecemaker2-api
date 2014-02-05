@@ -64,7 +64,7 @@ module Piecemaker
               @role_permission = Piecemaker::Helper::Auth::\
                 get_permission_recursively(user_role_id, entity)
 
-              error!('Forbidden', 403)  unless @role_permission
+              error!('Forbidden', 403) unless @role_permission
 
               if @role_permission.permission == "allow"
                 # okay, come in!
