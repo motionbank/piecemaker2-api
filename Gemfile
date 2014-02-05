@@ -15,7 +15,7 @@ gem 'rack-ssl-enforcer', "~> 0.2.5", :require => 'rack/ssl-enforcer'
 gem "thin", "~> 1.5.1"
 
 
-group :development do
+#group :development do
   gem "rake", "~> 10.1.0"
   gem "guard", "~> 1.6.1"
   gem "guard-bundler", "~> 1.0.0"
@@ -23,14 +23,14 @@ group :development do
   gem "guard-rake", "~> 0.0.9"
 
   gem "pry", "~> 0.9.12.2"
-end
+#end
 
-group :test do
+#group :test do
   gem "rspec"
   gem "rack-test", "~> 0.6.2"
   gem "sequel-factory", "~> 1.0.0"
 
   gem "pry", "~> 0.9.12.2"
-end
+#end
 
 ruby "2.0.0"
