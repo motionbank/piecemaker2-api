@@ -25,8 +25,9 @@ group :development do
   gem "pry", "~> 0.9.12.2"
 end
 
+gem "rspec"
+
 group :test do
-  gem "rspec"
   gem "rack-test", "~> 0.6.2"
   gem "sequel-factory", "~> 1.0.0"
 
