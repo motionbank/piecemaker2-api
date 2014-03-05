@@ -3,8 +3,8 @@ rvm:
   - 2.0.0-p247
 script: rspec
 services: postgresql
-before_install:
- - "rm Gemfile.lock"
+# before_install:
+#  - "rm Gemfile.lock"
 before_script: 
  - "psql -c 'create database piecemaker2_test;' -U postgres"
  - "cp config/config.sample.yml config/config.yml"
