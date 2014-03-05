@@ -11,4 +11,4 @@ before_script:
  - "sed -i 's/username  : XXX/username  : postgres/g' config/config.yml" 
  - "sed -i 's/password  : XXX/password  : /g' config/config.yml" 
  - "cat config/config.yml" 
- - "rake db:migrate[test]"
+ - "bundle exec rake db:migrate[test]"
