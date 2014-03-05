@@ -395,7 +395,7 @@ namespace :roles do
           end
           puts "</tbody>"
 
-        puts "</table"
+        puts "</table>"
       puts "</body>"
       puts "</html>"
 
