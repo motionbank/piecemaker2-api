@@ -190,9 +190,6 @@ NEWRELIC_DEVELOPER = true|false
 
 ON_HEROKU
   DATABASE_URL
-
-
-
 ```
 
 ### Other Developer Hints
