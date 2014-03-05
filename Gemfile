@@ -8,7 +8,7 @@ gem "newrelic-grape", "~> 1.3.1"
 gem "rack-cors", "~> 0.2.8"
 gem "grape-swagger", "~> 0.6.0"
 gem "sequel", "~> 4.0.0"
-gem "pg", "~> 0.15.1"
+gem "pg", "~> 0.15.1" # requires libpq-fe.h (brew install postgres)
 
 gem 'rack-ssl-enforcer', "~> 0.2.5", :require => 'rack/ssl-enforcer'
 
