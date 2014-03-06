@@ -89,11 +89,13 @@ end
 
 module Sequel
   class Dataset
+    
     # convert dataset values to Hash
     # @todo consider looping over all dataset elements and calling
     # this sequel json plugin on them. however, this works as well
     # but its not very nice.
     def all_values
+
       # @todo haha ... this is bad! 
       # converting to_json and then parsing it again!
       # there must be a better way!!!!
