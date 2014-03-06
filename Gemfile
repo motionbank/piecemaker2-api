@@ -22,7 +22,7 @@ gem "thin", "~> 1.5.1"
   gem "guard-rack", "~> 1.2.2"
   gem "guard-rake", "~> 0.0.9"
 
-  gem "pry", "~> 0.9.12.2"
+  # gem "pry", "~> 0.9.12.2"
 #end
 
 #group :test do
