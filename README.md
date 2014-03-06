@@ -19,10 +19,13 @@ a pre-compiled Mac OS X .app package.
  * PostgreSQL
  * [rbenv](https://github.com/sstephenson/rbenv), optional, but recommended
  * 3 fresh PostgreSQL databases:  
-   see http://www.postgresql.org/docs/9.2/static/app-createdb.html
+   see http://www.postgresql.org/docs/9.2/static/app-createdb.html and 
+   https://gist.github.com/mattes/9374499
    * piecemaker2_prod
    * piecemaker2_dev
    * piecemaker2_test
+
+
 
 
 ## Installation for Developers
@@ -187,9 +190,6 @@ NEWRELIC_DEVELOPER = true|false
 
 ON_HEROKU
   DATABASE_URL
-
-
-
 ```
 
 ### Other Developer Hints

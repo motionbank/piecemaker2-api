@@ -3,7 +3,6 @@
 .bundle
 log/*
 !log/.gitkeep
-Gemfile.lock
 *.pid
 
 vendor

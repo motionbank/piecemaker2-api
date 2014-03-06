@@ -1,14 +1,12 @@
 language: ruby
 rvm:
   - 2.0.0-p247
-script: rspec
+script: bundle exec rspec
 services: postgresql
-before_install:
- - "rm Gemfile.lock"
 before_script: 
  - "psql -c 'create database piecemaker2_test;' -U postgres"
  - "cp config/config.sample.yml config/config.yml"
  - "sed -i 's/username  : XXX/username  : postgres/g' config/config.yml" 
  - "sed -i 's/password  : XXX/password  : /g' config/config.yml" 
  - "cat config/config.yml" 
- - "rake db:migrate[test]"
+ - "bundle exec rake db:migrate[test]"

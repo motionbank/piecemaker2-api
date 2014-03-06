@@ -93,8 +93,6 @@ describe "Piecemaker::API EventGroup" do
         :duration => '2.0',
         :type => 'my_type'
 
-        p last_response
-
       last_response.status.should == 201
 
       result       = json_string_to_hash(last_response.body)
