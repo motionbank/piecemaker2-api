@@ -53,7 +53,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
   
     #---------------------------------------------------------------------------
-    it "returns status not found for non-existing event", :focus do
+    it "returns status not found for non-existing event" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
       get "/api/v1/event/74594534934982492649327649326423649246"

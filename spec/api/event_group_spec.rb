@@ -79,6 +79,33 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
   end
 
+  ##############################################################################
+  describe "GET /api/v1/groups/all" do
+  ##############################################################################
+
+    #---------------------------------------------------------------------------
+    it "returns really all event_groups (for super_admin)" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/groups/all"
+      last_response.status.should == 200
+
+      json_string_to_hash(last_response.body)
+        .should =~ times_to_s([@alpha.values, @beta.values])
+    end
+    #---------------------------------------------------------------------------
+  
+    #---------------------------------------------------------------------------
+    it "returns really no event_groups if not super admin" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @pan.api_access_key
+      get "/api/v1/groups/all"
+      last_response.status.should == 403
+    end
+    #---------------------------------------------------------------------------
+    
+  end
+
 
   ##############################################################################
   describe "POST /api/v1/group/:id/event" do
