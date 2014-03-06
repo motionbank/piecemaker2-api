@@ -164,7 +164,7 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "returns all events (filter options are connect with AND)" + 
+      desc "returns all events (filter options are connected with AND)" + 
            " (requires get_events permission)"
       #-------------------------------------------------------------------------
       params do
