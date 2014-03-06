@@ -16,6 +16,17 @@ module Piecemaker
         @_user = authorize!
         @_user.event_groups
       end
+
+
+      #_________________________________________________________________________
+      ##########################################################################
+      desc "returns really all event_groups (:super_admin_only)"
+      #-------------------------------------------------------------------------
+      get "/all" do  #/api/v1/groups/all
+      #-------------------------------------------------------------------------
+        @_user = authorize! :super_admin_only
+        EventGroup.all
+      end
     end
 
 
