@@ -88,7 +88,6 @@ module Piecemaker
       params do
         requires :title, type: String, desc: "name of the group"
         requires :text, type: String, desc: "some additional description"
-          # @todo type: Text not String
       end 
       #-------------------------------------------------------------------------
       post "/" do  #/api/v1/group
