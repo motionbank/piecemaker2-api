@@ -19,20 +19,12 @@
   <script type="text/javascript">
     $(function () {
 
-      // added by mattes
-      $(function () {
-         $.ajaxSetup({
-             beforeSend: function (jqXHR, settings) {
-                 jqXHR.setRequestHeader("X-Access-Key", 
-                      $("#input_apiKey").val());
-             }
-         });
-      });
+      $('a#explore').hide();
 
       window.swaggerUi = new SwaggerUi({
       url: "http://localhost:9292/api/v1/swagger_doc", // changed by mattes
       dom_id: "swagger-ui-container",
-      supportHeaderParams: true, // added by mattes
+      // supportHeaderParams: true, // added by mattes
       supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
       onComplete: function(swaggerApi, swaggerUi){
         log("Loaded SwaggerUI")
@@ -44,15 +36,11 @@
       docExpansion: "none"
     });
 
-    // commented-out by mattes
-    // $('#input_apiKey').change(function() {
-    //   var key = $('#input_apiKey')[0].value;
-    //   log("key: " + key);
-    //   if(key && key.trim() != "") {
-    //     log("added key " + key);
-    //     window.authorizations.add("key", new ApiKeyAuthorization("api_key", key, "query"));
-    //   }
-    // })
+    $('#input_apiKey').change(function() {
+      var key = $('#input_apiKey')[0].value;
+      log("key: " + key);
+      window.authorizations.add("key", new ApiKeyAuthorization("X-Access-Key", key, "header"));
+    })
 
     window.swaggerUi.load();
   });
