@@ -62,7 +62,11 @@ module Piecemaker
     # rescue from all thrown exceptions,
     # return error code 500 and message with explanation
     rescue_from :all do |e|
-      $logger.error(e)
+
+      unless [Grape::Exceptions::Validation].include?(e.class)
+        # don't log grape validations (i.e. missing required params)
+        $logger.error(e)
+      end
 
       Rack::Response.new({
           'status' => 500,
