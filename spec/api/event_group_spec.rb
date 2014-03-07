@@ -58,6 +58,19 @@ describe "Piecemaker::API EventGroup" do
 
       @user_role_admin      = UserRole.make :admin
 
+
+      # Events for fromto_query tests
+      @fromto_query_event_group = EventGroup.make :tofrom_query,
+                                    :created_by_user_id => @hans_admin.id
+      
+      @event1               = Event.make :event1, 
+                                :event_group_id => @fromto_query_event_group.id
+      @event2               = Event.make :event2, 
+                                :event_group_id => @fromto_query_event_group.id
+      @event3               = Event.make :event3, 
+                                :event_group_id => @fromto_query_event_group.id
+      @event4               = Event.make :event4, 
+                                :event_group_id => @fromto_query_event_group.id                                                                
     end
   end
 
@@ -91,7 +104,7 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 200
 
       json_string_to_hash(last_response.body)
-        .should =~ times_to_s([@alpha.values, @beta.values])
+        .should =~ times_to_s([@alpha.values, @beta.values, @fromto_query_event_group.values])
     end
     #---------------------------------------------------------------------------
   
@@ -372,23 +385,55 @@ describe "Piecemaker::API EventGroup" do
 
   ##############################################################################
   describe "GET /api/v1/group/:id/events" +
-           "?from=<utc_timestamp>&to=<utc_timestamp>" do
+           "?fromto_query=utc_timestamp" do
   ##############################################################################
     
     #---------------------------------------------------------------------------
-    it "returns all events between time frame" do
+    it "returns correct events for queries with :from" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
-      get "/api/v1/group/#{@alpha.id}/events?from=0&to=10&fromto_query=utc_timestamp"
+      get "/api/v1/group/#{@fromto_query_event_group.id}/events?from=10&fromto_query=utc_timestamp"
       last_response.status.should == 200
 
       results       = json_string_to_hash(last_response.body)
 
       results.should =~ [
-        {
-          :event => @small_in_alpha.values, 
-          :fields => [@small_event_field.values]
-        }
+        {:event => @event2.values, :fields => []},
+        {:event => @event3.values, :fields => []},
+        {:event => @event4.values, :fields => []},
+      ]
+    end
+    #---------------------------------------------------------------------------
+    
+    #---------------------------------------------------------------------------
+    it "returns correct events for queries with :to" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/group/#{@fromto_query_event_group.id}/events?to=24&fromto_query=utc_timestamp"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [
+        {:event => @event1.values, :fields => []},
+        {:event => @event2.values, :fields => []},
+        {:event => @event3.values, :fields => []},
+      ]
+    end
+    #---------------------------------------------------------------------------
+
+    #---------------------------------------------------------------------------
+    it "returns correct events for queries with :from and :to" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/group/#{@fromto_query_event_group.id}/events?from=10&to=24&fromto_query=utc_timestamp"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [
+        {:event => @event2.values, :fields => []},
+        {:event => @event3.values, :fields => []},
       ]
     end
     #---------------------------------------------------------------------------

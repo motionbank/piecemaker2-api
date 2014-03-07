@@ -11,6 +11,7 @@ Event.factory :big do
 end
 
 # Events for fromto_query tests
+# see docs/fromto_query.md
 
 Event.factory :event1 do
   utc_timestamp 8.0

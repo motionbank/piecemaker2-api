@@ -8,3 +8,11 @@ EventGroup.factory :beta do
   title "Group B"
   text "Event Group Beta"
 end
+
+# Events for fromto_query tests
+# see docs/fromto_query.md
+
+EventGroup.factory :tofrom_query do
+  title "Group for tofrom_query tests"
+  text "see title ;-)"
+end
