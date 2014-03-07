@@ -46,43 +46,47 @@ module Piecemaker
         error!('Not found', 404) unless @event
         authorize! :update_event, @event
 
-        # @todo wrap this into transaction
+        begin
+          DB.transaction(:rollback => :reraise) do
+            @event.update_with_params!(params, :utc_timestamp, :duration, :type)
+            @event.save
 
-        @event.update_with_params!(params, :utc_timestamp, :duration, :type)
-        @event.save
+            @event_fields = EventField.where(:event_id => @event.id)
+            event_fields_hash = @event_fields.to_hash(:id, :value)
 
-        @event_fields = EventField.where(:event_id => @event.id)
-        event_fields_hash = @event_fields.to_hash(:id, :value)
+            if params[:fields]
+              params[:fields].each do |id, value|
+                if event_fields_hash.has_key? id
+                  if value == "null"
+                    # delete field
+                    EventField.first(:event_id => @event.id, :id => id).delete
+                  else
+                    # update field
+                    EventField.first(
+                      :event_id => @event.id, 
+                      :id => id).update(:value => value)
+                  end
+                else
 
-        if params[:fields]
-          params[:fields].each do |id, value|
-            if event_fields_hash.has_key? id
-              if value == "null"
-                # delete field
-                EventField.first(:event_id => @event.id, :id => id).delete
-              else
-                # update field
-                EventField.first(
-                  :event_id => @event.id, 
-                  :id => id).update(:value => value)
+                  EventField.unrestrict_primary_key
+
+                  # create new field
+                  EventField.create(
+                    :event_id => @event.id, 
+                    :id => id,
+                    :value => value)
+                end
               end
-            else
-
-              EventField.unrestrict_primary_key
-
-              # create new field
-              EventField.create(
-                :event_id => @event.id, 
-                :id => id,
-                :value => value)
             end
           end
+        rescue # Sequel::Rollback
+          error!('Internal Server Error', 500)
+        else
+          return {
+            :event => @event, 
+            :fields => EventField.where(:event_id => @event.id)
+          }
         end
-
-        {
-          :event => @event, 
-          :fields => EventField.where(:event_id => @event.id)
-        }
       end
 
 
