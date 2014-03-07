@@ -10,3 +10,25 @@ Event.factory :big do
   type "big"
 end
 
+# Events for fromto_query tests
+
+Event.factory :event1 do
+  utc_timestamp 8.0
+  duration 8.0
+  type 'fromto_query_test'
+end
+Event.factory :event2 do
+  utc_timestamp 13.0
+  duration 9.0
+  type 'fromto_query_test'
+end
+Event.factory :event3 do
+  utc_timestamp 17.0
+  duration 9.0
+  type 'fromto_query_test'
+end
+Event.factory :event4 do
+  utc_timestamp 28.0
+  duration 3.0
+  type 'fromto_query_test'
+end
