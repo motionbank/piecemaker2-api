@@ -78,8 +78,14 @@ module Piecemaker
           :is_super_admin => params[:is_super_admin],
           :password => Digest::SHA1.hexdigest(new_password))
 
-        @user.password = new_password
-        return @user
+        # @user.password = new_password
+        return {
+          :id => @user.id,
+          :name => @user.name,
+          :email => @user.email,
+          :password => new_password,
+          :is_super_admin => @user.is_super_admin
+        }
       end
       
 
@@ -93,7 +99,7 @@ module Piecemaker
         return {
           :id => @_user.id,
           :name => @_user.name,
-          :email => @_user.password,
+          :email => @_user.email,
           :is_super_admin => @_user.is_super_admin
         }
       end
@@ -110,7 +116,13 @@ module Piecemaker
       get "/:id" do  #/api/v1/user/:id
       #-------------------------------------------------------------------------
         @_user = authorize!
-        User.first(:id => params[:id]) || error!('Not found', 404)
+        user = User.first(:id => params[:id]) || error!('Not found', 404)
+        return {
+          :id => user.id,
+          :name => user.name,
+          :email => user.email,
+          :is_super_admin => user.is_super_admin
+        }
       end
       
 
@@ -143,8 +155,23 @@ module Piecemaker
         end
 
         @user.save        
-        @user.password = new_password if new_password
-        return @user
+        # @user.password = new_password if new_password
+        if new_password
+          return {
+            :id => @user.id,
+            :name => @user.name,
+            :email => @user.email,
+            :password => new_password,
+            :is_super_admin => @user.is_super_admin
+          } 
+        else
+          return {
+            :id => @user.id,
+            :name => @user.name,
+            :email => @user.email,
+            :is_super_admin => @user.is_super_admin
+          } 
+        end
       end
       
 

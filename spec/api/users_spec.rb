@@ -214,7 +214,12 @@ describe "Piecemaker::API User" do
         @user = User[user[:id]].values
         @user.delete(:password)
 
-        user.should == @user
+        user.should == {
+          :id => @user[:id],
+          :name => @user[:name],
+          :email => @user[:email],
+          :is_super_admin => @user[:is_super_admin]
+        }
       end
       #-------------------------------------------------------------------------
 
@@ -250,7 +255,12 @@ describe "Piecemaker::API User" do
         header "X-Access-Key", @peter.api_access_key
         get "/api/v1/user/me"
         last_response.status.should == 200
-        json_string_to_hash(last_response.body).should == @peter.values
+        json_string_to_hash(last_response.body).should == {
+          :id => @peter[:id],
+          :name => @peter[:name],
+          :email => @peter[:email],
+          :is_super_admin => @peter[:is_super_admin]
+        }
       end
       #-------------------------------------------------------------------------
     end
@@ -266,7 +276,12 @@ describe "Piecemaker::API User" do
         header "X-Access-Key", @peter.api_access_key
         get "/api/v1/user/#{@pan.id}"
         last_response.status.should == 200
-        json_string_to_hash(last_response.body).should == @pan.values
+        json_string_to_hash(last_response.body).should == {
+          :id => @pan[:id],
+          :name => @pan[:name],
+          :email => @pan[:email],
+          :is_super_admin => @pan[:is_super_admin]
+        }
       end
       #-------------------------------------------------------------------------
     end
@@ -289,7 +304,13 @@ describe "Piecemaker::API User" do
 
         # was put persistant?
         returned_pan = json_string_to_hash(last_response.body)
-        returned_pan.should == User.first(:id => returned_pan[:id]).values
+        user_pan = User.first(:id => returned_pan[:id]).values
+        returned_pan.should == {
+          :id => user_pan[:id],
+          :name => user_pan[:name],
+          :email => user_pan[:email],
+          :is_super_admin => user_pan[:is_super_admin]
+        }
 
         # create new password
         header "X-Access-Key", @hans_admin.api_access_key
