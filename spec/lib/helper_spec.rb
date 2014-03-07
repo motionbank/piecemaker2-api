@@ -285,7 +285,12 @@ describe "Module helper" do
         :user_id => params[:user_id],
         :event_group_id => params[:event_group_id])
       error!('Invalid :user_id, :event_group_id combination', 500) unless @user_has_event_group
-      authorize! params[:permission], @user_has_event_group 
+      
+      begin
+        authorize! params[:permission], @user_has_event_group 
+      rescue TypeError
+        
+      end
     end
 
 

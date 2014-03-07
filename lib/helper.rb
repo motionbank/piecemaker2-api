@@ -72,7 +72,7 @@ module Piecemaker
               elsif @role_permission.permission == "forbid"
                 error!('Forbidden', 403)
               else
-                raise TypeError, "Unknown permission value"
+                raise TypeError, "Unknown permission value: '#{@role_permission.permission}'"
               end
 
             end
