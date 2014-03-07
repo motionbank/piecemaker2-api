@@ -83,8 +83,7 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "create new event_group (together with user_has_event_groups record)" +
-           " (:super_admin_only)"
+      desc "create new event_group (together with user_has_event_groups record)"
       #-------------------------------------------------------------------------
       params do
         requires :title, type: String, desc: "name of the group"
