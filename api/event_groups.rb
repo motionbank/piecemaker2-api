@@ -44,7 +44,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "event group id"
         requires :utc_timestamp, type: Float, desc: "utc timestamp"
         requires :type, type: String, desc: "type of event"
-        optional :duration, type: Float, desc: "duration"
+        optional :duration, type: Float, default: 0.0, desc: "duration"
         optional :fields, type: Hash, desc: "optional fields to create for this event"
       end 
       #-------------------------------------------------------------------------
