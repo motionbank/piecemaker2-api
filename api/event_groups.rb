@@ -182,6 +182,7 @@ module Piecemaker
         requires :id, type: Integer, desc: "event group id"
         optional :from, type: Float, desc: ">= utc_timestamp"
         optional :to, type: Float, desc: "<= utc_timestamp"
+        optional :fromto_query, type: String, default: "intersect", desc: "specify query mode utc_timestamp|intersect|contain"
         optional :type, type: String, desc: "event type "
         optional :fields, type: Hash, desc: "filter by event field key"
         optional :count_only, type: Boolean, desc: "return count of events only"
@@ -199,8 +200,25 @@ module Piecemaker
         where = [{:event_group_id => @event_group.id}]
 
         where << {:type => params[:type]} if params[:type]
-        where << ['utc_timestamp >= ?', params[:from]] if params[:from]
-        where << ['utc_timestamp <= ?', params[:to]] if params[:to]
+
+        if params[:fromto_query] == "utc_timestamp"
+          where << ['utc_timestamp >= ?', params[:from]] if params[:from]
+          where << ['utc_timestamp <= ?', params[:to]] if params[:to]
+
+        elsif params[:fromto_query] == "intersect"
+          where << ['utc_timestamp + duration >= ?', params[:from]] if params[:from]
+          where << ['utc_timestamp <= ?', params[:to]] if params[:to]
+
+        elsif params[:fromto_query] == "contain"
+          where << ['utc_timestamp >= ?', params[:from]] if params[:from]
+          where << ['utc_timestamp + duration <= ?', params[:to]] if params[:to]
+
+        else
+          # its safe to throw error here, since we set a default 
+          # value for :fromto_query above
+          error!('Bad Request', 400)
+        end
+
 
         # load event
         @events = Event.where( where )
