@@ -25,9 +25,11 @@ module Piecemaker
           :password => Digest::SHA1.hexdigest(params[:password]),
           :is_disabled => false)
         if @user
-          api_access_key = Piecemaker::Helper::API_Access_Key::generate
-          @user.update(:api_access_key => api_access_key)
-          return {:api_access_key => api_access_key}
+          # create new api_access_key if non exists
+          unless @user.api_access_key
+            @user.update(:api_access_key => Piecemaker::Helper::API_Access_Key::generate)
+          end
+          return {:api_access_key => @user.api_access_key}
         else
           error!('Unauthorized', 401)
         end
@@ -41,8 +43,12 @@ module Piecemaker
       post "/logout" do  #/api/v1/user/logout
       #-------------------------------------------------------------------------
         @_user = authorize!
-        @_user.update(:api_access_key => nil)
-        {:api_access_key => nil}
+
+        # as discussed here: https://github.com/motionbank/piecemaker2-api/issues/74
+        # do not delete api_access_key when logging out
+        # @_user.update(:api_access_key => nil)
+        # {:api_access_key => nil}
+        return nil
       end
       
 
