@@ -38,3 +38,7 @@ Event4 |                           X---
 :from & :to returns   Event2                            utc_timestamp >= :from && utc_timestamp + duration <= :to
 ```
 
+
+Please see https://github.com/motionbank/piecemaker2-api/issues/76 for more
+discussions about this feature. 
+
