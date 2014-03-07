@@ -9,3 +9,4 @@ Event.factory :big do
   duration 7.0
   type "big"
 end
+

@@ -379,7 +379,7 @@ describe "Piecemaker::API EventGroup" do
     it "returns all events between time frame" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @hans_admin.api_access_key
-      get "/api/v1/group/#{@alpha.id}/events?from=0&to=10"
+      get "/api/v1/group/#{@alpha.id}/events?from=0&to=10&fromto_query=utc_timestamp"
       last_response.status.should == 200
 
       results       = json_string_to_hash(last_response.body)
