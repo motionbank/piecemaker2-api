@@ -90,6 +90,12 @@ module Piecemaker
       get "/me" do  #/api/v1/user/me
       #-------------------------------------------------------------------------
         @_user = authorize!
+        return {
+          :id => @_user.id,
+          :name => @_user.name,
+          :email => @_user.password,
+          :is_super_admin => @_user.is_super_admin
+        }
       end
       
 
