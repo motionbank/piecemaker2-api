@@ -6,7 +6,7 @@ gem "json", "~> 1.7.7"
 gem "newrelic_rpm", "~> 3.6.5.130"
 gem "newrelic-grape", "~> 1.3.1"
 gem "rack-cors", "~> 0.2.8"
-gem "grape-swagger", "~> 0.6.0"
+gem "grape-swagger", "~> 0.7.2"
 gem "sequel", "~> 4.0.0"
 gem "pg", "~> 0.15.1" # requires libpq-fe.h (brew install postgres)
 

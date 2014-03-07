@@ -26,9 +26,13 @@ GEM
       rack-accept
       rack-mount
       virtus
-    grape-swagger (0.6.0)
+    grape-entity (0.4.1)
+      activesupport
+      multi_json (>= 1.3.2)
+    grape-swagger (0.7.2)
       grape (>= 0.2.0)
-      kramdown
+      grape-entity (>= 0.3.0)
+      kramdown (>= 1.3.1)
     growl (1.0.3)
     guard (1.6.2)
       listen (>= 0.6.0)
@@ -49,7 +53,7 @@ GEM
     hashie (2.0.5)
     i18n (0.6.5)
     json (1.7.7)
-    kramdown (1.2.0)
+    kramdown (1.3.2)
     listen (1.3.0)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -114,7 +118,7 @@ PLATFORMS
 
 DEPENDENCIES
   grape (~> 0.5.0)
-  grape-swagger (~> 0.6.0)
+  grape-swagger (~> 0.7.2)
   guard (~> 1.6.1)
   guard-bundler (~> 1.0.0)
   guard-rack (~> 1.2.2)
