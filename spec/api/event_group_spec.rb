@@ -442,6 +442,120 @@ describe "Piecemaker::API EventGroup" do
 
   ##############################################################################
   describe "GET /api/v1/group/:id/events" +
+           "?fromto_query=intersect" do
+  ##############################################################################
+    
+    #---------------------------------------------------------------------------
+    it "returns correct events for queries with :from" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/group/#{@fromto_query_event_group.id}/events?from=10&fromto_query=intersect"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [
+        {:event => @event1.values, :fields => []},
+        {:event => @event2.values, :fields => []},
+        {:event => @event3.values, :fields => []},
+        {:event => @event4.values, :fields => []},
+      ]
+    end
+    #---------------------------------------------------------------------------
+    
+    #---------------------------------------------------------------------------
+    it "returns correct events for queries with :to" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/group/#{@fromto_query_event_group.id}/events?to=24&fromto_query=intersect"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [
+        {:event => @event1.values, :fields => []},
+        {:event => @event2.values, :fields => []},
+        {:event => @event3.values, :fields => []},
+      ]
+    end
+    #---------------------------------------------------------------------------
+
+    #---------------------------------------------------------------------------
+    it "returns correct events for queries with :from and :to" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/group/#{@fromto_query_event_group.id}/events?from=10&to=24&fromto_query=intersect"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [
+        {:event => @event1.values, :fields => []},
+        {:event => @event2.values, :fields => []},
+        {:event => @event3.values, :fields => []},
+      ]
+    end
+    #---------------------------------------------------------------------------
+  end
+
+
+  ##############################################################################
+  describe "GET /api/v1/group/:id/events" +
+           "?fromto_query=contain" do
+  ##############################################################################
+    
+    #---------------------------------------------------------------------------
+    it "returns correct events for queries with :from" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/group/#{@fromto_query_event_group.id}/events?from=10&fromto_query=contain"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [
+        {:event => @event2.values, :fields => []},
+        {:event => @event3.values, :fields => []},
+        {:event => @event4.values, :fields => []},
+      ]
+    end
+    #---------------------------------------------------------------------------
+    
+    #---------------------------------------------------------------------------
+    it "returns correct events for queries with :to" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/group/#{@fromto_query_event_group.id}/events?to=24&fromto_query=contain"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [
+        {:event => @event1.values, :fields => []},
+        {:event => @event2.values, :fields => []},
+      ]
+    end
+    #---------------------------------------------------------------------------
+
+    #---------------------------------------------------------------------------
+    it "returns correct events for queries with :from and :to" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @hans_admin.api_access_key
+      get "/api/v1/group/#{@fromto_query_event_group.id}/events?from=10&to=24&fromto_query=contain"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+
+      results.should =~ [
+        {:event => @event2.values, :fields => []},
+      ]
+    end
+    #---------------------------------------------------------------------------
+  end
+
+
+  ##############################################################################
+  describe "GET /api/v1/group/:id/events" +
            "?fields[key]=value" do
   ##############################################################################
    
