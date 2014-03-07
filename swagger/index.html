@@ -20,11 +20,12 @@
     $(function () {
 
       $('a#explore').hide();
+      $('img#show-pet-store-icon').hide();
+      $('img#show-wordnik-dev-icon').hide();
 
       window.swaggerUi = new SwaggerUi({
       url: "http://localhost:9292/api/v1/swagger_doc", // changed by mattes
       dom_id: "swagger-ui-container",
-      // supportHeaderParams: true, // added by mattes
       supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
       onComplete: function(swaggerApi, swaggerUi){
         log("Loaded SwaggerUI")
@@ -36,6 +37,7 @@
       docExpansion: "none"
     });
 
+    // updated version by mattes
     $('#input_apiKey').change(function() {
       var key = $('#input_apiKey')[0].value;
       log("key: " + key);
