@@ -1,11 +1,16 @@
 require "sequel"
 require 'yaml'
 require File.expand_path('../../lib/helper', __FILE__)
+require 'logger'
 
 
 if ENV['ON_HEROKU']
   CONFIG = Hash.new
+  $logger = Logger.new(STDOUT)
+
 else
+  $logger = Logger.new(File.expand_path('../../log/api.log', __FILE__), 'monthly')
+
   CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
   ENV['ENABLE_NEWRELIC'] = CONFIG["enable_newrelic"].to_s
   ENV['NEWRELIC_LICENSE_KEY'] = CONFIG["newrelic_license_key"]
@@ -13,6 +18,23 @@ else
   ENV['NEWRELIC_MONITOR'] = CONFIG[ENV['RACK_ENV'].to_s]["newrelic_monitor"].to_s
   ENV['NEWRELIC_DEVELOPER'] = CONFIG[ENV['RACK_ENV'].to_s]["newrelic_developer"].to_s
 end
+
+
+# setup logger format
+original_formatter = Logger::Formatter.new
+$logger.formatter = proc { |severity, datetime, progname, msg|
+  if msg.is_a? Exception
+    exception = msg
+    msg = "\n\n#{exception.class} (#{exception.message}):\n    " +
+          exception.backtrace.join("\n    ") +
+          "\n\n"
+    original_formatter.call(severity, datetime, progname, msg)
+  else
+    original_formatter.call(severity, datetime, progname, msg.dump)
+  end
+}
+
+
 
 ENV['RACK_ENV'] ||= "production"
 ENV['ENABLE_NEWRELIC'] ||= 0
@@ -23,6 +45,14 @@ ENV['NEWRELIC_DEVELOPER'] = 'false' if ENV['NEWRELIC_DEVELOPER'].nil?
 
 
 ENV["NEWRELIC_APP_NAME"] = "Piecemaker API"
+
+
+if ENV['RACK_ENV'] == "production" || ENV['ON_HEROKU'] || ENV['RACK_ENV'] == "test"
+  $logger.level = Logger::WARN
+else 
+  # development
+  $logger.level = Logger::DEBUG
+end
 
 
 begin
@@ -39,8 +69,8 @@ begin
       :port     => CONFIG[ENV['RACK_ENV'].to_s]["port"] || '5432',
       :max_connections => CONFIG[ENV['RACK_ENV'].to_s]["max_connections"] || 4)
   end
-rescue=>ex
-  puts ex.message
+rescue => ex
+  $logger.fatal(ex.message) 
   exit 77
 end
 

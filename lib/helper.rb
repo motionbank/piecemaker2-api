@@ -135,7 +135,7 @@ module Piecemaker
         end
 
         # for debugging:
-        # puts "#{entity} - #{user_role_id}"
+        # $logger.debug("#{entity} - #{user_role_id}")
 
         # permission defined for this role?
         @role_permission = RolePermission.first(

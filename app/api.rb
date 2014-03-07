@@ -62,10 +62,7 @@ module Piecemaker
     # rescue from all thrown exceptions,
     # return error code 500 and message with explanation
     rescue_from :all do |e|
-      
-      # @todo implement logging
-      $stderr.puts e if ["development", "test"].include?(ENV['RACK_ENV'])
-      # raise e if ["test"].include?(ENV['RACK_ENV'])
+      $logger.error(e)
 
       Rack::Response.new({
           'status' => 500,
