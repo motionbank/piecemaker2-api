@@ -1038,23 +1038,33 @@ var SwaggerRequest = function(type, url, params, opts, successCallback, errorCal
     var fields = {};
     var possibleParams = {};
     var values = {};
-    var key;
-    for(key in formParams){
+    var encoded = [];
+    for(var key in formParams){
       var param = formParams[key];
-      values[param.name] = param;
-    }
+      var value = this.params[param.name]
+      values[param.name] = param; // not sure for what this is needed?!
 
-    var encoded = "";
-    var key;
-    for(key in values) {
-      value = this.params[key];
       if(typeof value !== 'undefined'){
-        if(encoded !== "")
-          encoded += "&";
-        encoded += encodeURIComponent(key) + '=' + encodeURIComponent(value);
+        if(param['dataType'] == 'Hash') {
+          if(value != "") {
+            try {
+              var json = JSON.parse(value);
+            } catch(e) {
+              window.alert("Unable to parse Hash value! Invalid JSON!");
+              return;
+            }
+            for(var json_key in json) {
+              var json_value = json[json_key];
+              encoded.push(encodeURIComponent(param.name) + '[' + encodeURIComponent(json_key) + ']=' + encodeURIComponent(json_value));
+            } 
+          }
+        }
+        else {
+          encoded.push(encodeURIComponent(param.name) + '=' + encodeURIComponent(value));
+        }
       }
     }
-    body = encoded;
+    body = encoded.join("&");
   }
   var name;
   for (name in this.headers)
