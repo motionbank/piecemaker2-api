@@ -136,7 +136,7 @@ Set newrelic_developer to true and go to http://127.0.0.1:9292/newrelic for
 performance stats.
 
 ### Explore and learn with [Swagger](https://github.com/wordnik/swagger-core/wiki)...
-When running in :development mode, open http://motionbank.github.io/piecemaker2-api/swagger-ui/dist in your browser.
+When running in :development mode, open http://motionbank.github.io/piecemaker2-api/swagger in your browser.
 Note: You can create a super admin with ```rake db:create_super_admin[env]```.
 
 ### Benchmarks
