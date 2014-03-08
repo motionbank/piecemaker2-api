@@ -19,6 +19,8 @@
   <script type="text/javascript">
     $(function () {
 
+
+
       $('a#explore').hide();
       $('img#show-pet-store-icon').hide();
       $('img#show-wordnik-dev-icon').hide();
@@ -41,7 +43,12 @@
     $('#input_apiKey').change(function() {
       var key = $('#input_apiKey')[0].value;
       log("key: " + key);
-      window.authorizations.add("key", new ApiKeyAuthorization("X-Access-Key", key, "header"));
+      if(key == "") {
+        window.authorizations.remove("key");
+      } else {
+        window.authorizations.add("key", new ApiKeyAuthorization("X-Access-Key", key, "header"));  
+      }
+      
     })
 
     window.swaggerUi.load();
