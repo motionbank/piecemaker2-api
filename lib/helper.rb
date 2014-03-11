@@ -12,37 +12,59 @@ end
 
 
 module Piecemaker
+  # consider context of execution ...
+  # included with 'helpers Piecemaker::Helper::Auth' in api
+  # http://intridea.github.io/grape/docs/index.html#Helpers
   module Helper
 
 
     module Token
+      # example calls ...
+      #
+      # verify_token! @event
+      # verify_token! @event, params[:token]
+      #
+      # return new token string on success
+      # raise and exit on error
       def verify_token!(*args)
-        @model = args[0]
+        token_length = 10
 
-        unless @model.keys.include? "token"
-          error!('Internal Server Error', 500)
+        @model = args[0]
+        
+        unless @model.keys.include? :token
           $logger.error("Missing token in @model.")
+          error!('Internal Server Error', 500)
         end
 
-        token = params[:token]
-        token = args[1] if args[1]
 
+        # unless @model.token return true, because there is nothing to compare
+        # this is usually the case, when a new record is created
+        if @model.token == "" || @model.token.nil?
+          @model.token = Piecemaker::Helper::Password::generate(token_length)
+          return true
+        end
+
+        if args[1]
+          token = args[1]
+        elsif params[:token]
+          token = params[:token]
+        else
+          $logger.error("No token given.")
+          error!('Internal Server Error', 500)
+        end
+        
+        # compare tokens
         if @model.token == token
-          @model.update({:token => 'abc'})
+          @model.token = Piecemaker::Helper::Password::generate(token_length)
           return true
         else
-          return false
+          error!('Conflict', 409)
         end
-
       end
     end
 
 
     module Auth
-      # consider context of execution ...
-      # included with 'helpers Piecemaker::Helper::Auth' in api
-      # http://intridea.github.io/grape/docs/index.html#Helpers
-      # 
       # example calls ...
       # 
       # authorize! :super_admin_only
@@ -95,8 +117,8 @@ module Piecemaker
               elsif @role_permission.permission == "forbid"
                 error!('Forbidden', 403)
               else
-                error!('Internal Server Error', 500)
                 $logger.error("Unknown permission value: '#{@role_permission.permission}'")
+                error!('Internal Server Error', 500)
               end
 
             end

@@ -8,6 +8,74 @@ describe "Module helper" do
   end
   
 
+  describe "Module Token" do
+    before(:all) do
+      truncate_db
+
+      DB.create_table! :pseudo_no_token do
+        primary_key :id
+      end
+
+      DB.create_table! :pseudo_token do
+        primary_key :id
+        String :token
+      end
+
+      class PseudoModelWithoutToken < Sequel::Model(:pseudo_no_token)
+      end
+
+      class PseudoModelWithToken < Sequel::Model(:pseudo_token)
+      end
+    end
+
+    Piecemaker::API.get "/rspec_dummy_route_for_verify_token1" do
+      @pmodel = PseudoModelWithoutToken.create
+      $logger.level = Logger::FATAL
+      verify_token! @pmodel
+    end
+    it "fails for missing token in @model" do
+      get "/api/v1/rspec_dummy_route_for_verify_token1" 
+      last_response.status.should == 500
+    end
+
+    Piecemaker::API.get "/rspec_dummy_route_for_verify_token2" do
+      @pmodel = PseudoModelWithToken.create(:token => "abc")
+      $logger.level = Logger::FATAL
+      verify_token! @pmodel
+    end
+    it "fails for missing token (when no param given)" do
+      get "/api/v1/rspec_dummy_route_for_verify_token2" 
+      last_response.status.should == 500
+    end
+
+    Piecemaker::API.get "/rspec_dummy_route_for_verify_token3" do
+      @pmodel = PseudoModelWithToken.create(:token => "")
+      verify_token! @pmodel, "tokenABC"
+    end
+    it "succeeds if @model.token is empty" do
+      get "/api/v1/rspec_dummy_route_for_verify_token3" 
+      last_response.status.should == 200
+    end
+
+    Piecemaker::API.get "/rspec_dummy_route_for_verify_token4" do
+      @pmodel = PseudoModelWithToken.create(:token => "tokenABC")
+      verify_token! @pmodel, "tokenABC"
+    end
+    it "succeeds if tokens are equal" do
+      get "/api/v1/rspec_dummy_route_for_verify_token4" 
+      last_response.status.should == 200
+    end
+
+    Piecemaker::API.get "/rspec_dummy_route_for_verify_token5" do
+      @pmodel = PseudoModelWithToken.create(:token => "tokenABCD")
+      verify_token! @pmodel, "tokenABC"
+    end
+    it "fails if tokens are not equal" do
+      get "/api/v1/rspec_dummy_route_for_verify_token5" 
+      last_response.status.should == 409
+    end
+  end
+
 
   describe "Module API_Access_key" do
     it "generates an api access key" do
@@ -289,7 +357,6 @@ describe "Module helper" do
       begin
         authorize! params[:permission], @user_has_event_group 
       rescue TypeError
-        
       end
     end
 
