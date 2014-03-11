@@ -30,12 +30,11 @@ module Piecemaker
         token_length = 10
 
         @model = args[0]
-        
+
         unless @model.keys.include? :token
           $logger.error("Missing token in @model.")
           error!('Internal Server Error', 500)
         end
-
 
         # unless @model.token return true, because there is nothing to compare
         # this is usually the case, when a new record is created
