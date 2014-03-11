@@ -15,6 +15,29 @@ module Piecemaker
   module Helper
 
 
+    module Token
+      def verify_token!(*args)
+        @model = args[0]
+
+        unless @model.keys.include? "token"
+          error!('Internal Server Error', 500)
+          $logger.error("Missing token in @model.")
+        end
+
+        token = params[:token]
+        token = args[1] if args[1]
+
+        if @model.token == token
+          @model.update({:token => 'abc'})
+          return true
+        else
+          return false
+        end
+
+      end
+    end
+
+
     module Auth
       # consider context of execution ...
       # included with 'helpers Piecemaker::Helper::Auth' in api

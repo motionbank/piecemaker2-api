@@ -3,22 +3,22 @@ require 'yaml'
 require File.expand_path('../../lib/helper', __FILE__)
 require 'logger'
 
-
-if ENV['ON_HEROKU']
-  CONFIG = Hash.new
-  $logger = Logger.new(STDOUT)
-
-else
+# set up logger
+if ["production"].include?(ENV['RACK_ENV'])
   $logger = Logger.new(File.expand_path('../../log/api.log', __FILE__), 'monthly')
-
-  CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
-  ENV['ENABLE_NEWRELIC'] = CONFIG["enable_newrelic"].to_s
-  ENV['NEWRELIC_LICENSE_KEY'] = CONFIG["newrelic_license_key"]
-
-  ENV['NEWRELIC_MONITOR'] = CONFIG[ENV['RACK_ENV'].to_s]["newrelic_monitor"].to_s
-  ENV['NEWRELIC_DEVELOPER'] = CONFIG[ENV['RACK_ENV'].to_s]["newrelic_developer"].to_s
+else
+  # development and test
+  $logger = Logger.new(STDOUT)
 end
 
+$logger = Logger.new(STDOUT) if ENV["ON_HEROKU"] # overwrite for heroku
+
+if ["production", "test"].include?(ENV['RACK_ENV'])
+  $logger.level = Logger::WARN
+else 
+  # development
+  $logger.level = Logger::DEBUG
+end
 
 # setup logger format
 original_formatter = Logger::Formatter.new
@@ -36,6 +36,18 @@ $logger.formatter = proc { |severity, datetime, progname, msg|
 
 
 
+if ENV['ON_HEROKU']
+  CONFIG = Hash.new
+else
+  CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
+  ENV['ENABLE_NEWRELIC'] = CONFIG["enable_newrelic"].to_s
+  ENV['NEWRELIC_LICENSE_KEY'] = CONFIG["newrelic_license_key"]
+
+  ENV['NEWRELIC_MONITOR'] = CONFIG[ENV['RACK_ENV'].to_s]["newrelic_monitor"].to_s
+  ENV['NEWRELIC_DEVELOPER'] = CONFIG[ENV['RACK_ENV'].to_s]["newrelic_developer"].to_s
+end
+
+
 ENV['RACK_ENV'] ||= "production"
 ENV['ENABLE_NEWRELIC'] ||= 0
 ENV['NEWRELIC_LICENSE_KEY'] ||= nil
@@ -45,14 +57,6 @@ ENV['NEWRELIC_DEVELOPER'] = 'false' if ENV['NEWRELIC_DEVELOPER'].nil?
 
 
 ENV["NEWRELIC_APP_NAME"] = "Piecemaker API"
-
-
-if ENV['RACK_ENV'] == "production" || ENV['ON_HEROKU'] || ENV['RACK_ENV'] == "test"
-  $logger.level = Logger::WARN
-else 
-  # development
-  $logger.level = Logger::DEBUG
-end
 
 
 begin

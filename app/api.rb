@@ -76,6 +76,7 @@ module Piecemaker
     end
 
     helpers Piecemaker::Helper::Auth
+    helpers Piecemaker::Helper::Token
     
     mount ::Piecemaker::Users
     mount ::Piecemaker::EventGroups

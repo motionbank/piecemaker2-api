@@ -46,6 +46,8 @@ module Piecemaker
         error!('Not found', 404) unless @event
         authorize! :update_event, @event
 
+        verify_token! @event
+
         begin
           DB.transaction(:rollback => :reraise) do
             @event.update_with_params!(params, :utc_timestamp, :duration, :type)
