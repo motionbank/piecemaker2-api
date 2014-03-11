@@ -33,11 +33,12 @@ module Piecemaker
            " (requires update_event permission)"
       #-------------------------------------------------------------------------
       params do
-        requires :id, type: Integer, desc: "event group id"
+        requires :id, type: Integer, desc: "event id"
         requires :utc_timestamp, type: Float, desc: "utc timestamp"
         optional :duration, type: Float, desc: "duration"
         optional :type, type: String, desc: "type of event"
         optional :fields, type: Hash, desc: "optional fields to update for this event {'field1': 'value', ...}"
+        requires :token, type: String, desc: "pass-through token from initial request"
       end
       #-------------------------------------------------------------------------
       put "/:id" do  #/api/v1/event/:id
@@ -46,7 +47,7 @@ module Piecemaker
         error!('Not found', 404) unless @event
         authorize! :update_event, @event
 
-        # verify_token! @event
+        verify_token! @event
 
         begin
           DB.transaction(:rollback => :reraise) do
