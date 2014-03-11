@@ -73,7 +73,8 @@ describe "Piecemaker::API Event" do
       header "X-Access-Key", @hans_admin.api_access_key
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '6', 
-        :duration => '7'
+        :duration => '7',
+        :token => '' # empty for new record
       last_response.status.should == 200
 
       result       = json_string_to_hash(last_response.body)
@@ -96,6 +97,7 @@ describe "Piecemaker::API Event" do
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '8', 
         :duration => '9',
+        :token => '', # empty for new record
         :fields => {
           :new_key => "some value",
           :another_new_key => "some more values"}
@@ -121,6 +123,7 @@ describe "Piecemaker::API Event" do
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '8', 
         :duration => '9',
+        :token => '', # empty for new record
         :fields => {
           :flag1 => "new value for flag1"}
       last_response.status.should == 200
@@ -146,6 +149,7 @@ describe "Piecemaker::API Event" do
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '8', 
         :duration => '9',
+        :token => '', # empty for new record
         :fields => {
           :flag1 => "null"}
       last_response.status.should == 200
