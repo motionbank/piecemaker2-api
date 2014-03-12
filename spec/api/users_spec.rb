@@ -364,7 +364,7 @@ describe "Piecemaker::API User" do
     ############################################################################  
 
       #-------------------------------------------------------------------------
-      it "returns all users" do
+      it "returns all users", :focus do
       #-------------------------------------------------------------------------
         header "X-Access-Key", @hans_admin.api_access_key
         get "/api/v1/users"
