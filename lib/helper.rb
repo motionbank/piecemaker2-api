@@ -15,18 +15,29 @@ end
 module Sequel
   module Plugins
     module Paginate2
-
       module ClassMethods
-        def page
-          self.dataset = self.dataset.limit(100)
+        def page(params, primary_key=nil)
+          count = params[:count] || 1
+          self.dataset = self.dataset.limit(count)
+
+          if primary_key
+            # primary_key = primary_key
+          else
+            primary_key = self.primary_key()
+            if primary_key.is_a?(Array)
+              raise RuntimeError, 'Composite keys not supported for paging.'
+            end
+          end
+
+          self.dataset = self.dataset.where(params[:max_id] >= primary_key) if(params[:max_id])
+          self.dataset = self.dataset.where(params[:since_id] < primary_key) if(params[:since_id])
+
           return self.dataset
         end
       end
-
     end
   end
 end
-
 Sequel::Model.plugin Sequel::Plugins::Paginate2
 
 

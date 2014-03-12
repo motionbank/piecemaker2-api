@@ -224,7 +224,7 @@ module Piecemaker
       desc "Returns all users. (:super_admin_only)"
       #-------------------------------------------------------------------------
       params do
-        optional :count, type: Integer, desc: "number of results"
+        optional :count, type: Integer, default: 100, desc: "number of results"
         optional :max_id, type: Integer, desc: "return results to id"
         optional :since_id, type: Integer, desc: "return results from id"
       end
@@ -232,7 +232,7 @@ module Piecemaker
       get "/" do  #/api/v1/users
       #-------------------------------------------------------------------------
         authorize! :super_admin_only
-        User.page().all || []
+        User.page(params).all || []
       end
 
     end
