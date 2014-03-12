@@ -99,7 +99,7 @@ module Piecemaker
           :id => @_user.id,
           :name => @_user.name,
           :email => @_user.email,
-          :is_super_admin => @_user.is_super_admin
+          :user_role_id => @_user.user_role_id
         }
       end
       

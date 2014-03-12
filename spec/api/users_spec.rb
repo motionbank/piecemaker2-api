@@ -204,7 +204,7 @@ describe "Piecemaker::API User" do
         post "/api/v1/user", 
           :name => "Michael",
           :email => "michael@example.com",
-          :is_super_admin => false
+          :user_role_id => "user"
         last_response.status.should == 201
 
         user = json_string_to_hash(last_response.body)
@@ -219,7 +219,7 @@ describe "Piecemaker::API User" do
           :id => @user[:id],
           :name => @user[:name],
           :email => @user[:email],
-          :is_super_admin => @user[:is_super_admin]
+          :user_role_id => @user[:user_role_id]
         }
       end
       #-------------------------------------------------------------------------
@@ -233,13 +233,13 @@ describe "Piecemaker::API User" do
         post "/api/v1/user", 
           :name => "Michael",
           :email => "michael@example.com",
-          :is_super_admin => false
+          :user_role_id => "user"
         last_response.status.should == 201
 
         post "/api/v1/user", 
           :name => "Michael 2",
           :email => "michael@example.com",
-          :is_super_admin => false
+          :user_role_id => "user"
         last_response.status.should == 409
       end
       #-------------------------------------------------------------------------
@@ -260,7 +260,7 @@ describe "Piecemaker::API User" do
           :id => @peter[:id],
           :name => @peter[:name],
           :email => @peter[:email],
-          :is_super_admin => @peter[:is_super_admin]
+          :user_role_id => @peter[:user_role_id]
         }
       end
       #-------------------------------------------------------------------------
@@ -281,7 +281,7 @@ describe "Piecemaker::API User" do
           :id => @pan[:id],
           :name => @pan[:name],
           :email => @pan[:email],
-          :is_super_admin => @pan[:is_super_admin]
+          :user_role_id => @pan[:user_role_id]
         }
       end
       #-------------------------------------------------------------------------
@@ -299,7 +299,7 @@ describe "Piecemaker::API User" do
         put "/api/v1/user/#{@pan.id}", 
           :name => "Michael",
           :email => "michael@example.com",
-          :is_super_admin => true,
+          :user_role_id => "user",
           :is_disabled => true
         last_response.status.should == 200
 
@@ -310,7 +310,7 @@ describe "Piecemaker::API User" do
           :id => user_pan[:id],
           :name => user_pan[:name],
           :email => user_pan[:email],
-          :is_super_admin => user_pan[:is_super_admin]
+          :user_role_id => user_pan[:user_role_id]
         }
 
         # create new password
@@ -351,7 +351,7 @@ describe "Piecemaker::API User" do
       it "returns all event_groups for user with id" do
       #-------------------------------------------------------------------------
         header "X-Access-Key", @frank_super_admin.api_access_key
-        get "/api/v1/user/#{@pan.id}/groups"
+        get "/api/v1/user/#{@frank_super_admin.id}/groups"
         last_response.status.should == 200
         json_string_to_hash(last_response.body)
           .should == times_to_s([@alpha.values])
