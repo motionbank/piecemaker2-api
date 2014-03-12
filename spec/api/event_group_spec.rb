@@ -714,20 +714,11 @@ describe "Piecemaker::API EventGroup" do
 
 
     #---------------------------------------------------------------------------
-    it "updates user_role_id in user_has_event_groups with empty id" do
+    it "fails when trying to update user_role_id in user_has_event_groups with empty id" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @frank_super_admin.api_access_key
       put "/api/v1/group/#{@alpha.id}/user/#{@pan.id}"
-      last_response.status.should == 200
-
-      user_has_event_group = json_string_to_hash(last_response.body)
-
-      @user_has_event_group = UserHasEventGroup.first(
-        :user_id => @pan.id, 
-        :event_group_id => @alpha.id)
-
-      @user_has_event_group.should_not eq(nil)
-      @user_has_event_group.user_role_id.should eq("group_admin")
+      last_response.status.should == 500
     end
     #---------------------------------------------------------------------------
 

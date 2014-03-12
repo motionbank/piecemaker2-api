@@ -120,7 +120,7 @@ module Piecemaker
           :id => user.id,
           :name => user.name,
           :email => user.email,
-          :is_super_admin => user.is_super_admin
+          :user_role_id => user.user_role_id
         }
       end
       

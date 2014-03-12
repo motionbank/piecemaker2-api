@@ -274,7 +274,7 @@ describe "Piecemaker::API User" do
       #-------------------------------------------------------------------------
       it "returns user for id" do
       #-------------------------------------------------------------------------
-        header "X-Access-Key", @peter.api_access_key
+        header "X-Access-Key", @frank_super_admin.api_access_key
         get "/api/v1/user/#{@pan.id}"
         last_response.status.should == 200
         json_string_to_hash(last_response.body).should == {
