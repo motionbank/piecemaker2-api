@@ -6,6 +6,72 @@ describe "Module helper" do
   def app
     Piecemaker::API
   end
+
+
+  describe "Module Paginate2" do
+    before(:all) do
+      truncate_db
+
+      DB.create_table! :pseudo_paging do
+        primary_key :id
+      end
+
+      class PseudoModelPaging < Sequel::Model(:pseudo_paging)
+      end
+
+      @id1 = PseudoModelPaging.create() 
+      @id2 = PseudoModelPaging.create() 
+      @id3 = PseudoModelPaging.create() 
+      @id4 = PseudoModelPaging.create()
+      @id5 = PseudoModelPaging.create()
+      @id6 = PseudoModelPaging.create()
+      @id7 = PseudoModelPaging.create()
+      @id8 = PseudoModelPaging.create()
+      @id9 = PseudoModelPaging.create()
+      @id10 = PseudoModelPaging.create()
+    end
+
+
+    Piecemaker::API.get "/rspec_dummy_route_for_paging1/:since_id" do
+      params[:count] = 100
+      return PseudoModelPaging.page(params).all
+    end
+    Piecemaker::API.get "/rspec_dummy_route_for_paging2/:max_id" do
+      params[:count] = 100
+      return PseudoModelPaging.page(params).all
+    end
+    Piecemaker::API.get "/rspec_dummy_route_for_paging3/:since_id/:max_id/:count" do
+      return PseudoModelPaging.page(params).all
+    end
+
+    it "should work for since_id only" do
+      get "/api/v1/rspec_dummy_route_for_paging1/5" 
+      last_response.status.should == 200
+      json_string_to_hash(last_response.body).should =~ [@id6.values, 
+        @id7.values, @id8.values, @id9.values, @id10.values]
+    end
+
+    it "should work for max_id only" do
+      get "/api/v1/rspec_dummy_route_for_paging2/5" 
+      last_response.status.should == 200
+      json_string_to_hash(last_response.body).should =~ [@id1.values, 
+        @id2.values, @id3.values, @id4.values, @id5.values]
+    end
+
+    it "should work for both since_id and max_id" do
+      get "/api/v1/rspec_dummy_route_for_paging3/2/8/100" 
+      last_response.status.should == 200
+      json_string_to_hash(last_response.body).should =~ [@id3.values, 
+        @id4.values, @id5.values, @id6.values, @id7.values, @id8.values]
+    end
+
+    it "should support the count param" do
+      get "/api/v1/rspec_dummy_route_for_paging3/2/8/1" 
+      last_response.status.should == 200
+      json_string_to_hash(last_response.body).should =~ [@id3.values]
+    end
+  end
+  
   
 
   describe "Module Token" do

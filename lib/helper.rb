@@ -23,8 +23,10 @@ module Sequel
         # User.page({:count => 100, :max_id => 123, :since_id => 999})
         # User.page(params, :user_id_pk) # no composite keys supported!
         def page(params, primary_key=nil)
+          new_dataset = self.dataset
+
           count = params[:count] || 1
-          self.dataset = self.dataset.limit(count)
+          new_dataset = new_dataset.limit(count)
 
           if primary_key
             # primary_key = primary_key
@@ -35,10 +37,11 @@ module Sequel
             end
           end
 
-          self.dataset = self.dataset.where(params[:max_id] >= primary_key) if(params[:max_id])
-          self.dataset = self.dataset.where(params[:since_id] < primary_key) if(params[:since_id])
+          new_dataset = new_dataset.where("#{primary_key.to_s} <= #{params[:max_id].to_i}") if(params[:max_id])
+          new_dataset = new_dataset.where("#{primary_key.to_s} > #{params[:since_id].to_i}") if(params[:since_id])
 
-          return self.dataset
+          # puts new_dataset.sql # for debug
+          return new_dataset
         end
       end
     end
