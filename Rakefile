@@ -148,14 +148,14 @@ namespace :db do
       :email => email,
       :password => Digest::SHA1.hexdigest(password),
       :api_access_key => api_access_key,
-      :is_super_admin => true)
+      :user_role_id => 'super_admin')
 
     puts ""
-    puts "Email   : #{email}"
-    puts "Password: #{password}"
+    puts "Email    : #{email}"
+    puts "Password : #{password}"
+    puts "Role     : super_admin"
     puts ""
     puts "A fresh API Access Key has been generated '#{api_access_key}'."
-    puts "Please note that this key will change the next time this user logs in."
   end
 
   desc "Run database migrations"
