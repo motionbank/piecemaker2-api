@@ -127,9 +127,8 @@ module Piecemaker
 
           # verify permissions ...
           entity = args[0]
-          if(args[1].class == "Class")
+          if(args[1].is_a? Class)
             _class = args[1]
-
             if _class.name == "User"
               @model = @user
             else
@@ -199,6 +198,9 @@ module Piecemaker
             :event_group_id => @_event.event_group_id)
           return nil unless @_user_has_event_group
           return @_user_has_event_group.user_role_id
+
+        elsif model.is_a? User
+          return model.user_role_id
 
         else
           raise ArgumentError, 

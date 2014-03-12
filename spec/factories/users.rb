@@ -5,7 +5,7 @@ User.factory :peter do
   email "peter@example.com"
   password Digest::SHA1.hexdigest("Peter") # important, that password == name
   api_access_key Piecemaker::Helper::API_Access_Key::generate
-  is_super_admin false
+  user_role_id "user"
 end
 
 User.factory :pan do
@@ -13,7 +13,7 @@ User.factory :pan do
   email "pan@example.com"
   password Digest::SHA1.hexdigest("Pan") # important, that password == name
   api_access_key Piecemaker::Helper::API_Access_Key::generate
-  is_super_admin false
+  user_role_id "user"
 end
 
 User.factory :hans_admin do
@@ -21,7 +21,7 @@ User.factory :hans_admin do
   email "hans@example.com"
   password Digest::SHA1.hexdigest("Hans") # important, that password == name
   api_access_key Piecemaker::Helper::API_Access_Key::generate
-  is_super_admin true
+  user_role_id "(RSPEC_PREFIX)-admin"
 end
 
 User.factory :klaus_disabled do
@@ -29,7 +29,7 @@ User.factory :klaus_disabled do
   email "klaus@example.com"
   password Digest::SHA1.hexdigest("Klaus") # important, that password == name
   api_access_key Piecemaker::Helper::API_Access_Key::generate
-  is_super_admin false
+  user_role_id "user"
   is_disabled true
 end
 
@@ -38,6 +38,6 @@ User.factory :user_with_no_api_access_key do
   email "user_with_no_api_access_key@example.com"
   password Digest::SHA1.hexdigest("User without API Access Key") # important, that password == name
   api_access_key nil
-  is_super_admin false
+  user_role_id "user"
   is_disabled false
 end

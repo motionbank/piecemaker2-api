@@ -1,4 +1,4 @@
-# make id random to avoid collission with init sql files
+# prefix id to avoid collission with init sql files
 
 prefix = "(RSPEC_PREFIX)-"
 

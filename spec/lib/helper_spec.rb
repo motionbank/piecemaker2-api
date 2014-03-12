@@ -216,10 +216,13 @@ describe "Module helper" do
         @user_role_user           = UserRole.make :user 
         @user_role_guest          = UserRole.make :guest
         
-
         @user_role_admin_allow_c   = RolePermission.make :allow,
                                       :user_role_id => @user_role_admin.id,
                                       :entity => @entity_prefix + "c"
+        
+        # needed for Piecemaker::API.get "/rspec_dummy_route_for_authorize_user_class" do
+        $user_role_admin_allow_c = @user_role_admin_allow_c
+
         @user_role_admin_forbid_z  = RolePermission.make :forbid,
                                       :user_role_id => @user_role_admin.id,
                                       :entity => @entity_prefix + "z"
@@ -409,8 +412,8 @@ describe "Module helper" do
       authorize!
     end
 
-    Piecemaker::API.get "/rspec_dummy_route_for_authorize_super_admin_only" do
-      authorize! :super_admin_only
+    Piecemaker::API.get "/rspec_dummy_route_for_authorize_user_class" do
+      authorize! $user_role_admin_allow_c.entity.to_sym, User
     end
 
     Piecemaker::API.get "/rspec_dummy_route_for_authorize_permission" +
@@ -444,7 +447,7 @@ describe "Module helper" do
         last_response.status.should == 401
       end
 
-      it "returns user if i am a super admin" do
+      it "returns user if i am a admin" do
         header "X-Access-Key", @hans_admin.api_access_key
         get "/api/v1/rspec_dummy_route_for_authorize_plain" 
         last_response.status.should == 200
@@ -453,18 +456,22 @@ describe "Module helper" do
         results.should == @hans_admin.values
       end
 
-      it "returns user if super admin is needed and super admin given" do
+      it "succeeds if admin is needed and admin given" do
+        rescue_hans_admin_user_role_id = @hans_admin.user_role_id 
+        @hans_admin.user_role_id = @user_role_admin.id
+        @hans_admin.save
+
         header "X-Access-Key", @hans_admin.api_access_key
-        get "/api/v1/rspec_dummy_route_for_authorize_super_admin_only" 
+        get "/api/v1/rspec_dummy_route_for_authorize_user_class" 
         last_response.status.should == 200
 
-        results = json_string_to_hash(last_response.body)
-        results.should == @hans_admin.values
+        @hans_admin.user_role_id = rescue_hans_admin_user_role_id
+        @hans_admin.save
       end
 
-      it "fails if super admin is needed, but no super admin given" do
+      it "fails if admin is needed, but no admin given" do
         header "X-Access-Key", @peter.api_access_key
-        get "/api/v1/rspec_dummy_route_for_authorize_super_admin_only" 
+        get "/api/v1/rspec_dummy_route_for_authorize_user_class" 
         last_response.status.should == 403
       end
 
