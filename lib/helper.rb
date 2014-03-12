@@ -16,6 +16,12 @@ module Sequel
   module Plugins
     module Paginate2
       module ClassMethods
+
+        # example calls
+        # 
+        # User.page(params).where(:name => "peter")
+        # User.page({:count => 100, :max_id => 123, :since_id => 999})
+        # User.page(params, :user_id_pk) # no composite keys supported!
         def page(params, primary_key=nil)
           count = params[:count] || 1
           self.dataset = self.dataset.limit(count)
