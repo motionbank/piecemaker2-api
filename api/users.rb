@@ -42,7 +42,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       post "/logout" do  #/api/v1/user/logout
       #-------------------------------------------------------------------------
-        @_user = authorize!
+        @_user = authorize! # no further permission here! ;-)
 
         # as discussed here: https://github.com/motionbank/piecemaker2-api/issues/74
         # do not delete api_access_key when logging out
@@ -54,7 +54,7 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "Creates new user. (:super_admin_only)"
+      desc "Creates new user."
       #-------------------------------------------------------------------------
       params do
         requires :name, type: String, desc: "users fullname or whatever"
@@ -65,7 +65,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       post "/" do  #/api/v1/user
       #-------------------------------------------------------------------------
-        @_user = authorize! :super_admin_only
+        authorize! :create_new_user, User
 
         # check if user with this email exists and return appropriate error code
         error!('Duplicate user', 409) if User.first(:email => params[:email])
@@ -115,7 +115,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/:id" do  #/api/v1/user/:id
       #-------------------------------------------------------------------------
-        @_user = authorize!
+        authorize! :get_user, User
         user = User.first(:id => params[:id]) || error!('Not found', 404)
         return {
           :id => user.id,
@@ -128,7 +128,7 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "updates user with id (:super_admin_only)"
+      desc "updates user with id"
       #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "a user id"
@@ -141,7 +141,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       put "/:id" do  #/api/v1/user/:id
       #-------------------------------------------------------------------------
-        @_user = authorize! :super_admin_only
+        authorize! :update_user, User
         @user = User.first(:id => params[:id])
         error!('Not found', 404) unless @user
 
@@ -177,7 +177,7 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "deletes user with id (:super_admin_only)"
+      desc "deletes user with id"
       #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "a user id"
@@ -185,7 +185,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       delete "/:id" do  #/api/v1/user/:id
       #-------------------------------------------------------------------------
-        @_user = authorize! :super_admin_only
+        authorize! :delete_user, User
         @user = User.first(:id => params[:id])
         error!('Not found', 404) unless @user
 
@@ -195,7 +195,7 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "returns all event_groups for user with id (:super_admin_only)"
+      desc "returns all event_groups for user with id"
       #-------------------------------------------------------------------------
       params do
         requires :id, type: Integer, desc: "a user id"
@@ -203,7 +203,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/:id/groups" do  #/api/v1/user/:id/groups
       #-------------------------------------------------------------------------
-        @_user = authorize! :super_admin_only
+        authorize! :get_event_groups_for_user, User
         @user = User.first(:id => params[:id])
         error!('Not found', 404) unless @user
         
@@ -221,7 +221,7 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "Returns all users. (:super_admin_only)"
+      desc "Returns all users."
       #-------------------------------------------------------------------------
       params do
         optional :count, type: Integer, default: 100, desc: "number of results"
@@ -231,7 +231,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/" do  #/api/v1/users
       #-------------------------------------------------------------------------
-        authorize! :super_admin_only
+        authorize! :get_users, User
         User.page(params).all || []
       end
 

@@ -13,7 +13,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/" do  #/api/v1/roles
       #-------------------------------------------------------------------------
-        authorize!
+        authorize! :get_roles, User
 
         # build user roles array
         get_user_roles_ordered_by_inheritance = lambda {

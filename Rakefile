@@ -260,7 +260,7 @@ def scan_entities(verbose)
             ""
           ]       
         else
-          _entity = authorize[0].scan(/:(.*), @/).flatten[0]
+          _entity = authorize[0].scan(/:(.*), /).flatten[0]
           entities << _entity if _entity
         end
       end
@@ -269,7 +269,7 @@ def scan_entities(verbose)
 
   unless verbose
     entities.uniq!
-    entities.delete("super_admin_only")
+    entities.sort!
     return entities
   else
     return return_value

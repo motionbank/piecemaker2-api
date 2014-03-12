@@ -13,18 +13,18 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/" do  #/api/v1/groups
       #-------------------------------------------------------------------------
-        @_user = authorize!
+        @_user = authorize! :get_my_event_groups, User
         @_user.event_groups
       end
 
 
       #_________________________________________________________________________
       ##########################################################################
-      desc "returns really all event_groups (:super_admin_only)"
+      desc "returns really all event_groups"
       #-------------------------------------------------------------------------
       get "/all" do  #/api/v1/groups/all
       #-------------------------------------------------------------------------
-        @_user = authorize! :super_admin_only
+        authorize! :get_all_event_groups, User
         EventGroup.all
       end
     end
@@ -92,7 +92,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       post "/" do  #/api/v1/group
       #-------------------------------------------------------------------------
-        @_user = authorize!
+        @_user = authorize! :create_new_event_group, User
         
         @event_group = EventGroup.create(
           :created_by_user_id => @_user.id,

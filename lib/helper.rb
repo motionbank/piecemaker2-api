@@ -108,6 +108,7 @@ module Piecemaker
       # example calls ...
       # 
       # authorize! # just logged in user
+      # authorize! :list_all, User # or other Model
       #
       # authorize! :get_events, @user_has_event_group, 
       # authorize! :get_events, @event_group
@@ -126,10 +127,20 @@ module Piecemaker
 
           # verify permissions ...
           entity = args[0]
-          @model = args[1]
+          if(args[1].class == "Class")
+            _class = args[1]
 
+            if _class.name == "User"
+              @model = @user
+            else
+              error!('Internal Server Error', 500)
+            end
+          else
+            @model = args[1]
+          end
+            
           user_role_id = Piecemaker::Helper::Auth::\
-            get_user_role_from_model(@model, @user)
+            get_user_role_from_model(@model, @user) 
           error!('Forbidden', 403) unless user_role_id
 
           @role_permission = Piecemaker::Helper::Auth::\
