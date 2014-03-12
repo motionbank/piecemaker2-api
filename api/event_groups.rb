@@ -298,7 +298,7 @@ module Piecemaker
       params do
         requires :event_group_id, type: Integer, desc: "event_group id"
         requires :user_id, type: Integer, desc: "user id"
-        optional :user_role_id, type: String, desc: "user role"
+        requires :user_role_id, type: String, desc: "user role"
       end
       #-------------------------------------------------------------------------
       post "/:event_group_id/user/:user_id" do 
@@ -336,7 +336,7 @@ module Piecemaker
       params do
         requires :event_group_id, type: Integer, desc: "event_group id"
         requires :user_id, type: Integer, desc: "user id"
-        optional :user_role_id, type: String, desc: "user role"
+        requires :user_role_id, type: String, desc: "user role"
       end
       #-------------------------------------------------------------------------
       put "/:event_group_id/user/:user_id" do 

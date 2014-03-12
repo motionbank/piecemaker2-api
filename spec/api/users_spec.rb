@@ -15,10 +15,10 @@ describe "Piecemaker::API User" do
       truncate_db
       
       factory_batch do 
-        @peter          = User.make :peter
-        @pan            = User.make :pan
-        @hans_admin     = User.make :hans_admin
-        @klaus_disabled = User.make :klaus_disabled
+        @peter                = User.make :peter
+        @pan                  = User.make :pan
+        @hans_admin           = User.make :hans_admin
+        @klaus_disabled       = User.make :klaus_disabled
       end
     end
 
@@ -177,17 +177,18 @@ describe "Piecemaker::API User" do
       truncate_db
       
       factory_batch do 
-        @peter          = User.make :peter
-        @pan            = User.make :pan
-        @hans_admin     = User.make :hans_admin
-        @klaus_disabled = User.make :klaus_disabled
+        @peter                = User.make :peter
+        @pan                  = User.make :pan
+        @hans_admin           = User.make :hans_admin
+        @klaus_disabled       = User.make :klaus_disabled
+        @frank_super_admin    = User.make :frank_super_admin
 
 
         @alpha                      = EventGroup.make :alpha,
-                                        :created_by_user_id => @hans_admin.id
+                                        :created_by_user_id => @frank_super_admin.id
 
-        @pan_has_event_group_alpha  = UserHasEventGroup.make :default,  
-                                      :user_id => @pan.id, 
+        @frank_super_admin_has_event_group_alpha  = UserHasEventGroup.make :default,  
+                                      :user_id => @frank_super_admin.id, 
                                       :event_group_id => @alpha.id
       end
     end
@@ -199,7 +200,7 @@ describe "Piecemaker::API User" do
       #-------------------------------------------------------------------------
       it "creates new user" do
       #-------------------------------------------------------------------------
-        header "X-Access-Key", @hans_admin.api_access_key
+        header "X-Access-Key", @frank_super_admin.api_access_key
         post "/api/v1/user", 
           :name => "Michael",
           :email => "michael@example.com",
@@ -227,7 +228,7 @@ describe "Piecemaker::API User" do
       #-------------------------------------------------------------------------
       it "fails when trying to create the same user twice" do
       #-------------------------------------------------------------------------
-        header "X-Access-Key", @hans_admin.api_access_key
+        header "X-Access-Key", @frank_super_admin.api_access_key
 
         post "/api/v1/user", 
           :name => "Michael",
@@ -294,7 +295,7 @@ describe "Piecemaker::API User" do
       #-------------------------------------------------------------------------
       it "updates user with id" do
       #-------------------------------------------------------------------------
-        header "X-Access-Key", @hans_admin.api_access_key
+        header "X-Access-Key", @frank_super_admin.api_access_key
         put "/api/v1/user/#{@pan.id}", 
           :name => "Michael",
           :email => "michael@example.com",
@@ -313,7 +314,7 @@ describe "Piecemaker::API User" do
         }
 
         # create new password
-        header "X-Access-Key", @hans_admin.api_access_key
+        header "X-Access-Key", @frank_super_admin.api_access_key
         put "/api/v1/user/#{@peter.id}", 
           :new_password => true
         last_response.status.should == 200
@@ -333,7 +334,7 @@ describe "Piecemaker::API User" do
       #-------------------------------------------------------------------------
       it "user with id" do
       #-------------------------------------------------------------------------
-        header "X-Access-Key", @hans_admin.api_access_key
+        header "X-Access-Key", @frank_super_admin.api_access_key
         delete "/api/v1/user/#{@pan.id}"
         last_response.status.should == 200
         User.first(:id => @pan.id).should eq(nil)
@@ -349,7 +350,7 @@ describe "Piecemaker::API User" do
       #-------------------------------------------------------------------------
       it "returns all event_groups for user with id" do
       #-------------------------------------------------------------------------
-        header "X-Access-Key", @hans_admin.api_access_key
+        header "X-Access-Key", @frank_super_admin.api_access_key
         get "/api/v1/user/#{@pan.id}/groups"
         last_response.status.should == 200
         json_string_to_hash(last_response.body)
@@ -366,11 +367,11 @@ describe "Piecemaker::API User" do
       #-------------------------------------------------------------------------
       it "returns all users" do
       #-------------------------------------------------------------------------
-        header "X-Access-Key", @hans_admin.api_access_key
+        header "X-Access-Key", @frank_super_admin.api_access_key
         get "/api/v1/users"
         last_response.status.should == 200
         json_string_to_hash(last_response.body).should =~ [@peter.values, 
-          @pan.values, @hans_admin.values, @klaus_disabled.values]
+          @pan.values, @frank_super_admin.values, @klaus_disabled.values, @hans_admin.values]
       end
       #-------------------------------------------------------------------------
     end

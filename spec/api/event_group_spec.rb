@@ -666,22 +666,12 @@ describe "Piecemaker::API EventGroup" do
 
 
     #---------------------------------------------------------------------------
-    it "adds a user to an event_group (via user_has_event_groups) " +
+    it "fails to add a user to an event_group (via user_has_event_groups) " +
        "and set empty user_role_id" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @frank_super_admin.api_access_key
       post "/api/v1/group/#{@alpha.id}/user/#{@peter.id}"
-      last_response.status.should == 201
-
-      result       = json_string_to_hash(last_response.body)
-      result.should == {:status => true}
-
-      @user_has_event_group = UserHasEventGroup.first(
-        :user_id => @peter.id, 
-        :event_group_id => @alpha.id)
-
-      @user_has_event_group.should_not eq(nil)
-      @user_has_event_group.user_role_id.should == nil
+      last_response.status.should == 500
     end
     #---------------------------------------------------------------------------
 
