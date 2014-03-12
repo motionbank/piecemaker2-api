@@ -182,10 +182,7 @@ namespace :db do
     env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
     DB.tables.each do |table|
-      # @todo: CASCADE equivalent command for DB.drop_table?
-      # DB.drop_table(table)
-      # DB[table.to_sym].drop(:cascade => true)
-      DB.run("DROP TABLE #{table} CASCADE")
+      DB.drop_table(table, :cascade=>true)
     end
   end
  
