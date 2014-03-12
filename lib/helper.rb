@@ -137,6 +137,9 @@ module Piecemaker
           else
             @model = args[1]
           end
+
+          # puts @model
+          # puts @user
             
           user_role_id = Piecemaker::Helper::Auth::\
             get_user_role_from_model(@model, @user) 
@@ -144,6 +147,11 @@ module Piecemaker
 
           @role_permission = Piecemaker::Helper::Auth::\
             get_permission_recursively(user_role_id, entity)
+
+          # puts @role_permission
+          # puts user_role_id
+          # puts entity
+          # puts @model
 
           error!('Forbidden', 403) unless @role_permission
 

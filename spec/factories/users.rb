@@ -16,12 +16,20 @@ User.factory :pan do
   user_role_id "user"
 end
 
+User.factory :frank_super_admin do
+  name "Frank"
+  email "frank@example.com"
+  password Digest::SHA1.hexdigest("Frank") # important, that password == name
+  api_access_key Piecemaker::Helper::API_Access_Key::generate
+  user_role_id "super_admin"
+end
+
 User.factory :hans_admin do
   name "Hans"
   email "hans@example.com"
   password Digest::SHA1.hexdigest("Hans") # important, that password == name
   api_access_key Piecemaker::Helper::API_Access_Key::generate
-  user_role_id "(RSPEC_PREFIX)-admin"
+  user_role_id "admin"
 end
 
 User.factory :klaus_disabled do

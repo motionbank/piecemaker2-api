@@ -10,15 +10,26 @@ describe "Piecemaker::API Event" do
     truncate_db
 
     factory_batch do 
-      @peter          = User.make :peter
-      @pan            = User.make :pan
-      @hans_admin     = User.make :hans_admin
-      @klaus_disabled = User.make :klaus_disabled
+      @peter                = User.make :peter
+      @pan                  = User.make :pan
+      @hans_admin           = User.make :hans_admin
+      @klaus_disabled       = User.make :klaus_disabled
+      @frank_super_admin    = User.make :frank_super_admin
 
       @alpha          = EventGroup.make :alpha,
-                          :created_by_user_id => @hans_admin.id
+                          :created_by_user_id => @frank_super_admin.id
       @beta           = EventGroup.make :beta,
-                          :created_by_user_id => @hans_admin.id
+                          :created_by_user_id => @frank_super_admin.id
+
+      @frank_has_event_group_alpha = UserHasEventGroup.make :default,  
+                                :user_id => @frank_super_admin.id, 
+                                :event_group_id => @alpha.id,
+                                :user_role_id => "group_admin"
+
+      @frank_has_event_group_beta = UserHasEventGroup.make :default,  
+                                :user_id => @frank_super_admin.id, 
+                                :event_group_id => @beta.id,
+                                :user_role_id => "group_admin"                                
 
       @big            = Event.make :big, 
                           :event_group_id => @alpha.id
@@ -36,7 +47,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "returns event with id (and return fields and group as well)" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @hans_admin.api_access_key
+      header "X-Access-Key", @frank_super_admin.api_access_key
       get "/api/v1/event/#{@big.id}"
       last_response.status.should == 200
 
@@ -55,7 +66,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "returns status not found for non-existing event" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @hans_admin.api_access_key
+      header "X-Access-Key", @frank_super_admin.api_access_key
       get "/api/v1/event/74594534934982492649327649326423649246"
       last_response.status.should == 404
     end
@@ -70,7 +81,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "updates an event (without fields)" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @hans_admin.api_access_key
+      header "X-Access-Key", @frank_super_admin.api_access_key
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '6', 
         :duration => '7',
@@ -93,7 +104,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "updates an event and creates new fields" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @hans_admin.api_access_key
+      header "X-Access-Key", @frank_super_admin.api_access_key
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '8', 
         :duration => '9',
@@ -119,7 +130,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "updates an event and updates existing fields" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @hans_admin.api_access_key
+      header "X-Access-Key", @frank_super_admin.api_access_key
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '8', 
         :duration => '9',
@@ -145,7 +156,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "updates an event and deletes existing fields" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @hans_admin.api_access_key
+      header "X-Access-Key", @frank_super_admin.api_access_key
       put "/api/v1/event/#{@big.id}", 
         :utc_timestamp => '8', 
         :duration => '9',
@@ -181,7 +192,7 @@ describe "Piecemaker::API Event" do
     #---------------------------------------------------------------------------
     it "deletes event with id" do
     #---------------------------------------------------------------------------
-      header "X-Access-Key", @hans_admin.api_access_key
+      header "X-Access-Key", @frank_super_admin.api_access_key
       delete "/api/v1/event/#{@big.id}"
       last_response.status.should == 200
 
