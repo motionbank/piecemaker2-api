@@ -11,95 +11,15 @@ module Sequel
   end
 end
 
-# module Sequel
-#   module DatasetPagination
-  
-#     def paginate(params, primary_key=nil)
-
-    
-#       count = params[:count] || 1
-
-#       a.limit(1)
-
-#       if primary_key
-#         # primary_key = primary_key
-#       else
-#         primary_key = a.primary_key()
-#         if primary_key.is_a?(Array)
-#           raise RuntimeError, 'Composite keys not supported for paging.'
-#         end
-#       end
-      
-#       a.where(:max_id >= primary_key) if(params[:max_id])
-#       a.where(:since_id < primary_key) if(params[:since_id])
-
-#       return self
-
-#     end
-#   end
-
-
-#   Dataset.register_extension(:paginate, DatasetPagination)
-# end
-
-
-# class Sequel::Model
-#   def self.paginate(*args)
-#     puts self.dataset.inspect
-#     self.dataset.limit(1)
-#     return self.dataset
-#   end
-# end
-require 'sequel'
-require 'sequel/extensions/pagination'
-
-module WillPaginate
-  # Sequel already supports pagination; we only need to make the
-  # resulting dataset look a bit more like WillPaginate::Collection
-  module SequelMethods
-    
-
-    def total_pages
-      page_count
-    end
-
-    def per_page
-      page_size
-    end
-
-    def size
-      current_page_record_count
-    end
-    alias length size
-
-    def total_entries
-      pagination_record_count
-    end
-
-    def out_of_bounds?
-      current_page > total_pages
-    end
-
-    # Current offset of the paginated collection
-    def offset
-      (current_page - 1) * per_page
-    end
-  end
-
-  
-end
 
 module Sequel
   module Plugins
-    module Achtung
+    module Paginate2
 
       module ClassMethods
-        def a
-          dataset = self.dataset
-          dataset = dataset.limit(100)
-          puts dataset.sql
-          
-          return dataset
+        def page
+          self.dataset = self.dataset.limit(100)
+          return self.dataset
         end
       end
 
@@ -107,23 +27,8 @@ module Sequel
   end
 end
 
-Sequel::Model.plugin Sequel::Plugins::Achtung
-Sequel::Dataset::Pagination.send(:include, WillPaginate::SequelMethods)
+Sequel::Model.plugin Sequel::Plugins::Paginate2
 
-
-# class Sequel::Model
-#   def self.page(*args)
-#     dataset.pagination(nil, nil)
-#   end
-# end
-
-# class Sequel::Dataset
-#   def page(*args)
-#     puts "b"
-#     puts self.inspect
-#     return self
-#   end
-# end
 
 
 

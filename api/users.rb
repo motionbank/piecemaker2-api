@@ -232,7 +232,7 @@ module Piecemaker
       get "/" do  #/api/v1/users
       #-------------------------------------------------------------------------
         authorize! :super_admin_only
-        User.a().all || []
+        User.page().all || []
       end
 
     end
