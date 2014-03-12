@@ -107,7 +107,7 @@ module Piecemaker
     module Auth
       # example calls ...
       # 
-      # authorize! :super_admin_only
+      # authorize! # just logged in user
       #
       # authorize! :get_events, @user_has_event_group, 
       # authorize! :get_events, @event_group
@@ -116,53 +116,37 @@ module Piecemaker
       def authorize!(*args)
         api_access_key = headers['X-Access-Key'] || nil
         if api_access_key
+
           # check if api_access_key is valid and the user is not disabled
-          @user = Piecemaker::Helper::Auth::get_user_by_api_acccess_key(
-            api_access_key)
-          unless @user
-            error!('Unauthorized', 401)
+          @user = Piecemaker::Helper::Auth::get_user_by_api_acccess_key(api_access_key)
+          error!('Unauthorized', 401) unless @user
+                   
+          # only logged in user is required ...
+          return @user if args.count == 0
+
+          # verify permissions ...
+          entity = args[0]
+          @model = args[1]
+
+          user_role_id = Piecemaker::Helper::Auth::\
+            get_user_role_from_model(@model, @user)
+          error!('Forbidden', 403) unless user_role_id
+
+          @role_permission = Piecemaker::Helper::Auth::\
+            get_permission_recursively(user_role_id, entity)
+
+          error!('Forbidden', 403) unless @role_permission
+
+          if @role_permission.permission == "allow"
+            # okay, come in!
+            return @user
+          elsif @role_permission.permission == "forbid"
+            error!('Forbidden', 403)
           else
-            # if you are a super admin, dont check any further ...
-            if @user.is_super_admin
-              return @user
-            end 
-
-            # is this method for super users only?
-            if args.include?(:super_admin_only) && !@user.is_super_admin
-              error!('Forbidden', 403)
-            end
-
-            args.delete :super_admin_only
-            if args.count == 0
-              # only check if user is logged in
-              # and since we got here, he is
-              return @user
-            else
-              # verify permissions ...
-              entity = args[0]
-              @model = args[1]
-
-              user_role_id = Piecemaker::Helper::Auth::\
-                get_user_role_from_model(@model, @user)
-              error!('Forbidden', 403) unless user_role_id
-
-              @role_permission = Piecemaker::Helper::Auth::\
-                get_permission_recursively(user_role_id, entity)
-
-              error!('Forbidden', 403) unless @role_permission
-
-              if @role_permission.permission == "allow"
-                # okay, come in!
-                return @user
-              elsif @role_permission.permission == "forbid"
-                error!('Forbidden', 403)
-              else
-                $logger.error("Unknown permission value: '#{@role_permission.permission}'")
-                error!('Internal Server Error', 500)
-              end
-
-            end
+            $logger.error("Unknown permission value: '#{@role_permission.permission}'")
+            error!('Internal Server Error', 500)
           end
+
         else
           error!('Bad Request, Missing X-Access-Key in Headers', 400)
         end
