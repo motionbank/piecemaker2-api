@@ -53,12 +53,4 @@ describe "Model UserRole" do
     @user_role_user.user_has_event_groups.should == []
   end
 
-  it "has many users" do
-    pending
-  end
-
-  it "has no many users" do
-    pending
-  end
-
 end
