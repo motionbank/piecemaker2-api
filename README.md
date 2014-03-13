@@ -59,20 +59,21 @@ rake spec:now
 # see rake for commands
 rake
 
-rake daemon[action]                  # Start|Stop production API (as deamon)
-rake db:create_super_admin[env]      # Create super admin
-rake db:export_into_file[env,table]  # Export table into file
-rake db:import_from_file[env,table]  # Import table into database
-rake db:migrate[env]                 # Run database migrations
-rake db:nuke[env]                    # Nuke the database (drop all tables)
-rake db:reset[env]                   # Reset the database (nuke & migrate & import_from_file)
-rake db:rollback[env]                # Rollback the database
-rake roles:output[env,format]        # Generate roles and permissions matrix from database (format:html|json)
-rake roles:scan_entities[verbose]    # Scan files for permission entities
-rake spec:html                       # generate nice html view
-rake spec:now                        # run tests now
-rake spec:onchange                   # watch files and run tests automatically
-rake start[env]                      # Start API with environment (prod|dev)
+rake daemon[action]                       # Start|Stop production API (as deamon)
+rake db:create_super_admin[env,username]  # Create super admin
+rake db:export_into_file[env,table]       # Export table into file
+rake db:import_from_file[env,table]       # Import table into database
+rake db:migrate[env]                      # Run database migrations
+rake db:nuke[env]                         # Nuke the database (drop all tables)
+rake db:reset[env]                        # Reset the database (nuke & migrate & import_from_file)
+rake db:rollback[env]                     # Rollback the database
+rake roles:output[env,format]             # Generate roles and permissions matrix from database (format:html|json)
+rake roles:scan_entities[verbose]         # Scan files for permission entities
+rake roles:update_permissions_file        # Update config/permissions.yml with all available permissions
+rake spec:html                            # generate nice html view
+rake spec:now                             # run tests now
+rake spec:onchange                        # watch files and run tests automatically
+rake start[env]                           # Start API with environment (prod|dev)
 
 # using IRB
 irb
