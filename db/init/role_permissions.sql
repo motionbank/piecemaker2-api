@@ -31,3 +31,7 @@ super_admin,allow,update_event
 super_admin,allow,update_event_group
 super_admin,allow,update_user
 super_admin,allow,update_users_attributes_for_event_group
+super_admin,allow,get_role
+super_admin,allow,create_new_role
+super_admin,allow,update_role
+super_admin,allow,delete_role

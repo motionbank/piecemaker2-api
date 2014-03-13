@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Piecemaker::API UserRole" do
+describe "Piecemaker::API UserRole", :focus do
   include Rack::Test::Methods
   def app
     Piecemaker::API
@@ -15,6 +15,9 @@ describe "Piecemaker::API UserRole" do
       @user_role_admin     = UserRole.make :admin
       @user_role_user      = UserRole.make :user
       @user_role_guest     = UserRole.make :guest
+
+      @permission1         = RolePermission.make :allow,
+                              :user_role_id => @user_role_admin.id
 
     end
   end
@@ -63,7 +66,15 @@ describe "Piecemaker::API UserRole" do
     #---------------------------------------------------------------------------
     it "returns user role with id and with according permissions" do
     #---------------------------------------------------------------------------
-      pending
+      header "X-Access-Key", @frank_super_admin.api_access_key
+      get "/api/v1/role/#{@user_role_admin.id}"
+      last_response.status.should == 200
+      result = json_string_to_hash(last_response.body)
+
+      result.should == {
+        :role => @user_role_admin.values,
+        :permissions => [@permission1.values]
+      }
     end
     #---------------------------------------------------------------------------
   end
@@ -76,7 +87,14 @@ describe "Piecemaker::API UserRole" do
     #---------------------------------------------------------------------------
     it "creates new user role" do
     #---------------------------------------------------------------------------
-      pending
+      header "X-Access-Key", @frank_super_admin.api_access_key
+      post "/api/v1/role",
+        :id => "new_role",
+        :inherit_from_id => nil,
+        :description => "awesome role"
+      last_response.status.should == 201
+      result = json_string_to_hash(last_response.body)
+      UserRole["new_role"].values.should == result
     end
     #---------------------------------------------------------------------------
   end
@@ -89,7 +107,13 @@ describe "Piecemaker::API UserRole" do
     #---------------------------------------------------------------------------
     it "updates user role with id" do
     #---------------------------------------------------------------------------
-      pending
+      header "X-Access-Key", @frank_super_admin.api_access_key
+      put "/api/v1/role/#{@user_role_admin.id}",
+        :inherit_from_id => nil,
+        :description => "new text"
+      last_response.status.should == 200
+      result = json_string_to_hash(last_response.body)
+      UserRole[@user_role_admin.id].values.should == result
     end
     #---------------------------------------------------------------------------
   end
@@ -102,7 +126,10 @@ describe "Piecemaker::API UserRole" do
     #---------------------------------------------------------------------------
     it "deletes user role with id" do
     #---------------------------------------------------------------------------
-      pending
+      header "X-Access-Key", @frank_super_admin.api_access_key
+      delete "/api/v1/role/#{@user_role_admin.id}"
+      last_response.status.should == 200
+      UserRole.first(:id => @user_role_admin.id).should eq(nil)
     end
     #---------------------------------------------------------------------------
   end
