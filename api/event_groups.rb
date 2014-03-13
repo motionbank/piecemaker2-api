@@ -393,8 +393,7 @@ module Piecemaker
         group_admins_count = UserHasEventGroup.where(
           :event_group_id => params[:event_group_id],
           :user_role_id => "group_admin").count
-        unless group_admins_count >= 1
-          
+        if group_admins_count <= 1
           error!('Every event group needs at least one group admin', 409) 
         end
         

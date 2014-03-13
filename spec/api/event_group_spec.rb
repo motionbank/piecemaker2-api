@@ -780,7 +780,18 @@ describe "Piecemaker::API EventGroup" do
     it "fails to delete the user if he is the only one left " +
        " with group_admin role" do
     #---------------------------------------------------------------------------
-      pending "no test yet"
+    factory_batch do 
+      @delta = EventGroup.make :beta
+
+      @pan_has_event_group_delta = UserHasEventGroup.make :default,
+                                    :user_id => @pan.id,
+                                    :event_group_id => @delta.id,
+                                    :user_role_id => "group_admin"
+    end
+
+    header "X-Access-Key", @frank_super_admin.api_access_key
+    delete "/api/v1/group/#{@delta.id}/user/#{@pan.id}"
+    last_response.status.should == 409
     end
     #---------------------------------------------------------------------------
   end
