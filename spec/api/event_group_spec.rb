@@ -736,7 +736,7 @@ describe "Piecemaker::API EventGroup" do
 
     #---------------------------------------------------------------------------
     it "fails to update the user_role_id to something else than goup_admin if the user is the " + 
-       "only one left with group_admin role" do
+       "only one left with group_admin role", :focus do
     #---------------------------------------------------------------------------
       pending "no test yet"
     end

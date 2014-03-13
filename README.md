@@ -113,6 +113,9 @@ Please refer to [db/init/user_roles.sql](db/init/user_roles.sql) and
 and permissions. Keep these files up-to-date, since they will be loaded
 into the database after a database reset.
 
+__The API makes heavy usage of two roles: ``super_admin`` and ``group_admin``.
+Make sure, that these roles are always present in  ``db/init/user_roles.sql``.__
+
 You can easily create the sql files from an existing database table:
 ```bash
 rake db:export_into_file[test,'user_roles']
