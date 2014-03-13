@@ -736,9 +736,21 @@ describe "Piecemaker::API EventGroup" do
 
     #---------------------------------------------------------------------------
     it "fails to update the user_role_id to something else than goup_admin if the user is the " + 
-       "only one left with group_admin role", :focus do
+       "only one left with group_admin role" do
     #---------------------------------------------------------------------------
-      pending "no test yet"
+      factory_batch do 
+        @gamma = EventGroup.make :beta
+
+        @pan_has_event_group_gamma = UserHasEventGroup.make :default,
+                                      :user_id => @pan.id,
+                                      :event_group_id => @gamma.id,
+                                      :user_role_id => "group_admin"
+      end
+
+      header "X-Access-Key", @frank_super_admin.api_access_key
+      put "/api/v1/group/#{@gamma.id}/user/#{@pan.id}",
+        :user_role_id => "user"
+      last_response.status.should == 409
     end
     #---------------------------------------------------------------------------
   end

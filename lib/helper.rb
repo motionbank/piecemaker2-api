@@ -140,36 +140,48 @@ module Piecemaker
 
           # puts @model
           # puts @user
-            
+          
+          # check users.user_role_id first (might be a super admin)
+          user_role_id = @user.user_role_id
+          @user = check_user_role_id(user_role_id, entity)
+          return @user if @user
+
           user_role_id = Piecemaker::Helper::Auth::\
             get_user_role_from_model(@model, @user) 
-          error!('Forbidden', 403) unless user_role_id
+          @user = check_user_role_id(user_role_id, entity)
+          return @user if @user
 
-          @role_permission = Piecemaker::Helper::Auth::\
-            get_permission_recursively(user_role_id, entity)
-
-          # puts @role_permission
-          # puts user_role_id
-          # puts entity
-          # puts @model
-
-          error!('Forbidden', 403) unless @role_permission
-
-          if @role_permission.permission == "allow"
-            # okay, come in!
-            return @user
-          elsif @role_permission.permission == "forbid"
-            error!('Forbidden', 403)
-          else
-            $logger.error("Unknown permission value: '#{@role_permission.permission}'")
-            error!('Internal Server Error', 500)
-          end
+          error!('Forbidden', 403)
 
         else
           error!('Bad Request, Missing X-Access-Key in Headers', 400)
         end
       end
 
+      def check_user_role_id(user_role_id, entity)
+        error!('Forbidden', 403) unless user_role_id
+
+        @role_permission = Piecemaker::Helper::Auth::\
+          get_permission_recursively(user_role_id, entity)
+
+        # puts "---------"
+        # puts @role_permission.inspect
+        # puts user_role_id
+        # puts entity
+        # puts @model
+
+        error!('Forbidden', 403) unless @role_permission
+
+        if @role_permission.permission == "allow"
+          # okay, come in!
+          return @user
+        elsif @role_permission.permission == "forbid"
+          error!('Forbidden', 403)
+        else
+          $logger.error("Unknown permission value: '#{@role_permission.permission}'")
+          error!('Internal Server Error', 500)
+        end
+      end
 
       def self.get_user_by_api_acccess_key(api_access_key)
         return nil unless api_access_key
