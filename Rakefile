@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'bundler'
+require 'yaml' 
 
 BASE_PATH = File.dirname(File.absolute_path(__FILE__))
 
@@ -278,6 +279,14 @@ namespace :roles do
   desc "Scan files for permission entities"
   task :scan_entities, :verbose do |cmd, args|
     puts scan_entities(args[:verbose])
+  end
+
+  desc "Update config/permissions.yml with all available permissions"
+  task :update_permissions_file do
+    entities = scan_entities(false)
+    content = "# this file is auto-generated with 'rake roles:update_permissions_file'" + "\n" + YAML.dump(entities)
+    IO.write('config/permissions.yml', content)
+    puts "config/permission.yml updated"
   end
 
 

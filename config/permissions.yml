@@ -1,0 +1,31 @@
+# this file is auto-generated with 'rake roles:update_permissions_file'
+---
+- add_user_to_event_group
+- create_new_event
+- create_new_event_group
+- create_new_permission
+- create_new_role
+- create_new_user
+- delete_event
+- delete_event_group
+- delete_permission
+- delete_role
+- delete_user
+- delete_user_in_event_group
+- get_all_event_groups
+- get_event_group
+- get_event_groups_for_user
+- get_events
+- get_my_event_groups
+- get_permission
+- get_role
+- get_roles
+- get_user
+- get_users
+- get_users_for_event_group
+- update_event
+- update_event_group
+- update_permission
+- update_role
+- update_user
+- update_users_attributes_for_event_group

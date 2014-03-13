@@ -82,6 +82,7 @@ module Piecemaker
     mount ::Piecemaker::EventGroups
     mount ::Piecemaker::Events
     mount ::Piecemaker::UserRoles
+    mount ::Piecemaker::Permissions
     mount ::Piecemaker::System
     
 
