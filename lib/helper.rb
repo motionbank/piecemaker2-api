@@ -138,8 +138,9 @@ module Piecemaker
             @model = args[1]
           end
 
-          # puts @model
-          # puts @user
+          # debug
+          # puts @model.inspect
+          # puts @user.inspect
 
           # yo, whats up. i am a super admin!
           return @user if @user.user_role_id == "super_admin"
@@ -151,10 +152,11 @@ module Piecemaker
           @role_permission = Piecemaker::Helper::Auth::\
             get_permission_recursively(user_role_id, entity)
 
-          # puts @role_permission
+          # debug
+          # puts @role_permission.inspect
           # puts user_role_id
           # puts entity
-          # puts @model
+          # puts @model.inspect
 
           error!('Forbidden', 403) unless @role_permission
 
