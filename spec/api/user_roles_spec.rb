@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Piecemaker::API UserRole", :focus do
+describe "Piecemaker::API UserRole" do
   include Rack::Test::Methods
   def app
     Piecemaker::API
@@ -206,7 +206,6 @@ describe "Piecemaker::API UserRole", :focus do
       RolePermission.first(
         :user_role_id => @user_role_admin.id,
         :entity => "foobar").values.should == result
-    end
     end
     #---------------------------------------------------------------------------
   end

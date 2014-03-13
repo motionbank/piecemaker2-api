@@ -135,7 +135,109 @@ module Piecemaker
         
         @user_role.delete
       end
+
+
+      #_________________________________________________________________________
+      ##########################################################################
+      desc "create new role permission for user role with id"
+      #-------------------------------------------------------------------------
+      params do
+        requires :id, type: String, desc: "user_role_id"
+        requires :entity, type: String, desc: "name of entity"
+        requires :permission, type: String, desc: "allow or forbid"
+      end
+      #-------------------------------------------------------------------------
+      post "/:id/permission" do  #/api/v1/role/:id/permission
+      #-------------------------------------------------------------------------
+        authorize! :create_new_permission, User
+        @user_role = UserRole.first(:id => params[:id])
+        error!('Not found', 404) unless @user_role
+        
+        unless ["allow", "forbid"].include?(params[:permission])
+          error!('Bad Request', 400)
+        end
+
+        RolePermission.unrestrict_primary_key
+        @role_permission = RolePermission.create(
+          :user_role_id     => @user_role.id,
+          :entity           => params[:entity],
+          :permission       => params[:permission])
+        
+        return @role_permission
+      end
+
+
+      #_________________________________________________________________________
+      ##########################################################################
+      desc "get role permissions"
+      #-------------------------------------------------------------------------
+      params do
+        requires :user_role_id, type: String, desc: "user role id"
+        requires :role_permission_entity, type: String, desc: "permission entity"
+      end
+      #-------------------------------------------------------------------------
+      get "/:user_role_id/permission/:role_permission_entity" do  
+        #/api/v1/role/:user_role_id/permission/:role_permission_entity
+      #-------------------------------------------------------------------------
+        authorize! :get_permission, User
+        @role_permission = RolePermission.first(
+          :user_role_id => params[:user_role_id],
+          :entity => params[:role_permission_entity])
+        error!('Not found', 404) unless @role_permission
+        return @role_permission
+      end
+
+
+      #_________________________________________________________________________
+      ##########################################################################
+      desc "update role permissions"
+      #-------------------------------------------------------------------------
+      params do
+        requires :user_role_id, type: String, desc: "user role id"
+        requires :role_permission_entity, type: String, desc: "permission entity"
+        requires :permission, type: String, desc: "allow or forbid"
+      end
+      #-------------------------------------------------------------------------
+      put "/:user_role_id/permission/:role_permission_entity" do  
+        #/api/v1/role/:user_role_id/permission/:role_permission_entity
+      #-------------------------------------------------------------------------
+        authorize! :update_permission, User
+        @role_permission = RolePermission.first(
+          :user_role_id => params[:user_role_id],
+          :entity => params[:role_permission_entity])
+        error!('Not found', 404) unless @role_permission
+
+        unless ["allow", "forbid"].include?(params[:permission])
+          error!('Bad Request', 400)
+        end
+
+        @role_permission.update_with_params!(params, :permission)
+        @role_permission.save
+      end
+
+
+      #_________________________________________________________________________
+      ##########################################################################
+      desc "delete role permissions"
+      #-------------------------------------------------------------------------
+      params do
+        requires :user_role_id, type: String, desc: "user role id"
+        requires :role_permission_entity, type: String, desc: "permission entity"
+      end
+      #-------------------------------------------------------------------------
+      delete "/:user_role_id/permission/:role_permission_entity" do  
+        #/api/v1/role/:user_role_id/permission/:role_permission_entity
+      #-------------------------------------------------------------------------
+        authorize! :delete_permission, User
+        @role_permission = RolePermission.first(
+          :user_role_id => params[:user_role_id],
+          :entity => params[:role_permission_entity])
+        error!('Not found', 404) unless @role_permission
+
+        @role_permission.delete
+      end
     end
+
 
 
   end

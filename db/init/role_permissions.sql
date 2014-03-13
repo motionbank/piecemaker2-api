@@ -35,3 +35,7 @@ super_admin,allow,get_role
 super_admin,allow,create_new_role
 super_admin,allow,update_role
 super_admin,allow,delete_role
+super_admin,allow,create_new_permission
+super_admin,allow,get_permission
+super_admin,allow,update_permission
+super_admin,allow,delete_permission
