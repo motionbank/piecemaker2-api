@@ -142,7 +142,11 @@ describe "Piecemaker::API UserRole", :focus do
     #---------------------------------------------------------------------------
     it "returns role permission with user_role_id and role_permission_entitiy" do
     #---------------------------------------------------------------------------
-      pending
+      header "X-Access-Key", @frank_super_admin.api_access_key
+      get "/api/v1/role/#{@user_role_admin.id}/permission/#{@permission1.entity}"
+      last_response.status.should == 200
+      result = json_string_to_hash(last_response.body)
+      result.should == @permission1.values
     end
     #---------------------------------------------------------------------------
   end
@@ -155,7 +159,14 @@ describe "Piecemaker::API UserRole", :focus do
     #---------------------------------------------------------------------------
     it "updates role permission with user_role_id and role_permission_entitiy" do
     #---------------------------------------------------------------------------
-      pending
+      header "X-Access-Key", @frank_super_admin.api_access_key
+      put "/api/v1/role/#{@user_role_admin.id}/permission/#{@permission1.entity}",
+        :permission => "forbid"
+      last_response.status.should == 200
+      result = json_string_to_hash(last_response.body)
+      RolePermission.first(
+        :user_role_id => @user_role_admin.id,
+        :entity => @permission1.entity).values.should == result
     end
     #---------------------------------------------------------------------------
   end
@@ -168,7 +179,12 @@ describe "Piecemaker::API UserRole", :focus do
     #---------------------------------------------------------------------------
     it "deletes role permission with user_role_id and role_permission_entitiy" do
     #---------------------------------------------------------------------------
-      pending
+      header "X-Access-Key", @frank_super_admin.api_access_key
+      delete "/api/v1/role/#{@user_role_admin.id}/permission/#{@permission1.entity}"
+      last_response.status.should == 200
+      RolePermission.first(
+        :user_role_id => @user_role_admin.id,
+        :entity => @permission1.entity).should eq(nil)
     end
     #---------------------------------------------------------------------------
   end
@@ -181,7 +197,16 @@ describe "Piecemaker::API UserRole", :focus do
     #---------------------------------------------------------------------------
     it "create new role permission for user role with id" do
     #---------------------------------------------------------------------------
-      pending
+      header "X-Access-Key", @frank_super_admin.api_access_key
+      post "/api/v1/role/#{@user_role_admin.id}/permission",
+        :entity => "foobar",
+        :permission => "allow"
+      last_response.status.should == 201
+      result = json_string_to_hash(last_response.body)
+      RolePermission.first(
+        :user_role_id => @user_role_admin.id,
+        :entity => "foobar").values.should == result
+    end
     end
     #---------------------------------------------------------------------------
   end
