@@ -159,13 +159,17 @@ namespace :db do
     puts "A fresh API Access Key has been generated '#{api_access_key}'."
   end
 
-  desc "Run database migrations"
-  task :migrate, :env do |cmd, args|
+  desc "Run database migrations (:version is optional and defaults to latest)"
+  task :migrate, :env, :version do |cmd, args|
     env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
  
     require 'sequel/extensions/migration'
-    Sequel::Migrator.apply(DB, "db/migrations")
+    if(args[:version])
+      Sequel::Migrator.apply(DB, "db/migrations", args[:version])
+    else
+      Sequel::Migrator.apply(DB, "db/migrations")
+    end
   end
  
   desc "Rollback the database"
