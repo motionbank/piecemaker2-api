@@ -166,7 +166,7 @@ namespace :db do
  
     require 'sequel/extensions/migration'
     if(args[:version])
-      Sequel::Migrator.apply(DB, "db/migrations", args[:version])
+      Sequel::Migrator.apply(DB, "db/migrations", args[:version].to_i)
     else
       Sequel::Migrator.apply(DB, "db/migrations")
     end
