@@ -38,6 +38,7 @@ module Piecemaker
           user_roles_json << {
             :id => user_role.id,
             :description => user_role.description,
+            :inherit_from_id => user_role.inherit_from_id,
             :permissions => user_role.role_permissions.map{|v| v.values } || []
           }
         end
