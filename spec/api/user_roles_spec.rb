@@ -43,7 +43,8 @@ describe "Piecemaker::API UserRole" do
       ].each do |user_role|
         user_roles_json << {
           :id => user_role.id,
-          :description => user_role.description}
+          :description => user_role.description,
+          :permissions => user_role.role_permissions.map{|v| v.values } || [] }
       end
 
       result2 = []

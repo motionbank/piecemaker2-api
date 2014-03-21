@@ -37,7 +37,8 @@ module Piecemaker
         @user_roles_ordered.each do |user_role|
           user_roles_json << {
             :id => user_role.id,
-            :description => user_role.description
+            :description => user_role.description,
+            :permissions => user_role.role_permissions.map{|v| v.values } || []
           }
         end
 
@@ -67,7 +68,7 @@ module Piecemaker
         error!('Not found', 404) unless @user_role
 
         { :role => @user_role,
-          :permissions => @user_role.role_permissions }
+          :permissions => @user_role.role_permissions.map{|v| v.values } || [] }
       end
 
 
