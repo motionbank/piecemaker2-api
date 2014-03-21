@@ -107,7 +107,7 @@ module Piecemaker
 
         authorize! :delete_event, @event
 
-        { :event => @event.delete, :fields => [] }
+        { :fields => [] }.merge(@event.delete)
       end
 
     end
