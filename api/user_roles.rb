@@ -67,8 +67,8 @@ module Piecemaker
         @user_role = UserRole.first(:id => params[:id])
         error!('Not found', 404) unless @user_role
 
-        { :role => @user_role,
-          :permissions => @user_role.role_permissions.map{|v| v.values } || [] }
+        { :permissions => @user_role.role_permissions.map{|v| v.values } || [] 
+          }.merge(@user_role)
       end
 
 

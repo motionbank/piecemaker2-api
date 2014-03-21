@@ -73,9 +73,8 @@ describe "Piecemaker::API UserRole" do
       result = json_string_to_hash(last_response.body)
 
       result.should == {
-        :role => @user_role_admin.values,
         :permissions => [@permission1.values]
-      }
+      }.merge(@user_role_admin.values)
     end
     #---------------------------------------------------------------------------
   end
