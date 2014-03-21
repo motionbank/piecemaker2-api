@@ -76,8 +76,7 @@ module Piecemaker
           end
         end
         
-        { :event => @event, 
-          :fields => fields }
+        { :fields => fields }.merge(@event)
       end
       
 

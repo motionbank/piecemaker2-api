@@ -142,8 +142,10 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 201
 
       result       = json_string_to_hash(last_response.body)
-      event        = result[:event]
       event_fields = result[:fields]
+ 
+      event        = result
+      event.delete(:fields)
 
       # was the event created?
       Event[event[:id]].values.should == event
@@ -173,8 +175,10 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 201
 
       result       = json_string_to_hash(last_response.body)
-      event        = result[:event]
       event_fields = result[:fields]
+      
+      event        = result
+      event.delete(:fields)
 
       # was the event created?
       Event[event[:id]].values.should == event
