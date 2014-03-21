@@ -22,8 +22,7 @@ module Piecemaker
         error!('Not found', 404) unless @event
         authorize! :get_events, @event
         
-        { :event => @event, 
-          :fields => @event.event_fields }
+        {:fields => @event.event_fields || [] }.merge(@event)
       end
 
 

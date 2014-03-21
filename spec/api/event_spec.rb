@@ -52,10 +52,13 @@ describe "Piecemaker::API Event" do
       last_response.status.should == 200
 
       # returned event matches factory event?
-      results       = json_string_to_hash(last_response.body)
-      event         = results[:event]
-      event_fields  = results[:fields]
-      # event_group  = results[:group]
+      result       = json_string_to_hash(last_response.body)
+      event_fields = result[:fields]
+      
+      event        = result
+      event.delete(:fields)
+      
+      # event_group  = result[:group]
 
       event.should == @big.values
       event_fields.should =~ [@big_field.values]
