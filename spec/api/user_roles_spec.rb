@@ -28,7 +28,7 @@ describe "Piecemaker::API UserRole" do
   ##############################################################################
 
     #---------------------------------------------------------------------------
-    it "returns all user roles ordered by inheritance", :focus do
+    it "returns all user roles ordered by inheritance" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @frank_super_admin.api_access_key
       get "/api/v1/roles"
