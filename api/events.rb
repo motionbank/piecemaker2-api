@@ -85,9 +85,8 @@ module Piecemaker
           error!('Internal Server Error', 500)
         else
           return {
-            :event => @event, 
-            :fields => EventField.where(:event_id => @event.id)
-          }
+            :fields => EventField.where(:event_id => @event.id) || []
+          }.merge(@event)
         end
       end
 

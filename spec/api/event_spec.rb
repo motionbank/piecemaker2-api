@@ -92,8 +92,10 @@ describe "Piecemaker::API Event" do
       last_response.status.should == 200
 
       result       = json_string_to_hash(last_response.body)
-      event        = result[:event]
       event_fields = result[:fields]
+      
+      event        = result
+      event.delete(:fields)
 
       # returned event matches event in db?
       Event[event[:id]].values.should == event
@@ -118,8 +120,10 @@ describe "Piecemaker::API Event" do
       last_response.status.should == 200
       
       result       = json_string_to_hash(last_response.body)
-      event        = result[:event]
       event_fields = result[:fields]
+      
+      event        = result
+      event.delete(:fields)
 
       # returned event matches event in db?
       event.should == Event[event[:id]].values
@@ -143,8 +147,10 @@ describe "Piecemaker::API Event" do
       last_response.status.should == 200
       
       result       = json_string_to_hash(last_response.body)
-      event        = result[:event]
       event_fields = result[:fields]
+      
+      event        = result
+      event.delete(:fields)
 
       # returned event matches event in db?
       event.should == Event[event[:id]].values
@@ -169,8 +175,10 @@ describe "Piecemaker::API Event" do
       last_response.status.should == 200
       
       result       = json_string_to_hash(last_response.body)
-      event        = result[:event]
       event_fields = result[:fields]
+      
+      event        = result
+      event.delete(:fields)
 
       # returned event matches event in db?
       event.should == Event[event[:id]].values
