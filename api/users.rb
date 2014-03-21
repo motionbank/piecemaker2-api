@@ -50,8 +50,24 @@ module Piecemaker
         # {:api_access_key => nil}
         return nil
       end
-      
 
+
+      #_________________________________________________________________________
+      ##########################################################################
+      desc "Generate new api_access_key."
+      #-------------------------------------------------------------------------
+      post "/regenerate_api_access_key" do  #/api/v1/user/regenerate_api_access_key
+      #-------------------------------------------------------------------------
+        @_user = authorize!
+
+        new_api_access_key = Piecemaker::Helper::API_Access_Key::generate
+        @_user.api_access_key = new_api_access_key
+        @_user.save
+
+        return {'api_access_key' => new_api_access_key}
+      end
+
+      
       #_________________________________________________________________________
       ##########################################################################
       desc "Creates new user."

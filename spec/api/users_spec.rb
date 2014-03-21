@@ -194,7 +194,7 @@ describe "Piecemaker::API User" do
     end
 
     ############################################################################
-    describe "POST /api/v1/user " do
+    describe "POST /api/v1/user" do
     ############################################################################  
 
       #-------------------------------------------------------------------------
@@ -245,6 +245,26 @@ describe "Piecemaker::API User" do
       #-------------------------------------------------------------------------
     end
 
+
+    ############################################################################
+    describe "POST /api/v1/user/regenerate_api_access_key" do
+    ############################################################################  
+
+      #-------------------------------------------------------------------------
+      it "creates new api_access_key" do
+      #-------------------------------------------------------------------------
+        header "X-Access-Key", @frank_super_admin.api_access_key
+        post "/api/v1/user/regenerate_api_access_key"
+        last_response.status.should == 201
+
+        result = json_string_to_hash(last_response.body)
+
+        @user = User[@frank_super_admin.id]
+
+        @user.api_access_key.should == result[:api_access_key]
+      end
+      #-------------------------------------------------------------------------
+    end
 
     ############################################################################
     describe "GET /api/v1/user/me" do
