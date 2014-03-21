@@ -79,7 +79,7 @@ module Piecemaker
       params do
         requires :id, type: String, desc: "id for user role (note that id is a string)"
         optional :inherit_from_id, type: String, desc: "inherit permissions from this user role"
-        optional :text, type: String, desc: "some additional description"
+        optional :description, type: String, desc: "some additional description"
       end
       #-------------------------------------------------------------------------
       post "/" do  #/api/v1/role
