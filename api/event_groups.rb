@@ -397,9 +397,9 @@ module Piecemaker
         @record = UserHasEventGroup.first(:user_id => params[:user_id],
           :event_group_id => params[:event_group_id])
 
+        error!('Event not found', 404) unless @record
         @record.delete if @record
-
-        {:status => true}
+        @record
       end
 
     end

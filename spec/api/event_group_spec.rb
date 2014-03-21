@@ -768,15 +768,19 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
     it "deletes a user from an event_group (via user_has_event_groups)" do
     #---------------------------------------------------------------------------
+      @user_has_event_group = UserHasEventGroup.first(:user_id => @frank_super_admin.id, 
+        :event_group_id => @alpha.id)
+
       header "X-Access-Key", @frank_super_admin.api_access_key
-      delete "/api/v1/group/#{@alpha.id}/user/#{@peter.id}"
+      delete "/api/v1/group/#{@alpha.id}/user/#{@frank_super_admin.id}"
       last_response.status.should == 200
 
       result       = json_string_to_hash(last_response.body)
-      result.should == {:status => true}
 
-      UserHasEventGroup.first(:user_id => @peter.id, 
+      UserHasEventGroup.first(:user_id => @frank_super_admin.id, 
         :event_group_id => @alpha.id).should eq(nil)
+
+      result.should == @user_has_event_group.values
     end
     #---------------------------------------------------------------------------
 
