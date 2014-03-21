@@ -331,14 +331,12 @@ describe "Piecemaker::API EventGroup" do
 
       results.should =~ [
         {
-          :event => @big_in_alpha.values, 
           :fields => [@a_field.values, @flag1_field.values, 
                       @z_field.values]
-        }, 
+        }.merge(@big_in_alpha.values), 
         {
-          :event => @small_in_alpha.values,
           :fields => [@small_event_field.values]
-        }
+        }.merge(@small_in_alpha.values)
       ]
     end
     #---------------------------------------------------------------------------
@@ -368,8 +366,11 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 200
 
       results        = json_string_to_hash(last_response.body)
-      event_0        = results[0][:event]
-      event_1        = results[1][:event]
+      event_0        = results[0]
+      event_0.delete(:fields)
+
+      event_1        = results[1]
+      event_1.delete(:fields)
 
       event_0.should == @small_in_alpha.values
       event_1.should == @big_in_alpha.values
@@ -408,9 +409,9 @@ describe "Piecemaker::API EventGroup" do
       results       = json_string_to_hash(last_response.body)
 
       results.should =~ [
-        {:event => @event2.values, :fields => []},
-        {:event => @event3.values, :fields => []},
-        {:event => @event4.values, :fields => []},
+        {:fields => []}.merge(@event2.values),
+        {:fields => []}.merge(@event3.values),
+        {:fields => []}.merge(@event4.values),
       ]
     end
     #---------------------------------------------------------------------------
@@ -425,9 +426,9 @@ describe "Piecemaker::API EventGroup" do
       results       = json_string_to_hash(last_response.body)
 
       results.should =~ [
-        {:event => @event1.values, :fields => []},
-        {:event => @event2.values, :fields => []},
-        {:event => @event3.values, :fields => []},
+        {:fields => []}.merge(@event1.values),
+        {:fields => []}.merge(@event2.values),
+        {:fields => []}.merge(@event3.values),
       ]
     end
     #---------------------------------------------------------------------------
@@ -442,8 +443,8 @@ describe "Piecemaker::API EventGroup" do
       results       = json_string_to_hash(last_response.body)
 
       results.should =~ [
-        {:event => @event2.values, :fields => []},
-        {:event => @event3.values, :fields => []},
+        {:fields => []}.merge(@event2.values),
+        {:fields => []}.merge(@event3.values),
       ]
     end
     #---------------------------------------------------------------------------
@@ -465,10 +466,10 @@ describe "Piecemaker::API EventGroup" do
       results       = json_string_to_hash(last_response.body)
 
       results.should =~ [
-        {:event => @event1.values, :fields => []},
-        {:event => @event2.values, :fields => []},
-        {:event => @event3.values, :fields => []},
-        {:event => @event4.values, :fields => []},
+        {:fields => []}.merge(@event1.values),
+        {:fields => []}.merge(@event2.values),
+        {:fields => []}.merge(@event3.values),
+        {:fields => []}.merge(@event4.values),
       ]
     end
     #---------------------------------------------------------------------------
@@ -483,9 +484,9 @@ describe "Piecemaker::API EventGroup" do
       results       = json_string_to_hash(last_response.body)
 
       results.should =~ [
-        {:event => @event1.values, :fields => []},
-        {:event => @event2.values, :fields => []},
-        {:event => @event3.values, :fields => []},
+        {:fields => []}.merge(@event1.values),
+        {:fields => []}.merge(@event2.values),
+        {:fields => []}.merge(@event3.values),
       ]
     end
     #---------------------------------------------------------------------------
@@ -500,9 +501,9 @@ describe "Piecemaker::API EventGroup" do
       results       = json_string_to_hash(last_response.body)
 
       results.should =~ [
-        {:event => @event1.values, :fields => []},
-        {:event => @event2.values, :fields => []},
-        {:event => @event3.values, :fields => []},
+        {:fields => []}.merge(@event1.values),
+        {:fields => []}.merge(@event2.values),
+        {:fields => []}.merge(@event3.values),
       ]
     end
     #---------------------------------------------------------------------------
@@ -524,9 +525,9 @@ describe "Piecemaker::API EventGroup" do
       results       = json_string_to_hash(last_response.body)
 
       results.should =~ [
-        {:event => @event2.values, :fields => []},
-        {:event => @event3.values, :fields => []},
-        {:event => @event4.values, :fields => []},
+        {:fields => []}.merge(@event2.values),
+        {:fields => []}.merge(@event3.values),
+        {:fields => []}.merge(@event4.values),
       ]
     end
     #---------------------------------------------------------------------------
@@ -541,8 +542,8 @@ describe "Piecemaker::API EventGroup" do
       results       = json_string_to_hash(last_response.body)
 
       results.should =~ [
-        {:event => @event1.values, :fields => []},
-        {:event => @event2.values, :fields => []},
+        {:fields => []}.merge(@event1.values),
+        {:fields => []}.merge(@event2.values),
       ]
     end
     #---------------------------------------------------------------------------
@@ -557,7 +558,7 @@ describe "Piecemaker::API EventGroup" do
       results       = json_string_to_hash(last_response.body)
 
       results.should =~ [
-        {:event => @event2.values, :fields => []},
+        {:fields => []}.merge(@event2.values),
       ]
     end
     #---------------------------------------------------------------------------
@@ -580,10 +581,9 @@ describe "Piecemaker::API EventGroup" do
 
       results.should =~ [
         {
-          :event => @big_in_alpha.values, 
           :fields => [@a_field.values, @flag1_field.values, 
                       @z_field.values]
-        }
+        }.merge(@big_in_alpha.values)
       ]
 
     end
@@ -602,10 +602,9 @@ describe "Piecemaker::API EventGroup" do
 
       results.should =~ [
         {
-          :event => @big_in_alpha.values, 
           :fields => [@a_field.values, @flag1_field.values, 
                       @z_field.values]
-        }
+        }.merge(@big_in_alpha.values)
       ]
 
     end

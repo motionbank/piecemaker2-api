@@ -246,8 +246,7 @@ module Piecemaker
             # (with its event fields)
             if counter == params[:fields].length
               @return_events << { 
-                :event => event, 
-                :fields => @event_fields[event.id] || [] }
+                :fields => @event_fields[event.id] || [] }.merge(event)
             end
           end
 
@@ -255,8 +254,7 @@ module Piecemaker
           # no further field conditions ...
           @events.each do |event|
             @return_events << { 
-              :event => event, 
-              :fields => @event_fields[event.id] || [] }
+              :fields => @event_fields[event.id] || [] }.merge(event)
           end
         end
 
