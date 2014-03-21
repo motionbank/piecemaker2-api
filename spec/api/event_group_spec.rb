@@ -655,11 +655,12 @@ describe "Piecemaker::API EventGroup" do
       last_response.status.should == 201
 
       result       = json_string_to_hash(last_response.body)
-      result.should == {:status => true}
-
+      
       @user_has_event_group = UserHasEventGroup.first(
         :user_id => @peter.id, 
         :event_group_id => @alpha.id)
+
+      result.should == @user_has_event_group.values
 
       @user_has_event_group.should_not eq(nil)
       @user_has_event_group.user_role_id.should == @user_role_admin.id

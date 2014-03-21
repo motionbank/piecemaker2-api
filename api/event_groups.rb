@@ -317,12 +317,12 @@ module Piecemaker
         end
 
         UserHasEventGroup.unrestrict_primary_key
-        UserHasEventGroup.create(
+        @user_has_event_group = UserHasEventGroup.create(
           :user_id => params[:user_id],
           :event_group_id => params[:event_group_id],
           :user_role_id => params[:user_role_id])
 
-        {:status => true}
+        @user_has_event_group
       end
 
 
