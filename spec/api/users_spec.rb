@@ -262,6 +262,7 @@ describe "Piecemaker::API User" do
         @user = User[@frank_super_admin.id]
 
         @user.api_access_key.should == result[:api_access_key]
+        @frank_super_admin.api_access_key.should_not == result[:api_access_key]
       end
       #-------------------------------------------------------------------------
     end
