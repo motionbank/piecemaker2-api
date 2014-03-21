@@ -86,7 +86,7 @@ module Piecemaker
       #-------------------------------------------------------------------------
       params do
         requires :title, type: String, desc: "name of the group"
-        requires :text, type: String, desc: "some additional description"
+        requires :description, type: String, desc: "some additional description"
       end 
       #-------------------------------------------------------------------------
       post "/" do  #/api/v1/group
@@ -96,7 +96,7 @@ module Piecemaker
         @event_group = EventGroup.create(
           :created_by_user_id => @_user.id,
           :title              => params[:title],
-          :text               => params[:text])
+          :description        => params[:description])
 
         UserHasEventGroup.unrestrict_primary_key
         UserHasEventGroup.create(

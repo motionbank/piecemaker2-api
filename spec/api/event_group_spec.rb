@@ -221,7 +221,7 @@ describe "Piecemaker::API EventGroup" do
     it "create new event_group (together with user_has_event_groups record)" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @frank_super_admin.api_access_key
-      post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
+      post "/api/v1/group", :title => "Omega", :description => "Text for Omega"
       last_response.status.should == 201
       
       returned_omega = json_parse(last_response.body)
@@ -238,7 +238,7 @@ describe "Piecemaker::API EventGroup" do
     it "makes the currently logged in user the owner" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @frank_super_admin.api_access_key
-      post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
+      post "/api/v1/group", :title => "Omega", :description => "Text for Omega"
       last_response.status.should == 201
 
       returned_omega = json_parse(last_response.body)
@@ -248,7 +248,7 @@ describe "Piecemaker::API EventGroup" do
 
     it "assigns admin-like role to owner of event group" do
       header "X-Access-Key", @frank_super_admin.api_access_key
-      post "/api/v1/group", :title => "Omega", :text => "Text for Omega"
+      post "/api/v1/group", :title => "Omega", :description => "Text for Omega"
       last_response.status.should == 201
 
       returned_omega = json_parse(last_response.body)
@@ -287,7 +287,7 @@ describe "Piecemaker::API EventGroup" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @frank_super_admin.api_access_key
       put "/api/v1/group/#{@alpha.id}", :title => "Omega", 
-        :text => "Text for Omega"
+        :description => "Text for Omega"
       last_response.status.should == 200
 
       event_group = json_string_to_hash(last_response.body)
