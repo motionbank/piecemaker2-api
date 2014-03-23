@@ -126,7 +126,7 @@ module Piecemaker
           return @user if args.count == 0
 
           # verify permissions ...
-          entity = args[0]
+          action = args[0]
           if(args[1].is_a? Class)
             _class = args[1]
             if _class.name == "User"
@@ -150,12 +150,12 @@ module Piecemaker
           error!('Forbidden', 403) unless user_role_id
 
           @role_permission = Piecemaker::Helper::Auth::\
-            get_permission_recursively(user_role_id, entity)
+            get_permission_recursively(user_role_id, action)
 
           # debug
           # puts @role_permission.inspect
           # puts user_role_id
-          # puts entity
+          # puts action
           # puts @model.inspect
 
           error!('Forbidden', 403) unless @role_permission
@@ -221,8 +221,8 @@ module Piecemaker
         end
       end
 
-      def self.get_permission_recursively(user_role, entity)
-        entity = entity.to_s
+      def self.get_permission_recursively(user_role, action)
+        action = action.to_s
 
         if user_role.is_a? UserRole
           user_role_id = user_role.id
@@ -231,11 +231,11 @@ module Piecemaker
         end
 
         # for debugging:
-        # $logger.debug("#{entity} - #{user_role_id}")
+        # $logger.debug("#{action} - #{user_role_id}")
 
         # permission defined for this role?
         @role_permission = RolePermission.first(
-          :user_role_id => user_role_id, :entity => entity)
+          :user_role_id => user_role_id, :action => action)
 
         if @role_permission
           # yes, return it
@@ -246,7 +246,7 @@ module Piecemaker
           if @user_role.inherit_from_id
             # check, if permission is defined for parent role ...
             return self.get_permission_recursively(
-              @user_role.inherit_from_id, entity)
+              @user_role.inherit_from_id, action)
           else
             # wasnt able to find permission
             return nil

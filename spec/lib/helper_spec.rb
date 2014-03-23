@@ -194,7 +194,7 @@ describe "Module helper" do
       # guest inherits nothing
 
       # Permission Matrix
-      # entity    admin user guest
+      # action    admin user guest
       # a         >     >    Y
       # b         >     Y    -
       # c         Y     -    -
@@ -208,7 +208,7 @@ describe "Module helper" do
       # t         Y     N    Y
       # u         N     Y    N
 
-      @entity_prefix = "(RSPEC_PREFIX)-"
+      @action_prefix = "(RSPEC_PREFIX)-"
 
       factory_batch do 
   
@@ -218,65 +218,65 @@ describe "Module helper" do
         
         @user_role_admin_allow_c   = RolePermission.make :allow,
                                       :user_role_id => @user_role_admin.id,
-                                      :entity => @entity_prefix + "c"
+                                      :action => @action_prefix + "c"
         
         # needed for Piecemaker::API.get "/rspec_dummy_route_for_authorize_user_class" do
         $user_role_admin_allow_c = @user_role_admin_allow_c
 
         @user_role_admin_forbid_z  = RolePermission.make :forbid,
                                       :user_role_id => @user_role_admin.id,
-                                      :entity => @entity_prefix + "z"
+                                      :action => @action_prefix + "z"
         @user_role_admin_forbid_s  = RolePermission.make :forbid,
                                       :user_role_id => @user_role_admin.id,
-                                      :entity => @entity_prefix + "s"
+                                      :action => @action_prefix + "s"
         @user_role_admin_allow_t   = RolePermission.make :allow,
                                       :user_role_id => @user_role_admin.id,
-                                      :entity => @entity_prefix + "t"
+                                      :action => @action_prefix + "t"
         @user_role_admin_forbid_u  = RolePermission.make :forbid,
                                       :user_role_id => @user_role_admin.id,
-                                      :entity => @entity_prefix + "u"
+                                      :action => @action_prefix + "u"
 
         @user_role_admin_invalid_type  = RolePermission.make :invalid_permission_type,
                                       :user_role_id => @user_role_admin.id,
-                                      :entity => "this_is_a_invalid_permission_type"
+                                      :action => "this_is_a_invalid_permission_type"
 
 
 
         @user_role_user_allow_b    = RolePermission.make :allow,
                                       :user_role_id => @user_role_user.id,
-                                      :entity => @entity_prefix + "b"
+                                      :action => @action_prefix + "b"
         @user_role_user_forbid_y   = RolePermission.make :forbid,
                                       :user_role_id => @user_role_user.id,
-                                      :entity => @entity_prefix + "y"
+                                      :action => @action_prefix + "y"
         @user_role_user_forbid_r   = RolePermission.make :forbid,
                                       :user_role_id => @user_role_user.id,
-                                      :entity => @entity_prefix + "r"
+                                      :action => @action_prefix + "r"
         @user_role_user_forbid_t   = RolePermission.make :forbid,
                                       :user_role_id => @user_role_user.id,
-                                      :entity => @entity_prefix + "t"                                      
+                                      :action => @action_prefix + "t"                                      
         @user_role_user_allow_u    = RolePermission.make :allow,
                                       :user_role_id => @user_role_user.id,
-                                      :entity => @entity_prefix + "u"
+                                      :action => @action_prefix + "u"
 
 
         @user_role_guest_allow_a    = RolePermission.make :allow,
                                       :user_role_id => @user_role_guest.id,
-                                      :entity => @entity_prefix + "a"
+                                      :action => @action_prefix + "a"
         @user_role_guest_forbid_x   = RolePermission.make :forbid,
                                       :user_role_id => @user_role_guest.id,
-                                      :entity => @entity_prefix + "x"                
+                                      :action => @action_prefix + "x"                
         @user_role_guest_allow_r    = RolePermission.make :allow,
                                       :user_role_id => @user_role_guest.id,
-                                      :entity => @entity_prefix + "r"
+                                      :action => @action_prefix + "r"
         @user_role_guest_allow_s    = RolePermission.make :allow,
                                       :user_role_id => @user_role_guest.id,
-                                      :entity => @entity_prefix + "s"
+                                      :action => @action_prefix + "s"
         @user_role_guest_allow_t    = RolePermission.make :allow,
                                       :user_role_id => @user_role_guest.id,
-                                      :entity => @entity_prefix + "t"                                      
+                                      :action => @action_prefix + "t"                                      
         @user_role_guest_forbid_u   = RolePermission.make :forbid,
                                       :user_role_id => @user_role_guest.id,
-                                      :entity => @entity_prefix + "u"
+                                      :action => @action_prefix + "u"
 
 
         @pan                      = User.make :pan
@@ -307,19 +307,19 @@ describe "Module helper" do
     describe "get_permission_recursively" do
       it "returns permission for role that inherits" do
         permission = Piecemaker::Helper::Auth::get_permission_recursively(
-          @user_role_admin, @entity_prefix + "a")
+          @user_role_admin, @action_prefix + "a")
         permission.should == @user_role_guest_allow_a
       end
 
       it "returns permission for role that does not inherit" do
         permission = Piecemaker::Helper::Auth::get_permission_recursively(
-          @user_role_admin, @entity_prefix + "c")
+          @user_role_admin, @action_prefix + "c")
         permission.should == @user_role_admin_allow_c
       end
 
       it "returns no permission when no permission exists" do
         permission = Piecemaker::Helper::Auth::get_permission_recursively(
-          @user_role_user, @entity_prefix + "c")
+          @user_role_user, @action_prefix + "c")
         permission.should eq(nil)      
       end
     end
@@ -413,7 +413,7 @@ describe "Module helper" do
     end
 
     Piecemaker::API.get "/rspec_dummy_route_for_authorize_user_class" do
-      authorize! $user_role_admin_allow_c.entity.to_sym, User
+      authorize! $user_role_admin_allow_c.action.to_sym, User
     end
 
     Piecemaker::API.get "/rspec_dummy_route_for_authorize_permission" +
@@ -498,13 +498,13 @@ describe "Module helper" do
       # verify permissions matrix ...
       describe "Permission Matrix"  do
 
-        describe "entity    admin user guest" do
+        describe "action    admin user guest" do
 
           before(:each) do
             truncate_table :user_has_event_groups
           end
 
-          def test_permission(permission, entity, user, role)
+          def test_permission(permission, action, user, role)
             # assign role to user via user_has_event_group
             user_has_event_group = nil
             factory_batch do 
@@ -517,7 +517,7 @@ describe "Module helper" do
             # send request to dummy authorize route  
             header "X-Access-Key", user.api_access_key
             get "/api/v1/rspec_dummy_route_for_authorize_permission" +
-                "/#{@entity_prefix}" + entity +
+                "/#{@action_prefix}" + action +
                 "/#{user_has_event_group.user_id}" + 
                 "/#{user_has_event_group.event_group_id}" 
 
@@ -530,7 +530,7 @@ describe "Module helper" do
             end
           end
 
-          # entity a
+          # action a
           it "a         >     >    Y  (as guest)" do
             test_permission("allow", "a", @pan, @user_role_guest)
           end
@@ -541,7 +541,7 @@ describe "Module helper" do
             test_permission("allow", "a", @pan, @user_role_admin)
           end
 
-          # entity b
+          # action b
           it "b         >     Y    -  (as guest)" do
             test_permission("forbid", "b", @pan, @user_role_guest)
           end
@@ -552,7 +552,7 @@ describe "Module helper" do
             test_permission("allow", "b", @pan, @user_role_admin)
           end
 
-          # entity c
+          # action c
           it "c         Y     -    -  (as guest)" do
             test_permission("forbid", "c", @pan, @user_role_guest)
           end
@@ -564,7 +564,7 @@ describe "Module helper" do
           end
         
 
-          # entity x
+          # action x
           it "x         >     >    N  (as guest)" do
             test_permission("forbid", "x", @pan, @user_role_guest)
           end
@@ -575,7 +575,7 @@ describe "Module helper" do
             test_permission("forbid", "x", @pan, @user_role_admin)
           end    
 
-          # entity y
+          # action y
           it "y         >     N    -  (as guest)" do
             test_permission("forbid", "y", @pan, @user_role_guest)
           end
@@ -586,7 +586,7 @@ describe "Module helper" do
             test_permission("forbid", "y", @pan, @user_role_admin)
           end      
 
-          # entity z
+          # action z
           it "z         N     -    -  (as guest)" do
             test_permission("forbid", "z", @pan, @user_role_guest)
           end
@@ -597,7 +597,7 @@ describe "Module helper" do
             test_permission("forbid", "z", @pan, @user_role_admin)
           end  
 
-          # entity r
+          # action r
           it "r         >     N    Y  (as guest)" do
             test_permission("allow", "r", @pan, @user_role_guest)
           end
@@ -608,7 +608,7 @@ describe "Module helper" do
             test_permission("forbid", "r", @pan, @user_role_admin)
           end  
 
-          # entity s
+          # action s
           it "s         N     >    Y  (as guest)" do
             test_permission("allow", "s", @pan, @user_role_guest)
           end
@@ -619,7 +619,7 @@ describe "Module helper" do
             test_permission("forbid", "s", @pan, @user_role_admin)
           end  
 
-          # entity t
+          # action t
           it "t         Y     N    Y  (as guest)" do
             test_permission("allow", "t", @pan, @user_role_guest)
           end
@@ -630,7 +630,7 @@ describe "Module helper" do
             test_permission("allow", "t", @pan, @user_role_admin)
           end 
 
-          # entity u
+          # action u
           it "u         N     Y    N  (as guest)" do
             test_permission("forbid", "u", @pan, @user_role_guest)
           end

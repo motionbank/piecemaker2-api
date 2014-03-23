@@ -262,8 +262,8 @@ def scan_entities(verbose)
             ""
           ]       
         else
-          _entity = authorize[0].scan(/:(.*), /).flatten[0]
-          entities << _entity if _entity
+          _action = authorize[0].scan(/:(.*), /).flatten[0]
+          entities << _action if _action
         end
       end
     end
@@ -318,18 +318,18 @@ namespace :roles do
 
 
     # build role permissions array
-    @distinct_entities = RolePermission.distinct(:entity).select(:entity).order(:entity).all
+    @distinct_entities = RolePermission.distinct(:action).select(:action).order(:action).all
 
     # build matrix
     matrix = []
-    @distinct_entities.each do |entity|
-      entity = entity.entity
+    @distinct_entities.each do |action|
+      action = action.action
       
       permissions = {}
 
       @user_roles_ordered.each do |user_role|
 
-        permission = Piecemaker::Helper::Auth::get_permission_recursively(user_role, entity)
+        permission = Piecemaker::Helper::Auth::get_permission_recursively(user_role, action)
         if permission
           if permission.permission == "allow"
             permissions[user_role.id] = "Yes"
@@ -343,17 +343,17 @@ namespace :roles do
         end
       end
 
-      deleted_entity = entities.delete(entity)
+      deleted_action = entities.delete(action)
 
       matrix << {
-        :entity => entity + (deleted_entity ? "" : " (not used)"),
+        :action => action + (deleted_action ? "" : " (not used)"),
         :permissions => permissions
       }
 
       
     end
 
-    entities.each do |entity|
+    entities.each do |action|
 
       permissions = {}
       @user_roles_ordered.each do |user_role|
@@ -361,7 +361,7 @@ namespace :roles do
       end
 
       matrix << {
-        :entity => entity,
+        :action => action,
         :permissions => permissions
       }
     end
@@ -386,7 +386,7 @@ namespace :roles do
           # header
           puts "<thead>"
           puts "<tr>"
-            puts "<th>Entity</th>"
+            puts "<th>Action</th>"
             output[:headers].each do |h|
               puts "<th>#{h}</th>"
             end
@@ -397,7 +397,7 @@ namespace :roles do
           puts "<tbody>"
           output[:data].each do |e|
             puts "<tr>"
-              puts "<td class='entity'><input type='checkbox'> #{e[:entity]}</td>"
+              puts "<td class='action'><input type='checkbox'> #{e[:action]}</td>"
               output[:headers].each do |p|
                 puts "<td class='permission #{e[:permissions][p]}'>#{e[:permissions][p]}</td>"
               end

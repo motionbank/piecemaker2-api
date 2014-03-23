@@ -1,16 +1,16 @@
-# make entity random to avoid collission with init sql files
+# make action random to avoid collission with init sql files
 
 RolePermission.factory :allow do
-  permission "allow"
-  entity "random_SFHJ4432D_entity"
+  allowed true
+  action "random_SFHJ4432D_action"
 end
 
 RolePermission.factory :forbid do
-  permission "forbid"
-  entity "random_SFHJ4432D_entity"
+  allowed false
+  action "random_SFHJ4432D_action"
 end
 
 RolePermission.factory :invalid_permission_type do
-  permission "invalid_type"
-  entity "random_SFHJ4432D_entity"
+  allowed "invalid_type"
+  action "random_SFHJ4432D_action"
 end
