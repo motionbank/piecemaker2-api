@@ -1,7 +1,7 @@
 Sequel.migration do
   up do
     alter_table(:role_permissions) do
-      rename_column(:entitiy, :action)
+      rename_column(:entity, :action)
       drop_column :permission
       add_column :allowed, TrueClass, :null => false, :default => false
 
@@ -13,7 +13,7 @@ Sequel.migration do
 
   down do
     alter_table(:role_permissions) do
-      rename_column(:action, :entitiy)
+      rename_column(:action, :entity)
       add_column :permission, String, :size => 50, :null => false
       drop_column :allowed
     end
