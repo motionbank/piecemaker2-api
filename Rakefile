@@ -331,15 +331,13 @@ namespace :roles do
 
         permission = Piecemaker::Helper::Auth::get_permission_recursively(user_role, action)
         if permission
-          if permission.permission == "allow"
+          if permission.allowed
             permissions[user_role.id] = "Yes"
-          elsif permission.permission == "forbid"
-            permissions[user_role.id] = "No"
           else
-            permissions[user_role.id] = "Error"
+            permissions[user_role.id] = "No"
           end
         else
-          permissions[user_role.id] = 'No'
+          permissions[user_role.id] = "No"
         end
       end
 

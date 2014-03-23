@@ -162,7 +162,7 @@ describe "Piecemaker::API UserRole" do
     #---------------------------------------------------------------------------
       header "X-Access-Key", @frank_super_admin.api_access_key
       put "/api/v1/role/#{@user_role_admin.id}/permission/#{@permission1.action}",
-        :permission => "forbid"
+        :allowed => false
       last_response.status.should == 200
       result = json_string_to_hash(last_response.body)
       RolePermission.first(
@@ -201,7 +201,7 @@ describe "Piecemaker::API UserRole" do
       header "X-Access-Key", @frank_super_admin.api_access_key
       post "/api/v1/role/#{@user_role_admin.id}/permission",
         :action => "foobar",
-        :permission => "allow"
+        :allowed => true
       last_response.status.should == 201
       result = json_string_to_hash(last_response.body)
       RolePermission.first(

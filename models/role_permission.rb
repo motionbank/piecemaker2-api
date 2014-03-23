@@ -1,6 +1,6 @@
 class RolePermission < Sequel::Model(:role_permissions)
   
-  set_primary_key [:user_role_id, :permission, :action]
+  set_primary_key [:user_role_id, :action]
 
   set_dataset dataset.order(:action)
 

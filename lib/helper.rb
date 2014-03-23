@@ -160,14 +160,11 @@ module Piecemaker
 
           error!('Forbidden', 403) unless @role_permission
 
-          if @role_permission.permission == "allow"
+          if @role_permission.allowed
             # okay, come in!
             return @user
-          elsif @role_permission.permission == "forbid"
-            error!('Forbidden', 403)
           else
-            $logger.error("Unknown permission value: '#{@role_permission.permission}'")
-            error!('Internal Server Error', 500)
+            error!('Forbidden', 403)
           end
 
         else

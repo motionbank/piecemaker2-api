@@ -486,15 +486,6 @@ describe "Module helper" do
         last_response.status.should == 403
       end
 
-      it "raises error if permission type is not allow or forbid" do
-        header "X-Access-Key", @pan.api_access_key
-        get "/api/v1/rspec_dummy_route_for_authorize_permission" +
-            "/this_is_a_invalid_permission_type" +
-            "/#{@user_has_event_group.user_id}" + 
-            "/#{@user_has_event_group.event_group_id}" 
-        last_response.status.should == 500
-      end
-
       # verify permissions matrix ...
       describe "Permission Matrix"  do
 
