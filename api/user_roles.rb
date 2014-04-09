@@ -145,8 +145,8 @@ module Piecemaker
       #-------------------------------------------------------------------------
       params do
         requires :id, type: String, desc: "user_role_id"
-        requires :entity, type: String, desc: "name of entity"
-        requires :permission, type: String, desc: "allow or forbid"
+        requires :action, type: String, desc: "name of action"
+        requires :allowed, type: Boolean, desc: "yes or no?"
       end
       #-------------------------------------------------------------------------
       post "/:id/permission" do  #/api/v1/role/:id/permission
@@ -155,15 +155,11 @@ module Piecemaker
         @user_role = UserRole.first(:id => params[:id])
         error!('Not found', 404) unless @user_role
         
-        unless ["allow", "forbid"].include?(params[:permission])
-          error!('Bad Request', 400)
-        end
-
         RolePermission.unrestrict_primary_key
         @role_permission = RolePermission.create(
           :user_role_id     => @user_role.id,
-          :entity           => params[:entity],
-          :permission       => params[:permission])
+          :action           => params[:action],
+          :allowed       => params[:allowed])
         
         return @role_permission
       end
@@ -175,16 +171,16 @@ module Piecemaker
       #-------------------------------------------------------------------------
       params do
         requires :user_role_id, type: String, desc: "user role id"
-        requires :role_permission_entity, type: String, desc: "permission entity"
+        requires :role_permission_action, type: String, desc: "permission action"
       end
       #-------------------------------------------------------------------------
-      get "/:user_role_id/permission/:role_permission_entity" do  
-        #/api/v1/role/:user_role_id/permission/:role_permission_entity
+      get "/:user_role_id/permission/:role_permission_action" do  
+        #/api/v1/role/:user_role_id/permission/:role_permission_action
       #-------------------------------------------------------------------------
         authorize! :get_permission, User
         @role_permission = RolePermission.first(
           :user_role_id => params[:user_role_id],
-          :entity => params[:role_permission_entity])
+          :action => params[:role_permission_action])
         error!('Not found', 404) unless @role_permission
         return @role_permission
       end
@@ -196,22 +192,18 @@ module Piecemaker
       #-------------------------------------------------------------------------
       params do
         requires :user_role_id, type: String, desc: "user role id"
-        requires :role_permission_entity, type: String, desc: "permission entity"
-        requires :permission, type: String, desc: "allow or forbid"
+        requires :role_permission_action, type: String, desc: "permission action"
+        requires :allowed, type: Boolean, desc: "yes or no?"
       end
       #-------------------------------------------------------------------------
-      put "/:user_role_id/permission/:role_permission_entity" do  
-        #/api/v1/role/:user_role_id/permission/:role_permission_entity
+      put "/:user_role_id/permission/:role_permission_action" do  
+        #/api/v1/role/:user_role_id/permission/:role_permission_action
       #-------------------------------------------------------------------------
         authorize! :update_permission, User
         @role_permission = RolePermission.first(
           :user_role_id => params[:user_role_id],
-          :entity => params[:role_permission_entity])
+          :action => params[:role_permission_action])
         error!('Not found', 404) unless @role_permission
-
-        unless ["allow", "forbid"].include?(params[:permission])
-          error!('Bad Request', 400)
-        end
 
         @role_permission.update_with_params!(params, :permission)
         @role_permission.save
@@ -224,16 +216,16 @@ module Piecemaker
       #-------------------------------------------------------------------------
       params do
         requires :user_role_id, type: String, desc: "user role id"
-        requires :role_permission_entity, type: String, desc: "permission entity"
+        requires :role_permission_action, type: String, desc: "permission action"
       end
       #-------------------------------------------------------------------------
-      delete "/:user_role_id/permission/:role_permission_entity" do  
-        #/api/v1/role/:user_role_id/permission/:role_permission_entity
+      delete "/:user_role_id/permission/:role_permission_action" do  
+        #/api/v1/role/:user_role_id/permission/:role_permission_action
       #-------------------------------------------------------------------------
         authorize! :delete_permission, User
         @role_permission = RolePermission.first(
           :user_role_id => params[:user_role_id],
-          :entity => params[:role_permission_entity])
+          :action => params[:role_permission_action])
         error!('Not found', 404) unless @role_permission
 
         @role_permission.delete

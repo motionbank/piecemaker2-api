@@ -7,7 +7,7 @@ describe "Model UserRole" do
     
     factory_batch do 
 
-      entity_prefix = "__some_random_SURY24259_chars_"
+      action_prefix = "__some_random_SURY24259_chars_"
 
       @user_role_admin     = UserRole.make :admin
       @user_role_user      = UserRole.make :user
@@ -16,11 +16,11 @@ describe "Model UserRole" do
 
       @admin_allow_a       = RolePermission.make :allow,
                               :user_role_id => @user_role_admin.id,
-                              :entity => entity_prefix + "a"
+                              :action => action_prefix + "a"
 
       @admin_allow_b       = RolePermission.make :allow,
                               :user_role_id => @user_role_admin.id,
-                              :entity => entity_prefix + "b"
+                              :action => action_prefix + "b"
         
 
       @pan                 = User.make :pan

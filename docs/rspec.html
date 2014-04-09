@@ -288,65 +288,106 @@ a {
   <dl style="margin-left: 15px;">
   <dt id="example_group_2" class="passed">GET /api/v1/groups</dt>
     <script type="text/javascript">moveProgressBar('0.6');</script>
+<<<<<<< HEAD
     <dd class="example passed"><span class="passed_spec_name">returns all event_groups for currently logged in user</span><span class='duration'>0.53339s</span></dd>
+=======
+    <dd class="example passed"><span class="passed_spec_name">returns all event_groups for currently logged in user</span><span class='duration'>0.36812s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_3" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_3" class="passed">GET /api/v1/groups/all</dt>
     <script type="text/javascript">moveProgressBar('1.2');</script>
+<<<<<<< HEAD
     <dd class="example passed"><span class="passed_spec_name">returns really all event_groups</span><span class='duration'>0.25396s</span></dd>
     <script type="text/javascript">moveProgressBar('1.8');</script>
     <dd class="example passed"><span class="passed_spec_name">returns really no event_groups if not super admin</span><span class='duration'>0.26619s</span></dd>
+=======
+    <dd class="example passed"><span class="passed_spec_name">returns really all event_groups</span><span class='duration'>0.16464s</span></dd>
+    <script type="text/javascript">moveProgressBar('1.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns really no event_groups if not super admin</span><span class='duration'>0.18278s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_4" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_4" class="passed">POST /api/v1/group/:id/event</dt>
     <script type="text/javascript">moveProgressBar('2.5');</script>
+<<<<<<< HEAD
     <dd class="example passed"><span class="passed_spec_name">creates and returns new event (without additional event_fields)</span><span class='duration'>0.18584s</span></dd>
     <script type="text/javascript">moveProgressBar('3.1');</script>
     <dd class="example passed"><span class="passed_spec_name">creates and returns new event (with additional event_fields)</span><span class='duration'>0.17274s</span></dd>
     <script type="text/javascript">moveProgressBar('3.7');</script>
     <dd class="example passed"><span class="passed_spec_name">fails if key for event_field is too long</span><span class='duration'>0.14837s</span></dd>
+=======
+    <dd class="example passed"><span class="passed_spec_name">creates and returns new event (without additional event_fields)</span><span class='duration'>0.10447s</span></dd>
+    <script type="text/javascript">moveProgressBar('3.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">creates and returns new event (with additional event_fields)</span><span class='duration'>0.09660s</span></dd>
+    <script type="text/javascript">moveProgressBar('3.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if key for event_field is too long</span><span class='duration'>0.10138s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_5" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_5" class="passed">POST /api/v1/group</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('4.3');</script>
     <dd class="example passed"><span class="passed_spec_name">create new event_group (together with user_has_event_groups record)</span><span class='duration'>0.15394s</span></dd>
     <script type="text/javascript">moveProgressBar('5.0');</script>
     <dd class="example passed"><span class="passed_spec_name">makes the currently logged in user the owner</span><span class='duration'>0.14418s</span></dd>
     <script type="text/javascript">moveProgressBar('5.6');</script>
     <dd class="example passed"><span class="passed_spec_name">assigns admin-like role to owner of event group</span><span class='duration'>0.14998s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('4.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">create new event_group (together with user_has_event_groups record)</span><span class='duration'>0.09829s</span></dd>
+    <script type="text/javascript">moveProgressBar('5.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">makes the currently logged in user the owner</span><span class='duration'>0.09778s</span></dd>
+    <script type="text/javascript">moveProgressBar('5.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">assigns admin-like role to owner of event group</span><span class='duration'>0.12496s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_6" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_6" class="passed">GET /api/v1/group/:id</dt>
     <script type="text/javascript">moveProgressBar('6.2');</script>
+<<<<<<< HEAD
     <dd class="example passed"><span class="passed_spec_name">returns event_group with id</span><span class='duration'>0.14938s</span></dd>
+=======
+    <dd class="example passed"><span class="passed_spec_name">returns event_group with id</span><span class='duration'>0.09833s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_7" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_7" class="passed">PUT /api/v1/group/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('6.8');</script>
     <dd class="example passed"><span class="passed_spec_name">updates event_group with id</span><span class='duration'>0.14534s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('6.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates event_group with id</span><span class='duration'>0.10709s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_8" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_8" class="passed">DELETE /api/v1/group/:id</dt>
     <script type="text/javascript">moveProgressBar('7.5');</script>
+<<<<<<< HEAD
     <dd class="example passed"><span class="passed_spec_name">deletes event_group with id</span><span class='duration'>0.14276s</span></dd>
+=======
+    <dd class="example passed"><span class="passed_spec_name">deletes event_group with id</span><span class='duration'>0.10760s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_9" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_9" class="passed">GET /api/v1/group/:id/events</dt>
     <script type="text/javascript">moveProgressBar('8.1');</script>
+<<<<<<< HEAD
     <dd class="example passed"><span class="passed_spec_name">returns all events (with event_fields) for event_group with id</span><span class='duration'>0.14683s</span></dd>
     <script type="text/javascript">moveProgressBar('8.7');</script>
     <dd class="example passed"><span class="passed_spec_name">returns the event counter only</span><span class='duration'>0.19376s</span></dd>
@@ -354,73 +395,131 @@ a {
     <dd class="example passed"><span class="passed_spec_name">fails if the events are not ordered by utc_timestamp ASC</span><span class='duration'>0.13467s</span></dd>
     <script type="text/javascript">moveProgressBar('10.0');</script>
     <dd class="example passed"><span class="passed_spec_name">fails if the event fields are not ordered id ASC</span><span class='duration'>0.13911s</span></dd>
+=======
+    <dd class="example passed"><span class="passed_spec_name">returns all events (with event_fields) for event_group with id</span><span class='duration'>0.10408s</span></dd>
+    <script type="text/javascript">moveProgressBar('8.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns the event counter only</span><span class='duration'>0.09810s</span></dd>
+    <script type="text/javascript">moveProgressBar('9.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if the events are not ordered by utc_timestamp ASC</span><span class='duration'>0.09554s</span></dd>
+    <script type="text/javascript">moveProgressBar('10.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if the event fields are not ordered id ASC</span><span class='duration'>0.09746s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_10" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_10" class="passed">GET /api/v1/group/:id/events?fromto_query=utc_timestamp</dt>
     <script type="text/javascript">moveProgressBar('10.6');</script>
+<<<<<<< HEAD
     <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from</span><span class='duration'>0.45171s</span></dd>
     <script type="text/javascript">moveProgressBar('11.2');</script>
     <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :to</span><span class='duration'>0.13525s</span></dd>
     <script type="text/javascript">moveProgressBar('11.8');</script>
     <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from and :to</span><span class='duration'>0.16065s</span></dd>
+=======
+    <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from</span><span class='duration'>0.09599s</span></dd>
+    <script type="text/javascript">moveProgressBar('11.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :to</span><span class='duration'>0.10209s</span></dd>
+    <script type="text/javascript">moveProgressBar('11.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from and :to</span><span class='duration'>0.09801s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_11" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_11" class="passed">GET /api/v1/group/:id/events?fromto_query=intersect</dt>
     <script type="text/javascript">moveProgressBar('12.5');</script>
+<<<<<<< HEAD
     <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from</span><span class='duration'>0.17363s</span></dd>
     <script type="text/javascript">moveProgressBar('13.1');</script>
     <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :to</span><span class='duration'>0.18227s</span></dd>
     <script type="text/javascript">moveProgressBar('13.7');</script>
     <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from and :to</span><span class='duration'>0.14038s</span></dd>
+=======
+    <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from</span><span class='duration'>0.09850s</span></dd>
+    <script type="text/javascript">moveProgressBar('13.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :to</span><span class='duration'>0.10235s</span></dd>
+    <script type="text/javascript">moveProgressBar('13.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from and :to</span><span class='duration'>0.13925s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_12" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_12" class="passed">GET /api/v1/group/:id/events?fromto_query=contain</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('14.3');</script>
     <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from</span><span class='duration'>0.13666s</span></dd>
     <script type="text/javascript">moveProgressBar('15.0');</script>
     <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :to</span><span class='duration'>0.18550s</span></dd>
     <script type="text/javascript">moveProgressBar('15.6');</script>
     <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from and :to</span><span class='duration'>0.26201s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('14.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from</span><span class='duration'>0.09012s</span></dd>
+    <script type="text/javascript">moveProgressBar('15.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :to</span><span class='duration'>0.10001s</span></dd>
+    <script type="text/javascript">moveProgressBar('15.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns correct events for queries with :from and :to</span><span class='duration'>0.09932s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_13" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_13" class="passed">GET /api/v1/group/:id/events?fields[key]=value</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('16.2');</script>
     <dd class="example passed"><span class="passed_spec_name">returns all events filtered by event type</span><span class='duration'>0.14202s</span></dd>
     <script type="text/javascript">moveProgressBar('16.8');</script>
     <dd class="example passed"><span class="passed_spec_name">returns all events filtered by multiple fields</span><span class='duration'>0.14319s</span></dd>
     <script type="text/javascript">moveProgressBar('17.5');</script>
     <dd class="example passed"><span class="passed_spec_name">returns empty array for non existing type</span><span class='duration'>0.14368s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('16.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all events filtered by event type</span><span class='duration'>0.10097s</span></dd>
+    <script type="text/javascript">moveProgressBar('16.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all events filtered by multiple fields</span><span class='duration'>0.10478s</span></dd>
+    <script type="text/javascript">moveProgressBar('17.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns empty array for non existing type</span><span class='duration'>0.10772s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_14" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_14" class="passed">GET /api/v1/group/:id/users</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('18.1');</script>
     <dd class="example passed"><span class="passed_spec_name">returns all users for event_group with id</span><span class='duration'>0.29413s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('18.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all users for event_group with id</span><span class='duration'>0.10147s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_15" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_15" class="passed">POST /api/v1/group/:id/user/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('18.7');</script>
     <dd class="example passed"><span class="passed_spec_name">adds a user to an event_group (via user_has_event_groups) and set user_role_id</span><span class='duration'>0.13381s</span></dd>
     <script type="text/javascript">moveProgressBar('19.3');</script>
     <dd class="example passed"><span class="passed_spec_name">fails to add a user to an event_group (via user_has_event_groups) and set empty user_role_id</span><span class='duration'>0.16868s</span></dd>
     <script type="text/javascript">moveProgressBar('20.0');</script>
     <dd class="example passed"><span class="passed_spec_name">adds a user to an event_group (via user_has_event_groups) and set invalid user_role_id</span><span class='duration'>0.16747s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('18.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">adds a user to an event_group (via user_has_event_groups) and set user_role_id</span><span class='duration'>0.10648s</span></dd>
+    <script type="text/javascript">moveProgressBar('19.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails to add a user to an event_group (via user_has_event_groups) and set empty user_role_id</span><span class='duration'>0.11898s</span></dd>
+    <script type="text/javascript">moveProgressBar('20.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">adds a user to an event_group (via user_has_event_groups) and set invalid user_role_id</span><span class='duration'>0.10071s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_16" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_16" class="passed">PUT /api/v1/group/:id/user/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('20.6');</script>
     <dd class="example passed"><span class="passed_spec_name">updates user_role_id in user_has_event_groups with valid id</span><span class='duration'>0.16621s</span></dd>
     <script type="text/javascript">moveProgressBar('21.2');</script>
@@ -429,15 +528,32 @@ a {
     <dd class="example passed"><span class="passed_spec_name">updates user_role_id in user_has_event_groups with invalid id</span><span class='duration'>0.14413s</span></dd>
     <script type="text/javascript">moveProgressBar('22.5');</script>
     <dd class="example passed"><span class="passed_spec_name">fails to update the user_role_id to something else than goup_admin if the user is the only one left with group_admin role</span><span class='duration'>0.19997s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('20.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates user_role_id in user_has_event_groups with valid id</span><span class='duration'>0.10209s</span></dd>
+    <script type="text/javascript">moveProgressBar('21.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when trying to update user_role_id in user_has_event_groups with empty id</span><span class='duration'>0.12486s</span></dd>
+    <script type="text/javascript">moveProgressBar('22.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates user_role_id in user_has_event_groups with invalid id</span><span class='duration'>0.09421s</span></dd>
+    <script type="text/javascript">moveProgressBar('22.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails to update the user_role_id to something else than goup_admin if the user is the only one left with group_admin role</span><span class='duration'>0.10817s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_17" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_17" class="passed">DELETE /api/v1/group/:id/user/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('23.1');</script>
     <dd class="example passed"><span class="passed_spec_name">deletes a user from an event_group (via user_has_event_groups)</span><span class='duration'>0.19212s</span></dd>
     <script type="text/javascript">moveProgressBar('23.7');</script>
     <dd class="example passed"><span class="passed_spec_name">fails to delete the user if he is the only one left  with group_admin role</span><span class='duration'>0.15756s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('23.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">deletes a user from an event_group (via user_has_event_groups)</span><span class='duration'>0.09917s</span></dd>
+    <script type="text/javascript">moveProgressBar('23.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails to delete the user if he is the only one left  with group_admin role</span><span class='duration'>0.10226s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_18" class="example_group passed">
@@ -448,15 +564,23 @@ a {
 <div id="div_group_19" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_19" class="passed">GET /api/v1/event/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('24.3');</script>
     <dd class="example passed"><span class="passed_spec_name">returns event with id (and return fields and group as well)</span><span class='duration'>0.14803s</span></dd>
     <script type="text/javascript">moveProgressBar('25.0');</script>
     <dd class="example passed"><span class="passed_spec_name">returns status not found for non-existing event</span><span class='duration'>0.15370s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('24.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns event with id (and return fields and group as well)</span><span class='duration'>0.09129s</span></dd>
+    <script type="text/javascript">moveProgressBar('25.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns status not found for non-existing event</span><span class='duration'>0.08454s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_20" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_20" class="passed">PUT /api/v1/event/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('25.6');</script>
     <dd class="example passed"><span class="passed_spec_name">updates an event (without fields)</span><span class='duration'>0.22201s</span></dd>
     <script type="text/javascript">moveProgressBar('26.2');</script>
@@ -465,13 +589,28 @@ a {
     <dd class="example passed"><span class="passed_spec_name">updates an event and updates existing fields</span><span class='duration'>0.15754s</span></dd>
     <script type="text/javascript">moveProgressBar('27.5');</script>
     <dd class="example passed"><span class="passed_spec_name">updates an event and deletes existing fields</span><span class='duration'>0.13982s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('25.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates an event (without fields)</span><span class='duration'>0.10166s</span></dd>
+    <script type="text/javascript">moveProgressBar('26.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates an event and creates new fields</span><span class='duration'>0.09658s</span></dd>
+    <script type="text/javascript">moveProgressBar('27.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates an event and updates existing fields</span><span class='duration'>0.09900s</span></dd>
+    <script type="text/javascript">moveProgressBar('27.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates an event and deletes existing fields</span><span class='duration'>0.09642s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_21" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_21" class="passed">DELETE /api/v1/event/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('28.1');</script>
     <dd class="example passed"><span class="passed_spec_name">deletes event with id</span><span class='duration'>0.15948s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('28.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">deletes event with id</span><span class='duration'>0.09434s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_22" class="example_group passed">
@@ -482,8 +621,13 @@ a {
 <div id="div_group_23" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_23" class="passed">GET /api/v1/permissions</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('28.7');</script>
     <dd class="example passed"><span class="passed_spec_name">returns all available permissions</span><span class='duration'>0.11806s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('28.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all available permissions</span><span class='duration'>0.08300s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_24" class="example_group passed">
@@ -494,8 +638,13 @@ a {
 <div id="div_group_25" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_25" class="passed">GET /api/v1/system</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('29.3');</script>
     <dd class="example passed"><span class="passed_spec_name">returns server timestamp with milliseconds</span><span class='duration'>0.10901s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('29.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns server timestamp with milliseconds</span><span class='duration'>0.08098s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_26" class="example_group passed">
@@ -506,64 +655,109 @@ a {
 <div id="div_group_27" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_27" class="passed">GET /api/v1/roles</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('30.0');</script>
     <dd class="example passed"><span class="passed_spec_name">returns all user roles ordered by inheritance</span><span class='duration'>0.12604s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('30.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all user roles ordered by inheritance</span><span class='duration'>0.08996s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_28" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_28" class="passed">GET /api/v1/role/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('30.6');</script>
     <dd class="example passed"><span class="passed_spec_name">returns user role with id and with according permissions</span><span class='duration'>0.26203s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('30.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user role with id and with according permissions</span><span class='duration'>0.09723s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_29" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_29" class="passed">POST /api/v1/role</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('31.2');</script>
     <dd class="example passed"><span class="passed_spec_name">creates new user role</span><span class='duration'>0.11668s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('31.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">creates new user role</span><span class='duration'>0.08205s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_30" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_30" class="passed">PUT /api/v1/role/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('31.8');</script>
     <dd class="example passed"><span class="passed_spec_name">updates user role with id</span><span class='duration'>0.13953s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('32.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates user role with id</span><span class='duration'>0.08947s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_31" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_31" class="passed">DELETE /api/v1/role/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('32.5');</script>
     <dd class="example passed"><span class="passed_spec_name">deletes user role with id</span><span class='duration'>0.17262s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('32.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">deletes user role with id</span><span class='duration'>0.09372s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_32" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_32" class="passed">GET /api/v1/role/:user_role_id/permission/:role_permission_entitiy</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('33.1');</script>
     <dd class="example passed"><span class="passed_spec_name">returns role permission with user_role_id and role_permission_entitiy</span><span class='duration'>0.19595s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('33.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns role permission with user_role_id and role_permission_entitiy</span><span class='duration'>0.11909s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_33" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_33" class="passed">PUT /api/v1/role/:user_role_id/permission/:role_permission_entitiy</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('33.7');</script>
     <dd class="example passed"><span class="passed_spec_name">updates role permission with user_role_id and role_permission_entitiy</span><span class='duration'>0.20414s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('33.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates role permission with user_role_id and role_permission_entitiy</span><span class='duration'>0.07995s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_34" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_34" class="passed">DELETE /api/v1/role/:user_role_id/permission/:role_permission_entitiy</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('34.3');</script>
     <dd class="example passed"><span class="passed_spec_name">deletes role permission with user_role_id and role_permission_entitiy</span><span class='duration'>0.26620s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('34.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">deletes role permission with user_role_id and role_permission_entitiy</span><span class='duration'>0.08593s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_35" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_35" class="passed">POST /api/v1/role/:id/permission</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('35.0');</script>
     <dd class="example passed"><span class="passed_spec_name">create new role permission for user role with id</span><span class='duration'>0.20589s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('35.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">create new role permission for user role with id</span><span class='duration'>0.08403s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_36" class="example_group passed">
@@ -579,6 +773,7 @@ a {
 <div id="div_group_38" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_38" class="passed">POST /api/v1/user/login</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('35.6');</script>
     <dd class="example passed"><span class="passed_spec_name">returns new api access token on valid credentials</span><span class='duration'>0.00648s</span></dd>
     <script type="text/javascript">moveProgressBar('36.2');</script>
@@ -599,17 +794,48 @@ a {
     <dd class="example passed"><span class="passed_spec_name">fails when not sending email and password is empty</span><span class='duration'>0.00314s</span></dd>
     <script type="text/javascript">moveProgressBar('41.2');</script>
     <dd class="example passed"><span class="passed_spec_name">fails when not sending email and password</span><span class='duration'>0.00293s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('35.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns new api access token on valid credentials</span><span class='duration'>0.00317s</span></dd>
+    <script type="text/javascript">moveProgressBar('36.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails for right user but with wrong password</span><span class='duration'>0.00236s</span></dd>
+    <script type="text/javascript">moveProgressBar('37.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails for disabled user</span><span class='duration'>0.00201s</span></dd>
+    <script type="text/javascript">moveProgressBar('37.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when using empty password</span><span class='duration'>0.00188s</span></dd>
+    <script type="text/javascript">moveProgressBar('38.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when using empty email and empty password</span><span class='duration'>0.00186s</span></dd>
+    <script type="text/javascript">moveProgressBar('38.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when using empty email and correct password from valid user</span><span class='duration'>0.00181s</span></dd>
+    <script type="text/javascript">moveProgressBar('39.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when using empty email and any password string</span><span class='duration'>0.00174s</span></dd>
+    <script type="text/javascript">moveProgressBar('40.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when not sending password and email is empty</span><span class='duration'>0.00131s</span></dd>
+    <script type="text/javascript">moveProgressBar('40.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when not sending email and password is empty</span><span class='duration'>0.00120s</span></dd>
+    <script type="text/javascript">moveProgressBar('41.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when not sending email and password</span><span class='duration'>0.00113s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_39" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_39" class="passed">POST /api/v1/user/logout </dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('41.8');</script>
     <dd class="example passed"><span class="passed_spec_name">invalidates the current api access token</span><span class='duration'>0.00538s</span></dd>
     <script type="text/javascript">moveProgressBar('42.5');</script>
     <dd class="example passed"><span class="passed_spec_name">fails if invalid header key</span><span class='duration'>0.00395s</span></dd>
     <script type="text/javascript">moveProgressBar('43.1');</script>
     <dd class="example passed"><span class="passed_spec_name">fails if empty header key is sent</span><span class='duration'>0.00642s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('42.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">invalidates the current api access token</span><span class='duration'>0.00198s</span></dd>
+    <script type="text/javascript">moveProgressBar('42.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if invalid header key</span><span class='duration'>0.00153s</span></dd>
+    <script type="text/javascript">moveProgressBar('43.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if empty header key is sent</span><span class='duration'>0.00232s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_40" class="example_group passed">
@@ -620,68 +846,127 @@ a {
 <div id="div_group_41" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_41" class="passed">POST /api/v1/user</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('43.7');</script>
     <dd class="example passed"><span class="passed_spec_name">creates new user</span><span class='duration'>0.31478s</span></dd>
     <script type="text/javascript">moveProgressBar('44.3');</script>
     <dd class="example passed"><span class="passed_spec_name">fails when trying to create the same user twice</span><span class='duration'>0.23149s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('44.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">creates new user</span><span class='duration'>0.09530s</span></dd>
+    <script type="text/javascript">moveProgressBar('44.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when trying to create the same user twice</span><span class='duration'>0.09206s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_42" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_42" class="passed">POST /api/v1/user/regenerate_api_access_key</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('45.0');</script>
     <dd class="example passed"><span class="passed_spec_name">creates new api_access_key</span><span class='duration'>0.22007s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('45.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">creates new api_access_key</span><span class='duration'>0.08678s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_43" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_43" class="passed">GET /api/v1/user/me</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('45.6');</script>
     <dd class="example passed"><span class="passed_spec_name">returns currently logged in user</span><span class='duration'>0.20908s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('45.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns currently logged in user</span><span class='duration'>0.09099s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_44" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_44" class="passed">GET /api/v1/user/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('46.2');</script>
     <dd class="example passed"><span class="passed_spec_name">returns user for id</span><span class='duration'>0.28273s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('46.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user for id</span><span class='duration'>0.09964s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_45" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_45" class="passed">PUT /api/v1/user/:id</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('46.8');</script>
     <dd class="example passed"><span class="passed_spec_name">updates user with id</span><span class='duration'>0.22217s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('47.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">updates user with id</span><span class='duration'>0.09891s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_46" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_46" class="passed">DELETE /api/v1/user/:id deletes</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('47.5');</script>
     <dd class="example passed"><span class="passed_spec_name">user with id</span><span class='duration'>0.21800s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('47.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">user with id</span><span class='duration'>0.09414s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_47" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_47" class="passed">GET /api/v1/user/:id/groups</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('48.1');</script>
     <dd class="example passed"><span class="passed_spec_name">returns all event_groups for user with id</span><span class='duration'>0.21896s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('48.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all event_groups for user with id</span><span class='duration'>0.09283s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_48" class="example_group passed">
   <dl style="margin-left: 30px;">
   <dt id="example_group_48" class="passed">GET /api/v1/users </dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('48.7');</script>
     <dd class="example passed"><span class="passed_spec_name">returns all users</span><span class='duration'>0.25107s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('49.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns all users</span><span class='duration'>0.10086s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_49" class="example_group passed">
   <dl style="margin-left: 0px;">
   <dt id="example_group_49" class="passed">Module helper</dt>
+<<<<<<< HEAD
+=======
   </dl>
 </div>
 <div id="div_group_50" class="example_group passed">
   <dl style="margin-left: 15px;">
+  <dt id="example_group_50" class="passed">Module Paginate2</dt>
+    <script type="text/javascript">moveProgressBar('49.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">should work for since_id only</span><span class='duration'>0.00235s</span></dd>
+    <script type="text/javascript">moveProgressBar('50.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">should work for max_id only</span><span class='duration'>0.00204s</span></dd>
+    <script type="text/javascript">moveProgressBar('50.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">should work for both since_id and max_id</span><span class='duration'>0.00210s</span></dd>
+    <script type="text/javascript">moveProgressBar('51.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">should support the count param</span><span class='duration'>0.00147s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
+  </dl>
+</div>
+<div id="div_group_51" class="example_group passed">
+  <dl style="margin-left: 15px;">
+<<<<<<< HEAD
   <dt id="example_group_50" class="passed">Module Paginate2</dt>
     <script type="text/javascript">moveProgressBar('49.3');</script>
     <dd class="example passed"><span class="passed_spec_name">should work for since_id only</span><span class='duration'>0.00478s</span></dd>
@@ -691,10 +976,24 @@ a {
     <dd class="example passed"><span class="passed_spec_name">should work for both since_id and max_id</span><span class='duration'>0.00543s</span></dd>
     <script type="text/javascript">moveProgressBar('51.2');</script>
     <dd class="example passed"><span class="passed_spec_name">should support the count param</span><span class='duration'>0.00397s</span></dd>
+=======
+  <dt id="example_group_51" class="passed">Module Token</dt>
+    <script type="text/javascript">moveProgressBar('52.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails for missing token in @model</span><span class='duration'>0.00286s</span></dd>
+    <script type="text/javascript">moveProgressBar('52.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails for missing token (when no param given)</span><span class='duration'>0.00301s</span></dd>
+    <script type="text/javascript">moveProgressBar('53.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">succeeds if @model.token is empty</span><span class='duration'>0.00255s</span></dd>
+    <script type="text/javascript">moveProgressBar('54.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">succeeds if tokens are equal</span><span class='duration'>0.00215s</span></dd>
+    <script type="text/javascript">moveProgressBar('54.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if tokens are not equal</span><span class='duration'>0.00256s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
-<div id="div_group_51" class="example_group passed">
+<div id="div_group_52" class="example_group passed">
   <dl style="margin-left: 15px;">
+<<<<<<< HEAD
   <dt id="example_group_51" class="passed">Module Token</dt>
     <script type="text/javascript">moveProgressBar('51.8');</script>
     <dd class="example passed"><span class="passed_spec_name">fails for missing token in @model</span><span class='duration'>0.00490s</span></dd>
@@ -719,22 +1018,53 @@ a {
     <dd class="example passed"><span class="passed_spec_name">fails, if an api access key makes no sense</span><span class='duration'>0.00015s</span></dd>
     <script type="text/javascript">moveProgressBar('56.8');</script>
     <dd class="example passed"><span class="passed_spec_name">fails, if an api access key is empty</span><span class='duration'>0.00014s</span></dd>
+=======
+  <dt id="example_group_52" class="passed">Module API_Access_key</dt>
+    <script type="text/javascript">moveProgressBar('55.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">generates an api access key</span><span class='duration'>0.00015s</span></dd>
+    <script type="text/javascript">moveProgressBar('55.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">checks if an api access key makes sense</span><span class='duration'>0.00011s</span></dd>
+    <script type="text/javascript">moveProgressBar('56.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails, if an api access key makes no sense</span><span class='duration'>0.00007s</span></dd>
+    <script type="text/javascript">moveProgressBar('57.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails, if an api access key is empty</span><span class='duration'>0.00007s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_53" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_53" class="passed">Module Password</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('57.5');</script>
     <dd class="example passed"><span class="passed_spec_name">generates a password</span><span class='duration'>0.00023s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('57.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">generates a password</span><span class='duration'>0.00011s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_54" class="example_group passed">
   <dl style="margin-left: 15px;">
   <dt id="example_group_54" class="passed">Module Auth</dt>
+<<<<<<< HEAD
+=======
   </dl>
 </div>
 <div id="div_group_55" class="example_group passed">
   <dl style="margin-left: 30px;">
+  <dt id="example_group_55" class="passed">get_permission_recursively</dt>
+    <script type="text/javascript">moveProgressBar('58.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns permission for role that inherits</span><span class='duration'>0.00210s</span></dd>
+    <script type="text/javascript">moveProgressBar('59.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns permission for role that does not inherit</span><span class='duration'>0.00062s</span></dd>
+    <script type="text/javascript">moveProgressBar('59.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns no permission when no permission exists</span><span class='duration'>0.00153s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
+  </dl>
+</div>
+<div id="div_group_56" class="example_group passed">
+  <dl style="margin-left: 30px;">
+<<<<<<< HEAD
   <dt id="example_group_55" class="passed">get_permission_recursively</dt>
     <script type="text/javascript">moveProgressBar('58.1');</script>
     <dd class="example passed"><span class="passed_spec_name">returns permission for role that inherits</span><span class='duration'>0.00317s</span></dd>
@@ -742,10 +1072,22 @@ a {
     <dd class="example passed"><span class="passed_spec_name">returns permission for role that does not inherit</span><span class='duration'>0.00104s</span></dd>
     <script type="text/javascript">moveProgressBar('59.3');</script>
     <dd class="example passed"><span class="passed_spec_name">returns no permission when no permission exists</span><span class='duration'>0.00250s</span></dd>
+=======
+  <dt id="example_group_56" class="passed">get_user_by_api_acccess_key</dt>
+    <script type="text/javascript">moveProgressBar('60.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns enabled user by api access key</span><span class='duration'>0.00057s</span></dd>
+    <script type="text/javascript">moveProgressBar('61.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">does not return disabled users</span><span class='duration'>0.00052s</span></dd>
+    <script type="text/javascript">moveProgressBar('61.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns nil if api access key is nil</span><span class='duration'>0.00009s</span></dd>
+    <script type="text/javascript">moveProgressBar('62.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns nil if no api access key is found</span><span class='duration'>0.00009s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
-<div id="div_group_56" class="example_group passed">
+<div id="div_group_57" class="example_group passed">
   <dl style="margin-left: 30px;">
+<<<<<<< HEAD
   <dt id="example_group_56" class="passed">get_user_by_api_acccess_key</dt>
     <script type="text/javascript">moveProgressBar('60.0');</script>
     <dd class="example passed"><span class="passed_spec_name">returns enabled user by api access key</span><span class='duration'>0.00113s</span></dd>
@@ -755,10 +1097,30 @@ a {
     <dd class="example passed"><span class="passed_spec_name">returns nil if api access key is nil</span><span class='duration'>0.00023s</span></dd>
     <script type="text/javascript">moveProgressBar('61.8');</script>
     <dd class="example passed"><span class="passed_spec_name">returns nil if no api access key is found</span><span class='duration'>0.00010s</span></dd>
+=======
+  <dt id="example_group_57" class="passed">get_user_role_from_model</dt>
+    <script type="text/javascript">moveProgressBar('62.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user_role for UserHasEventGroup</span><span class='duration'>0.00010s</span></dd>
+    <script type="text/javascript">moveProgressBar('63.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user_role for EventGroup</span><span class='duration'>0.00055s</span></dd>
+    <script type="text/javascript">moveProgressBar('64.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when trying to return user_role for EventGroup with wrong user</span><span class='duration'>0.00045s</span></dd>
+    <script type="text/javascript">moveProgressBar('64.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user_role for Event</span><span class='duration'>0.00049s</span></dd>
+    <script type="text/javascript">moveProgressBar('65.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when trying to return user_role for Event with wrong user</span><span class='duration'>0.00046s</span></dd>
+    <script type="text/javascript">moveProgressBar('66.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user_role for EventField</span><span class='duration'>0.00083s</span></dd>
+    <script type="text/javascript">moveProgressBar('66.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when trying to return user_role for EventField with wrong user</span><span class='duration'>0.00080s</span></dd>
+    <script type="text/javascript">moveProgressBar('67.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">throws error if no valid model is passed</span><span class='duration'>0.00084s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
-<div id="div_group_57" class="example_group passed">
+<div id="div_group_58" class="example_group passed">
   <dl style="margin-left: 30px;">
+<<<<<<< HEAD
   <dt id="example_group_57" class="passed">get_user_role_from_model</dt>
     <script type="text/javascript">moveProgressBar('62.5');</script>
     <dd class="example passed"><span class="passed_spec_name">returns user_role for UserHasEventGroup</span><span class='duration'>0.00012s</span></dd>
@@ -865,57 +1227,178 @@ a {
     <dd class="example passed"><span class="passed_spec_name">u         N     Y    N  (as user)</span><span class='duration'>0.02061s</span></dd>
     <script type="text/javascript">moveProgressBar('90.0');</script>
     <dd class="example passed"><span class="passed_spec_name">u         N     Y    N  (as admin)</span><span class='duration'>0.01336s</span></dd>
+=======
+  <dt id="example_group_58" class="passed">authorize!</dt>
+    <script type="text/javascript">moveProgressBar('67.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails when no or empty api access key is sent</span><span class='duration'>0.00242s</span></dd>
+    <script type="text/javascript">moveProgressBar('68.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails for invalid api access key</span><span class='duration'>0.00176s</span></dd>
+    <script type="text/javascript">moveProgressBar('69.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">returns user if i am a admin</span><span class='duration'>0.00177s</span></dd>
+    <script type="text/javascript">moveProgressBar('69.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">succeeds if admin is needed and admin given</span><span class='duration'>0.00448s</span></dd>
+    <script type="text/javascript">moveProgressBar('70.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">fails if admin is needed, but no admin given</span><span class='duration'>0.00247s</span></dd>
+    <script type="text/javascript">moveProgressBar('71.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">only gets user roles for the currently logged in user</span><span class='duration'>0.03243s</span></dd>
+  </dl>
+</div>
+<div id="div_group_59" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_59" class="passed">Permission Matrix</dt>
+  </dl>
+</div>
+<div id="div_group_60" class="example_group passed">
+  <dl style="margin-left: 60px;">
+  <dt id="example_group_60" class="passed">action    admin user guest</dt>
+    <script type="text/javascript">moveProgressBar('71.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">a         &gt;     &gt;    Y  (as guest)</span><span class='duration'>0.00837s</span></dd>
+    <script type="text/javascript">moveProgressBar('72.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">a         &gt;     &gt;    Y  (as user)</span><span class='duration'>0.00908s</span></dd>
+    <script type="text/javascript">moveProgressBar('72.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">a         &gt;     &gt;    Y  (as admin)</span><span class='duration'>0.00921s</span></dd>
+    <script type="text/javascript">moveProgressBar('73.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">b         &gt;     Y    -  (as guest)</span><span class='duration'>0.00800s</span></dd>
+    <script type="text/javascript">moveProgressBar('74.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">b         &gt;     Y    -  (as user)</span><span class='duration'>0.00806s</span></dd>
+    <script type="text/javascript">moveProgressBar('74.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">b         &gt;     Y    -  (as admin)</span><span class='duration'>0.00871s</span></dd>
+    <script type="text/javascript">moveProgressBar('75.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">c         Y     -    -  (as guest)</span><span class='duration'>0.00818s</span></dd>
+    <script type="text/javascript">moveProgressBar('76.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">c         Y     -    -  (as user)</span><span class='duration'>0.00924s</span></dd>
+    <script type="text/javascript">moveProgressBar('76.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">c         Y     -    -  (as admin)</span><span class='duration'>0.00905s</span></dd>
+    <script type="text/javascript">moveProgressBar('77.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">x         &gt;     &gt;    N  (as guest)</span><span class='duration'>0.00889s</span></dd>
+    <script type="text/javascript">moveProgressBar('77.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">x         &gt;     &gt;    N  (as user)</span><span class='duration'>0.01034s</span></dd>
+    <script type="text/javascript">moveProgressBar('78.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">x         &gt;     &gt;    N  (as admin)</span><span class='duration'>0.01017s</span></dd>
+    <script type="text/javascript">moveProgressBar('79.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">y         &gt;     N    -  (as guest)</span><span class='duration'>0.00949s</span></dd>
+    <script type="text/javascript">moveProgressBar('79.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">y         &gt;     N    -  (as user)</span><span class='duration'>0.00915s</span></dd>
+    <script type="text/javascript">moveProgressBar('80.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">y         &gt;     N    -  (as admin)</span><span class='duration'>0.00978s</span></dd>
+    <script type="text/javascript">moveProgressBar('81.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">z         N     -    -  (as guest)</span><span class='duration'>0.00909s</span></dd>
+    <script type="text/javascript">moveProgressBar('81.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">z         N     -    -  (as user)</span><span class='duration'>0.00979s</span></dd>
+    <script type="text/javascript">moveProgressBar('82.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">z         N     -    -  (as admin)</span><span class='duration'>0.00881s</span></dd>
+    <script type="text/javascript">moveProgressBar('83.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">r         &gt;     N    Y  (as guest)</span><span class='duration'>0.00905s</span></dd>
+    <script type="text/javascript">moveProgressBar('83.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">r         &gt;     N    Y  (as user)</span><span class='duration'>0.00891s</span></dd>
+    <script type="text/javascript">moveProgressBar('84.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">r         &gt;     N    Y  (as admin)</span><span class='duration'>0.00992s</span></dd>
+    <script type="text/javascript">moveProgressBar('84.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">s         N     &gt;    Y  (as guest)</span><span class='duration'>0.00916s</span></dd>
+    <script type="text/javascript">moveProgressBar('85.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">s         N     &gt;    Y  (as user)</span><span class='duration'>0.01000s</span></dd>
+    <script type="text/javascript">moveProgressBar('86.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">s         N     &gt;    Y  (as admin)</span><span class='duration'>0.00880s</span></dd>
+    <script type="text/javascript">moveProgressBar('86.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">t         Y     N    Y  (as guest)</span><span class='duration'>0.01021s</span></dd>
+    <script type="text/javascript">moveProgressBar('87.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">t         Y     N    Y  (as user)</span><span class='duration'>0.00914s</span></dd>
+    <script type="text/javascript">moveProgressBar('88.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">t         Y     N    Y  (as admin)</span><span class='duration'>0.00922s</span></dd>
+    <script type="text/javascript">moveProgressBar('88.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">u         N     Y    N  (as guest)</span><span class='duration'>0.00923s</span></dd>
+    <script type="text/javascript">moveProgressBar('89.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">u         N     Y    N  (as user)</span><span class='duration'>0.00865s</span></dd>
+    <script type="text/javascript">moveProgressBar('89.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">u         N     Y    N  (as admin)</span><span class='duration'>0.00889s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_61" class="example_group passed">
   <dl style="margin-left: 0px;">
   <dt id="example_group_61" class="passed">Model EventField</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('90.6');</script>
     <dd class="example passed"><span class="passed_spec_name">has one event</span><span class='duration'>0.00141s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('90.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one event</span><span class='duration'>0.00081s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_62" class="example_group passed">
   <dl style="margin-left: 0px;">
   <dt id="example_group_62" class="passed">Model EventGroup</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('91.2');</script>
     <dd class="example passed"><span class="passed_spec_name">has many events</span><span class='duration'>0.00180s</span></dd>
     <script type="text/javascript">moveProgressBar('91.8');</script>
     <dd class="example passed"><span class="passed_spec_name">has many users</span><span class='duration'>0.00207s</span></dd>
     <script type="text/javascript">moveProgressBar('92.5');</script>
     <dd class="example passed"><span class="passed_spec_name">has one user</span><span class='duration'>0.00189s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('91.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many events</span><span class='duration'>0.00074s</span></dd>
+    <script type="text/javascript">moveProgressBar('91.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many users</span><span class='duration'>0.00081s</span></dd>
+    <script type="text/javascript">moveProgressBar('92.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one user</span><span class='duration'>0.00053s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_63" class="example_group passed">
   <dl style="margin-left: 0px;">
   <dt id="example_group_63" class="passed">Model Event</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('93.1');</script>
     <dd class="example passed"><span class="passed_spec_name">has one user</span><span class='duration'>0.00100s</span></dd>
     <script type="text/javascript">moveProgressBar('93.7');</script>
     <dd class="example passed"><span class="passed_spec_name">has many event fields</span><span class='duration'>0.00079s</span></dd>
     <script type="text/javascript">moveProgressBar('94.3');</script>
     <dd class="example passed"><span class="passed_spec_name">has one event group</span><span class='duration'>0.00099s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('93.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one user</span><span class='duration'>0.00069s</span></dd>
+    <script type="text/javascript">moveProgressBar('93.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many event fields</span><span class='duration'>0.00064s</span></dd>
+    <script type="text/javascript">moveProgressBar('94.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one event group</span><span class='duration'>0.00072s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_64" class="example_group passed">
   <dl style="margin-left: 0px;">
   <dt id="example_group_64" class="passed">Model RolePermission</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('95.0');</script>
     <dd class="example passed"><span class="passed_spec_name">has one user role</span><span class='duration'>0.00233s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('94.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one user role</span><span class='duration'>0.00073s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_65" class="example_group passed">
   <dl style="margin-left: 0px;">
   <dt id="example_group_65" class="passed">Model UserHasEventGroup</dt>
+<<<<<<< HEAD
     <script type="text/javascript">moveProgressBar('95.6');</script>
     <dd class="example passed"><span class="passed_spec_name">has one user</span><span class='duration'>0.00147s</span></dd>
     <script type="text/javascript">moveProgressBar('96.2');</script>
     <dd class="example passed"><span class="passed_spec_name">has one event group</span><span class='duration'>0.00127s</span></dd>
+=======
+    <script type="text/javascript">moveProgressBar('95.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one user</span><span class='duration'>0.00082s</span></dd>
+    <script type="text/javascript">moveProgressBar('96.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">has one event group</span><span class='duration'>0.00069s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_66" class="example_group passed">
   <dl style="margin-left: 0px;">
   <dt id="example_group_66" class="passed">Model UserRole</dt>
     <script type="text/javascript">moveProgressBar('96.8');</script>
+<<<<<<< HEAD
     <dd class="example passed"><span class="passed_spec_name">has many role permissions</span><span class='duration'>0.00159s</span></dd>
     <script type="text/javascript">moveProgressBar('97.5');</script>
     <dd class="example passed"><span class="passed_spec_name">has no role permissions</span><span class='duration'>0.00128s</span></dd>
@@ -923,12 +1406,22 @@ a {
     <dd class="example passed"><span class="passed_spec_name">has many user has event groups</span><span class='duration'>0.00193s</span></dd>
     <script type="text/javascript">moveProgressBar('98.7');</script>
     <dd class="example passed"><span class="passed_spec_name">has no user has event groups</span><span class='duration'>0.00132s</span></dd>
+=======
+    <dd class="example passed"><span class="passed_spec_name">has many role permissions</span><span class='duration'>0.00068s</span></dd>
+    <script type="text/javascript">moveProgressBar('97.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">has no role permissions</span><span class='duration'>0.00048s</span></dd>
+    <script type="text/javascript">moveProgressBar('98.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many user has event groups</span><span class='duration'>0.00060s</span></dd>
+    <script type="text/javascript">moveProgressBar('98.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">has no user has event groups</span><span class='duration'>0.00043s</span></dd>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
   </dl>
 </div>
 <div id="div_group_67" class="example_group passed">
   <dl style="margin-left: 0px;">
   <dt id="example_group_67" class="passed">Model User</dt>
     <script type="text/javascript">moveProgressBar('99.3');</script>
+<<<<<<< HEAD
     <dd class="example passed"><span class="passed_spec_name">has many events</span><span class='duration'>0.00194s</span></dd>
     <script type="text/javascript">moveProgressBar('100.0');</script>
     <dd class="example passed"><span class="passed_spec_name">has many event_groups</span><span class='duration'>0.00246s</span></dd>
@@ -936,6 +1429,15 @@ a {
 </div>
 <script type="text/javascript">document.getElementById('duration').innerHTML = "Finished in <strong>16.08221 seconds</strong>";</script>
 <script type="text/javascript">document.getElementById('totals').innerHTML = "160 examples, 0 failures";</script>
+=======
+    <dd class="example passed"><span class="passed_spec_name">has many events</span><span class='duration'>0.00077s</span></dd>
+    <script type="text/javascript">moveProgressBar('100.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">has many event_groups</span><span class='duration'>0.00088s</span></dd>
+  </dl>
+</div>
+<script type="text/javascript">document.getElementById('duration').innerHTML = "Finished in <strong>8.32491 seconds</strong>";</script>
+<script type="text/javascript">document.getElementById('totals').innerHTML = "159 examples, 0 failures";</script>
+>>>>>>> 703f3ac841ac40deabedced16b48734a83d72cfd
 </div>
 </div>
 </body>
