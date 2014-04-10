@@ -219,12 +219,15 @@ module Piecemaker
       end
 
       def self.get_permission_recursively(user_role, action)
+
         action = action.to_s
 
         if user_role.is_a? UserRole
           user_role_id = user_role.id
-        else
+        elsif user_role and not user_role.empty?
           user_role_id = user_role
+        else
+          return nil
         end
 
         # for debugging:
@@ -250,9 +253,7 @@ module Piecemaker
           end
         end
       end
-
     end
-
 
 
     module API_Access_Key
