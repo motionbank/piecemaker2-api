@@ -15,3 +15,5 @@ config/database.json
 config/config.yml
 node_modules/*
 migrate/node_modules
+cache
+Gemfile.lock
