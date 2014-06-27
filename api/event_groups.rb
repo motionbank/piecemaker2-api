@@ -348,14 +348,15 @@ module Piecemaker
           :user_id => params[:user_id],
           :event_group_id => params[:event_group_id])
         error!('Relation not found', 404) unless @user_has_event_group
-        
+
         # check if there is at least one guy with "group_admin" 
         # role in the event group
         if params[:user_role_id] && params[:user_role_id] != "group_admin"
           group_admins_count = UserHasEventGroup.where(
             :event_group_id => params[:event_group_id],
             :user_role_id => "group_admin").count
-          if group_admins_count < 1
+          # if no group_admin or one to be changed is currently the last admin then fail
+          if group_admins_count < 1 || (group_admins_count == 1 && @user_has_event_group.user_role_id == "group_admin")
             error!('Every event group needs at least one group admin', 409) 
           end
         end
