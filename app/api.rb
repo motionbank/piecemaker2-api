@@ -20,7 +20,7 @@ class ApiNewRelicInstrumenter < Grape::Middleware::Base
  
   def call(env)
     @env = env
-    if ENV['ENABLE_NEWRELIC']
+    if ENV['ENABLE_NEWRELIC'].to_s.to_bool
       call_with_newrelic do
         super
       end

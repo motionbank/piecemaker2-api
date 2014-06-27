@@ -58,7 +58,6 @@ ENV['NEWRELIC_DEVELOPER'] = 'false' if ENV['NEWRELIC_DEVELOPER'].nil?
 
 ENV["NEWRELIC_APP_NAME"] = "Piecemaker API"
 
-
 begin
   if ENV['ON_HEROKU']
     DB = Sequel.connect( ENV['DATABASE_URL'] )
