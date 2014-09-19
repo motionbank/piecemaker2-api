@@ -136,7 +136,7 @@ namespace :db do
     env = expand_env_string(args[:env]) || "development"
     Rake::Task['environment'].invoke(env)
 
-    require "Digest"
+    require "digest"
     api_access_key = Piecemaker::Helper::API_Access_Key::generate
     time_now = Time.now.to_i
 
