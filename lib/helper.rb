@@ -149,7 +149,8 @@ module Piecemaker
             get_user_role_from_model(@model, @user) 
           error!('Forbidden (1)', 403) unless user_role_id
 
-          # puts @user_role_id
+          puts user_role_id
+          puts action
 
           @role_permission = Piecemaker::Helper::Auth::\
             get_permission_recursively(user_role_id, action)
