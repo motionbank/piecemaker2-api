@@ -135,7 +135,7 @@ module Piecemaker
       params do
         requires :id, type: Integer, desc: "event group id"
         optional :title, type: String, desc: "name of the group"
-        optional :text, type: String, desc: "some additional description"
+        optional :description, type: String, desc: "some additional description"
       end
       #-------------------------------------------------------------------------
       put "/:id" do  #/api/v1/group/:id
@@ -145,7 +145,7 @@ module Piecemaker
 
         authorize! :update_event_group, @event_group
 
-        @event_group.update_with_params!(params, :title, :text)
+        @event_group.update_with_params!(params, :title, :description)
         @event_group.save
       end
       
