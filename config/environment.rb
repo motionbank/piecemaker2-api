@@ -4,7 +4,7 @@ require File.expand_path('../../lib/helper', __FILE__)
 require 'logger'
 
 # set up logger
-if ["production"].include?(ENV['RACK_ENV'])
+if not ENV["ON_HEROKU"] and ["production"].include?(ENV['RACK_ENV'])
   $logger = Logger.new(File.expand_path('../../log/api.log', __FILE__), 'monthly')
 else
   # development and test
