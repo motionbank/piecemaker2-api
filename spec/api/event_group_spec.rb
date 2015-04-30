@@ -315,6 +315,33 @@ describe "Piecemaker::API EventGroup" do
 
 
   ##############################################################################
+  describe "GET /api/v1/group/:id/event-types" do
+  ##############################################################################
+    
+    #---------------------------------------------------------------------------
+    it "returns all destinct types of this groups events" do
+    #---------------------------------------------------------------------------
+      header "X-Access-Key", @frank_super_admin.api_access_key
+      get "/api/v1/group/#{@alpha.id}/event-types"
+      last_response.status.should == 200
+
+      results       = json_string_to_hash(last_response.body)
+      results.should_not eq([])
+      results.should_not eq(nil)
+
+      #p results
+
+      results.should =~ [
+        "big", "small"
+      ]
+
+    end
+    #---------------------------------------------------------------------------
+
+  end
+
+
+  ##############################################################################
   describe "GET /api/v1/group/:id/events" do
   ##############################################################################
     

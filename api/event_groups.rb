@@ -172,6 +172,36 @@ module Piecemaker
 
       #_________________________________________________________________________
       ##########################################################################
+      desc "returns all distinct event types of events in this group" + 
+           " (requires get_events permission)"
+      #-------------------------------------------------------------------------
+      params do
+  	requires :id, type: Integer, desc: "event group id"
+      end
+      #-------------------------------------------------------------------------
+      get "/:id/event-types" do  #/api/v1/group/:id/event-types
+      #-------------------------------------------------------------------------
+
+	@event_group = EventGroup.first(:id => params[:id])
+        error!('Not found', 404) unless @event_group
+
+        authorize! :get_events, @event_group
+
+	@events = Event.select(:type).order(:type).distinct(:type).where(:event_group_id => @event_group.id)
+        @types = []
+	
+	if @events
+	  @events.each do |event|
+            @types << event[:type]
+    	  end
+	end
+
+	@types
+
+      end
+
+      #_________________________________________________________________________
+      ##########################################################################
       desc "returns all events (filter options are connected with AND)" + 
            " (requires get_events permission)"
       #-------------------------------------------------------------------------
