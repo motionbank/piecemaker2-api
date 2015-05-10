@@ -209,7 +209,11 @@ namespace :db do
     end
     env = expand_env_string(args[:env])
     Rake::Task['environment'].invoke(env)
-    DB.run("COPY #{args[:table]} TO '#{BASE_PATH}/db/init/#{args[:table]}.sql' WITH CSV HEADER")
+    DB.copy_into( args[:table], {
+        :data => File.read( BASE_PATH + "/#{args[:table]}.sql" ),
+        :format => :csv,
+        :options => "HEADER TRUE"
+      })
   end
 
   desc "Import table into database"
@@ -220,7 +224,12 @@ namespace :db do
     end
     env = expand_env_string(args[:env])
     Rake::Task['environment'].invoke(env)
-    DB.run("COPY #{args[:table]} FROM '#{BASE_PATH}/db/init/#{args[:table]}.sql' WITH CSV HEADER")
+    DB.copy_into( args[:table], {
+        :data => File.read( BASE_PATH + "/#{args[:table]}.sql" ),
+        :format => :csv,
+        :options => "HEADER TRUE"
+      })
+    #DB.run("COPY #{args[:table]} FROM '#{BASE_PATH}/db/init/#{args[:table]}.sql' WITH CSV HEADER")
   end
 
 end
