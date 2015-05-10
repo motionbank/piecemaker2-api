@@ -210,7 +210,7 @@ namespace :db do
     env = expand_env_string(args[:env])
     Rake::Task['environment'].invoke(env)
     DB.copy_into( args[:table], {
-        :data => File.read( BASE_PATH + "/#{args[:table]}.sql" ),
+        :data => File.read( BASE_PATH + "/db/init/#{args[:table]}.sql" ),
         :format => :csv,
         :options => "HEADER TRUE"
       })
@@ -225,7 +225,7 @@ namespace :db do
     env = expand_env_string(args[:env])
     Rake::Task['environment'].invoke(env)
     DB.copy_into( args[:table], {
-        :data => File.read( BASE_PATH + "/#{args[:table]}.sql" ),
+        :data => File.read( BASE_PATH + "/db/init/#{args[:table]}.sql" ),
         :format => :csv,
         :options => "HEADER TRUE"
       })
