@@ -23,11 +23,11 @@ def truncate_db(init_with_defaults_after_truncate=true)
 
     base_path = File.expand_path("../../db/init", __FILE__)
 
-    DB.copy_into( "user_roles", {
+    DB.copy_into( :user_roles , {
         :data => File.read( base_path + "/user_roles.sql" ),
         :format => :csv
       });
-    DB.copy_into( "user_roles", {
+    DB.copy_into( :role_permissions, {
         :data => File.read( base_path + "/role_permissions.sql" ),
         :format => :csv
       });
@@ -43,13 +43,13 @@ def truncate_table(table, init_with_defaults_after_truncate=true)
     base_path = File.expand_path("../../db/init", __FILE__)
     case table
     when "user_roles"
-      DB.copy_into( "user_roles", {
+      DB.copy_into( :user_roles, {
           :data => File.read( base_path + "/user_roles.sql" ),
           :format => :csv
         });
       #DB.run("COPY user_roles FROM '#{File.expand_path("../../db/init", __FILE__)}/user_roles.sql' WITH CSV HEADER")
     when "role_permissions"
-      DB.copy_into( "user_roles", {
+      DB.copy_into( :role_permissions, {
           :data => File.read( base_path + "/role_permissions.sql" ),
           :format => :csv
         });
