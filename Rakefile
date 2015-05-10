@@ -229,7 +229,6 @@ namespace :db do
         :format => :csv,
         :options => "HEADER TRUE"
       })
-    #DB.run("COPY #{args[:table]} FROM '#{BASE_PATH}/db/init/#{args[:table]}.sql' WITH CSV HEADER")
   end
 
 end

@@ -18,9 +18,6 @@ def truncate_db(init_with_defaults_after_truncate=true)
 
   if init_with_defaults_after_truncate
 
-    # DB.run("COPY user_roles FROM '#{File.expand_path("../../db/init", __FILE__)}/user_roles.sql' WITH CSV HEADER")
-    # DB.run("COPY role_permissions FROM '#{File.expand_path("../../db/init", __FILE__)}/role_permissions.sql' WITH CSV HEADER")
-
     base_path = File.expand_path("../../db/init", __FILE__)
 
     DB.copy_into( :user_roles , {
@@ -49,15 +46,15 @@ def truncate_table(table, init_with_defaults_after_truncate=true)
           :data => File.read( base_path + "/user_roles.sql" ),
           :format => :csv,
         :options => "HEADER TRUE"
-        });
-      #DB.run("COPY user_roles FROM '#{File.expand_path("../../db/init", __FILE__)}/user_roles.sql' WITH CSV HEADER")
+        })
+
     when "role_permissions"
       DB.copy_into( :role_permissions, {
           :data => File.read( base_path + "/role_permissions.sql" ),
           :format => :csv,
         :options => "HEADER TRUE"
-        });
-      #DB.run("COPY role_permissions FROM '#{File.expand_path("../../db/init", __FILE__)}/role_permissions.sql' WITH CSV HEADER")
+        })
+      
     end
   end
 end
