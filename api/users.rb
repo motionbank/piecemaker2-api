@@ -239,7 +239,7 @@ module Piecemaker
       desc "Returns all users."
       #-------------------------------------------------------------------------
       params do
-        optional :count, type: Integer, default: 100, desc: "number of results"
+        optional :count, type: Integer, default: 1000, desc: "number of results"
         optional :max_id, type: Integer, desc: "return results to id"
         optional :since_id, type: Integer, desc: "return results from id"
       end
