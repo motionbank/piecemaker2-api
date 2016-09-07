@@ -185,18 +185,6 @@ namespace :db do
   desc "Nuke the database (drop all tables)"
   task :nuke, :env do |cmd, args|
     env = expand_env_string(args[:env]) || "development"
-    
-    require 'pg'
-    CONFIG = YAML.load(IO.read(File.expand_path('../config.yml', __FILE__)))
-    conn = PG.connect(
-      :host     => CONFIG[env]["host"]     || 'localhost',
-      :port     => CONFIG[env]["port"]     || '5432', 
-      :dbname   => 'postgres',
-      :user     => CONFIG[env]["username"] || '', 
-      :password => CONFIG[env]["password"] || ''
-    )
-    conn.exec("CREATE DATABASE piecemaker2_#{env}")
-
     Rake::Task['environment'].invoke(env)
     DB.tables.each do |table|
       DB.drop_table(table, :cascade=>true)
