@@ -12,6 +12,7 @@ This is the backend for the Piecemaker 2 time-based annotation system developed 
 
 For further information please contact florian-at-motionbank-org.
 
+[Old developer readme is here.](readme-dev.md)
 
  ## Supporters
  
