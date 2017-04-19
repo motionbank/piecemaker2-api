@@ -159,7 +159,7 @@ DEPENDENCIES
   thin (~> 1.6.2)
 
 RUBY VERSION
-   ruby 2.0.0p648
+   ruby 2.1.10p492
 
 BUNDLED WITH
    1.14.6
