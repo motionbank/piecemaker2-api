@@ -13,6 +13,7 @@ gem "pg", "~> 0.17.1" # requires libpq-fe.h (brew install postgres)
 gem 'rack-ssl-enforcer', "~> 0.2.5", :require => 'rack/ssl-enforcer'
 
 gem "thin", "~> 1.6.2"
+gem "puma", "~> 3.8.2"
 
 gem 'scout_apm'
 
