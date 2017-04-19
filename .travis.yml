@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.0.0-p247
+  - 2.0.0-p648
 script: bundle exec rspec
 services: postgresql
 before_script: 
