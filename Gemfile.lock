@@ -14,9 +14,6 @@ GEM
     builder (3.2.2)
     celluloid (0.15.2)
       timers (~> 1.1.0)
-    celluloid-io (0.15.0)
-      celluloid (>= 0.15.0)
-      nio4r (>= 0.5.0)
     coderay (1.1.0)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -83,7 +80,6 @@ GEM
       grape
       newrelic_rpm
     newrelic_rpm (3.8.0.218)
-    nio4r (1.0.0)
     pg (0.17.1)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -114,6 +110,7 @@ GEM
     rspec-mocks (3.0.2)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.2)
+    scout_apm (2.1.23)
     sequel (4.10.0)
     sequel-factory (1.0.0)
       sequel (>= 3.32)
@@ -156,6 +153,13 @@ DEPENDENCIES
   rack-test (~> 0.6.2)
   rake (~> 10.3.1)
   rspec
+  scout_apm
   sequel (~> 4.10.0)
   sequel-factory (~> 1.0.0)
   thin (~> 1.6.2)
+
+RUBY VERSION
+   ruby 2.0.0p247
+
+BUNDLED WITH
+   1.14.6

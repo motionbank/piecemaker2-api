@@ -14,6 +14,7 @@ gem 'rack-ssl-enforcer', "~> 0.2.5", :require => 'rack/ssl-enforcer'
 
 gem "thin", "~> 1.6.2"
 
+gem 'scout_apm'
 
 #group :development do
   gem "rake", "~> 10.3.1"
