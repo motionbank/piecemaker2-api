@@ -1,6 +1,7 @@
 language: ruby
+dist: trusty
 rvm:
-  - rbx-3.20
+  - rbx-3.74
 script: bundle exec rspec
 services: postgresql
 before_script: 
