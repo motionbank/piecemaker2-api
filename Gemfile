@@ -8,7 +8,7 @@ gem "newrelic-grape", "~> 1.3.1"
 gem "rack-cors", "~> 0.2.8"
 gem "grape-swagger", "~> 0.7.2"
 gem "sequel", "~> 4.10.0"
-gem "pg", "0.17.1", :platform => :jruby, :git => "git://github.com/flash-gordon/jruby-pg.git", :branch => "fix-encoding-usage"
+gem "pg", "0.17.1", :platform => :jruby, :git => "git://github.com/glooko/jruby-pg.git", :branch => "fix-encoding-usage-compiled"
 
 gem 'rack-ssl-enforcer', "~> 0.2.5", :require => 'rack/ssl-enforcer'
 

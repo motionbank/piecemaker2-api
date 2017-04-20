@@ -1,7 +1,7 @@
 GIT
-  remote: git://github.com/flash-gordon/jruby-pg.git
-  revision: f970ef94e1fe6af1d65a961c7fb91a5106910ae8
-  branch: fix-encoding-usage
+  remote: git://github.com/glooko/jruby-pg.git
+  revision: 75f40c18633a4d5ed9f134c34575d69f10179016
+  branch: fix-encoding-usage-compiled
   specs:
     pg (0.17.1)
 
