@@ -33,4 +33,4 @@ gem "newrelic-grape", "~> 1.3.1"
   gem "pry", "~> 0.9.12.2"
 #end
 
-ruby "2.3.1", :engine => "rbx", :engine_version => "3.74"
+ruby "2.3.1", :engine => "rbx", :engine_version => "3.72"
