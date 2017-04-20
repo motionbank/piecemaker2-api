@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'bundler'
-require 'yaml' 
+require 'yaml'
+require 'puma'
 
 BASE_PATH = File.dirname(File.absolute_path(__FILE__))
 
