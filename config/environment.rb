@@ -1,6 +1,7 @@
 require "sequel"
 require 'yaml'
 require File.expand_path('../../lib/helper', __FILE__)
+require File.expand_path('../../lib/cache', __FILE__)
 require 'logger'
 
 # set up logger

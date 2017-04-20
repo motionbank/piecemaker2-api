@@ -18,10 +18,15 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/:id" do  #/api/v1/event/:id
       #-------------------------------------------------------------------------
-        @event = Event.first(:id => params[:id])
+        @event = Cache.get('events', params[:id])
+        if @event.nil?
+          @event = Event.first(:id => params[:id])
+          if @event
+            Cache.set('events', params[:id], @event)
+          end
+        end
         error!('Not found', 404) unless @event
         authorize! :get_events, @event
-        
         {:fields => @event.event_fields || [] }.merge(@event)
       end
 
@@ -80,6 +85,8 @@ module Piecemaker
                 end
               end
             end
+
+            Cache.delete('events', params[:id])
           end
         rescue # Sequel::Rollback
           error!('Internal Server Error', 500)
@@ -107,6 +114,7 @@ module Piecemaker
 
         authorize! :delete_event, @event
 
+        Cache.delete('events', params[:id])
         { :fields => [] }.merge(@event.delete)
       end
 

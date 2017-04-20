@@ -14,6 +14,10 @@ module Piecemaker
       get "/" do  #/api/v1/groups
       #-------------------------------------------------------------------------
         @_user = authorize! :get_my_event_groups, User
+        groups = Cache.get('event_groups', 'my')
+        if groups.nil?
+
+        end
         @_user.event_groups
       end
 
@@ -119,9 +123,14 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/:id" do  #/api/v1/group/:id
       #-------------------------------------------------------------------------
-        @event_group = EventGroup.first(:id => params[:id]) 
+        @event_group = Cache.get('event_groups', params[:id])
+        if @event_group.nil?
+          @event_group = EventGroup.first(:id => params[:id])
+          if @event_group
+            Cache.set('event_groups', params[:id], @event_group)
+          end
+        end
         error!('Not found', 404) unless @event_group
-
         authorize! :get_event_group, @event_group
         @event_group 
       end
@@ -147,6 +156,8 @@ module Piecemaker
 
         @event_group.update_with_params!(params, :title, :description)
         @event_group.save
+        Cache.delete('event_groups', params[:id])
+        @event_group
       end
       
 
@@ -167,6 +178,8 @@ module Piecemaker
         authorize! :delete_event_group, @event_group
 
         @event_group.delete
+        Cache.delete('event_groups', params[:id])
+        @event_group
       end
        
 
@@ -181,23 +194,21 @@ module Piecemaker
       #-------------------------------------------------------------------------
       get "/:id/event-types" do  #/api/v1/group/:id/event-types
       #-------------------------------------------------------------------------
-
-	@event_group = EventGroup.first(:id => params[:id])
+        @event_group = EventGroup.first(:id => params[:id])
         error!('Not found', 404) unless @event_group
 
         authorize! :get_events, @event_group
 
-	@events = Event.select(:type).order(:type).distinct(:type).where(:event_group_id => @event_group.id)
+        @events = Event.select(:type).order(:type).distinct(:type).where(:event_group_id => @event_group.id)
         @types = []
-	
-	if @events
-	  @events.each do |event|
+
+        if @events
+          @events.each do |event|
             @types << event[:type]
-    	  end
-	end
+          end
+        end
 
-	@types
-
+        @types
       end
 
       #_________________________________________________________________________
