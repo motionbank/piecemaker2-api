@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.1.10
+  - rbx-3
 script: bundle exec rspec
 services: postgresql
 before_script: 
