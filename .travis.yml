@@ -1,7 +1,11 @@
 language: ruby
 dist: trusty
 rvm:
-  - rbx-3.74
+  - jruby-9.1.8.0
+addons:
+  apt:
+    packages:
+      - haveged
 script: bundle exec rspec
 services: postgresql
 before_script: 

@@ -15,6 +15,8 @@ gem 'rack-ssl-enforcer', "~> 0.2.5", :require => 'rack/ssl-enforcer'
 gem "thin", "~> 1.6.2"
 gem "puma", "~> 3.8.2"
 
+gem "scout_apm"
+
 #group :development do
   gem "rake", "~> 10.3.1"
   gem "guard", "~> 2.6.1"
@@ -33,4 +35,4 @@ gem "puma", "~> 3.8.2"
   gem "pry", "~> 0.9.12.2"
 #end
 
-ruby "2.3.1", :engine => "rbx", :engine_version => "3.74"
+ruby "2.3.1", :engine => "jruby", :engine_version => "9.1.8.0"
