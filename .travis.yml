@@ -1,8 +1,5 @@
 language: ruby
 dist: trusty
-install:
-  - gem uninstall bundler
-  - gem install bundler --version '1.14.6'
 rvm:
   - rbx-3.74
 script: bundle exec rspec

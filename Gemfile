@@ -3,8 +3,6 @@ source "http://rubygems.org"
 gem "rack", "~> 1.5.2"
 gem "grape", "~> 0.7.0"
 gem "json", "~> 1.8.1"
-gem "newrelic_rpm", "~> 3.8.0.218"
-gem "newrelic-grape", "~> 1.3.1"
 gem "rack-cors", "~> 0.2.8"
 gem "grape-swagger", "~> 0.7.2"
 gem "sequel", "~> 4.10.0"
@@ -12,8 +10,10 @@ gem "pg", "~> 0.17.1" # requires libpq-fe.h (brew install postgres)
 
 gem 'rack-ssl-enforcer', "~> 0.2.5", :require => 'rack/ssl-enforcer'
 
-gem "thin", "~> 1.6.2"
 gem "puma", "~> 3.8.2"
+
+gem "newrelic_rpm", "~> 3.8.0.218"
+gem "newrelic-grape", "~> 1.3.1"
 
 #group :development do
   gem "rake", "~> 10.3.1"
